@@ -51,6 +51,7 @@ with lib;
     defaultLocale = "en_US.UTF-8";
     inputMethod = {
       enabled = "fcitx5";
+      fcitx5.addons = [ fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl fcitx5-material-color ];
     };
   };
 
