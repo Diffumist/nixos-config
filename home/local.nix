@@ -11,7 +11,7 @@
     ./modules/git.nix
     ./modules/gpg.nix
     ./modules/fcitx5.nix
-    # ./modules/mpv.nix
+    ./modules/mpv.nix
     ./modules/firefox.nix
     # ./modules/rust.nix
     ./modules/shell/default.nix

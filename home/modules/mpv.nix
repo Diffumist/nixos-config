@@ -5,13 +5,6 @@
     config.hwdec = "auto";
     config.hwdec-codecs = "all";
   };
-  nixpkgs.overlays = [
-    (self: super: {
-      mpv = super.mpv-with-scripts.override {
-        scripts = [ self.mpvScripts.sponsorblock ];
-      };
-    })
-  ];
 
   programs.mpv.bindings = {
     WHEEL_UP    =  "add volume 2";
