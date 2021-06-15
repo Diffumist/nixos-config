@@ -23,6 +23,7 @@
     nixos-cn = {
       url = "github:nixos-cn/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
 
   };
@@ -80,9 +81,7 @@
     };
 
   in {
-    nixosConfigurations = builtins.mapAttrs (name: path: import path {
-      inherit inputs overlays;
-    }) {
+    nixosConfigurations = {
       local = mkSystem "x86_64-linux"
         (with overlays; [ rust-overlay xdgify-overlay tdesktop-font ])
         [ ./nixos/hosts/local/configuration.nix ];
