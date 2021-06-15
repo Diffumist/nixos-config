@@ -10,11 +10,11 @@
     ./modules/firefox.nix
     ./modules/git.nix
     ./modules/gpg.nix
-    ./modules/fcitx5.nix
-    ./modules/mpv.nix
+    # ./modules/fcitx5.nix
+    # ./modules/mpv.nix
     ./modules/firefox.nix
     # ./modules/rust.nix
-    ./modules/shell
+    ./modules/shell/default.nix
     ./modules/trash.nix
     ./modules/user-dirs.nix
     ./modules/vscode

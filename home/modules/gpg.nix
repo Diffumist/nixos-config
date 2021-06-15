@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   programs.gpg = {
     enable = true;
@@ -18,8 +18,4 @@
     maxCacheTtl = 24 * 3600;
   };
   
-  programs.password-store = {
-    enable = true;
-    package = pkgs.pass.withExtensions (ps: [ ps.pass-otp ]);
-  };
 }

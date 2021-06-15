@@ -1,15 +1,5 @@
 { lib, pkgs, ... }:
-
-let
-  myPip = pkgs.python3Packages.pip.overrideAttrs (old: {
-    postFixup = old.postFixup + ''
-      for file in $out/bin/pip*; do
-        sed '/PYTHONNOUSERSITE/d' --in-place "$file"
-      done
-    '';
-  });
-
-in {
+{
   home.packages = with pkgs; map lib.lowPrio [
     # Console
     neofetch htop pv ncdu dnsutils swapview # Stat

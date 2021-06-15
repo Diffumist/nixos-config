@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, lib, ... }:
 {
   nix = {
     # Ensure that flake support is enabled.
@@ -8,7 +8,7 @@
 
     trustedUsers = [ "root" "diffumist" ];
 
-    nix.binaryCaches = lib.mkBefore [
+    binaryCaches = lib.mkBefore [
       "https://mirror.sjtu.edu.cn/nix-channels/store"
     ];
 

@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   xdg = {
     userDirs = let prefix = "$HOME/.local/share/xdg"; in {

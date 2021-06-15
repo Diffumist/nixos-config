@@ -7,26 +7,6 @@
   programs.fish = {
     enable = true;
 
-    dotDir = ".config/fish";
-
-    enableCompletion = true;
-    useBabelfish = true;
-
-    history = {
-      ignoreDups = true;
-      ignoreSpace = true;
-      expireDuplicatesFirst = true;
-      extended = true;
-      share = true;
-      path = "${config.xdg.dataHome}/fish/fish_history";
-      save = 10000;
-      size = 50000;
-      ignorePatterns = [
-        "rm *" "\\rm *"
-        "sudo *rm*"
-        "task *(append|add|delete|perge|done|modify)*"
-      ];
-    };
     shellAbbrs = {
       myip = "curl -L -s ipconfig.me";
       ls = "exa -al --icons";
@@ -44,15 +24,15 @@
       set STARSHIP_CMD_STATUS $status
       # Account for changes in variable name between v2.7 and v3.0
       set STARSHIP_DURATION "$CMD_DURATION$cmd_duration"
-      "${pkg.starship}/bin/starship" prompt --status=$STARSHIP_CMD_STATUS --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=(count (jobs -p))
+      "${pkgs.starship}/bin/starship" prompt --status=$STARSHIP_CMD_STATUS --keymap=$STARSHIP_KEYMAP --cmd-duration=$STARSHIP_DURATION --jobs=(count (jobs -p))
       end
     '';
-    initExtra = ''
+    shellInit = ''
       export LANG="en_US.UTF-8"
       set -g fish_greeting
     '';
   };
-  starship = {
+  programs.starship = {
     enable = true;
     settings = {
       battery = { disabled = true; };

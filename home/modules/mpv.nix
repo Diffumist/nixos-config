@@ -1,5 +1,10 @@
-{ pkgs, ...}:
+{ pkgs, lib, ...}:
 {
+  programs.mpv = {
+    enable = true;
+    config.hwdec = "auto";
+    config.hwdec-codecs = "all";
+  };
   nixpkgs.overlays = [
     (self: super: {
       mpv = super.mpv-with-scripts.override {
@@ -7,11 +12,6 @@
       };
     })
   ];
-  programs.mpv = {
-    enable = true;
-    config.hwdec = "auto";
-    config.hwdec-codecs = "all";
-  };
 
   programs.mpv.bindings = {
     WHEEL_UP    =  "add volume 2";

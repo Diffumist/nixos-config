@@ -21,7 +21,6 @@
   hardware.bluetooth.enable = true;
   hardware.logitech.wireless.enable = true;
 
-  hardware.pulseaudio.enable = true;
   sound.enable = true;
   services.pipewire = {
       enable = true;

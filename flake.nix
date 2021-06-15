@@ -65,7 +65,6 @@
       specialArgs.inputs = inputs;
       modules = [
         system-label
-        inputs.nixos-cn.nixosModules.nixos-cn
         inputs.nixos-cn.nixosModules.nixos-cn-registries
         inputs.home-manager.nixosModules.home-manager
         { nixpkgs.overlays = overlays; }

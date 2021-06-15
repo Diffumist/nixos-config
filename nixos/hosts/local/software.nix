@@ -1,16 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  nixpkgsAllowUnfreeList = [
-    "ark" "unrar"
-    "vscode-extension-ms-vscode-cpptools"
-    "steam" "steam-original" "steam-runtime"
-    "minecraft-launcher"
-    "osu-lazer"
-    "nvidia-x11"
-    "nvidia-settings"
-    "typora"
-  ];
+  nixpkgs.config.allowUnfree = true;
   services.xserver.dpi = 144;
 
   networking.firewall = {
