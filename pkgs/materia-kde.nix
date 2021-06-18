@@ -1,11 +1,11 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "materia-kde";
+  pname = "materia-kde-theme";
   version = "20210612";
 
   src = fetchFromGitHub {
-    owner = "PapirusDevelopmentTeam";
+    owner = "diffumist";
     repo = "materia-kde";
     rev = version;
     sha256 = "";
@@ -13,16 +13,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  # Make this a fixed-output derivation
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  ouputHash = "";
-
   meta = {
     description = "A port of the materia theme for Plasma";
     homepage = "https://git.io/materia-kde";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.nixy ];
+    maintainers = [ lib.maintainers.diffumist ];
     platforms = lib.platforms.all;
   };
 }

@@ -6,6 +6,7 @@
     exa fd ripgrep zoxide lsof tealdeer jq loop bc gnupg file pwgen rsync # Util
     libarchive runzip # Compression
     trash-cli # CLI-Desktop
+    (chromium.override { commandLineArgs = "--enable-features=VaapiVideoDecoder"; })
     # taskwarrior # Task manager
     solaar
     # GUI

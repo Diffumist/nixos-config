@@ -29,6 +29,7 @@
   };
 
   outputs = inputs: let
+    pkgDir = ./pkgs;
 
     inherit (inputs.nixpkgs) lib;
 
@@ -46,7 +47,7 @@
       tdesktop-font = final: prev: {
         tdesktop = prev.tdesktop.overrideAttrs (oldAttrs: {
           patches = (oldAttrs.patches or []) ++
-            [ ./pkgs/patches/tdesktop-0001-use-system-font-and-use-stylename.patch ];
+            [ ./patches/tdesktop-0001-use-system-font-and-use-stylename.patch ];
         });
       };
     };
