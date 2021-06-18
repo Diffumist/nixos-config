@@ -5,9 +5,9 @@
     user = "diffumist";
     openDefaultPorts = true;
     declarative = {
-      android = {
-        devices = {
-          address = ["dynamic"];
+      devices = {
+        android = {
+          addresses = ["dynamic"];
           id = "P4HRTS6-CPFCLPU-QYTPFJV-F3NTFQW-3BY42Q6-L5GSIMM-HQO3LPV-UHMGGA3";
         };
       };
