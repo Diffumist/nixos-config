@@ -8,6 +8,7 @@ let
   ];
 in
 {
+  nixpkgs.config.allowUnfree = true;
   nix.registry = lib.genAttrs included (name: {
     from.type = "indirect";
     from.id = name;
