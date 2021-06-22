@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 let
   deleteOlderThanDays = "30";

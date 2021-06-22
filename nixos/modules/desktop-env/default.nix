@@ -49,9 +49,9 @@ with lib;
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
-    supportLocale = [
+    supportedLocales = [
       "en_US.UTF-8"
-      "zh_CN.utf8"
+      "zh_CN.UTF-8"
     ];
     inputMethod = {
       enabled = "fcitx5";
