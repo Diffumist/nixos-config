@@ -3,4 +3,4 @@ check:
 update:
     nix flake update --recreate-lock-file
 install:
-    sudo nixos-rebuild switch --flake .
+    sudo nixos-rebuild switch --flake .#local

@@ -11,7 +11,6 @@
     ../../modules/syncthing.nix
     ../../modules/nix-config.nix
     ../../modules/nix-registry.nix
-    ../../modules/steam-compat.nix
   ];
 
   networking.hostName = "Dmistlaptop";
