@@ -1,61 +1,72 @@
-{ pkgs }:
+{ ... }:
 
 {
-  "update.mode" = "manual";
-  "workbench.startupEditor" = "none";
-  "workbench.list.keyboardNavigation" = "filter";
-  "explorer.confirmDragAndDrop" = false;
-
-  "extensions.autoUpdate" = false;
-  "window.titleBarStyle" = "native";
-  "window.menuBarVisibility" = "toggle";
-
-  "editor.fontFamily" = "'Sarasa mono SC'";
-  "editor.fontSize" = 16;
+  "editor.renderWhitespace" = "all";
+  "editor.renderControlCharacters" = true;
+  "editor.fontFamily" = "'JetBrains Mono';'JetBrainsMono Nerd Font'";
+  "editor.fontSize" = 18;
   "editor.fontLigatures" = true;
+  "workbench.iconTheme" = "material-icon-theme";
+  "git.autofetch" = true;
+  "git.enableSmartCommit" = true;
+  "workbench.enableExperiments" = false;
+  "editor.smoothScrolling" = true;
+  "editor.scrollBeyondLastLine" = false;
+  "editor.links" = true;
+  "editor.renderLineHighlight" = "all";
+  "explorer.confirmDelete" = true;
+  "typescript.updateImportsOnFileMove.enabled" = "always";
+  "extensions.ignoreRecommendations" = true;
+  "terminal.explorerKind" = "external";
+  "git.autoStash" = true;
+  "git.showPushSuccessNotification" = true;
+  "editor.formatOnPaste" = true;
+  "editor.formatOnType" = true;
+  "debug.console.closeOnEnd" = true;
+  "debug.onTaskErrors" = "showErrors";
+  "task.autoDetect" = "off";
+  "gitlens.advanced.messages" = {
+    "suppressFileNotUnderSourceControlWarning" = true;
+  };
+  "git.enableCommitSigning" = true;
+  "editor.suggestSelection" = "first";
+  "files.autoSave" = "onFocusChange";
+  "terminal.external.linuxExec" = "alacritty";
+  "workbench.editorAssociations" = {
+    "*.ipynb" = "jupyter-notebook";
+  };
+  "extensions.autoUpdate" = false;
+  "workbench.colorTheme" = "Community Material Theme Darker";
+  "gitlens.gitCommands.skipConfirmations" = [
+    "fetch=command"
+    "stash-push=command"
+    "switch=command"
+    "branch-create=command"
+  ];
 
-  "editor.detectIndentation" = true;
-  "editor.insertSpaces" = true;
-  "editor.tabSize" = 4;
-  "files.encoding" = "utf8";
-  "files.autoGuessEncoding" = false;
-
-  "files.insertFinalNewline" = true;
-  "files.trimFinalNewlines" = true;
-  "files.trimTrailingWhitespace" = true;
-
-  "[haskell]"."editor.tabSize" = 2;
-  "[html]"."editor.tabSize" = 2;
-  "[idris]"."editor.tabSize" = 2;
-  "[javascript]"."editor.tabSize" = 2;
-  "[nix]"."editor.tabSize" = 2;
-  "[typescript]"."editor.tabSize" = 2;
-
-  "[rust]"."editor.formatOnSave" = true; # break codes?
-
-  # Don't break patch files.
+  "files.associations" = {
+    "*.md" = "markdown";
+    "*.ps" = "powershell";
+    "*.json" = "jsonc";
+  };
+  "[javascriptreact]" = { };
+  "[typescript]" = {
+    "editor.defaultFormatter" = "esbenp.prettier-vscode";
+  };
+  "[jsonc]" = {
+    "editor.defaultFormatter" = "esbenp.prettier-vscode";
+  };
   "[diff]" = {
     "editor.renderWhitespace" = "boundary";
     "files.insertFinalNewline" = true;
     "files.trimFinalNewlines" = false;
     "files.trimTrailingWhitespace" = false;
   };
+  "nix.enableLanguageServer" = true;
 
-  "[makefile]" = {
-    "editor.renderWhitespace" = "boundary";
-    "editor.insertSpaces" = false;
-  };
-
-  "python.linting.enabled" = true;
-  "python.linting.pylintEnabled" = true;
-  "python.linting.pylintPath" = "${pkgs.python3Packages.pylint}/bin/pylint";
-
-  "javascript.format.insertSpaceBeforeFunctionParenthesis" = true;
-  "javascript.format.insertSpaceAfterConstructor" = true;
-  "javascript.preferences.quoteStyle" = "single";
-  "typescript.format.insertSpaceBeforeFunctionParenthesis" = true;
-  "typescript.format.insertSpaceAfterConstructor" = true;
-  "typescript.preferences.quoteStyle" = "single";
-
-  "git.terminalAuthentication" = false;
+  "update.showReleaseNotes" = false;
+  "update.mode" = "none";
+  "telemetry.enableTelemetry" = false;
+  "telemetry.enableCrashReporter" = false;
+  "security.workspace.trust.untrustedFiles" = "open";
 }

@@ -2,64 +2,36 @@
 {
   home.packages = with pkgs; map lib.lowPrio [
     # Console
-    neofetch
-    htop
-    pv
-    ncdu
-    dnsutils
-    swapview # Stat
-    exa
-    fd
-    ripgrep
-    zoxide
-    lsof
-    tealdeer
-    jq
-    loop
-    bc
+    neofetch htop ncdu lsof dnsutils
+    exa fd ripgrep zoxide
+    tealdeer man-pages
+    jq loop
     gnupg
     file
-    pwgen
-    rsync # Util
-    libarchive
-    runzip # Compression
-    trash-cli # CLI-Desktop
-    (chromium.override { commandLineArgs = "--enable-features=VaapiVideoDecoder"; })
-    # taskwarrior # Task manager
-    solaar
+    rsync
+    libarchive runzip
+    trash-cli
     # GUI
+    (chromium.override { commandLineArgs = "--enable-features=VaapiVideoDecoder"; })
+    solaar
     typora
     # firefox mpv <- in module
-    steam # Games
+    steam
     obs-studio
-    jetbrains.idea-ultimate
-    jetbrains.clion
-    jetbrains.goland # Jetbrains
-    tdesktop
-    weechat # Messaging
-    netease-cloud-music # Music
-    # Dev
-    man-pages # Man
-    cachix
-    patchelf # Utils
-    gcc
-    gdb
-    gnumake
-    cmake
+    jetbrains.idea-ultimate jetbrains.clion jetbrains.goland
+    tdesktop weechat
+    netease-cloud-music cantata
+    # env
+    cachix patchelf
+    gcc gdb gnumake cmake
     lld
-    binutils # rust's backtrace-sys requires `ar`
+    openjdk11
+    mono
+    binutils
     ghc
-    nodejs # myIdris <- broken
-    python3 # myPython
-    nixpkgs-review # nix
-
-    # sqlite-interactive # sqlite
-
-    ################
-    # Keep from GC #
-    ################
-
-    # Dev deps
+    nodejs
+    python3
+    nixpkgs-review
     pkg-config
   ];
 }

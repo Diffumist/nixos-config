@@ -2,6 +2,7 @@
 {
   programs.alacritty = {
     enable = true;
+    # See: https://github.com/alacritty/alacritty/blob/master/alacritty.yml
     settings = {
       window = {
         dimensions = {
@@ -60,11 +61,13 @@
     };
   };
   home.packages = [
-    # Jun 04 07:49:35 invar kglobalaccel5[2299]: kf.globalaccel.kglobalacceld: No desktop file found for service "alacritty.desktop"
-    (pkgs.runCommand "alacritty-desktop" { } ''
-      mkdir -p $out/share/applications
-      cp ${pkgs.alacritty}/share/applications/Alacritty.desktop $out/share/applications/alacritty.desktop
-      sed 's/Name=Alacritty/Name=alacritty/g' --in-place $out/share/applications/alacritty.desktop
-    '')
+    # See: https://bugs.kde.org/show_bug.cgi?id=438204
+    (
+      pkgs.runCommand "alacritty-desktop" {} ''
+        mkdir -p $out/share/applications
+        cp ${pkgs.alacritty}/share/applications/Alacritty.desktop $out/share/applications/alacritty.desktop
+        sed 's/Name=Alacritty/Name=alacritty/g' --in-place $out/share/applications/alacritty.desktop
+      ''
+    )
   ];
 }

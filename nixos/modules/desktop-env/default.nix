@@ -4,6 +4,7 @@ with lib;
   environment.systemPackages = with pkgs; [
     (ark.override { unfreeEnableUnrar = true; })
     filelight
+    gparted
     kdeconnect
     scrcpy
     plasma-browser-integration
@@ -17,8 +18,6 @@ with lib;
     v2ray-domain-list-community
     (qv2ray.override { plugins = [ qv2ray-plugin-ss ]; })
   ];
-
-  programs.partition-manager.enable = true;
 
   nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
 
@@ -36,7 +35,7 @@ with lib;
     fonts = with pkgs; [
       jetbrains-mono
       noto-fonts-cjk
-      emojione
+      apple-emoji
       (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
     ];
     fontDir.enable = true;
@@ -44,12 +43,16 @@ with lib;
       monospace = [ "Jetbrains Mono" ];
       sansSerif = [ "Noto Sans CJK SC" ];
       serif = [ "Noto Sans CJK SC" ];
-      emoji = [ "EmojiOne Color" ];
+      emoji = [ "Apple Color Emoji" ];
     };
   };
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
+    supportLocale = [
+      "en_US.UTF-8"
+      "zh_CN.utf8"
+    ];
     inputMethod = {
       enabled = "fcitx5";
       fcitx5.addons = [ fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl fcitx5-material-color ];

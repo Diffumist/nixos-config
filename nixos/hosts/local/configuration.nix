@@ -24,7 +24,7 @@
       isNormalUser = true;
       uid = 1000;
       group = "diffumist";
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "networkmanager" ];
       shell = pkgs.fish;
     };
   };
