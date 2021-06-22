@@ -27,25 +27,27 @@
   boot.loader.timeout = 1;
 
   # Filesystems.
-  fileSystems = let
-    espDev = "/dev/disk/by-uuid/A106-7971";
-    btrfsDev = "/dev/disk/by-uuid/5db9451a-9017-4a17-bdb0-683947c974ca";
+  fileSystems =
+    let
+      espDev = "/dev/disk/by-uuid/A106-7971";
+      btrfsDev = "/dev/disk/by-uuid/5db9451a-9017-4a17-bdb0-683947c974ca";
 
-    btrfs = name: {
-      device = btrfsDev;
-      fsType = "btrfs";
-      options = [ "subvol=${name}"  ];
+      btrfs = name: {
+        device = btrfsDev;
+        fsType = "btrfs";
+        options = [ "subvol=${name}" ];
+      };
+    in
+    {
+      "/" = btrfs "@";
+      "/.subvols" = btrfs "";
+      "/home" = btrfs "@home";
+      "/nix" = btrfs "@nix";
+      "/boot" = {
+        device = espDev;
+        fsType = "vfat";
+      };
     };
-  in {
-    "/" = btrfs "@";
-    "/.subvols" = btrfs "";
-    "/home" = btrfs "@home";
-    "/nix" = btrfs "@nix";
-    "/boot" = {
-      device = espDev;
-      fsType = "vfat";
-    };
-  };
 
   swapDevices = [
     {

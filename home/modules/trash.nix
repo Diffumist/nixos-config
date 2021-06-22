@@ -3,7 +3,8 @@
 let
   deleteOlderThanDays = "30";
 
-in {
+in
+{
   systemd.user.services."trash-empty" = {
     Unit.Description = "Empty trash older than ${deleteOlderThanDays} days";
     Service.ExecStart = "${pkgs.trash-cli}/bin/trash-empty ${deleteOlderThanDays}";

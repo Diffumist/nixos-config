@@ -4,7 +4,8 @@ with lib;
   environment.systemPackages = with pkgs; [
     (ark.override { unfreeEnableUnrar = true; })
     filelight
-    kdeconnect scrcpy
+    kdeconnect
+    scrcpy
     plasma-browser-integration
     spectacle
     latte-dock
@@ -32,7 +33,7 @@ with lib;
   security.pam.services.sddm.enableKwallet = true;
 
   fonts = {
-    fonts = with pkgs; [ 
+    fonts = with pkgs; [
       jetbrains-mono
       noto-fonts-cjk
       emojione

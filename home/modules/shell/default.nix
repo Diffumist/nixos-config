@@ -36,19 +36,21 @@
     enable = true;
     settings = {
       battery = { disabled = true; };
-      directory = { 
+      directory = {
         read_only_style = "green";
         truncation_length = 3;
         truncation_symbol = "…/";
       };
     };
   };
-  
-  home.packages = let
-    nix-fish-completion = pkgs.runCommand "nix-fish-completion" {} ''
-      install -Dm644 ${./completions/nix.fish} $out/share/fish/completions/nix.fish
-    '';
-  in [
-    nix-fish-completion
-  ];
+
+  home.packages =
+    let
+      nix-fish-completion = pkgs.runCommand "nix-fish-completion" { } ''
+        install -Dm644 ${./completions/nix.fish} $out/share/fish/completions/nix.fish
+      '';
+    in
+    [
+      nix-fish-completion
+    ];
 }

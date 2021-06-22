@@ -1,4 +1,4 @@
-{ lib, pkgs, ...}:
+{ lib, pkgs, ... }:
 {
   networking = {
     hostName = "Dmistlaptop";
@@ -13,7 +13,7 @@
     '';
     nameservers = [ "127.0.0.53" ];
   };
-  
+
   services = {
     smartdns = {
       enable = true;

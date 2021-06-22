@@ -34,7 +34,7 @@
 
       keep-outputs = true # Keep build-dependencies.
     '';
-    
+
     registry = {
       nixpkgs = {
         from = { id = "nixpkgs"; type = "indirect"; };
