@@ -11,10 +11,4 @@
     version = "33.2.2";
     sha256 = "qaFo+vRZiMdf+hwEykzzMAfzZl/RqbfDhI40VJyepSg=";
   })
-  (extensionFromVscodeMarketplace {
-    publisher = "wakatime";
-    name = "vscode-wakatime";
-    version = "4.0.10";
-    sha256 = "wwTiaVb2ti8dcPIvzjrI5YtmMdrgxyXhnCw/dO2nVKk=";
-  })
 ]

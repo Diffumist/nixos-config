@@ -21,20 +21,21 @@
     libarchive
     runzip
     trash-cli
+    wakatime
     # GUI
-    (chromium.override { commandLineArgs = "--enable-features=VaapiVideoDecoder"; })
     solaar
     typora
     # firefox mpv <- in module
     steam
     obs-studio
+    neovim
+    taisei
     jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland
     tdesktop
     weechat
     cantata
-    kate
     # env
     cachix
     patchelf

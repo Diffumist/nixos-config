@@ -18,6 +18,7 @@
       formulahendry.code-runner
       tamasfe.even-better-toml
       jnoortheen.nix-ide
+      WakaTime.vscode-wakatime
     ] ++ import ./market-extensions.nix {
       inherit (pkgs.vscode-utils) extensionFromVscodeMarketplace;
     };

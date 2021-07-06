@@ -11,6 +11,7 @@
     ./modules/gpg.nix
     ./modules/fcitx5.nix
     ./modules/mpv.nix
+    ./modules/chromium.nix
     # ./modules/rust.nix
     ./modules/shell/default.nix
     ./modules/trash.nix
@@ -26,15 +27,25 @@
   #   inherit (config.home.sessionVariables) CARGO_HOME GNUPGHOME;
   # };
   systemd.user.sessionVariables = {
-    GOOGLE_DEFAULT_CLIENT_ID = "77185425430.apps.googleusercontent.com";
-    GOOGLE_DEFAULT_CLIENT_SECRET = "OTJgUOQcT7lO7GsGZq2G4IlT";
+    inherit (config.home.sessionVariables)
+      GNUPGHOME;
     CACHIX_AUTH_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1JDExODQ5IiwianRpIjoiNmY0ZDdhOWItNjAzOS00YTQxLWI4OTctYzllMWY2Y2E5MDkyIiwic2NvcGVzIjoidHgifQ.7XfhGJIW-bEFuSpLXV0ioGSlJqif7qIdn_P0VkyeCc8";
     LIBVA_DRIVER_NAME = "iHD";
     # cache
     XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
     __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
+    _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${config.xdg.cacheHome}/java";
+    MYSQL_HISTFILE = "${config.xdg.cacheHome}/mysql_history";
+    NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node_repl_history";
+    HISTFILE = "${config.xdg.cacheHome}/bash_history";
     # data
-    HISTFILE = "${config.xdg.dataHome}/bash_history";
+    WAKATIME_HOME = "${config.xdg.dataHome}/wakatime";
+    WINEPREFIX = "${config.xdg.dataHome}/wineprefixes/default";
+    VSCODE_PORTABLE = "${config.xdg.dataHome}/vscode";
+    GTK2_RC_FILES = "${config.xdg.dataHome}/gtk-2.0/gtkrc";
+    CABAL_DIR = "${config.xdg.dataHome}/cabal";
+    CABAL_CONFIG = "${config.xdg.dataHome}/cabal/config";
+    KDEHOME = "${config.xdg.dataHome}/kde";
     LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
   };
