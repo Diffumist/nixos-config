@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
 {
   # Initrd.
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "rtsx_pci_sdmmc" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "rtsx_pci_sdmmc" "usb_storage" "uas" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
 
   # Kernel.
@@ -29,8 +29,8 @@
   # Filesystems.
   fileSystems =
     let
-      espDev = "/dev/disk/by-uuid/A106-7971";
-      btrfsDev = "/dev/disk/by-uuid/5db9451a-9017-4a17-bdb0-683947c974ca";
+      espDev = "/dev/disk/by-uuid/E245-3FCF";
+      btrfsDev = "/dev/disk/by-uuid/96679f22-3764-4c1e-9770-3aa96430b4bc";
 
       btrfs = name: {
         device = btrfsDev;
@@ -43,6 +43,7 @@
       "/.subvols" = btrfs "";
       "/home" = btrfs "@home";
       "/nix" = btrfs "@nix";
+      "/var/swapfile" = btrfs "@swap";
       "/boot" = {
         device = espDev;
         fsType = "vfat";
@@ -51,7 +52,7 @@
 
   swapDevices = [
     {
-      device = "/var/swapfile";
+      device = "/var/swapfile/swapfile";
       size = 8192; # MiB
     }
   ];

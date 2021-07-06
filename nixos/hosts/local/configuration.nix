@@ -5,10 +5,10 @@
     ./software.nix
     ./system.nix
     ./network.nix
-    # ./virtual.nix
+    ./virtual.nix
 
     ../../modules/desktop-env
-    ../../modules/syncthing.nix
+    #../../modules/syncthing.nix
     ../../modules/nix-config.nix
     ../../modules/nix-registry.nix
   ];

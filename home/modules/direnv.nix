@@ -2,7 +2,9 @@
 {
   programs.direnv = {
     enable = true;
-    enableNixDirenvIntegration = true;
+    nix-direnv.enable = true;
+    nix-direnv.enableFlakes = true;
+    enableFishIntegration = true;
     stdlib = ''
       : ''${XDG_CACHE_HOME:=$HOME/.cache}
       declare -A direnv_layout_dirs

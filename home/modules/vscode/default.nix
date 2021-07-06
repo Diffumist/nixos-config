@@ -11,13 +11,13 @@
       ms-python.python
       ms-vscode.cpptools
       vadimcn.vscode-lldb
-      wakatime.vscode-wakatime
       esbenp.prettier-vscode
       pkief.material-icon-theme
       eamodio.gitlens
       dbaeumer.vscode-eslint
       formulahendry.code-runner
       tamasfe.even-better-toml
+      jnoortheen.nix-ide
     ] ++ import ./market-extensions.nix {
       inherit (pkgs.vscode-utils) extensionFromVscodeMarketplace;
     };

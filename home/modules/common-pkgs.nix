@@ -2,14 +2,24 @@
 {
   home.packages = with pkgs; map lib.lowPrio [
     # Console
-    neofetch htop ncdu lsof dnsutils
-    exa fd ripgrep zoxide
-    tealdeer man-pages
-    jq loop
+    neofetch
+    htop
+    ncdu
+    lsof
+    dnsutils
+    exa
+    fd
+    ripgrep
+    zoxide
+    tealdeer
+    man-pages
+    jq
+    loop
     gnupg
     file
     rsync
-    libarchive runzip
+    libarchive
+    runzip
     trash-cli
     # GUI
     (chromium.override { commandLineArgs = "--enable-features=VaapiVideoDecoder"; })
@@ -18,12 +28,20 @@
     # firefox mpv <- in module
     steam
     obs-studio
-    jetbrains.idea-ultimate jetbrains.clion jetbrains.goland
-    tdesktop weechat
-    netease-cloud-music cantata
+    jetbrains.idea-ultimate
+    jetbrains.clion
+    jetbrains.goland
+    tdesktop
+    weechat
+    cantata
+    kate
     # env
-    cachix patchelf
-    gcc gdb gnumake cmake
+    cachix
+    patchelf
+    gcc
+    gdb
+    gnumake
+    cmake
     lld
     openjdk11
     mono
@@ -32,6 +50,7 @@
     nodejs
     python3
     nixpkgs-review
+    nixpkgs-fmt
     pkg-config
   ];
 }

@@ -3,7 +3,7 @@
   programs.gpg = {
     enable = true;
     settings = {
-      default-key = "C753CC5B08CA116C83E9253FAFBF30648956131E";
+      default-key = "5647BF1E460733062EBF468BC68CA02B61625AEB";
       personal-digest-preferences = "SHA256";
       cert-digest-algo = "SHA256";
       homedir = "${config.home.homeDirectory}/storage/personal/gnupg";

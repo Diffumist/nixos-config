@@ -16,7 +16,7 @@
       font = {
         size = 10;
         normal = {
-          family = "JetBrainsMono NerFontd ";
+          family = "JetBrainsMono Nerd Font";
           style = "Regular";
         };
         bold = {
@@ -63,7 +63,7 @@
   home.packages = [
     # See: https://bugs.kde.org/show_bug.cgi?id=438204
     (
-      pkgs.runCommand "alacritty-desktop" {} ''
+      pkgs.runCommand "alacritty-desktop" { } ''
         mkdir -p $out/share/applications
         cp ${pkgs.alacritty}/share/applications/Alacritty.desktop $out/share/applications/alacritty.desktop
         sed 's/Name=Alacritty/Name=alacritty/g' --in-place $out/share/applications/alacritty.desktop

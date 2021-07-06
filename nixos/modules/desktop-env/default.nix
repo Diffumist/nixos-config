@@ -12,11 +12,14 @@ with lib;
     latte-dock
     plasma-systemmonitor
     materia-theme
+    materia-kde-theme
+    # FIXME https://github.com/NixOS/nixpkgs/issues/82769
+    libsForQt5.qtstyleplugin-kvantum
     papirus-icon-theme
     v2ray
     v2ray-geoip
     v2ray-domain-list-community
-    (qv2ray.override { plugins = [ qv2ray-plugin-ss ]; })
+    qv2ray
   ];
 
   nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
@@ -50,12 +53,17 @@ with lib;
   i18n = {
     defaultLocale = "en_US.UTF-8";
     supportedLocales = [
-      "en_US.UTF-8"
-      "zh_CN.UTF-8"
+      "en_US.UTF-8/UTF-8"
+      "zh_CN.UTF-8/UTF-8"
     ];
     inputMethod = {
       enabled = "fcitx5";
-      fcitx5.addons = [ fcitx5-chinese-addons fcitx5-pinyin-zhwiki fcitx5-pinyin-moegirl fcitx5-material-color ];
+      fcitx5.addons = with pkgs; [
+        fcitx5-chinese-addons
+        fcitx5-pinyin-zhwiki
+        fcitx5-material-color
+        fcitx5-pinyin-moegirl
+      ];
     };
   };
 

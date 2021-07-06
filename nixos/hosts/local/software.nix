@@ -29,9 +29,6 @@
 
   programs.adb.enable = true;
   users.groups."adbusers".members = [ "diffumist" ];
-  # programs.wireshark.enable = true;
-  # programs.wireshark.package = pkgs.wireshark;
-  # users.groups."wireshark".members = [ "oxa" ];
 
   # SSE Only
   services.fstrim = {

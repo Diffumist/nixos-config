@@ -3,7 +3,7 @@
 {
   "editor.renderWhitespace" = "all";
   "editor.renderControlCharacters" = true;
-  "editor.fontFamily" = "'JetBrains Mono';'JetBrainsMono Nerd Font'";
+  "editor.fontFamily" = "'JetBrains Mono','JetBrainsMono Nerd Font'";
   "editor.fontSize" = 18;
   "editor.fontLigatures" = true;
   "workbench.iconTheme" = "material-icon-theme";
@@ -32,21 +32,10 @@
   "editor.suggestSelection" = "first";
   "files.autoSave" = "onFocusChange";
   "terminal.external.linuxExec" = "alacritty";
-  "workbench.editorAssociations" = {
-    "*.ipynb" = "jupyter-notebook";
-  };
   "extensions.autoUpdate" = false;
-  "workbench.colorTheme" = "Community Material Theme Darker";
-  "gitlens.gitCommands.skipConfirmations" = [
-    "fetch=command"
-    "stash-push=command"
-    "switch=command"
-    "branch-create=command"
-  ];
-
+  "workbench.colorTheme" = "Material Theme Darker";
   "files.associations" = {
     "*.md" = "markdown";
-    "*.ps" = "powershell";
     "*.json" = "jsonc";
   };
   "[javascriptreact]" = { };
@@ -69,4 +58,5 @@
   "telemetry.enableTelemetry" = false;
   "telemetry.enableCrashReporter" = false;
   "security.workspace.trust.untrustedFiles" = "open";
+  "tabnine.experimentalAutoImports" = true;
 }

@@ -17,7 +17,11 @@
     driSupport32Bit = true;
     extraPackages = with pkgs; [ intel-media-driver ];
   };
-
+  hardware.firmware = with pkgs; [
+    firmwareLinuxNonfree
+    sof-firmware
+    alsa-firmware
+  ];
   hardware.bluetooth.enable = true;
   hardware.logitech.wireless.enable = true;
 
