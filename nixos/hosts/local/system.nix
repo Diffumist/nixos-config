@@ -26,13 +26,19 @@
   hardware.logitech.wireless.enable = true;
 
   sound.enable = true;
-  services.pipewire = {
+  hardware.pulseaudio = {
     enable = true;
-    pulse.enable = true;
-    alsa = {
-      enable = true;
-      support32Bit = true;
-    };
-    jack.enable = true;
+    support32Bit = true;
+    package = pkgs.pulseaudioFull;
   };
+  nixpkgs.config.pulseaudio = true;
+  # services.pipewire = {
+  #   enable = true;
+  #   pulse.enable = true;
+  #   alsa = {
+  #     enable = true;
+  #     support32Bit = true;
+  #   };
+  #   jack.enable = true;
+  # };
 }
