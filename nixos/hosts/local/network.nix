@@ -21,8 +21,6 @@
         "${smartdns-china-list}/apple.china.smartdns.conf"
         "${smartdns-china-list}/google.china.smartdns.conf"
       ];
-      nameserver =
-        [ "/cache.nixos.org/china" "/.6in4.dev/china" ];
       bind = [ "127.0.0.1:53" ];
       server = [
         "114.114.114.114 -group china -exclude-default-group"
