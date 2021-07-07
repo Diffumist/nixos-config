@@ -3,27 +3,27 @@
 {
   materia-kde = {
     pname = "materia-kde";
-    version = "0209857d0afa3c678d1b915ebc0d8fb708a4c013";
+    version = "092964dd002fa8b4130638f00ddbe705e0b1351f";
     src = fetchgit {
       url = "https://github.com/diffumist/materia-kde";
-      rev = "0209857d0afa3c678d1b915ebc0d8fb708a4c013";
+      rev = "092964dd002fa8b4130638f00ddbe705e0b1351f";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "0x8pm1n8c4ick2vvfqp3y4zzmzn2gi0hax7cs3fjg2c2zpbh0hji";
+      sha256 = "0yswcwhcihpjfzr1d1xjn6xry3c8d2d1hz3ffg98mb3880jyc87m";
     };
     
   };
   smartdns-china-list = {
     pname = "smartdns-china-list";
-    version = "8f35a52a2602f811531965f658df6bdc422d5e94";
+    version = "d6584ab89decc83169be7acbfa8e49404eea4ba1";
     src = fetchgit {
       url = "https://github.com/felixonmars/dnsmasq-china-list";
-      rev = "8f35a52a2602f811531965f658df6bdc422d5e94";
+      rev = "d6584ab89decc83169be7acbfa8e49404eea4ba1";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "1wxm30j99iy7nci00cv4aisbzcpf6kkdjf47dn7aj5ymaqd922x2";
+      sha256 = "1mqz3ac8b12bxpsf6b6vhrz40f7b04sqzajwqc7ri31vzbmp8ldg";
     };
     
   };

@@ -4,4 +4,5 @@ fetch.github = "felixonmars/dnsmasq-china-list"
 
 [materia-kde]
 src.git = "https://github.com/diffumist/materia-kde"
-fetch.github = "diffumist/materia-kde"
+fetch.git = "https://github.com/diffumist/materia-kde"
+src.branch = "aurorae"

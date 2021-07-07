@@ -9,8 +9,9 @@ with lib;
     plasma-browser-integration
     spectacle
     latte-dock
+    capitaine-cursors
     materia-theme
-    materia-kde
+    materia-kde-theme
     # FIXME https://github.com/NixOS/nixpkgs/issues/82769
     libsForQt5.qtstyleplugin-kvantum
     papirus-icon-theme
