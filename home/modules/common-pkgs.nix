@@ -17,6 +17,7 @@
     loop
     gnupg
     file
+    compsize
     rsync
     libarchive
     runzip

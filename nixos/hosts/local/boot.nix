@@ -32,18 +32,18 @@
       espDev = "/dev/disk/by-uuid/E245-3FCF";
       btrfsDev = "/dev/disk/by-uuid/96679f22-3764-4c1e-9770-3aa96430b4bc";
 
-      btrfs = name: {
+      btrfs = options: {
         device = btrfsDev;
         fsType = "btrfs";
-        options = [ "subvol=${name}" ];
+        options = [ "noatime" ] ++ options;
       };
     in
     {
-      "/" = btrfs "@";
-      "/.subvols" = btrfs "";
-      "/home" = btrfs "@home";
-      "/nix" = btrfs "@nix";
-      "/var/swapfile" = btrfs "@swap";
+      "/" = btrfs [ "subvol=@" "compress-force=zstd" ];
+      "/.subvols" = btrfs [];
+      "/home" = btrfs [ "subvol=@home" "compress-force=zstd" ];
+      "/nix" = btrfs [ "subvol=@nix" "compress-force=zstd" ];
+      "/var/swapfile" = btrfs [ "subvol=@swap" ];
       "/boot" = {
         device = espDev;
         fsType = "vfat";
