@@ -25,7 +25,6 @@
   home.sessionVariables = {
     GOOGLE_DEFAULT_CLIENT_ID = "77185425430.apps.googleusercontent.com";
     GOOGLE_DEFAULT_CLIENT_SECRET = "OTJgUOQcT7lO7GsGZq2G4IlT";
-    CACHIX_AUTH_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1JDExODQ5IiwianRpIjoiNmY0ZDdhOWItNjAzOS00YTQxLWI4OTctYzllMWY2Y2E5MDkyIiwic2NvcGVzIjoidHgifQ.7XfhGJIW-bEFuSpLXV0ioGSlJqif7qIdn_P0VkyeCc8";
     LIBVA_DRIVER_NAME = "iHD";
     # cache
     XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
