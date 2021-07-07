@@ -3,16 +3,14 @@ with lib;
 {
   environment.systemPackages = with pkgs; [
     (ark.override { unfreeEnableUnrar = true; })
-    filelight
     gparted
     kdeconnect
     scrcpy
     plasma-browser-integration
     spectacle
     latte-dock
-    plasma-systemmonitor
     materia-theme
-    materia-kde-theme
+    materia-kde
     # FIXME https://github.com/NixOS/nixpkgs/issues/82769
     libsForQt5.qtstyleplugin-kvantum
     papirus-icon-theme
@@ -20,6 +18,8 @@ with lib;
   ];
 
   nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
+
+  services.gnome.gnome-keyring.enable = true;
 
   services.xserver = {
     enable = true;

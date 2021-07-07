@@ -4,7 +4,7 @@ rec {
   packages = pkgs: mapPackages (name: pkgs.${name});
   overlay = final: prev: mapPackages (name:
     let
-      sources = (import ./_sources/generated.nix) { inherit (final) fetchurl fetchgit; };
+      sources = (import ./_build/generated.nix) { inherit (final) fetchurl fetchgit; };
       package = import (./. + "/${name}");
       args = builtins.intersectAttrs (builtins.functionArgs package) { source = sources.${name}; };
     in

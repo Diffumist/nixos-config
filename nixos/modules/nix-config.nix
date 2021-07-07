@@ -11,7 +11,7 @@
 
     binaryCaches = lib.mkBefore [
       "https://mirror.sjtu.edu.cn/nix-channels/store"
-      "https://nichi.cachix.org"
+      "https://diffumist.cachix.org"
     ];
     binaryCachePublicKeys = [ "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk=" ];
     gc = {

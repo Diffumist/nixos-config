@@ -10,7 +10,6 @@
     ../../modules/desktop-env
     #../../modules/syncthing.nix
     ../../modules/nix-config.nix
-    ../../modules/nix-registry.nix
   ];
 
   networking.hostName = "Dmistlaptop";
