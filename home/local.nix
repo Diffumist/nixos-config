@@ -26,9 +26,9 @@
   # systemd.user.sessionVariables = {
   #   inherit (config.home.sessionVariables) CARGO_HOME GNUPGHOME;
   # };
-  systemd.user.sessionVariables = {
-    inherit (config.home.sessionVariables)
-      GNUPGHOME;
+  home.sessionVariables = {
+    GOOGLE_DEFAULT_CLIENT_ID = "77185425430.apps.googleusercontent.com";
+    GOOGLE_DEFAULT_CLIENT_SECRET = "OTJgUOQcT7lO7GsGZq2G4IlT";
     CACHIX_AUTH_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1JDExODQ5IiwianRpIjoiNmY0ZDdhOWItNjAzOS00YTQxLWI4OTctYzllMWY2Y2E5MDkyIiwic2NvcGVzIjoidHgifQ.7XfhGJIW-bEFuSpLXV0ioGSlJqif7qIdn_P0VkyeCc8";
     LIBVA_DRIVER_NAME = "iHD";
     # cache
@@ -41,7 +41,6 @@
     # data
     WAKATIME_HOME = "${config.xdg.dataHome}/wakatime";
     WINEPREFIX = "${config.xdg.dataHome}/wineprefixes/default";
-    VSCODE_PORTABLE = "${config.xdg.dataHome}/vscode";
     GTK2_RC_FILES = "${config.xdg.dataHome}/gtk-2.0/gtkrc";
     CABAL_DIR = "${config.xdg.dataHome}/cabal";
     CABAL_CONFIG = "${config.xdg.dataHome}/cabal/config";

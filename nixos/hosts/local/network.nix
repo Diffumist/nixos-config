@@ -25,12 +25,14 @@
         [ "/cache.nixos.org/china" "/.6in4.dev/china" ];
       bind = [ "127.0.0.1:53" ];
       server = [
-        "127.0.0.1 -group china -exclude-default-group"
-        "2a0c:b641:69c:7864:0:5:0:3"
+        "114.114.114.114 -group china -exclude-default-group"
+        "8.8.8.8"
+        "9.9.9.9"
+        "1.1.1.1"
       ];
       server-https = [
         "https://223.5.5.5/dns-query -group china -exclude-default-group"
-        "https://101.6.6.6:8443/dns-query"
+        "https://223.6.6.6/dns-query -group china -exclude-default-group"
       ];
     };
   };
