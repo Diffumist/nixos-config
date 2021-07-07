@@ -23,7 +23,6 @@
     trash-cli
     wakatime
     # GUI
-    solaar
     typora
     # firefox mpv <- in module
     steam
@@ -36,7 +35,7 @@
     tdesktop
     weechat
     cantata
-    # env
+    # Dev
     cachix
     patchelf
     gcc

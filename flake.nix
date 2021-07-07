@@ -23,23 +23,12 @@
       url = "github:berberman/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    naersk = {
-      url = "github:nmattia/naersk";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
-    };
-    nickcao = {
-      url = "gitlab:nickcao/flakes";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
   };
   # Ref: https://github.com/oxalica/config
   outputs = inputs:
     let
+      this = import ./pkgs;
       inherit (inputs.nixpkgs) lib;
 
       prToOverlay = pr: pathStrs: final: prev:
@@ -60,7 +49,7 @@
         rust-overlay = inputs.rust-overlay.overlay;
         xdgify-overlay = inputs.xdgify-overlay.overlay;
         berberman-overlay = inputs.berberman.overlay;
-        nickcao-overlay = inputs.nickcao.overlay;
+        this-overlay = this.overlay;
       };
 
       mkSystem = system: overlays: modules: inputs.nixpkgs.lib.nixosSystem {
@@ -69,15 +58,6 @@
         modules = [
           inputs.home-manager.nixosModules.home-manager
           { nixpkgs.overlays = overlays; }
-          ({ lib, ... }: {
-            options.home-manager.users = with lib.types; lib.mkOption {
-              type = attrsOf (
-                submoduleWith {
-                  modules = [ ];
-                  specialArgs.inputs = inputs;
-                });
-            };
-          })
         ] ++ modules;
       };
 
@@ -89,7 +69,7 @@
             rust-overlay
             xdgify-overlay
             berberman-overlay
-            nickcao-overlay
+            this-overlay
           ])
           [ ./nixos/hosts/local/configuration.nix ];
       };

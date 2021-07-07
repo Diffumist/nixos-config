@@ -1,5 +1,6 @@
 { pkgs, inputs, lib, ... }:
 {
+  nixpkgs.config.allowUnfree = true;
   nix = {
     # Ensure that flake support is enabled.
     package = pkgs.nixFlakes;
@@ -10,8 +11,9 @@
 
     binaryCaches = lib.mkBefore [
       "https://mirror.sjtu.edu.cn/nix-channels/store"
+      "https://nichi.cachix.org"
     ];
-
+    binaryCachePublicKeys = [ "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk=" ];
     gc = {
       automatic = true;
       dates = "Wed";

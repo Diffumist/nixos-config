@@ -16,10 +16,7 @@ with lib;
     # FIXME https://github.com/NixOS/nixpkgs/issues/82769
     libsForQt5.qtstyleplugin-kvantum
     papirus-icon-theme
-    v2ray
-    v2ray-geoip
-    v2ray-domain-list-community
-    qv2ray
+    clash
   ];
 
   nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
@@ -27,7 +24,6 @@ with lib;
   services.xserver = {
     enable = true;
     layout = "us";
-
     desktopManager.plasma5.enable = true;
     displayManager.sddm.enable = true;
   };
