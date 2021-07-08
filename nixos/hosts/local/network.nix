@@ -7,6 +7,32 @@
     networkmanager.wifi.backend = "iwd";
     nameservers = [ "127.0.0.1" ];
   };
+
+  # FIXME: https://github.com/NixOS/nixpkgs/issues/97389
+  # services.syncthing = {
+  #   enable = true;
+  #   user = "diffumist";
+  #   openDefaultPorts = true;
+  #   declarative = {
+  #     devices = {
+  #       android = {
+  #         addresses = [ "dynamic" ];
+  #         id = "P4HRTS6-CPFCLPU-QYTPFJV-F3NTFQW-3BY42Q6-L5GSIMM-HQO3LPV-UHMGGA3";
+  #       };
+  #     };
+  #     folders = {
+  #       "/home/diffumist/Pictures/ShaftImages/" = {
+  #         id = "d7zsp-fqqmz";
+  #         devices = [ "android" ];
+  #       };
+  #       "/home/diffumist/Music/Sync" = {
+  #         id = "vghwu-tsmep";
+  #         devices = [ "android" ];
+  #       };
+  #     };
+  #   };
+  # };
+
   services.smartdns = {
     enable = true;
     settings = with pkgs; {
