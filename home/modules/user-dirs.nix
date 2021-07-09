@@ -7,7 +7,6 @@ let
     # cache
     XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
     __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
-    _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${config.xdg.cacheHome}/java";
     MYSQL_HISTFILE = "${config.xdg.cacheHome}/mysql_history";
     NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node_repl_history";
     HISTFILE = "${config.xdg.cacheHome}/bash_history";

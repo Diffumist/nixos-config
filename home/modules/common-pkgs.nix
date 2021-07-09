@@ -7,10 +7,8 @@
     ncdu
     lsof
     dnsutils
-    exa
     fd
     ripgrep
-    zoxide
     tealdeer
     man-pages
     jq
@@ -23,13 +21,17 @@
     runzip
     trash-cli
     wakatime
+    tabnine
     # GUI
     typora
     # firefox mpv <- in module
     steam
+    winetricks
+    wine
     obs-studio
     neovim
     taisei
+    libdbusmenu
     jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland
