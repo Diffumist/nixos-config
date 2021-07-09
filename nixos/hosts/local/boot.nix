@@ -6,10 +6,11 @@
 
   # Kernel.
   boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.extraModulePackages = with config.boot.kernelPackages; [
     # exfat-nofuse
     acpi_call # For TLP
-    (pkgs.linuxPackages.isgx.override { inherit kernel; })
+    (pkgs.linuxPackages_zen.nvidia_x11.override { inherit kernel; })
   ];
   boot.kernel.sysctl = {
     "kernel.sysrq" = 1;
@@ -17,7 +18,11 @@
     "vm.swappiness" = 10;
     "net.ipv4.tcp_congestion_control" = "bbr";
   };
-
+  # Ref: https://thesofproject.github.io/latest/getting_started/intel_debug/introduction.html
+  # Use HDaudio legacy drivers
+  boot.extraModprobeConfig = ''
+    options snd-intel-dspcfg dsp_driver=1
+  '';
   # For NTFS rw mount.
   boot.supportedFilesystems = [ "ntfs-3g" ];
 
