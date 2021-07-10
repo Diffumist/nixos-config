@@ -17,4 +17,10 @@
     version = "0.0.2";
     sha256 = "TVvjKdKXeExpnyUh+fDPl+eSdlQzh7lt8xSfw1YgtL4=";
   })
+  (extensionFromVscodeMarketplace {
+    publisher = "bmalehorn";
+    name = "vscode-fish";
+    version = "1.0.20";
+    sha256 = "aE4xL9tPj1U2B2i+mMWKNgSahWpB24+vHYXrU9wRBxo=";
+  })
 ]
