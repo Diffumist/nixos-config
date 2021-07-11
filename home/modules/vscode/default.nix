@@ -11,6 +11,7 @@
       ms-python.python
       ms-vscode.cpptools
       vadimcn.vscode-lldb
+      haskell.haskell
       esbenp.prettier-vscode
       pkief.material-icon-theme
       eamodio.gitlens
