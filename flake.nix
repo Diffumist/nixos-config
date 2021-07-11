@@ -33,17 +33,11 @@
 
       prToOverlay = pr: pathStrs: final: prev:
         with lib;
-        foldl' recursiveUpdate prev (
-          map
-            (
-              pathStr:
-              let
-                pathList = splitString "." pathStr;
-              in
-              setAttrByPath pathList (getAttrFromPath pathList pr.legacyPackages.${final.system})
-            )
-            pathStrs
-        );
+        foldl' recursiveUpdate prev (map (pathStr:
+          let pathList = splitString "." pathStr;
+          in setAttrByPath pathList
+          (getAttrFromPath pathList pr.legacyPackages.${final.system}))
+          pathStrs);
 
       overlays = {
         rust-overlay = inputs.rust-overlay.overlay;
@@ -52,26 +46,24 @@
         this-overlay = this.overlay;
       };
 
-      mkSystem = system: overlays: modules: inputs.nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs.inputs = inputs;
-        modules = [
-          inputs.home-manager.nixosModules.home-manager
-          { nixpkgs.overlays = overlays; }
-        ] ++ modules;
-      };
+      mkSystem = system: overlays: modules:
+        inputs.nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs.inputs = inputs;
+          modules = [
+            inputs.home-manager.nixosModules.home-manager
+            { nixpkgs.overlays = overlays; }
+          ] ++ modules;
+        };
 
-    in
-    {
+    in {
       nixosConfigurations = {
-        local = mkSystem "x86_64-linux"
-          (with overlays; [
-            rust-overlay
-            xdgify-overlay
-            berberman-overlay
-            this-overlay
-          ])
-          [ ./nixos/hosts/local/configuration.nix ];
+        local = mkSystem "x86_64-linux" (with overlays; [
+          rust-overlay
+          xdgify-overlay
+          berberman-overlay
+          this-overlay
+        ]) [ ./nixos/hosts/local/configuration.nix ];
       };
     };
 }

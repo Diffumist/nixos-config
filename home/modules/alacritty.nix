@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{ pkgs, ... }: {
   programs.alacritty = {
     enable = true;
     # See: https://github.com/alacritty/alacritty/blob/master/alacritty.yml
@@ -19,12 +18,8 @@
           family = "JetBrainsMono Nerd Font";
           style = "Regular";
         };
-        bold = {
-          family = "JetBrainsMono Nerd Font";
-        };
-        italic = {
-          family = "JetBrainsMono Nerd Font";
-        };
+        bold = { family = "JetBrainsMono Nerd Font"; };
+        italic = { family = "JetBrainsMono Nerd Font"; };
       };
       draw_bold_text_with_bright_colors = true;
       background_opacity = 1;
@@ -62,12 +57,10 @@
   };
   home.packages = [
     # See: https://bugs.kde.org/show_bug.cgi?id=438204
-    (
-      pkgs.runCommand "alacritty-desktop" { } ''
-        mkdir -p $out/share/applications
-        cp ${pkgs.alacritty}/share/applications/Alacritty.desktop $out/share/applications/alacritty.desktop
-        sed 's/Name=Alacritty/Name=alacritty/g' --in-place $out/share/applications/alacritty.desktop
-      ''
-    )
+    (pkgs.runCommand "alacritty-desktop" { } ''
+      mkdir -p $out/share/applications
+      cp ${pkgs.alacritty}/share/applications/Alacritty.desktop $out/share/applications/alacritty.desktop
+      sed 's/Name=Alacritty/Name=alacritty/g' --in-place $out/share/applications/alacritty.desktop
+    '')
   ];
 }

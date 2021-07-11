@@ -1,8 +1,3 @@
 [smartdns-china-list]
 src.git = "https://github.com/felixonmars/dnsmasq-china-list"
 fetch.github = "felixonmars/dnsmasq-china-list"
-
-[materia-kde]
-src.git = "https://github.com/diffumist/materia-kde"
-fetch.git = "https://github.com/diffumist/materia-kde"
-src.branch = "aurorae"

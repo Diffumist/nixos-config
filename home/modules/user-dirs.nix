@@ -22,8 +22,7 @@ let
     LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
   };
-in
-{
+in {
   xdg = {
     userDirs = {
       enable = true;

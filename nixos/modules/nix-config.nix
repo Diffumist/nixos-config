@@ -1,5 +1,4 @@
-{ pkgs, inputs, lib, ... }:
-{
+{ pkgs, inputs, lib, ... }: {
   nixpkgs.config.allowUnfree = true;
   nix = {
     # Ensure that flake support is enabled.
@@ -13,7 +12,8 @@
       "https://mirror.sjtu.edu.cn/nix-channels/store"
       "https://diffumist.cachix.org"
     ];
-    binaryCachePublicKeys = [ "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk=" ];
+    binaryCachePublicKeys =
+      [ "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk=" ];
     gc = {
       automatic = true;
       dates = "Wed";
@@ -40,13 +40,14 @@
 
     registry = {
       nixpkgs = {
-        from = { id = "nixpkgs"; type = "indirect"; };
+        from = {
+          id = "nixpkgs";
+          type = "indirect";
+        };
         flake = inputs.nixpkgs;
       };
     };
 
-    nixPath = [
-      "nixpkgs=${inputs.nixpkgs}"
-    ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
 }
