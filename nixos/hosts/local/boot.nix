@@ -8,8 +8,6 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.extraModulePackages = with config.boot.kernelPackages; [
-    # exfat-nofuse
-    acpi_call # For TLP
     (pkgs.linuxPackages_zen.nvidia_x11.override { inherit kernel; })
   ];
   boot.kernel.sysctl = {

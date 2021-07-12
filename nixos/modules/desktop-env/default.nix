@@ -12,13 +12,11 @@ with lib;
     capitaine-cursors
     materia-theme
     materia-kde-theme
-    # FIXME https://github.com/NixOS/nixpkgs/issues/82769
+    # FIXME: https://github.com/NixOS/nixpkgs/issues/82769
     libsForQt5.qtstyleplugin-kvantum
     papirus-icon-theme
     clash
   ];
-
-  nixpkgs.config.firefox.enablePlasmaBrowserIntegration = true;
 
   services.gnome.gnome-keyring.enable = true;
 
@@ -27,6 +25,7 @@ with lib;
     layout = "us";
     desktopManager.plasma5.enable = true;
     displayManager.sddm.enable = true;
+    videoDrivers = [ "nvidia" ];
   };
 
   security.pam.services.sddm.enableKwallet = true;

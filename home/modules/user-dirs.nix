@@ -19,6 +19,7 @@ let
     CABAL_DIR = "${config.xdg.dataHome}/cabal";
     CABAL_CONFIG = "${config.xdg.dataHome}/cabal/config";
     KDEHOME = "${config.xdg.dataHome}/kde";
+    GRADLE_USER_HOME="${config.xdg.dataHome}/gradle";
     LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
   };
@@ -49,6 +50,12 @@ in {
         tmp=$XDG_RUNTIME_DIR/npm
         init-module=${config.xdg.configHome}/npm/config/npm-init.js
         store-dir=${config.xdg.dataHome}/pnpm-store
+      '';
+      "fcitx5/conf/classicui.conf".text = ''
+        Vertical Candidate List=False
+        Font="Noto Sans CJK SC 10"
+        UseInputMethodLangaugeToDisplayText=True
+        Theme=Material-Color-Black
       '';
     };
   };

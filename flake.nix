@@ -31,14 +31,6 @@
       this = import ./pkgs;
       inherit (inputs.nixpkgs) lib;
 
-      prToOverlay = pr: pathStrs: final: prev:
-        with lib;
-        foldl' recursiveUpdate prev (map (pathStr:
-          let pathList = splitString "." pathStr;
-          in setAttrByPath pathList
-          (getAttrFromPath pathList pr.legacyPackages.${final.system}))
-          pathStrs);
-
       overlays = {
         rust-overlay = inputs.rust-overlay.overlay;
         xdgify-overlay = inputs.xdgify-overlay.overlay;

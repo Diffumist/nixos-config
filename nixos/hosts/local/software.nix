@@ -1,7 +1,6 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
   services.xserver.dpi = 144;
 
   networking.firewall = {
@@ -15,17 +14,6 @@
       STOP_CHARGE_THRESH_BAT0 = 80;
     };
   };
-
-  # services.printing.enable = true; # CUPS
-
-  # services.transmission = {
-  #   enable = true;
-  #   home = "/home/transmission";
-  # };
-  # users.groups."transmission".members = [ "oxa" ];
-
-  # services.fprintd.enable = true;
-  # services.fprintd.package = pkgs.fprintd-thinkpad;
 
   programs.adb.enable = true;
   users.groups."adbusers".members = [ "diffumist" ];

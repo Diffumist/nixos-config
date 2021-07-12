@@ -8,7 +8,6 @@
     ./virtual.nix
 
     ../../modules/desktop-env
-    #../../modules/syncthing.nix
     ../../modules/nix-config.nix
   ];
 

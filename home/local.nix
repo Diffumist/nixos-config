@@ -9,8 +9,7 @@
     ./modules/direnv.nix
     ./modules/git.nix
     ./modules/gpg.nix
-    ./modules/fcitx5.nix
-    ./modules/mpv.nix
+    ./modules/video.nix
     ./modules/chromium.nix
     # ./modules/rust.nix
     ./modules/shell/default.nix

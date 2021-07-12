@@ -3,9 +3,7 @@
   nix = {
     # Ensure that flake support is enabled.
     package = pkgs.nixFlakes;
-
     useSandbox = true;
-
     trustedUsers = [ "root" "diffumist" ];
 
     binaryCaches = lib.mkBefore [
