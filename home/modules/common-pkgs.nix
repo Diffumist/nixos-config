@@ -19,6 +19,7 @@
       libarchive
       runzip
       trash-cli
+      pandoc
       # GUI
       typora
       steam
