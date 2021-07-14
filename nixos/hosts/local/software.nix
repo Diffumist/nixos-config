@@ -1,9 +1,7 @@
 { pkgs, ... }:
 
 {
-  # See: https://github.com/rust-windowing/winit/pull/1963
-  # Use kde force font DPI
-  # services.xserver.dpi = 144;
+  services.xserver.dpi = 144;
 
   networking.firewall = {
     logRefusedConnections = false;
