@@ -35,13 +35,13 @@
     enableAliases = true;
   };
 
-  home.packages =
-    let
-      nix-fish-completion = pkgs.runCommand "nix-fish-completion" { } ''
-        install -Dm644 ${./completions/nix.fish} $out/share/fish/completions/nix.fish
-      '';
-    in
-    [
-      nix-fish-completion
-    ];
+  # home.packages =
+  #   let
+  #     nix-fish-completion = pkgs.runCommand "nix-fish-completion" { } ''
+  #       install -Dm644 ${./completions/nix.fish} $out/share/fish/completions/nix.fish
+  #     '';
+  #   in
+  #   [
+  #     nix-fish-completion
+  #   ];
 }
