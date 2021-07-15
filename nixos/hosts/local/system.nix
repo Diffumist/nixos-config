@@ -36,21 +36,13 @@ in
   hardware.logitech.wireless.enable = true;
 
   sound.enable = true;
-  hardware.pulseaudio = {
+  services.pipewire = {
     enable = true;
-    support32Bit = true;
-    package = pkgs.pulseaudioFull;
+    pulse.enable = true;
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
+    jack.enable = true;
   };
-  nixpkgs.config.pulseaudio = true;
-  # pipewire will not find the device after suspend
-  # FIXME: https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/895
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  #   alsa = {
-  #     enable = true;
-  #     support32Bit = true;
-  #   };
-  #   jack.enable = true;
-  # };
 }

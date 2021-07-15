@@ -48,14 +48,16 @@
           ] ++ modules;
         };
 
-    in {
+    in
+    {
       nixosConfigurations = {
-        local = mkSystem "x86_64-linux" (with overlays; [
-          rust-overlay
-          xdgify-overlay
-          berberman-overlay
-          this-overlay
-        ]) [ ./nixos/hosts/local/configuration.nix ];
+        local = mkSystem "x86_64-linux"
+          (with overlays; [
+            rust-overlay
+            xdgify-overlay
+            berberman-overlay
+            this-overlay
+          ]) [ ./nixos/hosts/local/configuration.nix ];
       };
     };
 }

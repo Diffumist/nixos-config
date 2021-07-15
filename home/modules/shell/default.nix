@@ -6,7 +6,7 @@
 
   programs.fish = {
     enable = true;
-    shellAbbrs = { 
+    shellAbbrs = {
       docker = "podman";
     };
     shellInit = ''

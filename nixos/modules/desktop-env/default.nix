@@ -1,6 +1,5 @@
 { lib, config, pkgs, ... }:
-with lib;
-{
+with lib; {
   environment.systemPackages = with pkgs; [
     (ark.override { unfreeEnableUnrar = true; })
     gparted
@@ -18,13 +17,19 @@ with lib;
     clash
   ];
 
-  services.gnome.gnome-keyring.enable = true;
+  # services.gnome.gnome-keyring.enable = true;
 
   services.xserver = {
     enable = true;
     layout = "us";
     desktopManager.plasma5.enable = true;
     displayManager.sddm.enable = true;
+    displayManager.sddm.settings = {
+      Autologin = {
+        User = "diffumist";
+        Session = "plasma5";
+      };
+    };
     videoDrivers = [ "nvidia" ];
   };
 
@@ -48,10 +53,7 @@ with lib;
 
   i18n = {
     defaultLocale = "en_US.UTF-8";
-    supportedLocales = [
-      "en_US.UTF-8/UTF-8"
-      "zh_CN.UTF-8/UTF-8"
-    ];
+    supportedLocales = [ "en_US.UTF-8/UTF-8" "zh_CN.UTF-8/UTF-8" ];
     inputMethod = {
       enabled = "fcitx5";
       fcitx5.addons = with pkgs; [

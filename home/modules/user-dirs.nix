@@ -5,7 +5,7 @@ let
     GOOGLE_DEFAULT_CLIENT_SECRET = "OTJgUOQcT7lO7GsGZq2G4IlT";
     LIBVA_DRIVER_NAME = "iHD";
     # WIP: https://github.com/rust-windowing/winit/pull/1963
-    WINIT_X11_SCALE_FACTOR="1.5";
+    WINIT_X11_SCALE_FACTOR = "1.5";
     # cache
     XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
     __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
@@ -21,11 +21,12 @@ let
     CABAL_DIR = "${config.xdg.dataHome}/cabal";
     CABAL_CONFIG = "${config.xdg.dataHome}/cabal/config";
     KDEHOME = "${config.xdg.dataHome}/kde";
-    GRADLE_USER_HOME="${config.xdg.dataHome}/gradle";
+    GRADLE_USER_HOME = "${config.xdg.dataHome}/gradle";
     LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
   };
-in {
+in
+{
   xdg = {
     userDirs = {
       enable = true;

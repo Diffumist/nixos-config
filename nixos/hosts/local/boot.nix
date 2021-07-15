@@ -43,7 +43,7 @@
     in
     {
       "/" = btrfs [ "subvol=@" "compress-force=zstd" ];
-      "/.subvols" = btrfs [];
+      "/.subvols" = btrfs [ ];
       "/home" = btrfs [ "subvol=@home" "compress-force=zstd" ];
       "/nix" = btrfs [ "subvol=@nix" "compress-force=zstd" ];
       "/var/swapfile" = btrfs [ "subvol=@swap" ];

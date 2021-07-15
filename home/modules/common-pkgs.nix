@@ -27,9 +27,11 @@
       obs-studio
       neovim
       taisei
+      citra
       jetbrains.idea-ultimate
       jetbrains.clion
       jetbrains.goland
+      discord
       tdesktop
       weechat
       cantata
@@ -44,7 +46,7 @@
       binutils
       python3
       nixpkgs-review
-      nixfmt
+      nixpkgs-fmt
       pkg-config
     ];
 }
