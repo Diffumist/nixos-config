@@ -38,15 +38,15 @@ with lib; {
   fonts = {
     fonts = with pkgs; [
       jetbrains-mono
-      noto-fonts-cjk
+      sarasa-gothic
       apple-emoji
       (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
     ];
     fontDir.enable = true;
     fontconfig.defaultFonts = {
       monospace = [ "Jetbrains Mono" ];
-      sansSerif = [ "Noto Sans CJK SC" ];
-      serif = [ "Noto Sans CJK SC" ];
+      sansSerif = [ "Sarasa Gothic SC" ];
+      serif = [ "Sarasa Gothic SC" ];
       emoji = [ "Apple Color Emoji" ];
     };
   };

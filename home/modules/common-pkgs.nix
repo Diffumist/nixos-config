@@ -21,6 +21,7 @@
       trash-cli
       pandoc
       # GUI
+      authy
       typora
       steam
       winetricks

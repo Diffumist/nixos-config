@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  services.xserver.dpi = 120;
+  services.xserver.dpi = 144;
 
   networking.firewall = {
     logRefusedConnections = false;
