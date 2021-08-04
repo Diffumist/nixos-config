@@ -1,7 +1,3 @@
 [smartdns-china-list]
 src.git = "https://github.com/felixonmars/dnsmasq-china-list"
 fetch.github = "felixonmars/dnsmasq-china-list"
-
-[clash]
-src.manual = "2021.07.03"
-fetch.url = "https://github.com/Dreamacro/clash/releases/download/premium/clash-linux-amd64-2021.07.03.gz"

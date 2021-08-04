@@ -15,9 +15,6 @@
         iptables() {
           ${iptables}/bin/iptables -w "$@"
         }
-        ip() {
-          ${iproute2}/bin/ip
-        }
         iptables -t mangle -F CLASH
         iptables -t mangle -N CLASH
         iptables -t mangle -A CLASH -d 0.0.0.0/8 -j RETURN
@@ -30,6 +27,9 @@
         iptables -t mangle -A PREROUTING -j CLASH
         iptables -t mangle -A OUTPUT -m owner --uid-owner clash -j RETURN
         iptables -t mangle -A OUTPUT -j CLASH
+        ${iproute2}/bin/ip route add default dev utun table 129
+        ${iproute2}/bin/ip rule add fwmark 129  lookup 129
+        set -e
       '';
 
       postStopScript = pkgs.writeShellScript "clash-poststop" ''
