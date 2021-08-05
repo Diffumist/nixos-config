@@ -10,7 +10,7 @@
 
   systemd.services.clash =
     let
-      inherit (pkgs) gnugrep iptables clash iproute2;
+      inherit (pkgs) gnugrep iptables clash iproute2 unixtools;
       preStartScript = pkgs.writeShellScript "clash-prestart" ''
         iptables() {
           ${iptables}/bin/iptables -w "$@"
@@ -27,13 +27,16 @@
         iptables -t mangle -A PREROUTING -j CLASH
         iptables -t mangle -A OUTPUT -m owner --uid-owner clash -j RETURN
         iptables -t mangle -A OUTPUT -j CLASH
+        ${iproute2}/bin/ip tuntap add mode tun user clash name utun
+        ${unixtools.ifconfig}/bin/ifconfig utun up
         ${iproute2}/bin/ip route add default dev utun table 129
-        ${iproute2}/bin/ip rule add fwmark 129  lookup 129
-        set -e
+        ${iproute2}/bin/ip rule add fwmark 129 lookup 129
       '';
 
       postStopScript = pkgs.writeShellScript "clash-poststop" ''
         ${iptables}/bin/iptables-save -c|${gnugrep}/bin/grep -v CLASH|${iptables}/bin/iptables-restore -c
+        ${iproute2}/bin/ip route del default dev utun table 129
+        ${iproute2}/bin/ip rule del fwmark 129 lookup 129
       '';
     in
     {
