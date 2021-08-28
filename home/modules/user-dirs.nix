@@ -1,8 +1,9 @@
 { config, ... }:
 let
   xdgdirs = {
-    GOOGLE_DEFAULT_CLIENT_ID = "77185425430.apps.googleusercontent.com";
-    GOOGLE_DEFAULT_CLIENT_SECRET = "OTJgUOQcT7lO7GsGZq2G4IlT";
+    GOOGLE_API_KEY = "AIzaSyCrsjCd2bEXQi6rUMuKAby5Jl79KLLM-IE";
+    GOOGLE_DEFAULT_CLIENT_ID = "1049154164486-5rf0ofgkj1rrhphp0p2pcr180n8v6ojm.apps.googleusercontent.com";
+    GOOGLE_DEFAULT_CLIENT_SECRET = "6anjFb7YPwri9NUy-zh2EZKr";
     LIBVA_DRIVER_NAME = "iHD";
     # WIP: https://github.com/rust-windowing/winit/pull/1963
     WINIT_X11_SCALE_FACTOR = "1.5";

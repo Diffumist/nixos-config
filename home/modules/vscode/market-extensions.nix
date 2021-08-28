@@ -2,8 +2,8 @@
   (extensionFromVscodeMarketplace {
     publisher = "TabNine";
     name = "tabnine-vscode";
-    version = "3.4.5";
-    sha256 = "hg6eH6j1khSxd7GQb7c/DtwX/2p2yA3JuMGC1MIRmd0=";
+    version = "3.4.23";
+    sha256 = "jrNbcREua8g5vl7x+JUYfJRFLuZyjpIY4jVghSPcb4g=";
   })
   (extensionFromVscodeMarketplace {
     publisher = "Equinusocio";
@@ -18,15 +18,15 @@
     sha256 = "TVvjKdKXeExpnyUh+fDPl+eSdlQzh7lt8xSfw1YgtL4=";
   })
   (extensionFromVscodeMarketplace {
-    publisher = "bmalehorn";
-    name = "vscode-fish";
-    version = "1.0.20";
-    sha256 = "aE4xL9tPj1U2B2i+mMWKNgSahWpB24+vHYXrU9wRBxo=";
+    publisher = "skyapps";
+    name = "fish-vscode";
+    version = "0.2.1";
+    sha256 = "FIoVJeipyekdlyMnZi9mXF7Z5kDzF5FjtSoHZKvfMXg=";
   })
   (extensionFromVscodeMarketplace {
     publisher = "Wakatime";
     name = "vscode-wakatime";
-    version = "13.0.0";
-    sha256 = "ACzOyiBHCUwMni/Y+nhHzioCLLouQfghT81HlbYb7kw=";
+    version = "15.0.2";
+    sha256 = "FdjZ64jbSshEyEruIhD80/1Edq10TNpk8sA/XyzWxCA=";
   })
 ]
