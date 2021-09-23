@@ -12,7 +12,6 @@ with lib; {
     # FIXME: https://github.com/NixOS/nixpkgs/issues/82769
     libsForQt5.qtstyleplugin-kvantum
     papirus-icon-theme
-    clash
   ];
 
   # services.gnome.gnome-keyring.enable = true;

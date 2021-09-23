@@ -10,32 +10,37 @@
 
   systemd.services.clash =
     let
-      inherit (pkgs) gnugrep iptables clash iproute2 unixtools;
+      inherit (pkgs) gnugrep iptables iproute2 unixtools;
       preStartScript = pkgs.writeShellScript "clash-prestart" ''
         iptables() {
           ${iptables}/bin/iptables -w "$@"
         }
+        ${iproute2}/bin/ip rule add fwmark 1 table 100
+        ${iproute2}/bin/ip route add local 0.0.0.0/0 dev lo table 100
         iptables -t mangle -N CLASH
-        iptables -t mangle -A CLASH -d 0.0.0.0/8 -j RETURN
-        iptables -t mangle -A CLASH -d 10.0.0.0/8 -j RETURN
-        iptables -t mangle -A CLASH -d 192.168.0.0/16 -j RETURN
-        iptables -t mangle -A CLASH -d 127.0.0.0/8 -j RETURN
-        iptables -t mangle -A CLASH -j MARK --set-xmark 129
-        iptables -t mangle -A PREROUTING -p udp -m udp --dport 4096:65535 -j RETURN
-        iptables -t mangle -A PREROUTING -p tcp -m tcp --dport 8192:65535 -j RETURN
+        iptables -t mangle -A CLASH -d 127.0.0.1/32 -j RETURN
+        iptables -t mangle -A CLASH -d 224.0.0.0/4 -j RETURN
+        iptables -t mangle -A CLASH -d 255.255.255.255/32 -j RETURN
+        iptables -t mangle -A CLASH -d 192.168.0.0/16 -p tcp -j RETURN
+        iptables -t mangle -A CLASH -d 192.168.0.0/16 -p udp ! --dport 53 -j RETURN
+        iptables -t mangle -A CLASH -p udp -j TPROXY --on-port 7891 --tproxy-mark 1
+        iptables -t mangle -A CLASH -p tcp -j TPROXY --on-port 7891 --tproxy-mark 1
         iptables -t mangle -A PREROUTING -j CLASH
-        iptables -t mangle -A OUTPUT -m owner --uid-owner clash -j RETURN
-        iptables -t mangle -A OUTPUT -j CLASH
-        ${iproute2}/bin/ip tuntap add mode tun user clash name utun
-        ${unixtools.ifconfig}/bin/ifconfig utun up
-        ${iproute2}/bin/ip route add default dev utun table 129
-        ${iproute2}/bin/ip rule add fwmark 129 lookup 129
+        iptables -t mangle -N CLASH_MASK
+        iptables -t mangle -A CLASH_MASK -d 224.0.0.0/4 -j RETURN
+        iptables -t mangle -A CLASH_MASK -d 255.255.255.255/32 -j RETURN
+        iptables -t mangle -A CLASH_MASK -d 192.168.0.0/16 -p tcp -j RETURN
+        iptables -t mangle -A CLASH_MASK -d 192.168.0.0/16 -p udp ! --dport 53 -j RETURN
+        iptables -t mangle -A CLASH_MASK -j RETURN -m mark --mark 0xff
+        iptables -t mangle -A CLASH_MASK -p udp -m owner ! --uid-owner clash -j MARK --set-mark 1
+        iptables -t mangle -A CLASH_MASK -p tcp -m owner ! --uid-owner clash -j MARK --set-mark 1
+        iptables -t mangle -A OUTPUT -j CLASH_MASK
       '';
 
       postStopScript = pkgs.writeShellScript "clash-poststop" ''
         ${iptables}/bin/iptables-save -c|${gnugrep}/bin/grep -v CLASH|${iptables}/bin/iptables-restore -c
-        ${iproute2}/bin/ip route del default dev utun table 129
-        ${iproute2}/bin/ip rule del fwmark 129 lookup 129
+        ${iproute2}/bin/ip route del local 0.0.0.0/0 dev lo table 100
+        ${iproute2}/bin/ip rule del fwmark 1 table 100
       '';
     in
     {
@@ -49,6 +54,8 @@
       serviceConfig = {
         ExecStartPre = "+${preStartScript}";
         ExecStopPost = "+${postStopScript}";
+        LimitNPROC=500;
+        LimitNOFILE=1000000;
         AmbientCapabilities =
           "CAP_NET_BIND_SERVICE CAP_NET_ADMIN";
         User = "clash";
