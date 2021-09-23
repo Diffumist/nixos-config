@@ -2,10 +2,10 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "clash";
-  version = "2021.07.03";
+  version = "2021.09.15";
   src = fetchurl {
-    sha256 = "1d6mq8qbkiz1f6fy91l2cdq32rk38kp479rf2ky73304a2rq2v9g";
-    url = "https://github.com/Dreamacro/clash/releases/download/premium/clash-linux-amd64-2021.07.03.gz";
+    sha256 = "wYCyECiIwR5XIOfYxsdPswpxBlC3G//5ICdSFSNiteI=";
+    url = "https://github.com/Dreamacro/clash/releases/download/premium/clash-linux-amd64-2021.09.15.gz";
   };
 
   phases = [ "installPhase" ];

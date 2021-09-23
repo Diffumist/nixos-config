@@ -15,7 +15,6 @@
         iptables() {
           ${iptables}/bin/iptables -w "$@"
         }
-        iptables -t mangle -F CLASH
         iptables -t mangle -N CLASH
         iptables -t mangle -A CLASH -d 0.0.0.0/8 -j RETURN
         iptables -t mangle -A CLASH -d 10.0.0.0/8 -j RETURN
@@ -56,34 +55,10 @@
         Restart = "on-abort";
       };
     };
-    users.users.clash = {
-      isSystemUser = true;
-    };
-
-  # FIXME: https://github.com/NixOS/nixpkgs/issues/97389
-  # services.syncthing = {
-  #   enable = true;
-  #   user = "diffumist";
-  #   openDefaultPorts = true;
-  #   declarative = {
-  #     devices = {
-  #       android = {
-  #         addresses = [ "dynamic" ];
-  #         id = "P4HRTS6-CPFCLPU-QYTPFJV-F3NTFQW-3BY42Q6-L5GSIMM-HQO3LPV-UHMGGA3";
-  #       };
-  #     };
-  #     folders = {
-  #       "/home/diffumist/Pictures/ShaftImages/" = {
-  #         id = "d7zsp-fqqmz";
-  #         devices = [ "android" ];
-  #       };
-  #       "/home/diffumist/Music/Sync" = {
-  #         id = "vghwu-tsmep";
-  #         devices = [ "android" ];
-  #       };
-  #     };
-  #   };
-  # };
+  users.users.clash.group = "nogroup";
+  users.users.clash = {
+    isSystemUser = true;
+  };
 
   services.smartdns = {
     enable = true;
@@ -95,7 +70,7 @@
       ];
       bind = [ "127.0.0.1:53" ];
       server = [
-        "114.114.114.114 -group china -exclude-default-group"
+        "223.5.5.5 -group china -exclude-default-group"
         "8.8.8.8"
         "9.9.9.9"
         "1.1.1.1"

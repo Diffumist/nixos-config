@@ -22,20 +22,18 @@
       pandoc
       # GUI
       authy
-      typora
       steam
+      wine
       winetricks
       obs-studio
       neovim
-      taisei
       citra
       jetbrains.idea-ultimate
       jetbrains.clion
-      jetbrains.goland
-      discord
+      jetbrains.rider
       tdesktop
-      weechat
-      cantata
+      qbittorrent-enhanced
+      google-chrome
       # Dev
       cachix
       patchelf

@@ -8,7 +8,7 @@
 
     extensions = with pkgs.vscode-extensions; [
       matklad.rust-analyzer
-      ms-python.python
+      # ms-python.python
       ms-vscode.cpptools
       vadimcn.vscode-lldb
       haskell.haskell

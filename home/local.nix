@@ -10,7 +10,6 @@
     ./modules/git.nix
     ./modules/gpg.nix
     ./modules/video.nix
-    ./modules/chromium.nix
     # ./modules/rust.nix
     ./modules/shell/default.nix
     ./modules/trash.nix

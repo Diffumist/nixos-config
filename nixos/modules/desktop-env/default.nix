@@ -4,8 +4,6 @@ with lib; {
     (ark.override { unfreeEnableUnrar = true; })
     gparted
     kdeconnect
-    scrcpy
-    plasma-browser-integration
     spectacle
     latte-dock
     capitaine-cursors
