@@ -10,7 +10,7 @@
 
   systemd.services.clash =
     let
-      inherit (pkgs) gnugrep iptables iproute2 unixtools;
+      inherit (pkgs) ripgrep iptables iproute2;
       preStartScript = pkgs.writeShellScript "clash-prestart" ''
         iptables() {
           ${iptables}/bin/iptables -w "$@"
@@ -38,7 +38,7 @@
       '';
 
       postStopScript = pkgs.writeShellScript "clash-poststop" ''
-        ${iptables}/bin/iptables-save -c|${gnugrep}/bin/grep -v CLASH|${iptables}/bin/iptables-restore -c
+        ${iptables}/bin/iptables-save -c|${ripgrep}/bin/grep -v CLASH|${iptables}/bin/iptables-restore -c
         ${iproute2}/bin/ip route del local 0.0.0.0/0 dev lo table 100
         ${iproute2}/bin/ip rule del fwmark 1 table 100
       '';
@@ -54,8 +54,8 @@
       serviceConfig = {
         ExecStartPre = "+${preStartScript}";
         ExecStopPost = "+${postStopScript}";
-        LimitNPROC=500;
-        LimitNOFILE=1000000;
+        LimitNPROC = 500;
+        LimitNOFILE = 1000000;
         AmbientCapabilities =
           "CAP_NET_BIND_SERVICE CAP_NET_ADMIN";
         User = "clash";

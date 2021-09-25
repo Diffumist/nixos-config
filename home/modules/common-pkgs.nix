@@ -8,7 +8,6 @@
       lsof
       dnsutils
       fd
-      ripgrep
       tealdeer
       man-pages
       jq
@@ -23,8 +22,8 @@
       # GUI
       authy
       steam
-      wine
-      winetricks
+      (wine.override { wineRelease = "unstable"; })
+      (winetricks.override { wine = wine.override { wineRelease = "unstable"; }; })
       obs-studio
       neovim
       citra
@@ -44,6 +43,7 @@
       lld
       binutils
       python3
+      mono
       nixpkgs-review
       nixpkgs-fmt
       pkg-config

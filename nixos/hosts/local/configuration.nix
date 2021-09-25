@@ -23,6 +23,7 @@
       group = "diffumist";
       extraGroups = [ "wheel" "networkmanager" ];
       shell = pkgs.fish;
+      hashedPassword = "$6$pdVI5OMHlykFwtcC$Hh1wEakcsiI5nG/zRI7Xdt10OD99e7D3SaKQu5SQWi9p.vpM6jgG01RtIlWfDwSp/K5jumRIWqS8NigILAlCi/";
     };
   };
   home-manager = {
