@@ -1,8 +1,5 @@
 name: "build and push"
-on:
-  pull_request:
-  push:
-  workflow_dispatch:
+on: [push]
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -16,7 +13,6 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-    - run: nix build
     - run: nix run nixpkgs#nixpkgs-fmt -- . --check
     - name: check
       run: nix flake check --print-build-logs
