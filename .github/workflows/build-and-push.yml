@@ -21,4 +21,4 @@ jobs:
           nix run nixpkgs#jq -- ".[].outputs.out" --raw-output | \
           nix run nixpkgs#cachix -- push diffumist
       env:
-        CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_AUTH_TOKEN }}
+        CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
