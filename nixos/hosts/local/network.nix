@@ -88,4 +88,9 @@
       ];
     };
   };
+
+  services.zerotierone = {
+    enable = true;
+    joinNetworks = [ "93afae5963a9686e" ];
+  };
 }
