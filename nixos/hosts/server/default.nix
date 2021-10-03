@@ -1,4 +1,5 @@
-{ system, self, nixpkgs, inputs,this,... }:
+{ system, nixpkgs, inputs, ... }:
+let this = import ./../../../pkgs; in
 nixpkgs.lib.nixosSystem {
   inherit system;
   specialArgs.inputs = inputs;
@@ -9,6 +10,7 @@ nixpkgs.lib.nixosSystem {
     {
       nixpkgs.overlays = [
         inputs.rust-overlay.overlay
+        this.overlay
       ];
     }
   ];

@@ -35,13 +35,10 @@
     };
   };
   outputs = inputs@{ self, nixpkgs, flake-utils, ... }:
-    let
-      this = import ./pkgs;
-    in
     {
       nixosConfigurations = {
-        local = import ./nixos/hosts/local { system = "x86_64-linux"; inherit self nixpkgs inputs this; };
-        server = import ./nixos/hosts/server { system = "x86_64-linux"; inherit self nixpkgs inputs this; };
+        local = import ./nixos/hosts/local { system = "x86_64-linux"; inherit nixpkgs inputs; };
+        server = import ./nixos/hosts/server { system = "x86_64-linux"; inherit nixpkgs inputs; };
       };
       deploy.nodes = {
         server = {
@@ -56,9 +53,7 @@
       (system:
         rec {
           # Ref: https://gitlab.com/NickCao/flakes/-/blob/master/flake.nix#L79
-          checks = this // (inputs.deploy-rs.lib.${system}.deployChecks {
-            node = this.lib.filterAttrs (name: cfg: cfg.profiles.system.path.system == system) self.deploy.nodes;
-          });
+          checks = (inputs.deploy-rs.lib.${system}.deployChecks { nodes = self.deploy.nodes; });
         }
       );
 }

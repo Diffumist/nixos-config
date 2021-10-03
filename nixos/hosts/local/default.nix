@@ -1,4 +1,5 @@
-{ system, self, nixpkgs, inputs,this,... }:
+{ system, nixpkgs, inputs, ... }:
+let this = import ./../../../pkgs; in
 nixpkgs.lib.nixosSystem {
   inherit system;
   specialArgs.inputs = inputs;
