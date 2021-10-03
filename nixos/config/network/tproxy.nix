@@ -1,16 +1,9 @@
-{ lib, pkgs, config, ... }:
-{
-  networking = {
-    hostName = "Dmistlaptop";
-    firewall.enable = false;
-    networkmanager.dns = "none";
-    networkmanager.wifi.backend = "iwd";
-    nameservers = [ "127.0.0.1" ];
-  };
-
+{ lib, pkgs, config, ... }: {
+  # TODO Modify to module instead of configuration
   systemd.services.clash =
     let
       inherit (pkgs) ripgrep iptables iproute2;
+      # Start clash client with iptables script
       preStartScript = pkgs.writeShellScript "clash-prestart" ''
         iptables() {
           ${iptables}/bin/iptables -w "$@"
@@ -36,9 +29,9 @@
         iptables -t mangle -A CLASH_MASK -p tcp -m owner ! --uid-owner clash -j MARK --set-mark 1
         iptables -t mangle -A OUTPUT -j CLASH_MASK
       '';
-
+      # Stop clash client
       postStopScript = pkgs.writeShellScript "clash-poststop" ''
-        ${iptables}/bin/iptables-save -c|${ripgrep}/bin/grep -v CLASH|${iptables}/bin/iptables-restore -c
+        ${iptables}/bin/iptables-save -c|${ripgrep}/bin/rg -v CLASH|${iptables}/bin/iptables-restore -c
         ${iproute2}/bin/ip route del local 0.0.0.0/0 dev lo table 100
         ${iproute2}/bin/ip rule del fwmark 1 table 100
       '';
@@ -62,35 +55,9 @@
         Restart = "on-abort";
       };
     };
-  users.users.clash.group = "nogroup";
+  users.groups.clash = { };
   users.users.clash = {
+    group = "clash";
     isSystemUser = true;
-  };
-
-  services.smartdns = {
-    enable = true;
-    settings = with pkgs; {
-      conf-file = [
-        "${smartdns-china-list}/accelerated-domains.china.smartdns.conf"
-        "${smartdns-china-list}/apple.china.smartdns.conf"
-        "${smartdns-china-list}/google.china.smartdns.conf"
-      ];
-      bind = [ "127.0.0.1:53" ];
-      server = [
-        "223.5.5.5 -group china -exclude-default-group"
-        "8.8.8.8"
-        "9.9.9.9"
-        "1.1.1.1"
-      ];
-      server-https = [
-        "https://223.5.5.5/dns-query -group china -exclude-default-group"
-        "https://223.6.6.6/dns-query -group china -exclude-default-group"
-      ];
-    };
-  };
-
-  services.zerotierone = {
-    enable = true;
-    joinNetworks = [ "93afae5963a9686e" ];
   };
 }

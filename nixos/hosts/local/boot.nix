@@ -1,10 +1,8 @@
 { lib, config, pkgs, ... }:
 {
-  # Initrd.
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "rtsx_pci_sdmmc" "usb_storage" "uas" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
 
-  # Kernel.
   boot.kernelModules = [ "kvm-intel" ];
   boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.extraModulePackages = with config.boot.kernelPackages; [
@@ -21,15 +19,12 @@
   boot.extraModprobeConfig = ''
     options snd-intel-dspcfg dsp_driver=1
   '';
-  # For NTFS rw mount.
   boot.supportedFilesystems = [ "ntfs-3g" ];
 
-  # Boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 1;
 
-  # Filesystems.
   fileSystems =
     let
       espDev = "/dev/disk/by-uuid/E245-3FCF";
@@ -60,11 +55,5 @@
     }
   ];
 
-  # Misc.
-
   powerManagement.cpuFreqGovernor = "powersave";
-
-  # High-resolution display.
-  hardware.video.hidpi.enable = true;
-  console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u24n.psf.gz";
 }

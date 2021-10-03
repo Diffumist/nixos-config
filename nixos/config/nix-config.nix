@@ -1,7 +1,6 @@
 { pkgs, inputs, lib, ... }: {
   nixpkgs.config.allowUnfree = true;
   nix = {
-    # Ensure that flake support is enabled.
     package = pkgs.nixFlakes;
     useSandbox = true;
     trustedUsers = [ "root" "diffumist" ];
@@ -14,15 +13,11 @@
       [ "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk=" ];
     gc = {
       automatic = true;
-      dates = "Wed";
+      dates = "Sun";
       options = "--delete-older-than 8d";
     };
 
     autoOptimiseStore = true;
-    # optimise = {
-    #   automatic = true;
-    #   dates = [ "Thu" ];
-    # };
 
     extraOptions = ''
       experimental-features = nix-command flakes
@@ -32,6 +27,7 @@
       connect-timeout = 15
       stalled-download-timeout = 10
 
+      # To protect nix-shell against garbage collection.
       keep-outputs = true
       keep-derivations = true
     '';

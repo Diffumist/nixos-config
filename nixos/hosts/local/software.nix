@@ -1,12 +1,12 @@
 { pkgs, ... }:
 
 {
+  # HiDPI display
+  hardware.video.hidpi.enable = true;
+  console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u24n.psf.gz";
   services.xserver.dpi = 120;
 
-  networking.firewall = {
-    logRefusedConnections = false;
-  };
-
+  # Batery config
   services.tlp = {
     enable = true;
     settings = {
@@ -18,10 +18,10 @@
   programs.adb.enable = true;
   users.groups."adbusers".members = [ "diffumist" ];
 
-  # SSE Only
+  # SSD trim
   services.fstrim = {
     enable = true;
-    interval = "Wed";
+    interval = "Sun";
   };
 
   services.timesyncd.enable = true;
@@ -34,8 +34,6 @@
   programs.mtr.enable = true;
 
   environment.systemPackages = with pkgs; [
-    cntr
     curl
-    virt-manager
   ];
 }

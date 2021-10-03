@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, nixos-cn, ... }:
 with lib; {
   environment.systemPackages = with pkgs; [
     (ark.override { unfreeEnableUnrar = true; })

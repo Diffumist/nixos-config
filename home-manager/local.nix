@@ -4,17 +4,14 @@
   programs.home-manager.enable = true;
 
   imports = [
-    ./modules/alacritty.nix
-    ./modules/common-pkgs.nix
-    ./modules/direnv.nix
-    ./modules/git.nix
-    ./modules/gpg.nix
-    ./modules/video.nix
-    # ./modules/rust.nix
-    ./modules/shell/default.nix
-    ./modules/trash.nix
-    ./modules/user-dirs.nix
-    ./modules/vscode
+    ./config/terminal.nix
+    ./config/common-pkgs.nix
+    ./config/git.nix
+    ./config/video.nix
+    ./config/services.nix
+    ./config/user-dirs.nix
+    ./config/vscode
+    ./config/shell
 
   ];
 

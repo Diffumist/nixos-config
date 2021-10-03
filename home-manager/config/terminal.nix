@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ ... }: {
+  # Terminal
   programs.alacritty = {
     enable = true;
     # See: https://github.com/alacritty/alacritty/blob/master/alacritty.yml
