@@ -2,17 +2,15 @@
 let
   xdgdirs = {
     LIBVA_DRIVER_NAME = "iHD";
-    # WIP: https://github.com/rust-windowing/winit/pull/1963
-    WINIT_X11_SCALE_FACTOR = "1.5";
-    # cache
+    # Cache
     XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
     __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
     MYSQL_HISTFILE = "${config.xdg.cacheHome}/mysql_history";
     NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node_repl_history";
     HISTFILE = "${config.xdg.cacheHome}/bash_history";
-    # config
+    # Config
     NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
-    # data
+    # Data
     WAKATIME_HOME = "${config.xdg.dataHome}/wakatime";
     WINEPREFIX = "${config.xdg.dataHome}/wineprefixes/default";
     GTK2_RC_FILES = "${config.xdg.dataHome}/gtk-2.0/gtkrc";
@@ -22,6 +20,8 @@ let
     GRADLE_USER_HOME = "${config.xdg.dataHome}/gradle";
     LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
+    # PATH
+    PATH = "$PATH\${PATH:+:}:$HOME/.local/bin";
   };
 in
 {

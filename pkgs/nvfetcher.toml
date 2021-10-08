@@ -1,3 +1,8 @@
 [smartdns-china-list]
 src.git = "https://github.com/felixonmars/dnsmasq-china-list"
 fetch.github = "felixonmars/dnsmasq-china-list"
+[maxmind-geoip]
+src.git = "https://github.com/Dreamacro/maxmind-geoip"
+src.branch = "release"
+fetch.github = "Dreamacro/maxmind-geoip"
+git.branch = "release"

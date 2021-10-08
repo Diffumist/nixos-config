@@ -1,7 +1,7 @@
-name: "build and push"
+name: "deploy"
 on: [push]
 jobs:
-  build-and-push:
+  deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -19,9 +19,11 @@ jobs:
       run: nix flake update
     - name: Cachix push
       run: |
-          nix build ".#nixosConfigurations.local.config.system.build.toplevel" --json | \
+          nix build ".#nixosConfigurations.server.config.system.build.toplevel" --json | \
           nix run nixpkgs#jq -- ".[].outputs.out" --raw-output | \
           nix run nixpkgs#cachix -- push diffumist
       env:
-
         CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    # - name: Deploy
+    #   run: |
+    #        nix run github:serokell/deploy-rs "./#server"

@@ -1,13 +1,10 @@
 { pkgs, ... }:
-
-let deleteOlderThanDays = "30";
-
-in
 {
+  # User unit services
   systemd.user.services."trash-empty" = {
-    Unit.Description = "Empty trash older than ${deleteOlderThanDays} days";
+    Unit.Description = "Empty trash older than 30 days";
     Service.ExecStart =
-      "${pkgs.trash-cli}/bin/trash-empty ${deleteOlderThanDays}";
+      "${pkgs.trash-cli}/bin/trash-empty 30";
   };
   systemd.user.timers."trash-empty" = {
     Timer = {

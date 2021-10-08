@@ -1,6 +1,7 @@
 { lib, pkgs, ... }:
 
 {
+  # Ref: https://github.com/oxalica/nixos-config
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
