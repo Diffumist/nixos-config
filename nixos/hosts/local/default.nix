@@ -1,4 +1,4 @@
-{ system, nixpkgs, inputs, ... }:
+{ system, nixpkgs, inputs, self, ... }:
 let this = import ./../../../pkgs; in
 nixpkgs.lib.nixosSystem {
   inherit system;
@@ -7,9 +7,10 @@ nixpkgs.lib.nixosSystem {
     ./configuration.nix
     inputs.home-manager.nixosModules.home-manager
     inputs.sops-nix.nixosModules.sops
+    self.nixosModules.clash
     {
       nixpkgs.overlays = [
-        (final: prev: import ./../../overlays.nix final prev)
+        (final: prev: import ./../../../overlays final prev)
         inputs.rust-overlay.overlay
         inputs.berberman.overlay
         this.overlay

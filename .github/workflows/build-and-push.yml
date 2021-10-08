@@ -15,6 +15,10 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - name: Flake check
       run: nix flake check --print-build-logs
+    - name: Flake update
+      run: nix flake update
+    - name: Nvfetcher update
+      run: nix-shell -p nvfetcher --command 'cd pkgs/; nvfetcher'
     - name: Cachix push
       run: |
           nix build ".#nixosConfigurations.local.config.system.build.toplevel" --json | \

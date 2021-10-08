@@ -36,9 +36,10 @@
   };
   outputs = inputs@{ self, nixpkgs, flake-utils, ... }:
     {
+      nixosModules = import ./modules;
       nixosConfigurations = {
-        local = import ./nixos/hosts/local { system = "x86_64-linux"; inherit nixpkgs inputs; };
-        server = import ./nixos/hosts/server { system = "x86_64-linux"; inherit nixpkgs inputs; };
+        local = import ./nixos/hosts/local { system = "x86_64-linux"; inherit self nixpkgs inputs; };
+        server = import ./nixos/hosts/server { system = "x86_64-linux"; inherit self nixpkgs inputs; };
       };
       deploy.nodes = {
         server = {

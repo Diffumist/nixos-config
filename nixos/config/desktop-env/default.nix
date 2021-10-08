@@ -1,8 +1,9 @@
-{ lib, config, pkgs, nixos-cn, ... }:
+{ lib, config, pkgs, ... }:
 with lib; {
   environment.systemPackages = with pkgs; [
     (ark.override { unfreeEnableUnrar = true; })
-    gparted
+    partition-manager
+    ksystemlog
     kdeconnect
     spectacle
     latte-dock
@@ -27,7 +28,7 @@ with lib; {
         Session = "plasma5";
       };
     };
-    videoDrivers = [ "nvidia" ];
+    videoDrivers = [ "modesetting" ];
   };
 
   security.pam.services.sddm.enableKwallet = true;

@@ -6,7 +6,7 @@
   console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u24n.psf.gz";
   services.xserver.dpi = 120;
 
-  # Batery config
+  # Batery conservation mode
   services.tlp = {
     enable = true;
     settings = {
@@ -30,10 +30,23 @@
     enable = true;
     enableNotifications = true;
   };
+  virtualisation = {
+    libvirtd = {
+      enable = true;
+      qemuPackage = pkgs.qemu_kvm;
+    };
+    kvmgt = {
+      enable = true;
+      # Random generated UUIDs.
+      # vgpus."i915-GVTg_V5_4".uuid = "7a0eb5a3-9927-4613-a01e-24886e15c4a4"; # 1920x1200
+      # vgpus."i915-GVTg_V5_8".uuid = [ "83d2cd0c-89aa-4045-8e8e-5796ac8d6d4f" ]; # 1024x768
+    };
+    podman.enable = true;
+  };
+  users.groups."libvirtd".members = [ "diffumist" ];
 
   programs.mtr.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    curl
-  ];
+  programs.fish.enable = true;
+  programs.fish.useBabelfish = true;
 }

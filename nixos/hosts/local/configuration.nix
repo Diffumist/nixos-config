@@ -4,23 +4,26 @@
     ./boot.nix
     ./software.nix
     ./hardware.nix
-    ./virtual.nix
 
     ../../config/desktop-env
     ../../config/nix-config.nix
-    ../../config/network
-    ../../config/network/tproxy.nix
+    ../../config/network.nix
   ];
 
   networking = {
     hostName = "Dmistlaptop";
-    firewall.enable = false;
+    firewall.enable = true;
     networkmanager.dns = "none";
     networkmanager.wifi.backend = "iwd";
     nameservers = [ "127.0.0.1" ];
   };
   time.timeZone = "Asia/Shanghai";
 
+  services.clash = {
+    enable = true;
+    enableTProxy = true;
+    tproxyPort = 7891;
+  };
   # Generate hashedPassword: mkpasswd
   users = {
     groups."diffumist".gid = 1000;

@@ -1,6 +1,7 @@
 { lib, pkgs, ... }: {
   home.packages = with pkgs; map lib.lowPrio [
     # CLI
+    curl
     neofetch
     htop
     ncdu
@@ -28,8 +29,8 @@
     google-chrome
     steam
     citra
-    (wine.override { wineRelease = "unstable"; })
-    (winetricks.override { wine = wine.override { wineRelease = "unstable"; }; })
+    wine
+    winetricks
     # Env
     patchelf
     gcc

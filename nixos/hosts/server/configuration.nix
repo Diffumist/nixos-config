@@ -2,7 +2,7 @@
 {
   imports = [
     (modulesPath + "/virtualisation/amazon-image.nix")
-    ../../config/network
+    ../../config/network.nix
     ../../config/nix-config.nix
   ];
 

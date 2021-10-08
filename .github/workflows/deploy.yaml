@@ -15,8 +15,15 @@ jobs:
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
     - name: Flake check
       run: nix flake check --print-build-logs
-    - name: Deploy
+    - name: Flake update
+      run: nx flake update
+    - name: Cachix push
       run: |
-           nix run github:serokell/deploy-rs "./#server"
+          nix build ".#nixosConfigurations.server.config.system.build.toplevel" --json | \
+          nix run nixpkgs#jq -- ".[].outputs.out" --raw-output | \
+          nix run nixpkgs#cachix -- push diffumist
       env:
         CACHIX_SIGNING_KEY: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    # - name: Deploy
+    #   run: |
+    #        nix run github:serokell/deploy-rs "./#server"

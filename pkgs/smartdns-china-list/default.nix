@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Chinese-specific configuration to improve your favorite DNS server. Best partner for chnroutes.";
+    description = "Chinese-specific configuration to improve your favorite DNS server. Best partner for chnroutes.";
     homepage = "https://github.com/felixonmars/dnsmasq-china-list";
     license = licenses.wtfpl;
   };
