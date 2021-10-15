@@ -14,7 +14,7 @@
     gc = {
       automatic = true;
       dates = "Sun";
-      options = "--delete-older-than 8d";
+      options = "--delete-older-than 14d";
     };
 
     autoOptimiseStore = true;

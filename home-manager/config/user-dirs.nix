@@ -1,15 +1,20 @@
 { config, ... }:
 let
   xdgdirs = {
+    # Chromium
+    GOOGLE_DEFAULT_CLIENT_ID = "77185425430.apps.googleusercontent.com";
+    GOOGLE_DEFAULT_CLIENT_SECRET = "OTJgUOQcT7lO7GsGZq2G4IlT";
     LIBVA_DRIVER_NAME = "iHD";
     # Cache
     XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
+    COMPOSER_CACHE_DIR = "${config.xdg.cacheHome}/compose";
     __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
     MYSQL_HISTFILE = "${config.xdg.cacheHome}/mysql_history";
     NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node_repl_history";
     HISTFILE = "${config.xdg.cacheHome}/bash_history";
     # Config
     NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
+    _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${config.xdg.configHome}/java";
     # Data
     WAKATIME_HOME = "${config.xdg.dataHome}/wakatime";
     WINEPREFIX = "${config.xdg.dataHome}/wineprefixes/default";
@@ -20,8 +25,7 @@ let
     GRADLE_USER_HOME = "${config.xdg.dataHome}/gradle";
     LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
-    # PATH
-    PATH = "$PATH\${PATH:+:}:$HOME/.local/bin";
+    VSCODE_PORTABLE = "${config.xdg.dataHome}/vscode";
   };
 in
 {
@@ -35,7 +39,7 @@ in
       music = "$HOME/Music";
       publicShare = "$HOME";
       templates = "$HOME";
-      videos = "$HOME/Videos";
+      videos = "$HOME";
     };
     configFile = {
       "go/env".text = ''

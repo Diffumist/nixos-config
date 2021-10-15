@@ -8,6 +8,7 @@
     lsof
     dnsutils
     fd
+    ripgrep
     tealdeer
     man-pages
     jq
@@ -20,15 +21,13 @@
     # GUI
     authy
     obs-studio
-    neovim
     jetbrains.idea-ultimate
     jetbrains.clion
-    jetbrains.rider
+    android-studio
     tdesktop
     qbittorrent-enhanced
-    google-chrome
     steam
-    citra
+    virt-manager
     wine
     winetricks
     # Env
@@ -40,9 +39,17 @@
     lld
     binutils
     python3
+    nodejs
     mono
     nixpkgs-review
     nixpkgs-fmt
     pkg-config
+    # LSP
+    nodePackages.typescript-language-server
+    nodePackages.prettier
+    nodePackages.yaml-language-server
+    rnix-lsp
+    pyright
+    tree-sitter
   ];
 }

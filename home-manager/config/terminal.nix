@@ -9,6 +9,10 @@
           columns = 110;
           lines = 35;
         };
+        position = {
+          x = 550;
+          y = 550;
+        };
         dynamic_title = true;
       };
       shell.program = "fish";
@@ -16,11 +20,11 @@
       font = {
         size = 10;
         normal = {
-          family = "JetBrains Mono";
+          family = "JetBrains Mono Nerd Font";
           style = "Regular";
         };
-        bold = { family = "JetBrains Mono"; };
-        italic = { family = "JetBrains Mono"; };
+        bold = { family = "JetBrains Mono Nerd Font"; };
+        italic = { family = "JetBrains Mono Nerd Font"; };
       };
       draw_bold_text_with_bright_colors = true;
       background_opacity = 1;

@@ -7,9 +7,11 @@
     ./config/terminal.nix
     ./config/common-pkgs.nix
     ./config/git.nix
+    ./config/browsers.nix
     ./config/video.nix
     ./config/services.nix
     ./config/user-dirs.nix
+    ./config/neovim
     ./config/vscode
     ./config/shell
 

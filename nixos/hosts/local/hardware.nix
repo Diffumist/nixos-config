@@ -11,6 +11,8 @@
       enable = true;
       finegrained = true;
     };
+    modesetting.enable = true;
+    nvidiaSettings = false;
   };
   hardware.opengl = {
     enable = true;

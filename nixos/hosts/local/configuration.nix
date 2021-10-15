@@ -7,9 +7,9 @@
 
     ../../config/desktop-env
     ../../config/nix-config.nix
-    ../../config/network.nix
   ];
 
+  # Network
   networking = {
     hostName = "Dmistlaptop";
     firewall.enable = true;
@@ -21,9 +21,30 @@
 
   services.clash = {
     enable = true;
-    enableTProxy = true;
-    tproxyPort = 7891;
+    redirPort = 7891;
   };
+
+  services.smartdns = {
+    enable = true;
+    settings = {
+      conf-file = with pkgs; [
+        "${smartdns-china-list}/accelerated-domains.china.smartdns.conf"
+        "${smartdns-china-list}/apple.china.smartdns.conf"
+        "${smartdns-china-list}/google.china.smartdns.conf"
+      ];
+      bind = [ "127.0.0.1:53" ];
+      prefetch-domain = true;
+      server = "223.5.5.5 -group china -exclude-default-group";
+      server-tls = [ "8.8.8.8:853" "1.1.1.1:853" ];
+      server-https = "https://cloudflare-dns.com/dns-query -exclude-default-group";
+    };
+  };
+
+  services.zerotierone = {
+    enable = true;
+    joinNetworks = [ "93afae5963a9686e" ];
+  };
+
   # Generate hashedPassword: mkpasswd
   users = {
     groups."diffumist".gid = 1000;

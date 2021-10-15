@@ -1,11 +1,9 @@
 { lib, config, pkgs, ... }:
-with lib; {
+{
   environment.systemPackages = with pkgs; [
     (ark.override { unfreeEnableUnrar = true; })
-    partition-manager
+    gparted
     ksystemlog
-    kdeconnect
-    spectacle
     latte-dock
     capitaine-cursors
     materia-theme
@@ -14,8 +12,6 @@ with lib; {
     libsForQt5.qtstyleplugin-kvantum
     papirus-icon-theme
   ];
-
-  # services.gnome.gnome-keyring.enable = true;
 
   services.xserver = {
     enable = true;
@@ -28,7 +24,7 @@ with lib; {
         Session = "plasma5";
       };
     };
-    videoDrivers = [ "modesetting" ];
+    videoDrivers = [ "nvidia" ];
   };
 
   security.pam.services.sddm.enableKwallet = true;
@@ -68,11 +64,12 @@ with lib; {
     wifi.macAddress = "preserve";
   };
 
+  programs.kdeconnect.enable = true;
+
   environment.etc = {
     "xdg/kdeglobals".source = ./xdg/kdeglobals;
     "xdg/kglobalshortcutsrc".source = ./xdg/kglobalshortcutsrc;
     "xdg/kwinrc".source = ./xdg/kwinrc;
-    "xdg/kwinrulesrc".source = ./xdg/kwinrulesrc;
     "xdg/spectaclerc".source = ./xdg/spectaclerc;
     "xdg/startkderc".source = ./xdg/startkderc;
   };

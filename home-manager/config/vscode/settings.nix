@@ -58,5 +58,4 @@
   "telemetry.enableTelemetry" = false;
   "telemetry.enableCrashReporter" = false;
   "security.workspace.trust.untrustedFiles" = "open";
-  "tabnine.experimentalAutoImports" = true;
 }

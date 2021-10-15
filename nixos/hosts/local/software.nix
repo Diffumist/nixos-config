@@ -10,7 +10,7 @@
   services.tlp = {
     enable = true;
     settings = {
-      START_CHARGE_THRESH_BAT0 = 75;
+      START_CHARGE_THRESH_BAT0 = 60; # Waiting tlp 1.4.0
       STOP_CHARGE_THRESH_BAT0 = 80;
     };
   };
@@ -34,12 +34,6 @@
     libvirtd = {
       enable = true;
       qemuPackage = pkgs.qemu_kvm;
-    };
-    kvmgt = {
-      enable = true;
-      # Random generated UUIDs.
-      # vgpus."i915-GVTg_V5_4".uuid = "7a0eb5a3-9927-4613-a01e-24886e15c4a4"; # 1920x1200
-      # vgpus."i915-GVTg_V5_8".uuid = [ "83d2cd0c-89aa-4045-8e8e-5796ac8d6d4f" ]; # 1024x768
     };
     podman.enable = true;
   };
