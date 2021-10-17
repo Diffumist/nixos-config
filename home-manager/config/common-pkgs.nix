@@ -18,6 +18,8 @@
     libarchive
     runzip
     pandoc
+    sops
+    prime-run
     # GUI
     authy
     obs-studio

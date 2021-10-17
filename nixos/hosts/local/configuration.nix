@@ -22,6 +22,7 @@
   services.clash = {
     enable = true;
     redirPort = 7891;
+    configFile = "/etc/clash/clash.yaml";
   };
 
   services.smartdns = {
@@ -38,11 +39,6 @@
       server-tls = [ "8.8.8.8:853" "1.1.1.1:853" ];
       server-https = "https://cloudflare-dns.com/dns-query -exclude-default-group";
     };
-  };
-
-  services.zerotierone = {
-    enable = true;
-    joinNetworks = [ "93afae5963a9686e" ];
   };
 
   # Generate hashedPassword: mkpasswd
