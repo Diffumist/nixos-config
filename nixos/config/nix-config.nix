@@ -8,6 +8,7 @@
     binaryCaches = lib.mkBefore [
       "https://mirror.sjtu.edu.cn/nix-channels/store"
       "https://diffumist.cachix.org"
+      "https://cache.nixos.org"
     ];
     binaryCachePublicKeys =
       [ "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk=" ];
@@ -22,10 +23,6 @@
     extraOptions = ''
       experimental-features = nix-command flakes
       flake-registry = /etc/nix/registry.json
-
-      download-attempts = 5
-      connect-timeout = 15
-      stalled-download-timeout = 10
 
       # To protect nix-shell against garbage collection.
       keep-outputs = true

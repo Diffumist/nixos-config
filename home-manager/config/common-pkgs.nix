@@ -46,6 +46,7 @@
     nixpkgs-review
     nixpkgs-fmt
     pkg-config
+    (nixos-generators.override { nix = nixFlakes; })
     # LSP
     nodePackages.typescript-language-server
     nodePackages.prettier

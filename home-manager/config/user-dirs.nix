@@ -9,18 +9,14 @@ let
     XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
     COMPOSER_CACHE_DIR = "${config.xdg.cacheHome}/compose";
     __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
-    MYSQL_HISTFILE = "${config.xdg.cacheHome}/mysql_history";
     NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node_repl_history";
     HISTFILE = "${config.xdg.cacheHome}/bash_history";
     # Config
     NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
     _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${config.xdg.configHome}/java";
     # Data
-    WAKATIME_HOME = "${config.xdg.dataHome}/wakatime";
     WINEPREFIX = "${config.xdg.dataHome}/wineprefixes/default";
     GTK2_RC_FILES = "${config.xdg.dataHome}/gtk-2.0/gtkrc";
-    CABAL_DIR = "${config.xdg.dataHome}/cabal";
-    CABAL_CONFIG = "${config.xdg.dataHome}/cabal/config";
     KDEHOME = "${config.xdg.dataHome}/kde";
     GRADLE_USER_HOME = "${config.xdg.dataHome}/gradle";
     LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
@@ -56,11 +52,15 @@ in
         init-module=${config.xdg.configHome}/npm/config/npm-init.js
         store-dir=${config.xdg.dataHome}/pnpm-store
       '';
-      "fcitx5/conf/classicui.conf".text = ''
+      "fcitx5/conf/fcitx5.conf".text = ''
         Vertical Candidate List=False
         Font="Sarasa Gothic SC 10"
         UseInputMethodLangaugeToDisplayText=True
         Theme=Material-Color-Black
+      '';
+      "Kvantum/kvantum.kvconfig".text = ''
+        [General]
+        theme=MateriaDark
       '';
     };
   };

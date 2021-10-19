@@ -18,12 +18,6 @@
     layout = "us";
     desktopManager.plasma5.enable = true;
     displayManager.sddm.enable = true;
-    displayManager.sddm.settings = {
-      Autologin = {
-        User = "diffumist";
-        Session = "plasma5";
-      };
-    };
     videoDrivers = [ "nvidia" ];
   };
 

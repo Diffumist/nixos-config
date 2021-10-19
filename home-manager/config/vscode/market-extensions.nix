@@ -11,10 +11,4 @@
     version = "0.0.2";
     sha256 = "TVvjKdKXeExpnyUh+fDPl+eSdlQzh7lt8xSfw1YgtL4=";
   })
-  (extensionFromVscodeMarketplace {
-    publisher = "XadillaX";
-    name = "viml";
-    version = "1.0.1";
-    sha256 = "mzf2PBSbvmgPjchyKmTaf3nASUi5/S9Djpoeh0y8gH0=";
-  })
 ]

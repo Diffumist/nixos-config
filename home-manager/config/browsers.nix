@@ -11,7 +11,6 @@
       '';
     });
     extensions = [
-      "mpkodccbngfoacfalldjimigbofkhgjn" # Aria2 for Chrome
       "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
       "ponfpcnoihfmfllpaingbgckeeldkhle" # Enhancer for YouTube
       "jklfcpboamajpiikgkbjcnnnnooefbhh" # pakku for bilibili

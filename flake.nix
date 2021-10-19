@@ -39,15 +39,14 @@
       nixosModules = import ./modules;
       nixosConfigurations = {
         local = import ./nixos/hosts/local { system = "x86_64-linux"; inherit self nixpkgs inputs; };
-        server = import ./nixos/hosts/server { system = "x86_64-linux"; inherit self nixpkgs inputs; };
-        iso = import ./nixos/hosts/iso { system = "x86_64-linux"; inherit self nixpkgs inputs; };
+        dos = import ./nixos/hosts/dos { system = "x86_64-linux"; inherit self nixpkgs inputs; };
       };
       deploy.nodes = {
-        server = {
+        dos = {
           sshUser = "root";
           sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-          hostname = "host.diffumist.me";
-          profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.server;
+          hostname = "dos.diffumist.me";
+          profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.dos;
         };
       };
     }

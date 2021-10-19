@@ -4,6 +4,7 @@ with lib;
 let
   cfg = config.services.clash;
   configPath = cfg.configPath;
+  configFile = cfg.configFile;
   inherit (pkgs) ripgrep iptables;
   redirPortStr = toString cfg.redirPort;
 in
@@ -13,6 +14,10 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
+      };
+      configFile = mkOption {
+        type = types.path;
+        default = "";
       };
       configPath = mkOption {
         type = types.path;
@@ -26,7 +31,7 @@ in
   };
   config = mkIf cfg.enable {
     environment.etc."clash/Country.mmdb".source = "${pkgs.maxmind-geoip}/Country.mmdb";
-    # environment.etc."clash/config.yaml".source = "${configPath}";
+    environment.etc."clash/config.yaml".source = "${configFile}";
     systemd.services.clash =
       let
         # Start clash client with iptables script

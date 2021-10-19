@@ -15,8 +15,8 @@
       eamodio.gitlens
       dbaeumer.vscode-eslint
       tamasfe.even-better-toml
+      redhat.vscode-yaml
       jnoortheen.nix-ide
-      vscodevim.vim
     ] ++ import ./market-extensions.nix {
       inherit (pkgs.vscode-utils) extensionFromVscodeMarketplace;
     };
