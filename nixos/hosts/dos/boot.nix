@@ -41,7 +41,7 @@
   swapDevices = [
     {
       device = "/dev/disk/by-label/swap";
-      size = 2048;  # MiB
+      size = 2048; # MiB
     }
   ];
 
