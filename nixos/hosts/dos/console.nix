@@ -10,7 +10,7 @@
     enable = true;
     port = 53232;
     encryptionMethod = "aes-256-gcm";
-    passwordFile = "/etc/shadowsocks.txt";
+    passwordFile = "/persist/shadowsocks.txt";
   };
   environment.systemPackages = with pkgs; [
     htop

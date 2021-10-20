@@ -5,6 +5,7 @@ nixpkgs.lib.nixosSystem {
   modules = [
     ./configuration.nix
     inputs.home-manager.nixosModules.home-manager
+    inputs.impermanence.nixosModules.impermanence
     inputs.sops-nix.nixosModules.sops
     {
       nixpkgs.overlays = [
@@ -13,5 +14,3 @@ nixpkgs.lib.nixosSystem {
     }
   ];
 }
-
-

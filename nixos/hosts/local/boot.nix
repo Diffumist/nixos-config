@@ -28,19 +28,19 @@
   fileSystems =
     let
       espDev = "/dev/disk/by-uuid/E245-3FCF";
-      btrfsDev = "/dev/disk/by-uuid/96679f22-3764-4c1e-9770-3aa96430b4bc";
+      btrfsDev = "/dev/disk/by-label/NixOS";
 
       btrfs = options: {
         device = btrfsDev;
         fsType = "btrfs";
-        options = [ "noatime" ] ++ options;
+        options = [ "noatime" "space_cache=v2" "compress-force=zstd" ] ++ options;
       };
     in
     {
-      "/" = btrfs [ "subvol=@" "compress-force=zstd" ];
+      "/" = btrfs [ "subvol=@" ];
       "/.subvols" = btrfs [ ];
-      "/home" = btrfs [ "subvol=@home" "compress-force=zstd" ];
-      "/nix" = btrfs [ "subvol=@nix" "compress-force=zstd" ];
+      "/home" = btrfs [ "subvol=@home" ];
+      "/nix" = btrfs [ "subvol=@nix" ];
       "/var/swapfile" = btrfs [ "subvol=@swap" ];
       "/boot" = {
         device = espDev;
