@@ -1,6 +1,6 @@
 # From https://github.com/cleverca22/nix-tests/blob/master/kexec/kexec.nix
-{ pkgs, config, ... }:
 
+{ pkgs, config, ... }:
 {
   system.build = rec {
     image = pkgs.runCommand "image" { buildInputs = [ pkgs.nukeReferences ]; } ''

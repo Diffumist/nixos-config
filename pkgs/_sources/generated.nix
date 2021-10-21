@@ -3,26 +3,26 @@
 {
   maxmind-geoip = {
     pname = "maxmind-geoip";
-    version = "5f627316ee63b2e5610f4bc69c87aa4ec567f001";
+    version = "7b912166e3db29d70a2e2754f57dc075afcd930d";
     src = fetchgit {
       url = "https://github.com/Dreamacro/maxmind-geoip";
-      rev = "5f627316ee63b2e5610f4bc69c87aa4ec567f001";
+      rev = "7b912166e3db29d70a2e2754f57dc075afcd930d";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "1h3il5qx42ymdbzasdkqr51fasfs9rim3q4q2pl0wzi1z371s38a";
+      sha256 = "1lvjkgkz41q6bhw7z27gmhz73j37g6c1xpxwcqd2g91vw0yhndcv";
     };
   };
   smartdns-china-list = {
     pname = "smartdns-china-list";
-    version = "ab59165e481e9f2192ab357c32778482e55b7650";
+    version = "227b400e5951b5c466fba1810e5a1cd16e1de9ab";
     src = fetchgit {
       url = "https://github.com/felixonmars/dnsmasq-china-list";
-      rev = "ab59165e481e9f2192ab357c32778482e55b7650";
+      rev = "227b400e5951b5c466fba1810e5a1cd16e1de9ab";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "0l6xxh11pnnj2acmlz9g9nc05mzsz04aklrshksllzf4hw95avar";
+      sha256 = "1fiq23hdbk2q6c3vhlwqa5sga88dwk34k3qf9hy3lpxy2w1jhq7c";
     };
   };
 }

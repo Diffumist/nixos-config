@@ -2,7 +2,7 @@
   description = "diffumist's NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     flake-utils.url = "github:numtide/flake-utils";
     impermanence.url = "github:nix-community/impermanence";
@@ -53,9 +53,19 @@
     }
     // flake-utils.lib.eachSystem [ "x86_64-linux" ]
       (system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+          inherit (pkgs) mkShell;
+        in
         rec {
           # Ref: https://gitlab.com/NickCao/flakes/-/blob/master/flake.nix#L79
           checks = (inputs.deploy-rs.lib.${system}.deployChecks { nodes = self.deploy.nodes; });
+          devShell = mkShell {
+            buildInputs = with pkgs; [
+              nixpkgs-fmt
+              nvfetcher
+            ];
+          };
         }
       );
 }
