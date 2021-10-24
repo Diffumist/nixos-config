@@ -15,6 +15,12 @@
     firewall.enable = true;
     networkmanager.dns = "none";
     networkmanager.wifi.backend = "iwd";
+    networkmanager.extraConfig = ''
+      [main]
+      rc-manager = unmanaged
+      [keyfile]
+      path = /var/lib/NetworkManager/system-connections
+    '';
     nameservers = [ "127.0.0.1" ];
   };
   time.timeZone = "Asia/Shanghai";

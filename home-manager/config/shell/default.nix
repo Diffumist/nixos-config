@@ -6,6 +6,9 @@
       export LANG="en_US.UTF-8"
       set -g fish_greeting
     '';
+    shellAliases = {
+      nixfmt = "nixpkgs-fmt (fd -E pkgs -e nix)";
+    };
   };
   programs.starship = {
     enable = true;

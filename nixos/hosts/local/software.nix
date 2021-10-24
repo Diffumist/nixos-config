@@ -6,6 +6,10 @@
   console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u24n.psf.gz";
   services.xserver.dpi = 120;
 
+  environment.sessionVariables = {
+    WINIT_X11_SCALE_FACTOR = "1.5"; # Ref: https://github.com/alacritty/alacritty/issues/3792
+  };
+
   # Batery conservation mode
   services.tlp = {
     enable = true;

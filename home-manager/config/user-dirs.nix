@@ -52,7 +52,7 @@ in
         init-module=${config.xdg.configHome}/npm/config/npm-init.js
         store-dir=${config.xdg.dataHome}/pnpm-store
       '';
-      "fcitx5/conf/fcitx5.conf".text = ''
+      "fcitx5/conf/classicui.conf".text = ''
         Vertical Candidate List=False
         Font="Sarasa Gothic SC 10"
         UseInputMethodLangaugeToDisplayText=True

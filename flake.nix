@@ -36,6 +36,30 @@
     };
   };
   outputs = inputs@{ self, nixpkgs, flake-utils, ... }:
+    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ]
+      (
+        system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [
+              inputs.deploy-rs.overlay
+              inputs.rust-overlay.overlay
+            ];
+          };
+        in
+        rec {
+          checks = (inputs.deploy-rs.lib.${system}.deployChecks {
+            nodes = pkgs.lib.filterAttrs (name: cfg: cfg.profiles.system.path.system == system) self.deploy.nodes;
+          });
+          devShell = with pkgs; mkShell {
+            buildInputs = [
+              nvfetcher
+              deploy-rs.deploy-rs
+            ];
+          };
+        }
+      ) //
     {
       nixosModules = import ./modules;
       nixosConfigurations = {
@@ -50,22 +74,5 @@
           profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.dos;
         };
       };
-    }
-    // flake-utils.lib.eachSystem [ "x86_64-linux" ]
-      (system:
-        let
-          pkgs = import nixpkgs { inherit system; };
-          inherit (pkgs) mkShell;
-        in
-        rec {
-          # Ref: https://gitlab.com/NickCao/flakes/-/blob/master/flake.nix#L79
-          checks = (inputs.deploy-rs.lib.${system}.deployChecks { nodes = self.deploy.nodes; });
-          devShell = mkShell {
-            buildInputs = with pkgs; [
-              nixpkgs-fmt
-              nvfetcher
-            ];
-          };
-        }
-      );
+    };
 }

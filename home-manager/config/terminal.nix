@@ -20,11 +20,11 @@
       font = {
         size = 10;
         normal = {
-          family = "JetBrains Mono Nerd Font";
+          family = "JetBrains Mono";
           style = "Regular";
         };
-        bold = { family = "JetBrains Mono Nerd Font"; };
-        italic = { family = "JetBrains Mono Nerd Font"; };
+        bold = { family = "JetBrains Mono"; };
+        italic = { family = "JetBrains Mono"; };
       };
       draw_bold_text_with_bright_colors = true;
       background_opacity = 1;

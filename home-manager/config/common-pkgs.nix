@@ -28,7 +28,6 @@
     android-studio
     tdesktop
     qbittorrent-enhanced
-    steam
     virt-manager
     wine
     winetricks

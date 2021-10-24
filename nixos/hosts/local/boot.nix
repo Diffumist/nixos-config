@@ -34,24 +34,41 @@
         device = btrfsDev;
         fsType = "btrfs";
         options = [ "noatime" "space_cache=v2" "compress-force=zstd" ] ++ options;
+        neededForBoot = true;
+      };
+      tmpfs = {
+        fsType = "tmpfs";
+        options = [ "defaults" "mode=755" ];
       };
     in
     {
-      "/" = btrfs [ "subvol=@" ];
+      "/" = tmpfs;
       "/.subvols" = btrfs [ ];
       "/home" = btrfs [ "subvol=@home" ];
       "/nix" = btrfs [ "subvol=@nix" ];
       "/var/swapfile" = btrfs [ "subvol=@swap" ];
+      "/persist" = btrfs [ "subvol=@persist" ];
       "/boot" = {
         device = espDev;
         fsType = "vfat";
       };
     };
 
+  environment.persistence."/persist" = {
+    directories = [
+      "/var/log"
+      "/var/lib"
+      "/var/db"
+    ];
+    files = [
+      "/etc/machine-id"
+    ];
+  };
+
   swapDevices = [
     {
       device = "/var/swapfile/swapfile";
-      size = 8192; # MiB
+      size = 16384; # MiB
     }
   ];
 

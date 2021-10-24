@@ -56,5 +56,5 @@
     ];
   };
 
-  powerManagement.cpuFreqGovernor =  "ondemand";
+  powerManagement.cpuFreqGovernor = "ondemand";
 }
