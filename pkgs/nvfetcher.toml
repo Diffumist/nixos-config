@@ -6,3 +6,9 @@ src.git = "https://github.com/Dreamacro/maxmind-geoip"
 src.branch = "release"
 fetch.github = "Dreamacro/maxmind-geoip"
 git.branch = "release"
+[material-nvim]
+src.git = "https://github.com/marko-cerovac/material.nvim"
+fetch.github = "marko-cerovac/material.nvim"
+[nali]
+src.git = "https://github.com/zu1k/nali"
+fetch.github = "zu1k/nali"

@@ -1,3 +1,4 @@
+# Ref: https://github.com/archlinux/svntogit-packages/blob/packages/nvidia-prime/trunk/prime-run
 { writeShellScriptBin }:
 writeShellScriptBin "prime-run" ''
   export __NV_PRIME_RENDER_OFFLOAD=1

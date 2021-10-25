@@ -10,7 +10,7 @@
     ./config/browsers.nix
     ./config/video.nix
     ./config/services.nix
-    ./config/user-dirs.nix
+    ./config/xdg
     ./config/neovim
     ./config/vscode
     ./config/shell

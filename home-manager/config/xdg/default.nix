@@ -22,6 +22,7 @@ let
     LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
     VSCODE_PORTABLE = "${config.xdg.dataHome}/vscode";
+    NALI_DB_HOME = "${config.xdg.dataHome}/nali";
   };
 in
 {
@@ -62,6 +63,7 @@ in
         [General]
         theme=MateriaDark
       '';
+      "latte/Default.layout.latte".text = builtins.readFile ./config.layout.latte;
     };
   };
   systemd.user.sessionVariables = xdgdirs;
