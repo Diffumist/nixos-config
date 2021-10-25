@@ -1,4 +1,4 @@
-# Ref: https://gitlab.com/NickCao/flakes
+# Ref: https://gitlab.com/NickCao/flakes/-/blob/master/pkgs/default.nix
 rec {
   mapPackages = f:
     with builtins;

@@ -12,8 +12,10 @@
     encryptionMethod = "aes-256-gcm";
     passwordFile = "/persist/shadowsocks.txt";
   };
+
   environment.systemPackages = with pkgs; [
     htop
     curl
+    ncdu
   ];
 }

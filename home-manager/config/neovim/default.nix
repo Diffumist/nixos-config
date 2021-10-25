@@ -1,15 +1,4 @@
 { pkgs, lib, ... }:
-let
-  material-nvim = pkgs.vimUtils.buildVimPlugin rec {
-    pname = "material-nvim";
-    version = "2021-10-15";
-    src = pkgs.fetchgit {
-      url = "https://github.com/marko-cerovac/material.nvim";
-      rev = "f8e663ae7b185e64acad94b72914c88fda729cf5";
-      sha256 = "KydXkdDF5bkUC5pJ0ydyixUYTqE0zPa6iLeGmTpibHM=";
-    };
-  };
-in
 {
   programs.neovim = {
     enable = true;
@@ -20,7 +9,7 @@ in
       dashboard-nvim
       bufferline-nvim
       toggleterm-nvim
-      material-nvim
+      pkgs.material-nvim
       # lsp
       nvim-cmp
       cmp-nvim-lsp
