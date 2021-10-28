@@ -4,7 +4,6 @@
   programs.home-manager.enable = true;
 
   imports = [
-    ./config/terminal.nix
     ./config/common-pkgs.nix
     ./config/git.nix
     ./config/browsers.nix

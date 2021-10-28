@@ -26,12 +26,4 @@
       default-key = "5647BF1E460733062EBF468BC68CA02B61625AEB";
     };
   };
-
-  services.gpg-agent = {
-    enable = true;
-    pinentryFlavor = "qt";
-    enableSshSupport = true;
-    defaultCacheTtl = 12 * 3600;
-    maxCacheTtl = 24 * 3600;
-  };
 }

@@ -32,4 +32,13 @@
     ];
     extraConfig = builtins.readFile ./setting.vimrc;
   };
+  # LSP
+  home.packages = with pkgs; [
+    nodePackages.typescript-language-server
+    nodePackages.prettier
+    nodePackages.yaml-language-server
+    rnix-lsp
+    pyright
+    tree-sitter
+  ];
 }

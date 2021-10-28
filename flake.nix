@@ -34,9 +34,13 @@
       inputs.utils.follows = "flake-utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nickpkgs = {
+      url = "github:NickCao/flakes?dir=pkgs";
+      flake = false;
+    };
   };
   outputs = inputs@{ self, nixpkgs, flake-utils, ... }:
-    flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ]
+    flake-utils.lib.eachSystem [ "x86_64-linux" ]
       (
         system:
         let
@@ -45,6 +49,7 @@
             overlays = [
               inputs.deploy-rs.overlay
               inputs.rust-overlay.overlay
+              inputs.sops-nix.overlay
             ];
           };
         in
@@ -56,6 +61,8 @@
             buildInputs = [
               nvfetcher
               deploy-rs.deploy-rs
+              ssh-to-age
+              age
             ];
           };
         }
@@ -65,6 +72,8 @@
       nixosConfigurations = {
         local = import ./nixos/hosts/local { system = "x86_64-linux"; inherit self nixpkgs inputs; };
         dos = import ./nixos/hosts/dos { system = "x86_64-linux"; inherit self nixpkgs inputs; };
+        vessel = import ./nixos/hosts/vessel { system = "x86_64-linux"; inherit self nixpkgs inputs; };
+        mist = import ./nixos/hosts/mist { system = "x86_64-linux"; inherit self nixpkgs inputs; };
       };
       deploy.nodes = {
         dos = {
@@ -72,6 +81,18 @@
           sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
           hostname = "dos.diffumist.me";
           profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.dos;
+        };
+        vessel = {
+          sshUser = "root";
+          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
+          hostname = "vessel.diffumist.me";
+          profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.vessel;
+        };
+        mist = {
+          sshUser = "root";
+          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
+          hostname = "mist.diffumist.me";
+          profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mist;
         };
       };
     };

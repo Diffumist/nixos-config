@@ -23,6 +23,8 @@ let
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
     VSCODE_PORTABLE = "${config.xdg.dataHome}/vscode";
     NALI_DB_HOME = "${config.xdg.dataHome}/nali";
+    # EDIROR
+    EDITOR = "nvim";
   };
 in
 {

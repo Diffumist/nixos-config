@@ -25,16 +25,16 @@
       sha256 = "1lvjkgkz41q6bhw7z27gmhz73j37g6c1xpxwcqd2g91vw0yhndcv";
     };
   };
-  nali-go = {
-    pname = "nali-go";
-    version = "4386b97d1516c25fdd5c8a83e5fee721de011051";
+  nali = {
+    pname = "nali";
+    version = "v0.3.2";
     src = fetchgit {
       url = "https://github.com/zu1k/nali";
-      rev = "4386b97d1516c25fdd5c8a83e5fee721de011051";
+      rev = "v0.3.2";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "0ra405s878cvd0p5wdi45sm3bkhhz3lhhhi7lgzsr5vijdr44dgn";
+      sha256 = "0s6bqmmklx0hb92bq4lqp3b4mgs7mxqg0l5nzksknary218fh4l9";
     };
   };
   smartdns-china-list = {

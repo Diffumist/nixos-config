@@ -11,6 +11,7 @@ nixpkgs.lib.nixosSystem {
     self.nixosModules.clash
     {
       nixpkgs.overlays = [
+        (import "${inputs.nickpkgs}/pkgs").overlay
         inputs.rust-overlay.overlay
         inputs.berberman.overlay
         this.overlay

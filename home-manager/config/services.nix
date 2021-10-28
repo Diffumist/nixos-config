@@ -13,4 +13,11 @@
     };
     Install.WantedBy = [ "timers.target" ];
   };
+  services.gpg-agent = {
+    enable = true;
+    pinentryFlavor = "qt";
+    # enableSshSupport = true;
+    defaultCacheTtl = 12 * 3600;
+    maxCacheTtl = 24 * 3600;
+  };
 }

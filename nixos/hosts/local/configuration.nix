@@ -1,4 +1,4 @@
-{ lib, pkgs, inputs, ... }:
+{ lib, pkgs, inputs, dmist, ... }:
 {
   imports = [
     ./boot.nix
@@ -8,7 +8,13 @@
     ../../config/desktop-env
     ../../config/nix-config.nix
   ];
-
+  # Sops-nix
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    age = {
+      keyFile = /var/lib/sops/local.key;
+    };
+  };
   # Network
   networking = {
     hostName = "Dmistlaptop";
@@ -25,7 +31,7 @@
   };
   time.timeZone = "Asia/Shanghai";
 
-  services.clash = {
+  dmist.clash = {
     enable = true;
     redirPort = 7891;
     configFile = "/etc/clash/clash.yaml";
@@ -47,7 +53,7 @@
     };
   };
 
-  # Generate hashedPassword: mkpasswd
+  # Generate hashedPassword: mkpasswd -m sha-512
   users = {
     groups."diffumist".gid = 1000;
     users."diffumist" = {

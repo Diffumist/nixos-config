@@ -51,6 +51,9 @@
     "files.trimFinalNewlines" = false;
     "files.trimTrailingWhitespace" = false;
   };
+  "[nix]" = {
+    "editor.tabSize" = 2;
+  };
   "nix.enableLanguageServer" = true;
 
   "update.showReleaseNotes" = false;

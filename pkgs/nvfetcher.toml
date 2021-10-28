@@ -9,6 +9,6 @@ git.branch = "release"
 [material-nvim]
 src.git = "https://github.com/marko-cerovac/material.nvim"
 fetch.github = "marko-cerovac/material.nvim"
-[nali-go]
-src.git = "https://github.com/zu1k/nali"
+[nali]
+src.github_tag = "zu1k/nali"
 fetch.github = "zu1k/nali"

@@ -45,6 +45,9 @@
 
   programs.mtr.enable = true;
 
+  programs.neovim.enable = true;
+  programs.neovim.defaultEditor = true;
+
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;
 }

@@ -144,6 +144,24 @@
         "type": "github"
       }
     },
+    "nickpkgs": {
+      "flake": false,
+      "locked": {
+        "dir": "pkgs",
+        "lastModified": 1635427032,
+        "narHash": "sha256-tk4XgAllna3Tnz14aNOd7QAJXEkuGse88MzbtE1E1MI=",
+        "owner": "NickCao",
+        "repo": "flakes",
+        "rev": "4d24658aea09c5c21914051861fcc522e96eb30a",
+        "type": "github"
+      },
+      "original": {
+        "dir": "pkgs",
+        "owner": "NickCao",
+        "repo": "flakes",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1634515797,
@@ -191,6 +209,7 @@
         "flake-utils": "flake-utils_2",
         "home-manager": "home-manager",
         "impermanence": "impermanence",
+        "nickpkgs": "nickpkgs",
         "nixpkgs": "nixpkgs",
         "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix"

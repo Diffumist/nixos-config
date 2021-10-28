@@ -2,15 +2,13 @@
 
 with lib;
 let
-  cfg = config.services.clash;
-  configPath = cfg.configPath;
-  configFile = cfg.configFile;
+  cfg = config.dmist.clash;
   inherit (pkgs) ripgrep iptables;
   redirPortStr = toString cfg.redirPort;
 in
 {
   options = {
-    services.clash = {
+    dmist.clash = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -31,7 +29,7 @@ in
   };
   config = mkIf cfg.enable {
     environment.etc."clash/Country.mmdb".source = "${pkgs.maxmind-geoip}/Country.mmdb";
-    environment.etc."clash/config.yaml".source = "${configFile}";
+    environment.etc."clash/config.yaml".source = "${cfg.configFile}";
     systemd.services.clash =
       let
         # Start clash client with iptables script
@@ -55,9 +53,9 @@ in
       {
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = "exec ${pkgs.clash}/bin/clash -d ${configPath}";
+        script = "exec ${pkgs.clash}/bin/clash -d ${cfg.configPath}";
         unitConfig = {
-          ConditionPathExists = "${configPath}/config.yaml";
+          ConditionPathExists = "${cfg.configPath}/config.yaml";
         };
         serviceConfig = {
           ExecStartPre = "+${preStartScript}";

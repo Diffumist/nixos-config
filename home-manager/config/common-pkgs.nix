@@ -1,17 +1,18 @@
 { lib, pkgs, config, ... }:
 let
-  theme-path = "${config.xdg.configHome}/Kvantum/MateriaDark/";
+  inherit (config.xdg) configHome;
+  MateriaDark = "${configHome}/Kvantum/MateriaDark/";
   kvantum-patch = pkgs.writeShellScriptBin "kvantum-patch" ''
-    if [ ! -d "${theme-path}" ]; then
-      mkdir -p ${theme-path}
+    if [ ! -d "${MateriaDark}" ]; then
+      mkdir -p ${MateriaDark}
     fi
-    if [ -d "${theme-path}" ]; then
-      for file in ${theme-path}/*
+    if [ -d "${MateriaDark}" ]; then
+      for file in ${MateriaDark}/*
       do
         unlink $file
       done
     fi
-    ln -s ${pkgs.materia-kde-theme}/share/Kvantum/MateriaDark/* ${theme-path}
+    ln -s ${pkgs.materia-kde-theme}/share/Kvantum/MateriaDark/* ${MateriaDark}
   '';
 in
 {
@@ -37,7 +38,8 @@ in
     pandoc
     sops
     prime-run
-    nali-go
+    nali
+    traceroute
     kvantum-patch
     # GUI
     authy
@@ -67,12 +69,5 @@ in
     nixpkgs-review
     nixpkgs-fmt
     pkg-config
-    # LSP
-    nodePackages.typescript-language-server
-    nodePackages.prettier
-    nodePackages.yaml-language-server
-    rnix-lsp
-    pyright
-    tree-sitter
   ];
 }
