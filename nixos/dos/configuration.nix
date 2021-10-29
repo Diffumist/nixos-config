@@ -3,15 +3,7 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     ./boot.nix
-    ../../config/nix-config.nix
   ];
-
-  sops = {
-    age = {
-      keyFile = "/var/lib/sops.key";
-      sshKeyPaths = [ ];
-    };
-  };
 
   networking = {
     hostName = "dos";

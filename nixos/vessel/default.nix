@@ -8,6 +8,8 @@ nixpkgs.lib.nixosSystem {
     inputs.impermanence.nixosModules.impermanence
     inputs.sops-nix.nixosModules.sops
     self.nixosModules.ss
+    self.nixosModules.nix-config
+    self.nixosModules.sops-nix
     {
       nixpkgs.overlays = [
         inputs.rust-overlay.overlay

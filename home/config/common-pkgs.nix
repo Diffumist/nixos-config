@@ -42,7 +42,7 @@ in
     traceroute
     kvantum-patch
     # GUI
-    authy
+    # authy
     obs-studio
     jetbrains.idea-ultimate
     jetbrains.clion

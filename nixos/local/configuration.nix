@@ -4,17 +4,7 @@
     ./boot.nix
     ./software.nix
     ./hardware.nix
-
-    ../../config/desktop-env
-    ../../config/nix-config.nix
   ];
-  # Sops-nix
-  sops = {
-    defaultSopsFile = ./secrets.yaml;
-    age = {
-      keyFile = /var/lib/sops/local.key;
-    };
-  };
   # Network
   networking = {
     hostName = "Dmistlaptop";
@@ -68,7 +58,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.diffumist = import ../../../home-manager/local.nix;
+    users.diffumist = import ../../home;
   };
 
   system.stateVersion = "20.09";

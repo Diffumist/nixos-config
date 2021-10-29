@@ -3,7 +3,7 @@
     "berberman": {
       "inputs": {
         "nixpkgs": [
-          "latest"
+          "nixpkgs"
         ],
         "nvfetcher": "nvfetcher"
       },
@@ -95,7 +95,7 @@
         ],
         "nixos-generators": "nixos-generators",
         "nixpkgs": [
-          "latest"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -198,7 +198,7 @@
     "home": {
       "inputs": {
         "nixpkgs": [
-          "latest"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -237,22 +237,6 @@
         "owner": "nixos",
         "repo": "nixpkgs",
         "rev": "31ffc50c571e6683e9ecc9dbcbd4a8e9914b4497",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "latest_2": {
-      "locked": {
-        "lastModified": 1635403963,
-        "narHash": "sha256-0actzfzBAXvvDJ/EvPSGbtCPXUwSObQrcq0RpsPWZgA=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "2deb07f3ac4eeb5de1c12c4ba2911a2eb1f6ed61",
         "type": "github"
       },
       "original": {
@@ -319,22 +303,6 @@
         "type": "github"
       }
     },
-    "nixos": {
-      "locked": {
-        "lastModified": 1635456205,
-        "narHash": "sha256-CLZxFvwec8BhFlB5tkIq08UBDNNrijOY780UF6ubJXc=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "66d6ec6ed2ddc77d08cf677cc8230db39f051793",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "release-21.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixos-generators": {
       "inputs": {
         "nixlib": [
@@ -357,6 +325,22 @@
       "original": {
         "owner": "nix-community",
         "repo": "nixos-generators",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1635403963,
+        "narHash": "sha256-0actzfzBAXvvDJ/EvPSGbtCPXUwSObQrcq0RpsPWZgA=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "2deb07f3ac4eeb5de1c12c4ba2911a2eb1f6ed61",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
@@ -410,13 +394,12 @@
         ],
         "home": "home",
         "impermanence": "impermanence",
-        "latest": "latest_2",
         "nickpkgs": "nickpkgs",
         "nixlib": [
           "digga",
           "nixlib"
         ],
-        "nixos": "nixos",
+        "nixpkgs": "nixpkgs",
         "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix"
       }
@@ -427,7 +410,7 @@
           "flake-utils"
         ],
         "nixpkgs": [
-          "latest"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -447,7 +430,7 @@
     "sops-nix": {
       "inputs": {
         "nixpkgs": [
-          "latest"
+          "nixpkgs"
         ]
       },
       "locked": {

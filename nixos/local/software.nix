@@ -14,8 +14,7 @@
   services.tlp = {
     enable = true;
     settings = {
-      START_CHARGE_THRESH_BAT0 = 60; # Waiting tlp 1.4.0
-      STOP_CHARGE_THRESH_BAT0 = 80;
+      START_CHARGE_THRESH_BAT0 = 60;
     };
   };
 
@@ -37,7 +36,7 @@
   virtualisation = {
     libvirtd = {
       enable = true;
-      qemuPackage = pkgs.qemu_kvm;
+      qemu.package = pkgs.qemu_kvm;
     };
     podman.enable = true;
   };
