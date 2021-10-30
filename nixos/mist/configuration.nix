@@ -7,6 +7,7 @@
 
   networking = {
     hostName = "mist";
+    domain = "diffumist.me";
     firewall = {
       enable = true;
       allowedTCPPorts = [ 22 ];
@@ -18,11 +19,9 @@
       eth0 = {
         ipv4.addresses = [
           { address = "209.141.44.76"; prefixLength = 24; }
-          { address = "172.16.185.223  "; prefixLength = 24; }
         ];
         ipv4.routes = [
           { address = "209.141.44.1"; prefixLength = 32; }
-          { address = "172.16.0.1"; prefixLength = 32; }
         ];
       };
     };

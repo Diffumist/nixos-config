@@ -11,7 +11,7 @@ nixpkgs.lib.nixosSystem {
     self.nixosModules.clash
     self.nixosModules.nix-config
     self.nixosModules.sops-nix
-    self.nixosModules.desktop-env
+    self.nixosModules.plasma-env
     {
       nixpkgs.overlays = [
         (import "${inputs.nickpkgs}/pkgs").overlay

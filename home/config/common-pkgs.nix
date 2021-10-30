@@ -54,6 +54,7 @@ in
     virt-manager
     wine
     winetricks
+    steam
     # Env
     patchelf
     gcc

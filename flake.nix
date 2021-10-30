@@ -7,7 +7,7 @@
     blank.follows = "digga/blank";
     nixlib.follows = "digga/nixlib";
     flake-utils.follows = "digga/flake-utils";
-    flake-utils-plus.follows = "digga/flake-utils-plus";
+    utils.url = "github:gytis-ivaskevicius/flake-utils-plus/1.2.0";
     deploy-rs.follows = "digga/deploy";
     flake-compat.follows = "digga/deploy/flake-compat";
 
@@ -17,7 +17,7 @@
       inputs.home-manager.follows = "home";
     };
     home = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-21.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     rust-overlay = {
@@ -36,7 +36,7 @@
       inputs.flake-compat.follows = "flake-compat";
     };
     nickpkgs = {
-      url = "github:NickCao/flakes?dir=pkgs";
+      url = "github:NickCao/flakes";
       flake = false;
     };
     impermanence.url = "github:nix-community/impermanence";
@@ -46,7 +46,7 @@
     , nixpkgs
     , digga
     , home
-    , flake-utils
+    , utils
     , rust-overlay
     , deploy-rs
     , sops-nix
@@ -54,59 +54,64 @@
     , impermanence
     , ...
     } @ inputs:
-    flake-utils.lib.eachSystem [ "x86_64-linux" ]
-      (
-        system:
-        let
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = [
-              deploy-rs.overlay
-              rust-overlay.overlay
-              sops-nix.overlay
-            ];
-          };
-        in
-        rec {
-          checks = (deploy-rs.lib.${system}.deployChecks {
-            nodes = pkgs.lib.filterAttrs (name: cfg: cfg.profiles.system.path.system == system) self.deploy.nodes;
-          });
-          devShell = with pkgs; mkShell {
-            buildInputs = [
-              nvfetcher
-              deploy-rs
-              ssh-to-age
-              age
-            ];
-          };
-        }
-      ) //
-    {
-      nixosModules = import ./modules;
-      nixosConfigurations = {
-        local = import ./nixos/local { system = "x86_64-linux"; inherit self nixpkgs inputs; };
-        dos = import ./nixos/dos { system = "x86_64-linux"; inherit self nixpkgs inputs; };
-        vessel = import ./nixos/vessel { system = "x86_64-linux"; inherit self nixpkgs inputs; };
-        mist = import ./nixos/mist { system = "x86_64-linux"; inherit self nixpkgs inputs; };
+    let
+      this = import ./pkgs;
+      nixcao = import "${inputs.nickpkgs}/pkgs";
+      inherit (utils.lib) mkFlake exportModules exportOverlays exportPackages;
+    in
+    mkFlake {
+      inherit self inputs;
+      supportedSystems = [ "x86_64-linux" ];
+      channelsConfig.allowUnfree = true;
+      channels.nixpkgs.overlaysBuilder = channels:  map (x: x.overlay) [
+        rust-overlay
+        deploy-rs
+        berberman
+        nixcao
+        this
+        utils
+        ];
+      nixosModules = exportModules [
+        ./modules/shadowsocks
+        ./modules/plasma-env
+        ./modules/clash
+        ./modules/base
+        ./modules/sops-nix
+        ./modules/nix-config
+      ];
+
+      hostDefaults = {
+        system = "x86_64-linux";
+        channelName = "nixpkgs";
+        modules = with self.nixosModules; [
+          base
+          # sops-nix
+          nix-config
+          # sops-nix.nixosModules.sops
+          impermanence.nixosModules.impermanence
+        ];
       };
-      deploy.nodes = {
-        dos = {
-          sshUser = "root";
-          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-          hostname = "dos.diffumist.me";
-          profiles.system.path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.dos;
-        };
-        vessel = {
-          sshUser = "root";
-          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-          hostname = "vessel.diffumist.me";
-          profiles.system.path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.vessel;
-        };
-        mist = {
-          sshUser = "root";
-          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-          hostname = "mist.diffumist.me";
-          profiles.system.path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.mist;
+
+      hosts = with self.nixosModules; {
+        local.modules = [
+          ./nixos/local/configuration.nix
+          home.nixosModules.home-manager
+          plasma-env
+          clash
+        ];
+        vessel.modules = [
+          shadowsocks
+        ];
+        mist.modules = vessel.modules;
+        dos.modules = vessel.modules;
+      };
+      outputsBuilder = channels: with channels.nixpkgs; {
+        devShell = mkShell {
+          buildInputs = [
+            cachix
+            nixpkgs-fmt
+            deploy-rs
+          ];
         };
       };
     };

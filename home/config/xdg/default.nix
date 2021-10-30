@@ -1,10 +1,6 @@
 { config, ... }:
 let
   xdgdirs = {
-    # Chromium
-    GOOGLE_DEFAULT_CLIENT_ID = "77185425430.apps.googleusercontent.com";
-    GOOGLE_DEFAULT_CLIENT_SECRET = "OTJgUOQcT7lO7GsGZq2G4IlT";
-    LIBVA_DRIVER_NAME = "iHD";
     # Cache
     XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
     COMPOSER_CACHE_DIR = "${config.xdg.cacheHome}/compose";
@@ -23,8 +19,6 @@ let
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
     VSCODE_PORTABLE = "${config.xdg.dataHome}/vscode";
     NALI_DB_HOME = "${config.xdg.dataHome}/nali";
-    # EDIROR
-    EDITOR = "nvim";
   };
 in
 {
@@ -56,7 +50,6 @@ in
         store-dir=${config.xdg.dataHome}/pnpm-store
       '';
       "fcitx5/conf/classicui.conf".text = ''
-        Vertical Candidate List=False
         Font="Sarasa Gothic SC 10"
         UseInputMethodLangaugeToDisplayText=True
         Theme=Material-Color-Black
@@ -65,7 +58,7 @@ in
         [General]
         theme=MateriaDark
       '';
-      "latte/Default.layout.latte".text = builtins.readFile ./config.layout.latte;
+      "latte/Default.layout.latte".source = ./config.layout.latte;
     };
   };
   systemd.user.sessionVariables = xdgdirs;

@@ -11,7 +11,7 @@ let cfg = config.dmist.ss; in
       };
       ports = mkOption {
         type = types.port;
-        default = 53231;
+        default = 4352;
       };
     };
   };

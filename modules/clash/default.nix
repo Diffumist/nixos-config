@@ -11,7 +11,7 @@ in
     dmist.clash = {
       enable = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
       };
       configFile = mkOption {
         type = types.path;

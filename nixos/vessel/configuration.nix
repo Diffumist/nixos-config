@@ -7,6 +7,7 @@
 
   networking = {
     hostName = "vessel";
+    domain = "diffumist.me";
     firewall = {
       enable = true;
       allowedTCPPorts = [ 22 ];

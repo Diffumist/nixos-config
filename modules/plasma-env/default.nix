@@ -1,9 +1,9 @@
 { lib, config, pkgs, ... }:
 with lib;
-let cfg = config.dmist.desktop-env; in
+let cfg = config.dmist.plasma-env; in
 {
   options = {
-    dmist.desktop-env = {
+    dmist.plasma-env = {
       enable = mkOption {
         type = types.bool;
         default = true;

@@ -1,5 +1,4 @@
 { pkgs, inputs, lib, ... }: {
-  nixpkgs.config.allowUnfree = true;
   nix = {
     package = pkgs.nixFlakes;
     useSandbox = true;

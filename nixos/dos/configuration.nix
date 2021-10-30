@@ -7,6 +7,7 @@
 
   networking = {
     hostName = "dos";
+    domain = "diffumist.me";
     firewall = {
       enable = true;
       allowedTCPPorts = [ 22 ];

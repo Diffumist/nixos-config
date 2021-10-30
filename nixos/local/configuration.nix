@@ -7,7 +7,7 @@
   ];
   # Network
   networking = {
-    hostName = "Dmistlaptop";
+    hostName = "local";
     firewall.enable = true;
     networkmanager.dns = "none";
     networkmanager.wifi.backend = "iwd";

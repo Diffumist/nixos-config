@@ -6,7 +6,7 @@
   imports = [
     ./config/common-pkgs.nix
     ./config/git.nix
-    ./config/browsers.nix
+    ./config/chromium.nix
     ./config/video.nix
     ./config/services.nix
     ./config/xdg
