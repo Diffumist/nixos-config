@@ -5,7 +5,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     utils.url = "github:numtide/flake-utils";
-    utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
     impermanence.url = "github:nix-community/impermanence";
     flake-compat = {
       url = "github:edolstra/flake-compat";
@@ -42,90 +41,85 @@
   };
   outputs =
     { self
-    , nixpkgs
     , home
+    , nixpkgs
+    , sops-nix
     , nickpkgs
     , deploy-rs
+    , berberman
+    , rust-overlay
+    , impermanence
     , ...
     } @ inputs:
     let
-      inherit (nixpkgs.lib) nixosSystem;
+      inherit (builtins) map mapAttrs import;
       system = "x86_64-linux";
-      this = import ./pkgs; nixcao = import "${nickpkgs}/pkgs";
-      overlays = with inputs; map (x: x.overlay) [
+      this = import ./pkgs;
+      nixcao = import "${nickpkgs}/pkgs";
+      overlays = map (x: x.overlay) [
         this
         nixcao
-        berberman
         sops-nix
         deploy-rs
+        berberman
         rust-overlay
       ];
-      shareModules = with inputs; [
-        self.nixosModules.base
-        self.nixosModules.nix-config
+      allModules = import ./modules;
+      shareModules = with allModules; [
+        base
+        nix-config
         sops-nix.nixosModules.sops
         impermanence.nixosModules.impermanence
       ];
-      mkServerSystem = { system, hostName, hostConfig ? ./hosts/. + "/${hostName}", ...}: nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs; };
-        modules = [
-          hostConfig
-          { nixpkgs.overlays = overlays; }
-        ] ++ shareModules;
-      };
-      mkDesktopSystem = { system, hostName, hostConfig ? ./hosts/. + "/${hostName}", ...}: nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs; };
-        modules = [
-          hostConfig
-          home.nixosModules.home-manager
-          { nixpkgs.overlays = overlays; }
-          self.nixosModules.plasma-env
-          self.nixosModules.clash
-        ] ++ shareModules;
-      };
+      desktopModules = with allModules; [
+        clash
+        plasma-env
+        home.nixosModules.home-manager
+      ];
+      serverModules = with allModules; [
+        cloud
+        shadowsocks
+      ];
+      mkSystem = { hostname, config ? ./hosts/. + "/${hostname}", ... }:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = with allModules; [
+            config
+            { nixpkgs = { inherit overlays; }; }
+          ] ++ shareModules ++ (if hostname == "local" then desktopModules else serverModules);
+        };
     in
     {
-      nixosModules = import ./modules;
       nixosConfigurations = {
-        local = mkDesktopSystem {
-          inherit system;
-          hostName = "local";
-        };
-        dos = mkServerSystem {
-          inherit system;
-          hostName = "dos";
-        };
-        mist = mkServerSystem {
-          inherit system;
-          hostName = "mist";
-        };
-        vessel = mkServerSystem {
-          inherit system;
-          hostName = "vessel";
-        };
+        local = mkSystem { hostname = "local"; };
+        dos = mkSystem { hostname = "dos"; };
+        mist = mkSystem { hostname = "mist"; };
+        vessel = mkSystem { hostname = "vessel"; };
       };
-      deploy.nodes = with self.nixosConfigurations; {
-        dos = {
+      deploy.nodes = with self.nixosConfigurations;
+        let
           sshUser = "root";
           sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-          hostname = "dos.diffumist.me";
-          profiles.system.path = deploy-rs.lib.${system}.activate.nixos dos;
+          inherit (deploy-rs.lib.${system}.activate) nixos;
+        in
+        {
+          dos = {
+            inherit sshUser sshOpts;
+            hostname = "dos.diffumist.me";
+            profiles.system.path = nixos dos;
+          };
+          vessel = {
+            inherit sshUser sshOpts;
+            hostname = "vessel.diffumist.me";
+            profiles.system.path = nixos vessel;
+          };
+          mist = {
+            inherit sshUser sshOpts;
+            hostname = "mist.diffumist.me";
+            profiles.system.path = nixos mist;
+          };
         };
-        vessel = {
-          sshUser = "root";
-          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-          hostname = "vessel.diffumist.me";
-          profiles.system.path = deploy-rs.lib.${system}.activate.nixos vessel;
-        };
-        mist = {
-          sshUser = "root";
-          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-          hostname = "mist.diffumist.me";
-          profiles.system.path = deploy-rs.lib.${system}.activate.nixos mist;
-        };
-      };
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+      checks = mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 }

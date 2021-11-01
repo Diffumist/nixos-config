@@ -8,11 +8,11 @@
         "nvfetcher": "nvfetcher"
       },
       "locked": {
-        "lastModified": 1635602968,
-        "narHash": "sha256-DSzyVem6I4xs7igfRpzu0CSDtT2tRq79UlSJ6s2j9EE=",
+        "lastModified": 1635718744,
+        "narHash": "sha256-zulrh6bti+IBXV8kjCsz3EQAhId01ott6+Xb+MSOiMo=",
         "owner": "berberman",
         "repo": "flakes",
-        "rev": "1c9c62037e0baff0550b7b5c5cc7cb26ae5e17b8",
+        "rev": "97d1165c5dd6b1eadfb31c862d9475a79d8356aa",
         "type": "github"
       },
       "original": {
@@ -86,21 +86,6 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "rev": "f7e004a55b120c02ecb6219596820fcd32ca8772",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_2": {
-      "locked": {
-        "lastModified": 1629481132,
-        "narHash": "sha256-JHgasjPR0/J1J3DRm4KxM4zTyAj4IOJY8vIl75v/kPI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "997f7efcb746a9c140ce1f13c72263189225f482",
         "type": "github"
       },
       "original": {
@@ -210,8 +195,7 @@
         "nixpkgs": "nixpkgs",
         "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix",
-        "utils": "utils",
-        "utils-plus": "utils-plus"
+        "utils": "utils"
       }
     },
     "rust-overlay": {
@@ -224,11 +208,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1635646580,
-        "narHash": "sha256-OdHejobtoEu2Q4j1OgriMRp39B2EWfu6N6/S4QbR5vc=",
+        "lastModified": 1635733010,
+        "narHash": "sha256-/5ZKRJZhIECQJ0MQmTsKh6VFqtAiWrT1RZ54JwDKacY=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "da39f01d3b2c5b710759908ac5011051ea100fc6",
+        "rev": "7d496e6703a0b7083cf70d3168cf3d30bb888d6c",
         "type": "github"
       },
       "original": {
@@ -269,24 +253,6 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "utils-plus": {
-      "inputs": {
-        "flake-utils": "flake-utils_2"
-      },
-      "locked": {
-        "lastModified": 1635069106,
-        "narHash": "sha256-2BLp9MNNppYZi12tIbnryW3UR4425gmTrj2hYlaRaOA=",
-        "owner": "gytis-ivaskevicius",
-        "repo": "flake-utils-plus",
-        "rev": "4d9d171acce2cf2d0fe88f1988509f30b3aae178",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gytis-ivaskevicius",
-        "repo": "flake-utils-plus",
         "type": "github"
       }
     }

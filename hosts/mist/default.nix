@@ -8,10 +8,6 @@
   networking = {
     hostName = "mist";
     domain = "diffumist.me";
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ 22 ];
-    };
     nameservers = [ "205.185.112.68" ];
     defaultGateway = "209.141.44.1";
     dhcpcd.enable = false;
@@ -26,18 +22,4 @@
       };
     };
   };
-
-  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
-
-  services.openssh = {
-    enable = true;
-    ports = [ 22 ];
-    passwordAuthentication = false;
-  };
-
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAd/6aBTs/HVmH0g1xHZ+ECETUjEOEHVI7PJuxELqYCg noname"
-  ];
-
-  system.stateVersion = "20.09";
 }

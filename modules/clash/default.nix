@@ -15,7 +15,7 @@ in
       };
       configFile = mkOption {
         type = types.path;
-        default = "";
+        default = "/etc/clash/clash.yaml";
       };
       configPath = mkOption {
         type = types.path;

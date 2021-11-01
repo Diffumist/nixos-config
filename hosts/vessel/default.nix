@@ -8,10 +8,6 @@
   networking = {
     hostName = "vessel";
     domain = "diffumist.me";
-    firewall = {
-      enable = true;
-      allowedTCPPorts = [ 22 ];
-    };
     nameservers = [ "77.88.8.8" ];
     defaultGateway = "194.147.33.1";
     dhcpcd.enable = false;
@@ -24,18 +20,4 @@
       };
     };
   };
-
-  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
-
-  services.openssh = {
-    enable = true;
-    ports = [ 22 ];
-    passwordAuthentication = false;
-  };
-
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAd/6aBTs/HVmH0g1xHZ+ECETUjEOEHVI7PJuxELqYCg noname"
-  ];
-
-  system.stateVersion = "20.09";
 }

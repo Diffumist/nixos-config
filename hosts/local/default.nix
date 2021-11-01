@@ -38,7 +38,7 @@
   };
   dmist.clash = {
     enable = true;
-    configFile = "/etc/clash/clash.yaml";
+
   };
   # Generate hashedPassword: mkpasswd -m sha-512
   users = {

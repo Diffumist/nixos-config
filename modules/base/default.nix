@@ -16,5 +16,11 @@ let cfg = config.dmist.base; in
       vimAlias = true;
       defaultEditor = true;
     };
+    sops = {
+      defaultSopsFile = ./secrets.yaml;
+      age = {
+        keyFile = "/var/lib/sops.key";
+      };
+    };
   };
 }
