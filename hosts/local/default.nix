@@ -5,10 +5,16 @@
     ./software.nix
     ./hardware.nix
   ];
-  # Network
+  # swapfile
+  swapDevices = [
+    {
+      device = "/var/swapfile/swapfile";
+      size = 16384; # MiB
+    }
+  ];
+  # network
   networking = {
     hostName = "local";
-    firewall.enable = true;
     networkmanager.dns = "none";
     networkmanager.wifi.backend = "wpa_supplicant";
     networkmanager.extraConfig = ''
@@ -31,16 +37,14 @@
       ];
       bind = [ "127.0.0.1:53" ];
       prefetch-domain = true;
-      server = "223.5.5.5 -group china -exclude-default-group";
-      server-tls = [ "8.8.8.8:853" "1.1.1.1:853" ];
+      server = [
+        "223.5.5.5 -group china -exclude-default-group"
+        "8.8.8.8"
+      ];
       server-https = "https://cloudflare-dns.com/dns-query -exclude-default-group";
     };
   };
-  dmist.clash = {
-    enable = true;
-
-  };
-  # Generate hashedPassword: mkpasswd -m sha-512
+  # generate hashedPassword: mkpasswd -m sha-512
   users = {
     groups."diffumist".gid = 1000;
     users."diffumist" = {
@@ -57,6 +61,4 @@
     useUserPackages = true;
     users.diffumist = import ../../home;
   };
-
-  system.stateVersion = "20.09";
 }

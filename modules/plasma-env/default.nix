@@ -39,6 +39,7 @@ let cfg = config.dmist.plasma-env; in
         jetbrains-mono
         sarasa-gothic
         apple-emoji
+        (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
       ];
       fontDir.enable = true;
       fontconfig.defaultFonts = {

@@ -80,15 +80,21 @@
         cloud
         shadowsocks
       ];
-      mkSystem = { hostname, config ? ./hosts/. + "/${hostname}", ... }:
+      mkSystem = { hostname, config ? ./. + "/hosts/${hostname}", ... }: 
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
-          modules = with allModules; [
+          modules = [
             config
             { nixpkgs = { inherit overlays; }; }
           ] ++ shareModules ++ (if hostname == "local" then desktopModules else serverModules);
         };
+      mkDeployNodes = { hostname, ... }: {
+        sshUser = "root";
+        sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
+        hostname = "${hostname}.diffumist.me";
+        profiles.system.path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.${hostname};
+      };
     in
     {
       nixosConfigurations = {
@@ -97,29 +103,11 @@
         mist = mkSystem { hostname = "mist"; };
         vessel = mkSystem { hostname = "vessel"; };
       };
-      deploy.nodes = with self.nixosConfigurations;
-        let
-          sshUser = "root";
-          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-          inherit (deploy-rs.lib.${system}.activate) nixos;
-        in
-        {
-          dos = {
-            inherit sshUser sshOpts;
-            hostname = "dos.diffumist.me";
-            profiles.system.path = nixos dos;
-          };
-          vessel = {
-            inherit sshUser sshOpts;
-            hostname = "vessel.diffumist.me";
-            profiles.system.path = nixos vessel;
-          };
-          mist = {
-            inherit sshUser sshOpts;
-            hostname = "mist.diffumist.me";
-            profiles.system.path = nixos mist;
-          };
-        };
+      deploy.nodes = {
+        dos = mkDeployNodes { hostname = "dos"; };
+        vessel = mkDeployNodes { hostname = "vessel"; };
+        mist = mkDeployNodes { hostname = "mist"; };
+      };
       checks = mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 }

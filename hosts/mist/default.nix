@@ -2,9 +2,13 @@
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
-    ./boot.nix
   ];
-
+  swapDevices = [
+    {
+      device = "/var/swapfile/swapfile";
+      size = 1024;
+    }
+  ];
   networking = {
     hostName = "mist";
     domain = "diffumist.me";

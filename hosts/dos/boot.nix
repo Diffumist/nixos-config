@@ -38,13 +38,6 @@
       "/persist" = btrfs [ "subvol=persist" ];
     };
 
-  swapDevices = [
-    {
-      device = "/dev/disk/by-label/swap";
-      size = 2048; # MiB
-    }
-  ];
-
   environment.persistence."/persist" = {
     directories = [
       "/var/log"

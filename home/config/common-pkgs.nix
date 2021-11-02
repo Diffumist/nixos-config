@@ -37,10 +37,12 @@ in
     runzip
     pandoc
     sops
+    compsize
     prime-run
     nali
     traceroute
     kvantum-patch
+    bubblewrap
 
     # GUI
     # authy

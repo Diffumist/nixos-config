@@ -17,10 +17,10 @@
       nvim-lspconfig
       lsp_signature-nvim
       lspkind-nvim
+      (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
       # tweak
       neoformat
       direnv-vim
-      nvim-treesitter
       nvim-web-devicons
       nvim-tree-lua
       neoscroll-nvim
@@ -39,6 +39,5 @@
     nodePackages.yaml-language-server
     rnix-lsp
     pyright
-    tree-sitter
   ];
 }

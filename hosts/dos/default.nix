@@ -2,7 +2,13 @@
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
-    ./boot.nix
+  ];
+
+  swapDevices = [
+    {
+      device = "/dev/disk/by-label/swap";
+      size = 2048; # MiB
+    }
   ];
 
   networking = {

@@ -24,6 +24,7 @@
     sof-firmware
     alsa-firmware
   ];
+  hardware.enableRedistributableFirmware = true;
   hardware.bluetooth.enable = true;
   hardware.logitech.wireless.enable = true;
 

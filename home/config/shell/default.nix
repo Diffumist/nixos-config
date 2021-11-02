@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   programs.alacritty = {
     enable = true;
@@ -23,8 +23,8 @@
           family = "JetBrains Mono";
           style = "Regular";
         };
-        bold = { family = "JetBrains Mono"; };
-        italic = { family = "JetBrains Mono"; };
+        bold = { family = "JetBrains Mono Nerd Font"; };
+        italic = { family = "JetBrains Mono Nerd Font"; };
       };
       draw_bold_text_with_bright_colors = true;
       background_opacity = 1;
@@ -67,7 +67,7 @@
       set -g fish_greeting
     '';
     shellAliases = {
-      nixfmt = "nixpkgs-fmt (fd -E pkgs -e nix)";
+      nixfmt = "nixpkgs-fmt (fd  -E pkgs/_sources/ -e nix)";
     };
   };
   programs.starship = {
