@@ -54,7 +54,7 @@
     } @ inputs:
     let
       inherit (builtins) map mapAttrs import;
-      system = "x86_64-linux";
+      system = "x86_64-linux"; # 
       this = import ./pkgs;
       nixcao = import "${nickpkgs}/pkgs";
       overlays = map (x: x.overlay) [
@@ -81,7 +81,7 @@
         cloud
         shadowsocks
       ];
-      mkSystem = { hostname, system, config ? ./. + "/hosts/${hostname}", ... }: 
+      mkSystem = { hostname, config ? ./. + "/hosts/${hostname}", ... }: 
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
@@ -90,7 +90,7 @@
             { nixpkgs = { inherit overlays; }; }
           ] ++ shareModules ++ (if hostname == "local" then desktopModules else serverModules);
         };
-      mkDeployNodes = { hostname, system, ... }: {
+      mkDeployNodes = { hostname, ... }: {
         sshUser = "root";
         sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
         hostname = "${hostname}.diffumist.me";
@@ -99,15 +99,15 @@
     in
     {
       nixosConfigurations = {
-        local = mkSystem { hostname = "local"; inherit system; };
-        dos = mkSystem { hostname = "dos"; inherit system; };
-        mist = mkSystem { hostname = "mist"; inherit system; };
-        vessel = mkSystem { hostname = "vessel"; inherit system; };
+        local = mkSystem { hostname = "local"; };
+        dos = mkSystem { hostname = "dos"; };
+        mist = mkSystem { hostname = "mist"; };
+        vessel = mkSystem { hostname = "vessel"; };
       };
       deploy.nodes = {
-        dos = mkDeployNodes { hostname = "dos"; inherit system; };
-        vessel = mkDeployNodes { hostname = "vessel"; inherit system; };
-        mist = mkDeployNodes { hostname = "mist"; inherit system; };
+        dos = mkDeployNodes { hostname = "dos"; };
+        vessel = mkDeployNodes { hostname = "vessel"; };
+        mist = mkDeployNodes { hostname = "mist"; };
       };
       checks = mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
