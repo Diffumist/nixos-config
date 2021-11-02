@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 {
   "editor.renderWhitespace" = "all";

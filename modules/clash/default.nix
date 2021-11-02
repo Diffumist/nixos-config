@@ -3,7 +3,7 @@
 with lib;
 let
   cfg = config.dmist.clash;
-  inherit (pkgs) ripgrep iptables;
+  inherit (pkgs) writeShellScript iptables iproute maxmind-geoip clean-dns-bpf clash ripgrep;
   redirPortStr = toString cfg.redirPort;
 in
 {
@@ -28,12 +28,12 @@ in
     };
   };
   config = mkIf cfg.enable {
-    environment.etc."clash/Country.mmdb".source = "${pkgs.maxmind-geoip}/Country.mmdb";
+    environment.etc."clash/Country.mmdb".source = "${maxmind-geoip}/Country.mmdb";
     environment.etc."clash/config.yaml".source = "${cfg.configFile}";
     systemd.services.clash =
       let
         # Start clash client with iptables script
-        preStartScript = pkgs.writeShellScript "clash-prestart" ''
+        preStartScript = writeShellScript "clash-prestart" ''
           iptables() {
             ${iptables}/bin/iptables -w "$@"
           }
@@ -44,16 +44,18 @@ in
           iptables -t nat -A CLASH -m owner --uid-owner clash -j RETURN
           iptables -t nat -A CLASH -p tcp -j REDIRECT --to-ports ${redirPortStr}
           iptables -t nat -A OUTPUT -p tcp -j CLASH
+          ${iproute}/bin/ip link set dev wlp0s20f3 xdp obj ${clean-dns-bpf}
         '';
         # Stop clash client
-        postStopScript = pkgs.writeShellScript "clash-poststop" ''
+        postStopScript = writeShellScript "clash-poststop" ''
           ${iptables}/bin/iptables-save -c|${ripgrep}/bin/rg -v CLASH|${iptables}/bin/iptables-restore -c
+          ${iproute}/bin/ip link set dev wlp0s20f3 xdp off
         '';
       in
       {
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = "exec ${pkgs.clash}/bin/clash -d ${cfg.configPath}";
+        script = "exec ${clash}/bin/clash -d ${cfg.configPath}";
         unitConfig = {
           ConditionPathExists = "${cfg.configPath}/config.yaml";
         };

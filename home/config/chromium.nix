@@ -2,14 +2,14 @@
 {
   programs.chromium = {
     enable = true;
-    package = (pkgs.chromium.override {
+    package = pkgs.chromium.override {
       # Hardware video decoding support
       commandLineArgs = ''
         --enable-gpu-rasterization \
         --enable-zero-copy \
         --enable-features=VaapiVideoDecoder \
       '';
-    });
+    };
     extensions = [
       "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
       "ponfpcnoihfmfllpaingbgckeeldkhle" # Enhancer for YouTube

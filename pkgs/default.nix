@@ -10,7 +10,7 @@ rec {
       (filter (v: v != null) (attrValues
         (mapAttrs (k: v: if v == "directory" then k else null)
           (readDir ./.)))));
-  packages = pkgs: mapPackages (name: pkgs.${name});
+  packages = pkgs: mapPackages (name: pkgs."${name}");
   overlay = final: prev:
     mapPackages (name:
       let
@@ -19,7 +19,7 @@ rec {
         };
         package = import (./. + "/${name}");
         args = builtins.intersectAttrs (builtins.functionArgs package) {
-          source = sources.${name};
+          source = sources."${name}";
         };
       in
       final.callPackage package args);

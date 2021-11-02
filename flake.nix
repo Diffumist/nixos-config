@@ -4,6 +4,7 @@
   inputs = {
     # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    stable.url = "github:nixos/nixpkgs/release-21.05";
     # utils
     utils.url = "github:numtide/flake-utils";
     impermanence.url = "github:nix-community/impermanence";
@@ -44,6 +45,7 @@
     { self
     , home
     , nixpkgs
+    , stable
     , sops-nix
     , nickpkgs
     , deploy-rs
@@ -54,7 +56,7 @@
     } @ inputs:
     let
       inherit (builtins) map mapAttrs import;
-      system = "x86_64-linux"; # 
+      system = "x86_64-linux";
       this = import ./pkgs;
       nixcao = import "${nickpkgs}/pkgs";
       overlays = map (x: x.overlay) [
@@ -94,7 +96,7 @@
         sshUser = "root";
         sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
         hostname = "${hostname}.diffumist.me";
-        profiles.system.path = deploy-rs.lib.${system}.activate.nixos self.nixosConfigurations.${hostname};
+        profiles.system.path = deploy-rs.lib."${system}".activate.nixos self.nixosConfigurations."${hostname}";
       };
     in
     {

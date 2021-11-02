@@ -12,3 +12,7 @@ fetch.github = "marko-cerovac/material.nvim"
 [nali]
 src.git = "https://github.com/zu1k/nali"
 fetch.github = "zu1k/nali"
+passthru = { vendorSha256 = "Kb2T+zDUuH+Rx8amYsTIhR5L3DIx5nGcDGqxHOn90NU="   }
+[clean-dns-bpf]
+src.manual = "0.1"
+fetch.url = "https://github.com/ihciah/clean-dns-bpf/releases/download/v0.1/clean-dns.elf"

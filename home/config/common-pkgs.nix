@@ -43,6 +43,12 @@ in
     traceroute
     kvantum-patch
     bubblewrap
+    nixpkgs-review
+    nixpkgs-fmt
+    pkg-config
+    deploy-rs.deploy-rs
+    nvfetcher
+    cachix
 
     # GUI
     # authy
@@ -60,20 +66,19 @@ in
     steam
     # Env
     patchelf
-    gcc
-    gdb
     gnumake
     cmake
     lld
+    llvm_12
+    clang_12
     binutils
     python3
     nodejs
     mono
     go
-    nixpkgs-review
-    nixpkgs-fmt
-    pkg-config
-    deploy-rs.deploy-rs
-    nvfetcher
+    (rust-bin.stable.latest.default.override {
+      extensions = [ "rust-src" ];
+      targets = [ "x86_64-unknown-linux-musl" ];
+    })
   ];
 }
