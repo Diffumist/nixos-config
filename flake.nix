@@ -2,8 +2,9 @@
   description = "diffumist's NixOS configuration";
 
   inputs = {
+    # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
+    # utils
     utils.url = "github:numtide/flake-utils";
     impermanence.url = "github:nix-community/impermanence";
     flake-compat = {
@@ -29,9 +30,9 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # other pkgs
     berberman = {
       url = "github:berberman/flakes";
-      inputs.utils.follows = "utils";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nickpkgs = {
@@ -80,7 +81,7 @@
         cloud
         shadowsocks
       ];
-      mkSystem = { hostname, config ? ./. + "/hosts/${hostname}", ... }: 
+      mkSystem = { hostname, system, config ? ./. + "/hosts/${hostname}", ... }: 
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
@@ -89,7 +90,7 @@
             { nixpkgs = { inherit overlays; }; }
           ] ++ shareModules ++ (if hostname == "local" then desktopModules else serverModules);
         };
-      mkDeployNodes = { hostname, ... }: {
+      mkDeployNodes = { hostname, system, ... }: {
         sshUser = "root";
         sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
         hostname = "${hostname}.diffumist.me";
@@ -98,15 +99,15 @@
     in
     {
       nixosConfigurations = {
-        local = mkSystem { hostname = "local"; };
-        dos = mkSystem { hostname = "dos"; };
-        mist = mkSystem { hostname = "mist"; };
-        vessel = mkSystem { hostname = "vessel"; };
+        local = mkSystem { hostname = "local"; inherit system; };
+        dos = mkSystem { hostname = "dos"; inherit system; };
+        mist = mkSystem { hostname = "mist"; inherit system; };
+        vessel = mkSystem { hostname = "vessel"; inherit system; };
       };
       deploy.nodes = {
-        dos = mkDeployNodes { hostname = "dos"; };
-        vessel = mkDeployNodes { hostname = "vessel"; };
-        mist = mkDeployNodes { hostname = "mist"; };
+        dos = mkDeployNodes { hostname = "dos"; inherit system; };
+        vessel = mkDeployNodes { hostname = "vessel"; inherit system; };
+        mist = mkDeployNodes { hostname = "mist"; inherit system; };
       };
       checks = mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
