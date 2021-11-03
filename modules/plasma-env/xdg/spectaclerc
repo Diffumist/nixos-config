@@ -1,15 +1,13 @@
-[General][$i]
-alwaysRememberRegion=false
-autoSaveImage=false
-copyImageToClipboard=true
-printKeyActionRunning=0
+[General]
+clipboardGroup=PostScreenshotCopyImage
 rememberLastRectangularRegion=false
-showMagnifier=false
-useLightMaskColour=false
-useReleaseToCapture=false
+showMagnifier=true
+useLightMaskColour=true
+
+[KFileDialog Settings]
+detailViewIconSize=16
 
 [Save]
-compressionQuality[$i]=90
-copySaveLocation[$i]=false
 defaultSaveImageFormat[$i]=PNG
 saveFilenameFormat[$i]=Screenshot_%Y%M%D_%H%m%S
+defaultSaveLocation=file:$HOME/Pictures/Screenshot/

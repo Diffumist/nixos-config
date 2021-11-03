@@ -46,16 +46,4 @@
     };
     vendorSha256 = "Kb2T+zDUuH+Rx8amYsTIhR5L3DIx5nGcDGqxHOn90NU=";
   };
-  smartdns-china-list = {
-    pname = "smartdns-china-list";
-    version = "227b400e5951b5c466fba1810e5a1cd16e1de9ab";
-    src = fetchgit {
-      url = "https://github.com/felixonmars/dnsmasq-china-list";
-      rev = "227b400e5951b5c466fba1810e5a1cd16e1de9ab";
-      fetchSubmodules = false;
-      deepClone = false;
-      leaveDotGit = false;
-      sha256 = "1fiq23hdbk2q6c3vhlwqa5sga88dwk34k3qf9hy3lpxy2w1jhq7c";
-    };
-  };
 }

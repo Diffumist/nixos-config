@@ -58,7 +58,7 @@ in
         [General]
         theme=MateriaDark
       '';
-      "latte/Default.layout.latte".source = ./config.layout.latte;
+      "latte/Default.layout.latte".source = ./latte.config;
     };
   };
   systemd.user.sessionVariables = xdgdirs;

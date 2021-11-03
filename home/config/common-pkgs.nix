@@ -3,10 +3,10 @@ let
   inherit (config.xdg) configHome;
   MateriaDark = "${configHome}/Kvantum/MateriaDark/";
   kvantum-patch = pkgs.writeShellScriptBin "kvantum-patch" ''
-    if [ ! -d "${MateriaDark}" ]; then
+    if [[ ! -d "${MateriaDark}" ]]; then
       mkdir -p ${MateriaDark}
     fi
-    if [ -d "${MateriaDark}" ]; then
+    if [[ -d "${MateriaDark}" ]]; then
       for file in ${MateriaDark}/*
       do
         unlink $file
@@ -37,6 +37,7 @@ in
     runzip
     pandoc
     sops
+    age
     compsize
     prime-run
     nali
@@ -49,7 +50,6 @@ in
     deploy-rs.deploy-rs
     nvfetcher
     cachix
-
     # GUI
     # authy
     obs-studio
@@ -64,6 +64,7 @@ in
     wine
     winetricks
     steam
+    nur.repos.linyinfeng.wemeet
     # Env
     patchelf
     gnumake

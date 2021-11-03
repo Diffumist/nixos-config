@@ -32,6 +32,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # other pkgs
+    nur.url = "github:nix-community/NUR";
     berberman = {
       url = "github:berberman/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -42,8 +43,10 @@
     };
   };
   outputs =
-    { self
+    { nur
+    , self
     , home
+    , utils
     , nixpkgs
     , stable
     , sops-nix
@@ -57,10 +60,10 @@
     let
       inherit (builtins) map mapAttrs import;
       system = "x86_64-linux";
-      this = import ./pkgs;
       nixcao = import "${nickpkgs}/pkgs";
       overlays = map (x: x.overlay) [
-        this
+        nur
+        self
         nixcao
         sops-nix
         deploy-rs
@@ -83,7 +86,7 @@
         cloud
         shadowsocks
       ];
-      mkSystem = { hostname, config ? ./. + "/hosts/${hostname}", ... }: 
+      mkSystem = { hostname, config ? ./. + "/hosts/${hostname}", ... }:
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
@@ -100,6 +103,7 @@
       };
     in
     {
+      overlay = (import ./pkgs).overlay;
       nixosConfigurations = {
         local = mkSystem { hostname = "local"; };
         dos = mkSystem { hostname = "dos"; };
