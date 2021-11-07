@@ -3,7 +3,8 @@
 with lib;
 let
   cfg = config.dmist.clash;
-  inherit (pkgs) writeShellScript iptables iproute maxmind-geoip clean-dns-bpf clash ripgrep;
+  inherit (pkgs) writeShellScript iptables iproute maxmind-geoip clean-dns-bpf ripgrep;
+  inherit (pkgs.nur.repos.linyinfeng) clash-premium;
   redirPortStr = toString cfg.redirPort;
 in
 {
@@ -55,7 +56,7 @@ in
       {
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = "exec ${clash}/bin/clash -d ${cfg.configPath}";
+        script = "exec ${clash-premium}/bin/clash-premium -d ${cfg.configPath}";
         unitConfig = {
           ConditionPathExists = "${cfg.configPath}/config.yaml";
         };

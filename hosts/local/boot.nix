@@ -3,9 +3,9 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "rtsx_pci_sdmmc" "usb_storage" "uas" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages_xanmod;
   boot.extraModulePackages = with config.boot.kernelPackages; [
-    (pkgs.linuxPackages_zen.nvidia_x11.override { inherit kernel; })
+    (pkgs.linuxPackages_xanmod.nvidia_x11.override { inherit kernel; })
   ];
   boot.kernel.sysctl = {
     "kernel.sysrq" = 1;

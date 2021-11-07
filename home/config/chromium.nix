@@ -20,8 +20,8 @@
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
       "pncfbmialoiaghdehhbnbhkkgmjanfhe" # uBlacklist
       "dkndmhgdcmjdmkdonmbgjpijejdcilfh" # PixivBatchDownloader
-      "ifbmcpbgkhlpfcodhjhdbllhiaomkdej"
-      "padekgcemlokbadohgkifijomclgjgif"
+      "padekgcemlokbadohgkifijomclgjgif" # Proxy SwitchyOmega
+      "ennpfpdlaclocpomkiablnmbppdnlhoh" # Rust Search Extension
     ];
   };
 

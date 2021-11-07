@@ -60,26 +60,22 @@ in
     discord
     kotatogram-desktop
     qbittorrent-enhanced
-    virt-manager
     wine
     winetricks
     steam
     nur.repos.linyinfeng.wemeet
+    # TODO: Modify WPS file icon https://wiki.archlinux.org/title/WPS_Office
+    wpsoffice
     # Env
     patchelf
     gnumake
     cmake
     lld
-    llvm_12
-    clang_12
     binutils
     python3
     nodejs
     mono
     go
-    (rust-bin.stable.latest.default.override {
-      extensions = [ "rust-src" ];
-      targets = [ "x86_64-unknown-linux-musl" ];
-    })
+    dosbox
   ];
 }

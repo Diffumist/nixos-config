@@ -61,9 +61,13 @@
       inherit (builtins) map mapAttrs import;
       system = "x86_64-linux";
       nixcao = import "${nickpkgs}/pkgs";
+      stable.overlay = final: prev: {
+        stable = stable.legacyPackages.${prev.system};
+      };
       overlays = map (x: x.overlay) [
         nur
         self
+        stable
         nixcao
         sops-nix
         deploy-rs

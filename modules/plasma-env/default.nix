@@ -15,7 +15,7 @@ let cfg = config.dmist.plasma-env; in
       (ark.override { unfreeEnableUnrar = true; })
       gparted
       ksystemlog
-      latte-dock
+      # latte-dock # Broken
       capitaine-cursors
       materia-theme
       materia-kde-theme
@@ -71,7 +71,7 @@ let cfg = config.dmist.plasma-env; in
         macAddress = "preserve";
       };
     };
-
+    # FIXME: dolphin’s sshfs and mtp integration is broken
     programs.kdeconnect.enable = true;
 
     environment.etc = {

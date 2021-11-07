@@ -34,15 +34,8 @@
     enableNotifications = true;
   };
   virtualisation = {
-    libvirtd = {
-      enable = true;
-      qemu.package = pkgs.qemu_kvm;
-    };
+    virtualbox.host.enable = true;
     podman.enable = true;
-    kvmgt = {
-      enable = true;
-      vgpus."i915-GVTg_V5_8".uuid = [ "b364f268-66c0-4f47-84ee-a2e21110c0c1" ]; # 1024x768
-    };
   };
   users.groups."libvirtd".members = [ "diffumist" ];
 
