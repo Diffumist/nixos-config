@@ -8,7 +8,7 @@
     userSettings = import ./settings.nix { inherit pkgs; };
 
     extensions = with pkgs.vscode-extensions; [
-      # matklad.rust-analyzer # waiting https://github.com/NixOS/nixpkgs/pull/142851
+      matklad.rust-analyzer
       ms-vscode.cpptools
       esbenp.prettier-vscode
       pkief.material-icon-theme

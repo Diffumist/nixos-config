@@ -3,7 +3,7 @@
 
   inputs = {
     # nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
     stable.url = "github:nixos/nixpkgs/release-21.05";
     # utils
     utils.url = "github:numtide/flake-utils";
@@ -25,7 +25,7 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "flake-compat";
-      inputs.utils.follows = "utils";
+      inputs.flake-utils.follows = "utils";
     };
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -47,8 +47,8 @@
     , self
     , home
     , utils
-    , nixpkgs
     , stable
+    , nixpkgs
     , sops-nix
     , nickpkgs
     , deploy-rs
