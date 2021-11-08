@@ -42,83 +42,76 @@
       flake = false;
     };
   };
-  outputs =
-    { nur
-    , self
-    , home
-    , utils
-    , stable
-    , nixpkgs
-    , sops-nix
-    , nickpkgs
-    , deploy-rs
-    , berberman
-    , rust-overlay
-    , impermanence
-    , ...
-    } @ inputs:
+  outputs = { self, ... } @inputs:
     let
-      inherit (builtins) map mapAttrs import;
+      inherit (builtins) mapAttrs;
       system = "x86_64-linux";
-      nixcao = import "${nickpkgs}/pkgs";
-      stable.overlay = final: prev: {
-        stable = stable.legacyPackages.${prev.system};
+      nixcao = import "${inputs.nickpkgs}/pkgs";
+      other.overlay = final: prev: {
+        stable = inputs.stable.legacyPackages.${prev.system};
+        # Ref: https://github.com/NickCao/flakes/blob/08044fc9e40fab5eec0dbcb336777477a6d4bfaa/nixos/local/default.nix#L21
+        alacritty = final.symlinkJoin {
+          name = "alacritty";
+          paths = [ prev.alacritty ];
+          buildInputs = [ final.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/alacritty --unset WAYLAND_DISPLAY
+          '';
+        };
       };
-      overlays = map (x: x.overlay) [
+      overlays = with inputs; map (x: x.overlay) [
         nur
         self
-        stable
+        other
         nixcao
         sops-nix
         deploy-rs
         berberman
         rust-overlay
       ];
-      allModules = import ./modules;
-      shareModules = with allModules; [
-        base
-        nix-config
-        sops-nix.nixosModules.sops
-        impermanence.nixosModules.impermanence
+      selfModules = import ./modules;
+      shareModules = [
+        selfModules.base
+        selfModules.nix-config
+        inputs.sops-nix.nixosModules.sops
+        inputs.impermanence.nixosModules.impermanence
       ];
-      desktopModules = with allModules; [
-        clash
-        plasma-env
-        home.nixosModules.home-manager
+      desktopModules = [
+        selfModules.clash
+        selfModules.gnome-env
+        inputs.home.nixosModules.home-manager
       ];
-      serverModules = with allModules; [
-        cloud
-        shadowsocks
+      serverModules = [
+        selfModules.cloud
+        selfModules.shadowsocks
       ];
-      mkSystem = { hostname, config ? ./. + "/hosts/${hostname}", ... }:
-        nixpkgs.lib.nixosSystem {
+      mkSystem = hostname:
+        inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
-          modules = [
-            config
-            { nixpkgs = { inherit overlays; }; }
-          ] ++ shareModules ++ (if hostname == "local" then desktopModules else serverModules);
+          modules = [{ nixpkgs = { inherit overlays; }; }]
+            ++ hostname
+            ++ shareModules
+            ++ (if hostname == [ ./hosts/local ] then desktopModules else serverModules);
         };
-      mkDeployNodes = { hostname, ... }: {
+      mkDeployNodes = hostname: {
         sshUser = "root";
         sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
         hostname = "${hostname}.diffumist.me";
-        profiles.system.path = deploy-rs.lib."${system}".activate.nixos self.nixosConfigurations."${hostname}";
+        profiles.system.path = inputs.deploy-rs.lib."${system}".activate.nixos self.nixosConfigurations."${hostname}";
       };
     in
     {
       overlay = (import ./pkgs).overlay;
       nixosConfigurations = {
-        local = mkSystem { hostname = "local"; };
-        dos = mkSystem { hostname = "dos"; };
-        mist = mkSystem { hostname = "mist"; };
-        vessel = mkSystem { hostname = "vessel"; };
+        local = mkSystem [ ./hosts/local ];
+        mist = mkSystem [ ./hosts/mist ];
+        vessel = mkSystem [ ./hosts/vessel ];
       };
       deploy.nodes = {
-        dos = mkDeployNodes { hostname = "dos"; };
-        vessel = mkDeployNodes { hostname = "vessel"; };
-        mist = mkDeployNodes { hostname = "mist"; };
+        vessel = mkDeployNodes "vessel";
+        mist = mkDeployNodes "mist";
       };
-      checks = mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+      checks = mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
     };
 }
