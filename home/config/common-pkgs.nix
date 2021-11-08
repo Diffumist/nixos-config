@@ -1,19 +1,6 @@
 { lib, pkgs, config, ... }:
 let
   inherit (config.xdg) configHome;
-  MateriaDark = "${configHome}/Kvantum/MateriaDark/";
-  kvantum-patch = pkgs.writeShellScriptBin "kvantum-patch" ''
-    if [[ ! -d "${MateriaDark}" ]]; then
-      mkdir -p ${MateriaDark}
-    fi
-    if [[ -d "${MateriaDark}" ]]; then
-      for file in ${MateriaDark}/*
-      do
-        unlink $file
-      done
-    fi
-    ln -s ${pkgs.materia-kde-theme}/share/Kvantum/MateriaDark/* ${MateriaDark}
-  '';
 in
 {
   # set implicitly installed packages to be low-priority.
@@ -42,7 +29,6 @@ in
     prime-run
     nali
     traceroute
-    kvantum-patch
     bubblewrap
     nixpkgs-review
     nixpkgs-fmt

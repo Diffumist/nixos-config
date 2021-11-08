@@ -26,7 +26,7 @@
   background_opacity = 1;
   colors = {
     primary = {
-      background = "#272727";
+      background = "#373737";
       foreground = "#eff0eb";
     };
     selection = {

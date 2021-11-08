@@ -41,4 +41,5 @@
 
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
+  documentation.nixos.enable = false;
 }

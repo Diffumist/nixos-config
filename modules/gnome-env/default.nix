@@ -1,9 +1,9 @@
 { lib, config, pkgs, ... }:
 with lib;
-let cfg = config.dmist.plasma-env; in
+let cfg = config.dmist.gnome-env; in
 {
   options = {
-    dmist.plasma-env = {
+    dmist.gnome-env = {
       enable = mkOption {
         type = types.bool;
         default = true;
@@ -12,27 +12,50 @@ let cfg = config.dmist.plasma-env; in
   };
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      (ark.override { unfreeEnableUnrar = true; })
+      perlPackages.FileMimeInfo
+      evince
+      foliate
+      lollypop
+      gnome.eog
       gparted
-      ksystemlog
-      # latte-dock # Broken
+      waydroid
       capitaine-cursors
       materia-theme
       materia-kde-theme
-      # FIXME: https://github.com/NixOS/nixpkgs/issues/82769
-      libsForQt5.qtstyleplugin-kvantum
       papirus-icon-theme
+      gnome.ghex
+      gnome.gnome-tweaks
+      gnome.dconf-editor
+      gnome.gnome-screenshot
+      gnome.nautilus
+      gnome.gnome-system-monitor
+      gnome.gnome-power-manager
+      gnomeExtensions.lunar-calendar
+      gnomeExtensions.kimpanel
+      gnomeExtensions.gsconnect
+      gnomeExtensions.appindicator
+      gnomeExtensions.clipboard-indicator
     ];
-
+    programs.dconf.enable = true;
     services.xserver = {
       enable = true;
       layout = "us";
-      desktopManager.plasma5.enable = true;
-      displayManager.sddm.enable = true;
+      desktopManager.gnome.enable = true;
+      displayManager.gdm = {
+        enable = true;
+        wayland = true;
+        nvidiaWayland = true;
+      };
       videoDrivers = [ "nvidia" ];
     };
-
-    security.pam.services.sddm.enableKwallet = true;
+    services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
+    services.gnome = {
+      core-utilities.enable = false;
+      core-developer-tools.enable = false;
+      evolution-data-server.enable = true;
+      gnome-online-accounts.enable = true;
+      gnome-keyring.enable = true;
+    };
 
     fonts = {
       fonts = with pkgs; [
@@ -63,7 +86,6 @@ let cfg = config.dmist.plasma-env; in
         ];
       };
     };
-
     networking.networkmanager = {
       enable = true;
       wifi = {
@@ -71,16 +93,5 @@ let cfg = config.dmist.plasma-env; in
         macAddress = "preserve";
       };
     };
-    # FIXME: dolphin’s sshfs and mtp integration is broken
-    programs.kdeconnect.enable = true;
-
-    environment.etc = {
-      "xdg/kdeglobals".source = ./xdg/kdeglobals;
-      "xdg/kglobalshortcutsrc".source = ./xdg/kglobalshortcutsrc;
-      "xdg/kwinrc".source = ./xdg/kwinrc;
-      "xdg/spectaclerc".source = ./xdg/spectaclerc;
-      "xdg/startkderc".source = ./xdg/startkderc;
-    };
-
   };
 }

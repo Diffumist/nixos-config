@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   xdgdirs = {
     # Cache
@@ -13,7 +13,6 @@ let
     # Data
     WINEPREFIX = "${config.xdg.dataHome}/wineprefixes/default";
     GTK2_RC_FILES = "${config.xdg.dataHome}/gtk-2.0/gtkrc";
-    KDEHOME = "${config.xdg.dataHome}/kde";
     GRADLE_USER_HOME = "${config.xdg.dataHome}/gradle";
     LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
@@ -50,15 +49,11 @@ in
         store-dir=${config.xdg.dataHome}/pnpm-store
       '';
       "fcitx5/conf/classicui.conf".text = ''
-        Font="Sarasa Gothic SC 10"
+        PerScreenDPI=True
+        Font="Sarasa Gothic SC 12"
         UseInputMethodLangaugeToDisplayText=True
         Theme=Material-Color-Black
       '';
-      "Kvantum/kvantum.kvconfig".text = ''
-        [General]
-        theme=MateriaDark
-      '';
-      "latte/Default.layout.latte".source = ./latte.config;
     };
   };
   systemd.user.sessionVariables = xdgdirs;
