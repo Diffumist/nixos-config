@@ -3,9 +3,12 @@
 with lib;
 let
   cfg = config.dmist.clash;
+  clashDir = "/var/lib/clash";
+  redirPort = 7891;
+  clashUser = "clash";
+  wlanName = "wlp0s20f3";
   inherit (pkgs) writeShellScript iptables iproute maxmind-geoip clean-dns-bpf ripgrep;
   inherit (pkgs.nur.repos.linyinfeng) clash-premium;
-  redirPortStr = toString cfg.redirPort;
 in
 {
   options = {
@@ -14,23 +17,14 @@ in
         type = types.bool;
         default = true;
       };
-      configFile = mkOption {
-        type = types.path;
-        default = "/etc/clash/clash.yaml";
-      };
-      configPath = mkOption {
-        type = types.path;
-        default = "/etc/clash";
-      };
-      redirPort = mkOption {
-        type = types.port;
-        default = 7891;
-      };
     };
   };
   config = mkIf cfg.enable {
-    environment.etc."clash/Country.mmdb".source = "${maxmind-geoip}/Country.mmdb";
-    environment.etc."clash/config.yaml".source = "${cfg.configFile}";
+    system.activationScripts.initClashScripts = ''
+      mkdir -p "${clashDir}"
+      chown "${clashUser}" "${clashDir}"
+      cp "${maxmind-geoip}/Country.mmdb" "${clashDir}/Country.mmdb"
+    '';
     systemd.services.clash =
       let
         # Start clash client with iptables script
@@ -42,35 +36,32 @@ in
           iptables -t nat -N CLASH
           iptables -t nat -A CLASH -d 127.0.0.1/32 -j RETURN
           iptables -t nat -A CLASH -d 192.168.0.0/16 -j RETURN
-          iptables -t nat -A CLASH -m owner --uid-owner clash -j RETURN
-          iptables -t nat -A CLASH -p tcp -j REDIRECT --to-ports ${redirPortStr}
+          iptables -t nat -A CLASH -m owner --uid-owner ${clashUser} -j RETURN
+          iptables -t nat -A CLASH -p tcp -j REDIRECT --to-ports ${toString redirPort}
           iptables -t nat -A OUTPUT -p tcp -j CLASH
-          ${iproute}/bin/ip link set dev wlp0s20f3 xdp obj ${clean-dns-bpf}
+          ${iproute}/bin/ip link set dev ${wlanName} xdp obj ${clean-dns-bpf}
         '';
         # Stop clash client
         postStopScript = writeShellScript "clash-poststop" ''
           ${iptables}/bin/iptables-save -c|${ripgrep}/bin/rg -v CLASH|${iptables}/bin/iptables-restore -c
-          ${iproute}/bin/ip link set dev wlp0s20f3 xdp off
+          ${iproute}/bin/ip link set dev ${wlanName} xdp off
         '';
       in
       {
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        script = "exec ${clash-premium}/bin/clash-premium -d ${cfg.configPath}";
-        unitConfig = {
-          ConditionPathExists = "${cfg.configPath}/config.yaml";
-        };
+        wantedBy = [ "graphical.target" ];
+        script = "exec ${clash-premium}/bin/clash-premium -d ${clashDir}";
         serviceConfig = {
           ExecStartPre = "+${preStartScript}";
           ExecStopPost = "+${postStopScript}";
           AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_ADMIN";
-          User = "clash";
+          User = clashUser;
+          Group = config.users.groups.nogroup.name;
           Restart = "on-abort";
         };
       };
-    users.groups.clash = { };
-    users.users.clash = {
-      group = "clash";
+    users.users."${clashUser}" = {
+      group = config.users.groups.nogroup.name;
       isSystemUser = true;
     };
   };
