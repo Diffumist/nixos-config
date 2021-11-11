@@ -1,20 +1,4 @@
 { lib, pkgs, config, ... }:
-let
-  inherit (config.xdg) configHome;
-  MateriaDark = "${configHome}/Kvantum/MateriaDark/";
-  kvantum-patch = pkgs.writeShellScriptBin "kvantum-patch" ''
-    if [[ ! -d "${MateriaDark}" ]]; then
-      mkdir -p ${MateriaDark}
-    fi
-    if [[ -d "${MateriaDark}" ]]; then
-      for file in ${MateriaDark}/*
-      do
-        unlink $file
-      done
-    fi
-    ln -s ${pkgs.materia-kde-theme}/share/Kvantum/MateriaDark/* ${MateriaDark}
-  '';
-in
 {
   # set implicitly installed packages to be low-priority.
   home.packages = with pkgs; map lib.lowPrio [
@@ -42,7 +26,6 @@ in
     prime-run
     nali
     traceroute
-    kvantum-patch
     bubblewrap
     nixpkgs-review
     nixpkgs-fmt
@@ -50,22 +33,25 @@ in
     deploy-rs.deploy-rs
     nvfetcher
     cachix
+    scrcpy
+    perlPackages.FileMimeInfo
+    dconf2nix
+    gjs
     # GUI
     # authy
-    obs-studio
+    # obs-studio
     jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland
     android-studio
-    discord
     kotatogram-desktop
+    netease-cloud-music-gtk
     qbittorrent-enhanced
-    wine
-    winetricks
-    steam
-    nur.repos.linyinfeng.wemeet
-    # TODO: Modify WPS file icon https://wiki.archlinux.org/title/WPS_Office
-    wpsoffice
+    # wine
+    # winetricks
+    # steam
+    taxi
+    cawbird
     # Env
     patchelf
     gnumake
@@ -76,6 +62,5 @@ in
     nodejs
     mono
     go
-    dosbox
   ];
 }

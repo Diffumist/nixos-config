@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   programs.alacritty = {
     enable = true;
@@ -12,6 +12,8 @@
     '';
     shellAliases = {
       nixfmt = "nixpkgs-fmt (fd  -E pkgs/_sources/ -e nix)";
+      fzf = "zi";
+      dosbox = "${pkgs.dosbox}/bin/dosbox -conf ${config.xdg.configHome}/dosbox/dosbox.conf";
     };
   };
   # utils
@@ -25,10 +27,6 @@
         truncation_symbol = "…/";
       };
     };
-  };
-  programs.zoxide = {
-    enable = true;
-    enableFishIntegration = true;
   };
   programs.exa = {
     enable = true;
@@ -45,8 +43,7 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
-    nix-direnv.enableFlakes = true;
-    enableFishIntegration = true;
+    # Ref: https://github.com/nix-community/nix-direnv#storing-direnv-outside-the-project-directory
     stdlib = ''
       : ''${XDG_CACHE_HOME:=$HOME/.cache}
       declare -A direnv_layout_dirs
@@ -58,8 +55,9 @@
       }
     '';
   };
-  programs.nix-index = {
-    enable = true;
-    enableFishIntegration = true;
+  programs = {
+    zoxide.enable = true;
+    fzf.enable = true;
+    nix-index.enable = true;
   };
 }

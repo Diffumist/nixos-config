@@ -4,7 +4,6 @@
   inputs = {
     # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    stable.url = "github:nixos/nixpkgs/release-21.05";
     # utils
     utils.url = "github:numtide/flake-utils";
     impermanence.url = "github:nix-community/impermanence";
@@ -47,13 +46,21 @@
       inherit (builtins) mapAttrs;
       system = "x86_64-linux";
       nixcao = import "${inputs.nickpkgs}/pkgs";
-      stable.overlay = final: prev: {
-        stable = inputs.stable.legacyPackages.${prev.system};
+      other.overlay = final: prev: {
+        # Ref: https://github.com/NickCao/flakes/blob/08044fc9e40fab5eec0dbcb336777477a6d4bfaa/nixos/local/default.nix#L21
+        alacritty = final.symlinkJoin {
+          name = "alacritty";
+          paths = [ prev.alacritty ];
+          buildInputs = [ final.makeWrapper ];
+          postBuild = ''
+            wrapProgram $out/bin/alacritty --unset WAYLAND_DISPLAY
+          '';
+        };
       };
       overlays = with inputs; map (x: x.overlay) [
         nur
         self
-        stable
+        other
         nixcao
         sops-nix
         deploy-rs
@@ -69,7 +76,7 @@
       ];
       desktopModules = [
         selfModules.clash
-        selfModules.plasma-env
+        selfModules.gnome-env
         inputs.home.nixosModules.home-manager
       ];
       serverModules = [
@@ -81,9 +88,9 @@
           inherit system;
           specialArgs = { inherit inputs; };
           modules = [ { nixpkgs = { inherit overlays; }; } ]
-          ++ hostname
-          ++ shareModules 
-          ++ (if hostname == [ ./hosts/local ] then desktopModules else serverModules);
+            ++ hostname
+            ++ shareModules
+            ++ (if hostname == [ ./hosts/local ] then desktopModules else serverModules);
         };
       mkDeployNodes = hostname: {
         sshUser = "root";

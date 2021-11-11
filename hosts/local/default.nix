@@ -41,7 +41,7 @@
         "223.5.5.5 -group china -exclude-default-group"
         "8.8.8.8"
       ];
-      server-https = "https://cloudflare-dns.com/dns-query -exclude-default-group";
+      # server-https = "https://cloudflare-dns.com/dns-query -exclude-default-group";
     };
   };
   # generate hashedPassword: mkpasswd -m sha-512
@@ -59,6 +59,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = "backup";
     users.diffumist = import ../../home;
   };
 }

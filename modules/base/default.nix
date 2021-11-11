@@ -22,7 +22,7 @@ let cfg = config.dmist.base; in
         keyFile = "/var/lib/sops.key";
       };
     };
-    networking.firewall.enable = true;
+    networking.firewall.enable = false;
     system.stateVersion = "20.09";
   };
 }

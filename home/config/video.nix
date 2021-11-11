@@ -1,8 +1,11 @@
 _: {
   programs.mpv = {
     enable = true;
-    config.hwdec = "auto";
-    config.hwdec-codecs = "all";
+    config = {
+      hwdec = "auto";
+      hwdec-codecs = "all";
+      gpu-context = "wayland";
+    };
   };
 
   programs.mpv.bindings = {
