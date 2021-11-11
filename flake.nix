@@ -4,7 +4,6 @@
   inputs = {
     # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    stable.url = "github:nixos/nixpkgs/release-21.05";
     # utils
     utils.url = "github:numtide/flake-utils";
     impermanence.url = "github:nix-community/impermanence";
@@ -48,7 +47,6 @@
       system = "x86_64-linux";
       nixcao = import "${inputs.nickpkgs}/pkgs";
       other.overlay = final: prev: {
-        stable = inputs.stable.legacyPackages.${prev.system};
         # Ref: https://github.com/NickCao/flakes/blob/08044fc9e40fab5eec0dbcb336777477a6d4bfaa/nixos/local/default.nix#L21
         alacritty = final.symlinkJoin {
           name = "alacritty";

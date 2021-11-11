@@ -12,39 +12,43 @@ let cfg = config.dmist.gnome-env; in
   };
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      perlPackages.FileMimeInfo
+      meld
       evince
-      foliate
-      lollypop
-      gnome.eog
+      remmina
       gparted
-      waydroid
-      capitaine-cursors
-      materia-theme
-      materia-kde-theme
-      papirus-icon-theme
+      lollypop
+      wpsoffice
+      gnome.eog
       gnome.ghex
+      gnome.gedit
+      gnome.nautilus
+      gnome.file-roller
       gnome.gnome-tweaks
       gnome.dconf-editor
       gnome.gnome-screenshot
-      gnome.nautilus
-      gnome.gnome-system-monitor
       gnome.gnome-power-manager
-      gnomeExtensions.lunar-calendar
-      gnomeExtensions.kimpanel
+      gnome.gnome-system-monitor
       gnomeExtensions.gsconnect
       gnomeExtensions.appindicator
-      gnomeExtensions.clipboard-indicator
+      gnomeExtensions.espresso
+      materia-theme
+      papirus-icon-theme
     ];
     programs.dconf.enable = true;
     services.xserver = {
       enable = true;
       layout = "us";
       desktopManager.gnome.enable = true;
-      displayManager.gdm = {
-        enable = true;
-        wayland = true;
-        nvidiaWayland = true;
+      displayManager = {
+        gdm = {
+          enable = true;
+          wayland = true;
+          nvidiaWayland = true;
+        };
+        autoLogin = {
+          enable = true;
+          user = "diffumist";
+        };
       };
       videoDrivers = [ "nvidia" ];
     };
@@ -53,7 +57,7 @@ let cfg = config.dmist.gnome-env; in
       core-utilities.enable = false;
       core-developer-tools.enable = false;
       evolution-data-server.enable = true;
-      gnome-online-accounts.enable = true;
+      gnome-online-accounts.enable = false;
       gnome-keyring.enable = true;
     };
 
@@ -77,13 +81,8 @@ let cfg = config.dmist.gnome-env; in
       defaultLocale = "en_US.UTF-8";
       supportedLocales = [ "en_US.UTF-8/UTF-8" "zh_CN.UTF-8/UTF-8" ];
       inputMethod = {
-        enabled = "fcitx5";
-        fcitx5.addons = with pkgs; [
-          fcitx5-chinese-addons
-          fcitx5-pinyin-zhwiki
-          fcitx5-material-color
-          fcitx5-pinyin-moegirl
-        ];
+        enabled = "ibus";
+        ibus.engines = with pkgs.ibus-engines; [ rime ];
       };
     };
     networking.networkmanager = {

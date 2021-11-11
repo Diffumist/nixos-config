@@ -35,15 +35,23 @@
   };
   nali = {
     pname = "nali";
-    version = "f299668a1fa3be81e9e2226844bfc7945da4a09f";
+    version = "d4a15200e47de4b346f535366a5083395cd4fb2d";
     src = fetchgit {
       url = "https://github.com/zu1k/nali";
-      rev = "f299668a1fa3be81e9e2226844bfc7945da4a09f";
+      rev = "d4a15200e47de4b346f535366a5083395cd4fb2d";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "1cnda7pk2q6zrwvyligc0qlgi09hjv5554bq8zx3977knynj9b7d";
+      sha256 = "03214l91wy6adf6mhssplp8ni4ysi9vr3zayqq2yywh1hp95g1id";
     };
     vendorSha256 = "Kb2T+zDUuH+Rx8amYsTIhR5L3DIx5nGcDGqxHOn90NU=";
+  };
+  rime-pinyin-moegirl = {
+    pname = "rime-pinyin-moegirl";
+    version = "20210923";
+    src = fetchurl {
+      url = "https://github.com/outloudvi/mw2fcitx/releases/download/20211014/moegirl.dict.yaml";
+      sha256 = "13hd8ivwkkxgminfc0g5hdy2m0kd8ikxirj4dz4ihh6kv2vhh31m";
+    };
   };
 }

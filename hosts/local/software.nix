@@ -26,7 +26,11 @@
   };
   virtualisation = {
     virtualbox.host.enable = true;
-    podman.enable = true;
+    # waydroid.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+    };
   };
   users.groups."libvirtd".members = [ "diffumist" ];
 

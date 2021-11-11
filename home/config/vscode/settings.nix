@@ -61,4 +61,5 @@ _:
   "telemetry.enableTelemetry" = false;
   "telemetry.enableCrashReporter" = false;
   "security.workspace.trust.untrustedFiles" = "open";
+  "terminal.integrated.persistentSessionReviveProcess" = "never";
 }
