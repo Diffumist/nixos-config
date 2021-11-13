@@ -31,10 +31,8 @@
       enable = true;
       dockerCompat = true;
     };
+    oci-containers.backend = "podman";
   };
-  users.groups."libvirtd".members = [ "diffumist" ];
-
-  programs.mtr.enable = true;
 
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;

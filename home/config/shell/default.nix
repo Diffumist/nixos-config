@@ -1,9 +1,5 @@
 { pkgs, config, ... }:
 {
-  programs.alacritty = {
-    enable = true;
-    settings = (import ./alacritty.nix);
-  };
   programs.fish = {
     enable = true;
     shellInit = ''
@@ -28,18 +24,6 @@
       };
     };
   };
-  programs.exa = {
-    enable = true;
-    enableAliases = true;
-  };
-  programs.bat = {
-    enable = true;
-    config = {
-      theme = "ansi";
-      pager = "less -FR";
-      style = "";
-    };
-  };
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
@@ -59,5 +43,21 @@
     zoxide.enable = true;
     fzf.enable = true;
     nix-index.enable = true;
+    exa = {
+      enable = true;
+      enableAliases = true;
+    };
+    bat = {
+      enable = true;
+      config = {
+        theme = "ansi";
+        pager = "less -FR";
+        style = "";
+      };
+    };
+    alacritty = {
+      enable = true;
+      settings = (import ./alacritty.nix);
+    };
   };
 }

@@ -17,9 +17,7 @@ let cfg = config.dmist.ss; in
   };
 
   config = mkIf cfg.enable {
-    sops.secrets.ss = {
-      sopsFile = ./secrets.yaml;
-    };
+    sops.secrets.ss.sopsFile = ./secrets.yaml;
 
     services.shadowsocks = {
       enable = true;

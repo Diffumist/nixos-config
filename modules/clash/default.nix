@@ -19,15 +19,16 @@ in
       };
     };
   };
+
   config = mkIf cfg.enable {
     system.activationScripts.initClashScripts = ''
       mkdir -p "${clashDir}"
       chown "${clashUser}" "${clashDir}"
       cp "${maxmind-geoip}/Country.mmdb" "${clashDir}/Country.mmdb"
     '';
+
     systemd.services.clash =
       let
-        # Start clash client with iptables script
         preStartScript = writeShellScript "clash-prestart" ''
           iptables() {
             ${iptables}/bin/iptables -w "$@"
@@ -41,7 +42,6 @@ in
           iptables -t nat -A OUTPUT -p tcp -j CLASH
           ${iproute}/bin/ip link set dev ${wlanName} xdp obj ${clean-dns-bpf}
         '';
-        # Stop clash client
         postStopScript = writeShellScript "clash-poststop" ''
           ${iptables}/bin/iptables-save -c|${ripgrep}/bin/rg -v CLASH|${iptables}/bin/iptables-restore -c
           ${iproute}/bin/ip link set dev ${wlanName} xdp off
@@ -60,6 +60,13 @@ in
           Restart = "on-abort";
         };
       };
+
+    virtualisation.oci-containers.containers = {
+      clash-web = {
+        image = "docker.io/haishanh/yacd:latest";
+        ports = [ "127.0.0.1:1234:80" ];
+      };
+    };
     users.users."${clashUser}" = {
       group = config.users.groups.nogroup.name;
       isSystemUser = true;

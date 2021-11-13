@@ -43,7 +43,6 @@
   };
   outputs = { self, ... } @inputs:
     let
-      inherit (builtins) mapAttrs;
       system = "x86_64-linux";
       nixcao = import "${inputs.nickpkgs}/pkgs";
       other.overlay = final: prev: {
@@ -87,7 +86,7 @@
         inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
-          modules = [ { nixpkgs = { inherit overlays; }; } ]
+          modules = [{ nixpkgs = { inherit overlays; }; }]
             ++ hostname
             ++ shareModules
             ++ (if hostname == [ ./hosts/local ] then desktopModules else serverModules);
@@ -110,6 +109,6 @@
         vessel = mkDeployNodes "vessel";
         mist = mkDeployNodes "mist";
       };
-      checks = mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
     };
 }

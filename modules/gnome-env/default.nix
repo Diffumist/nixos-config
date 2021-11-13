@@ -13,14 +13,19 @@ let cfg = config.dmist.gnome-env; in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       meld
+      kooha
       evince
+      drawing
       remmina
       gparted
       lollypop
+      newsflash
       wpsoffice
       gnome.eog
       gnome.ghex
       gnome.gedit
+      gnome-builder
+      gnome.seahorse
       gnome.nautilus
       gnome.file-roller
       gnome.gnome-tweaks
@@ -34,6 +39,12 @@ let cfg = config.dmist.gnome-env; in
       materia-theme
       papirus-icon-theme
     ];
+    # gsconnect
+    networking.firewall = rec {
+      allowedTCPPortRanges = [{ from = 1714; to = 1764; }];
+      allowedUDPPortRanges = allowedTCPPortRanges;
+    };
+
     programs.dconf.enable = true;
     services.xserver = {
       enable = true;
@@ -42,8 +53,8 @@ let cfg = config.dmist.gnome-env; in
       displayManager = {
         gdm = {
           enable = true;
-          wayland = true;
-          nvidiaWayland = true;
+          wayland = false;
+          nvidiaWayland = false;
         };
         autoLogin = {
           enable = true;
@@ -85,6 +96,7 @@ let cfg = config.dmist.gnome-env; in
         ibus.engines = with pkgs.ibus-engines; [ rime ];
       };
     };
+
     networking.networkmanager = {
       enable = true;
       wifi = {

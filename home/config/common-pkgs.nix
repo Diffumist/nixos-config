@@ -34,9 +34,7 @@
     nvfetcher
     cachix
     scrcpy
-    perlPackages.FileMimeInfo
     dconf2nix
-    gjs
     # GUI
     # authy
     # obs-studio
@@ -53,6 +51,7 @@
     taxi
     cawbird
     # Env
+    pkg-config
     patchelf
     gnumake
     cmake

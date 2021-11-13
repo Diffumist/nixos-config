@@ -13,15 +13,7 @@
   };
   shell.program = "fish";
   mouse.hide_when_typing = true;
-  font = {
-    size = 10;
-    normal = {
-      family = "JetBrains Mono";
-      style = "Regular";
-    };
-    bold = { family = "JetBrains Mono Nerd Font"; };
-    italic = { family = "JetBrains Mono Nerd Font"; };
-  };
+  font.size = 10;
   draw_bold_text_with_bright_colors = true;
   background_opacity = 1;
   colors = {

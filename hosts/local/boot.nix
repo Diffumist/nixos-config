@@ -7,8 +7,10 @@
   ];
   # Ref: https://thesofproject.github.io/latest/getting_started/intel_debug/introduction.html
   # use legacy drivers
-  boot.kernelParams = [ "snd-intel-dspcfg.dsp_driver=1" ];
-  boot.blacklistedKernelModules = [ "ip_tables" ];
+  boot.kernelParams = [
+    "snd-intel-dspcfg.dsp_driver=1"
+    "nowatchdog"
+  ];
   boot.kernel.sysctl = {
     "kernel.sysrq" = 1;
     "kernel.panic" = 10;

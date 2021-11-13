@@ -11,18 +11,13 @@ let cfg = config.dmist.base; in
     };
   };
   config = mkIf cfg.enable {
-    programs.neovim = {
-      enable = true;
-      vimAlias = true;
-      defaultEditor = true;
-    };
     sops = {
       defaultSopsFile = ./secrets.yaml;
       age = {
         keyFile = "/var/lib/sops.key";
       };
     };
-    networking.firewall.enable = false;
+    networking.firewall.enable = true;
     system.stateVersion = "20.09";
   };
 }

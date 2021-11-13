@@ -16,7 +16,6 @@
   networking = {
     hostName = "local";
     networkmanager.dns = "none";
-    networkmanager.wifi.backend = "wpa_supplicant";
     networkmanager.extraConfig = ''
       [main]
       rc-manager = unmanaged
@@ -28,7 +27,7 @@
   time.timeZone = "Asia/Shanghai";
 
   services.smartdns = {
-    enable = true;
+    enable = false;
     settings = {
       conf-file = with pkgs; [
         "${smartdns-china-list}/accelerated-domains.china.smartdns.conf"
@@ -59,7 +58,6 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    backupFileExtension = "backup";
     users.diffumist = import ../../home;
   };
 }

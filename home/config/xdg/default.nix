@@ -52,6 +52,10 @@ in
         windowresolution=1080x800
         output=opengl
       '';
+      "containers/storage.conf".text = ''
+        [storage]
+        driver = "btrfs"
+      '';
       "ibus/rime/default.custom.yaml".text = ''
         patch:
           translator/dictionary: pinyin_simp
