@@ -17,7 +17,10 @@ let cfg = config.dmist.ss; in
   };
 
   config = mkIf cfg.enable {
-    sops.secrets.ss.sopsFile = ./secrets.yaml;
+    sops.secrets.ss = {
+      sopsFile = ./secrets.yaml;
+      restartUnits = [ "shadowsocks-libev.service" ];
+    };
 
     services.shadowsocks = {
       enable = true;
@@ -26,9 +29,9 @@ let cfg = config.dmist.ss; in
       passwordFile = config.sops.secrets.ss.path;
     };
 
-    networking.firewall = {
+    networking.firewall = rec {
       allowedTCPPorts = [ cfg.ports ];
-      allowedUDPPorts = [ cfg.ports ];
+      allowedUDPPorts = allowedTCPPorts;
     };
   };
 }

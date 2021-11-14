@@ -2,6 +2,7 @@
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
+    ../mist/boot.nix
   ];
   swapDevices = [
     {

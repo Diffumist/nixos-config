@@ -56,10 +56,6 @@ let cfg = config.dmist.gnome-env; in
           wayland = false;
           nvidiaWayland = false;
         };
-        autoLogin = {
-          enable = true;
-          user = "diffumist";
-        };
       };
       videoDrivers = [ "nvidia" ];
     };

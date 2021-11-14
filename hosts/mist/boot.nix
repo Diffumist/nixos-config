@@ -8,10 +8,7 @@
     "net.ipv4.tcp_congestion_control" = "bbr";
     "net.ipv4.ip_forward" = 1;
   };
-  boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
-    blacklistedKernelModules = [ "ip_tables" ];
-  };
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
 
   fileSystems =

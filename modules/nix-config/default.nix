@@ -5,7 +5,7 @@
     trustedUsers = [ "root" "diffumist" ];
 
     binaryCaches = lib.mkBefore [
-      "https://mirror.sjtu.edu.cn/nix-channels/store"
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://diffumist.cachix.org"
       "https://cache.nixos.org"
     ];
