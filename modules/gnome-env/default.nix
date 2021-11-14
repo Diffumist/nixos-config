@@ -13,6 +13,7 @@ let cfg = config.dmist.gnome-env; in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       meld
+      srain
       kooha
       evince
       drawing
@@ -25,7 +26,6 @@ let cfg = config.dmist.gnome-env; in
       gnome.ghex
       gnome.gedit
       gnome-builder
-      gnome.seahorse
       gnome.nautilus
       gnome.file-roller
       gnome.gnome-tweaks
@@ -73,6 +73,9 @@ let cfg = config.dmist.gnome-env; in
         jetbrains-mono
         sarasa-gothic
         apple-emoji
+        noto-fonts
+        noto-fonts-cjk
+        wqy_microhei
         (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
       ];
       fontDir.enable = true;

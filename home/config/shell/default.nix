@@ -7,7 +7,6 @@
       set -g fish_greeting
     '';
     shellAliases = {
-      nixfmt = "nixpkgs-fmt (fd  -E pkgs/_sources/ -e nix)";
       fzf = "zi";
       dosbox = "${pkgs.dosbox}/bin/dosbox -conf ${config.xdg.configHome}/dosbox/dosbox.conf";
     };
