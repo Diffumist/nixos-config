@@ -1,5 +1,7 @@
 { pkgs, inputs, lib, ... }: {
+
   nixpkgs.config.allowUnfree = true;
+
   nix = {
     package = pkgs.nixFlakes;
     trustedUsers = [ "root" "diffumist" ];

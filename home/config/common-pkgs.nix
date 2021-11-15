@@ -37,7 +37,7 @@
     dconf2nix
     # GUI
     # authy
-    # obs-studio
+    obs-studio
     jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland

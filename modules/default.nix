@@ -1,9 +1,13 @@
-{
-  # TODO map readir gen module list
-  clash = import ./clash;
-  shadowsocks = import ./shadowsocks;
-  nix-config = import ./nix-config;
-  base = import ./base;
-  cloud = import ./cloud;
-  gnome-env = import ./gnome-env;
-}
+[
+  # env
+  ./base
+  ./cloud
+  ./nix-config.nix
+
+  ./services/gnome-env
+  ./hardware
+
+  # networking
+  ./services/ss
+  ./services/clash.nix
+]

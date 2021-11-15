@@ -1,14 +1,13 @@
 { pkgs, config, lib, ... }:
 
 with lib;
-let cfg = config.dmist.ss; in
+let
+  cfg = config.dmist.ss;
+in
 {
   options = {
     dmist.ss = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-      };
+      enable = mkEnableOption "ss-server";
       ports = mkOption {
         type = types.port;
         default = 4352;

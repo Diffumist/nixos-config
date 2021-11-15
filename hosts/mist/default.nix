@@ -3,21 +3,14 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     ./boot.nix
+    ./options.nix
   ];
-  swapDevices = [
-    {
-      device = "/var/swapfile/swapfile";
-      size = 1024;
-    }
-  ];
+
   networking = {
     hostName = "mist";
     domain = "diffumist.me";
     nameservers = [ "205.185.112.68" ];
     defaultGateway = "209.141.44.1";
-    firewall = {
-      allowedTCPPorts = [ 12345 12346 ];
-    };
     dhcpcd.enable = false;
     interfaces = {
       eth0 = {
@@ -28,6 +21,9 @@
           { address = "209.141.44.1"; prefixLength = 32; }
         ];
       };
+    };
+    firewall = {
+      allowedTCPPorts = [ 12345 12346 ];
     };
   };
 

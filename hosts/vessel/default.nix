@@ -3,12 +3,7 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     ../mist/boot.nix
-  ];
-  swapDevices = [
-    {
-      device = "/var/swapfile/swapfile";
-      size = 1024;
-    }
+    ../mist/options.nix
   ];
 
   networking = {

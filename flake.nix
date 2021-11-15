@@ -66,22 +66,12 @@
         berberman
         rust-overlay
       ];
-      selfModules = import ./modules;
       shareModules = [
-        selfModules.base
-        selfModules.nix-config
         inputs.sops-nix.nixosModules.sops
         inputs.impermanence.nixosModules.impermanence
-      ];
-      desktopModules = [
-        selfModules.clash
-        selfModules.gnome-env
         inputs.home.nixosModules.home-manager
       ];
-      serverModules = [
-        selfModules.cloud
-        selfModules.shadowsocks
-      ];
+      nixosModules = import ./modules;
       mkSystem = hostname:
         inputs.nixpkgs.lib.nixosSystem {
           inherit system;
@@ -89,7 +79,7 @@
           modules = [{ nixpkgs = { inherit overlays; }; }]
             ++ hostname
             ++ shareModules
-            ++ (if hostname == [ ./hosts/local ] then desktopModules else serverModules);
+            ++ nixosModules;
         };
       mkDeployNodes = hostname: {
         sshUser = "root";

@@ -1,13 +1,13 @@
 { lib, config, pkgs, ... }:
+
 with lib;
-let cfg = config.dmist.cloud; in
+let
+  cfg = config.dmist.cloud;
+in
 {
   options = {
     dmist.cloud = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-      };
+      enable = mkEnableOption "cloud";
     };
   };
 

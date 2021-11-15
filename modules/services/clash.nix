@@ -6,7 +6,6 @@ let
   clashDir = "/var/lib/clash";
   redirPort = 7891;
   clashUser = "clash";
-  wlanName = "wlp0s20f3";
   startScript = writeShellScript "clash-prestart" ''
     iptables() {
       ${iptables}/bin/iptables -w "$@"
@@ -28,10 +27,7 @@ let
 in
 {
   options.dmist.clash = {
-    enable = mkOption {
-      type = types.bool;
-      default = true;
-    };
+    enable = mkEnableOption "clash services";
   };
 
   config = mkIf cfg.enable {

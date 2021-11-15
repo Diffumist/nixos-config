@@ -6,13 +6,6 @@ git.branch = "release"
 [material-nvim]
 src.git = "https://github.com/marko-cerovac/material.nvim"
 fetch.github = "marko-cerovac/material.nvim"
-[nali]
-src.git = "https://github.com/zu1k/nali"
-fetch.github = "zu1k/nali"
-passthru = { vendorSha256 = "Kb2T+zDUuH+Rx8amYsTIhR5L3DIx5nGcDGqxHOn90NU="   }
-[clean-dns-bpf]
-src.manual = "0.1"
-fetch.url = "https://github.com/ihciah/clean-dns-bpf/releases/download/v0.1/clean-dns.elf"
 [rime-pinyin-moegirl]
 src.manual = "20210923"
 fetch.url = "https://github.com/outloudvi/mw2fcitx/releases/download/20211014/moegirl.dict.yaml"

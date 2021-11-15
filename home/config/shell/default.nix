@@ -56,7 +56,7 @@
     };
     alacritty = {
       enable = true;
-      settings = (import ./alacritty.nix);
+      settings = import ./alacritty.nix;
     };
   };
 }

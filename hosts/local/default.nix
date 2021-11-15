@@ -3,13 +3,11 @@
   imports = [
     ./boot.nix
     ./software.nix
-    ./hardware.nix
   ];
   # swapfile
   swapDevices = [
     {
       device = "/var/swapfile/swapfile";
-      size = 16384; # MiB
     }
   ];
   # network
@@ -42,7 +40,19 @@
       server-https = "https://cloudflare-dns.com/dns-query -exclude-default-group";
     };
   };
-  # generate hashedPassword: mkpasswd -m sha-512
+  # modules options
+  dmist = {
+    gnome-env = {
+      enable = true;
+      waylandEnable = false;
+    };
+    clash.enable = true;
+    hardware = {
+      enable = true;
+      nvidiaEnable = true;
+    };
+  };
+
   users = {
     groups."diffumist".gid = 1000;
     users."diffumist" = {

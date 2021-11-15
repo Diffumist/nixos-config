@@ -1,6 +1,9 @@
 { lib, config, pkgs, ... }:
+
 with lib;
-let cfg = config.dmist.base; in
+let
+  cfg = config.dmist.base;
+in
 {
   options = {
     dmist.base = {
@@ -10,6 +13,7 @@ let cfg = config.dmist.base; in
       };
     };
   };
+
   config = mkIf cfg.enable {
     sops = {
       defaultSopsFile = ./secrets.yaml;
@@ -17,6 +21,13 @@ let cfg = config.dmist.base; in
         keyFile = "/var/lib/sops.key";
       };
     };
+
+    swapDevices = [
+      {
+        device = "/var/swapfile/swapfile";
+      }
+    ];
+
     networking.firewall.enable = true;
     system.stateVersion = "20.09";
   };
