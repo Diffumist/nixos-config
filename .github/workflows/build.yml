@@ -17,5 +17,16 @@ jobs:
         with:
           name: diffumist
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
-      - name: flake checks
+      - name: Flake Update
+        run: |
+          git config --local user.email "flakes-actions[bot]@users.noreply.github.com"
+          git config --local user.name "flakes-actions[bot]"
+          nix flake update --commit-lock-file
+      - name: Flake Checks
         run: nix flake check -Lv
+      - name: Push Changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: flakes-actions
+          force: true
