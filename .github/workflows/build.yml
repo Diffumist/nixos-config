@@ -1,8 +1,12 @@
-name: "build"
+name: "Cachix cache"
 on:
   push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
   schedule:
-    - cron: '0 8 * * *'
+    - cron: '0 0 * * 4'
 jobs:
   cachix:
     runs-on: ubuntu-latest
@@ -19,14 +23,26 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - name: Flake Update
         run: |
-          git config --local user.email "flakes-actions[bot]@users.noreply.github.com"
-          git config --local user.name "flakes-actions[bot]"
-          nix flake update --commit-lock-file
+            cd pkgs && nix run github:nixos/nixpkgs/nixos-unstable-small#nvfetcher && cd ..
+            nix flake update
+            git add -A
+            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --global user.name "github-actions"
+            git commit -m "Automatic update flakes"
       - name: Flake Checks
         run: nix flake check -Lv
       - name: Push Changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.5.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: flakes-actions
           force: true
+      - name: Send notification
+        uses: appleboy/telegram-action@v0.1.1
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+            ${{ github.workflow }} already built successfully:
+            
+            See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
