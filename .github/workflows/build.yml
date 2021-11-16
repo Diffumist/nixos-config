@@ -23,21 +23,25 @@ jobs:
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - name: Flake Update
         run: |
-            cd pkgs && nix run github:nixos/nixpkgs/nixos-unstable-small#nvfetcher && cd ..
-            nix flake update
-            git add -A
-            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git config --global user.name "github-actions"
-            git commit -m "Automatic update flakes"
+          cd pkgs && nix run github:nixos/nixpkgs/nixos-unstable-small#nvfetcher && cd ..
+          nix flake update
+          git add -A
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions"
+          git commit -m "Automatic update flakes"
       - name: Flake Checks
         run: nix flake check -Lv
+      - name: Build Cache
+        run: |
+          sudo rm -rf /opt || true &
+          nix build ".#nixosConfigurations.local.config.system.build.toplevel"
       - name: Push Changes
         uses: ad-m/github-push-action@v0.5.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: flakes-actions
           force: true
-      - name: Send notification
+      - name: Send to Telegram
         uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.TELEGRAM_TO }}
