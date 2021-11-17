@@ -73,24 +73,27 @@ in
         fonts = with pkgs; [
           jetbrains-mono
           sarasa-gothic
-          apple-emoji
-          noto-fonts
+          noto-fonts-emoji
           noto-fonts-cjk
-          wqy_microhei
           (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
         ];
+
         fontDir.enable = true;
-        fontconfig.defaultFonts = {
-          monospace = [ "Jetbrains Mono" ];
-          sansSerif = [ "Sarasa Gothic SC" ];
-          serif = [ "Sarasa Gothic SC" ];
-          emoji = [ "Apple Color Emoji" ];
+
+        fontconfig = {
+          defaultFonts = rec {
+            monospace = [ "Jetbrains Mono" ];
+            sansSerif = [ "Sarasa Gothic SC" ];
+            serif = sansSerif;
+            emoji = [ "Noto Color Emoji" ];
+          };
         };
       };
 
       i18n = {
         defaultLocale = "en_US.UTF-8";
         supportedLocales = [ "en_US.UTF-8/UTF-8" "zh_CN.UTF-8/UTF-8" ];
+
         inputMethod = {
           enabled = "ibus";
           ibus.engines = with pkgs.ibus-engines; [ rime ];

@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , source
 , dbus
 , openssl
@@ -13,14 +12,12 @@
 rustPlatform.buildRustPackage rec {
   inherit (source) pname version src cargoLock;
 
-  nativeBuildInputs = [
-    openssl
-    pkg-config
+  buildInputs = [
     dbus
     libxcb
-    python3
+    openssl
   ];
-  buildInputs = nativeBuildInputs;
+  nativeBuildInputs = buildInputs ++ [ python3 pkg-config ];
 
   checkFlags = [
     "--skip formatters::tests::test_explain_html_1"
