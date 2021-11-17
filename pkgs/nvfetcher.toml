@@ -9,3 +9,7 @@ fetch.github = "marko-cerovac/material.nvim"
 [rime-pinyin-moegirl]
 src.manual = "20210923"
 fetch.url = "https://github.com/outloudvi/mw2fcitx/releases/download/20211014/moegirl.dict.yaml"
+[ydcv-rs]
+src.git = "https://github.com/farseerfc/ydcv-rs"
+fetch.github = "farseerfc/ydcv-rs"
+cargo_lock = "Cargo.lock"

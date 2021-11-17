@@ -35,8 +35,8 @@
     cachix
     scrcpy
     dconf2nix
+    ydcv-rs
     # GUI
-    # authy
     obs-studio
     jetbrains.idea-ultimate
     jetbrains.clion
@@ -45,8 +45,8 @@
     kotatogram-desktop
     netease-cloud-music-gtk
     qbittorrent-enhanced
-    # wine
-    # winetricks
+    wine
+    winetricks
     # steam
     taxi
     cawbird

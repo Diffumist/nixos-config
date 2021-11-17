@@ -7,7 +7,7 @@ in
 {
   options.dmist.gnome-env = {
     enable = mkEnableOption "GNOME";
-    waylandEnable = mkEnableOption "GNOME with wayland";
+    waylandEnable = mkEnableOption "GNOME on wayland";
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -40,6 +40,7 @@ in
         gnomeExtensions.espresso
         materia-theme
         papirus-icon-theme
+        capitaine-cursors
       ];
 
       services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
@@ -63,7 +64,7 @@ in
         displayManager = {
           gdm = {
             enable = true;
-            wayland = mkAfter false;
+            wayland = false;
           };
         };
       };
@@ -114,7 +115,7 @@ in
     })
     (mkIf (cfg.waylandEnable) {
       services.xserver.displayManager.gdm = {
-        wayland = true;
+        wayland = mkForce true;
         nvidiaWayland = true;
       };
     })

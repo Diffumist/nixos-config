@@ -3,9 +3,13 @@ let
   xdgdirs = {
     # cache
     __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
+    CUDA_CACHE_PATH = "${config.xdg.cacheHome}/nv";
     NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node_repl_history";
     HISTFILE = "${config.xdg.cacheHome}/bash_history";
-    _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${config.xdg.cacheHome}/java";
+    _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd_hrgb -Djava.util.prefs.userRoot=${config.xdg.cacheHome}/java";
+    # See: https://github.com/NixOS/nixpkgs/pull/95019
+    XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
+    # XCOMPOSEFILE = "${config.xdg.cacheHome}/compose";
     # config
     NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
     # data
@@ -17,11 +21,6 @@ let
   };
 in
 {
-  xsession = {
-    pointerCursor.package = pkgs.capitaine-cursors;
-    pointerCursor.defaultCursor = "capitaine-cursors";
-    pointerCursor.name = "capitaine-cursors";
-  };
   # dconf.settings = import ./dconf.nix { };
   xdg = {
     userDirs = {
@@ -106,6 +105,6 @@ in
     platformTheme = "gtk";
     style = { package = pkgs.adwaita-qt; name = "adwaita"; };
   };
-  home.sessionVariables = xdgdirs;
-  xresources.path = "${config.xdg.dataHome}/.Xresources";
+  systemd.user.sessionVariables = xdgdirs;
+  xresources.path = "${config.xdg.dataHome}/Xresources";
 }

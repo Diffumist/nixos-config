@@ -66,19 +66,17 @@
         berberman
         rust-overlay
       ];
-      shareModules = [
+      nixosModules = import ./modules ++ [
         inputs.sops-nix.nixosModules.sops
         inputs.impermanence.nixosModules.impermanence
         inputs.home.nixosModules.home-manager
       ];
-      nixosModules = import ./modules;
       mkSystem = hostname:
         inputs.nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = { inherit inputs; };
           modules = [{ nixpkgs = { inherit overlays; }; }]
             ++ hostname
-            ++ shareModules
             ++ nixosModules;
         };
       mkDeployNodes = hostname: {

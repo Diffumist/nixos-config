@@ -33,4 +33,22 @@
       sha256 = "13hd8ivwkkxgminfc0g5hdy2m0kd8ikxirj4dz4ihh6kv2vhh31m";
     };
   };
+  ydcv-rs = {
+    pname = "ydcv-rs";
+    version = "7756945e0e44c138416727f66f9e7a81b896792c";
+    src = fetchgit {
+      url = "https://github.com/farseerfc/ydcv-rs";
+      rev = "7756945e0e44c138416727f66f9e7a81b896792c";
+      fetchSubmodules = false;
+      deepClone = false;
+      leaveDotGit = false;
+      sha256 = "1zvh19nzi60w5ka0c34s72aqk0iajlsczgyssvmxfz6xcr3s1lza";
+    };
+    cargoLock = {
+      lockFile = ./ydcv-rs-7756945e0e44c138416727f66f9e7a81b896792c/Cargo.lock;
+      outputHashes = {
+        
+      };
+    };
+  };
 }
