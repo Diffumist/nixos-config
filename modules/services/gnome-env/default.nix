@@ -21,11 +21,12 @@ in
         remmina
         lollypop
         newsflash
-        wpsoffice
         gnome.eog
         gnome.ghex
         gnome.gedit
+        libreoffice
         gnome.gpaste
+        virt-manager
         gnome-builder
         gnome.seahorse
         gnome.nautilus

@@ -1,4 +1,4 @@
-{ pkgs, inputs, lib, ... }: {
+{ pkgs, inputs, self, lib, config, secrets, ... }: {
 
   nixpkgs.config.allowUnfree = true;
 
@@ -24,11 +24,14 @@
     extraOptions = ''
       experimental-features = nix-command flakes ca-references
       flake-registry = /etc/nix/registry.json
+
       keep-outputs = true
       keep-derivations = true
+
+      access-tokens = github.com=${secrets.github-token}
     '';
 
-    registry.p.flake = inputs.nixpkgs;
+    registry.p.flake = self;
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
 }

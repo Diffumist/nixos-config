@@ -24,8 +24,12 @@
     enable = true;
     enableNotifications = true;
   };
+
   virtualisation = {
-    virtualbox.host.enable = true;
+    libvirtd = {
+      enable = true;
+      qemu.package = pkgs.qemu_kvm;
+    };
     # waydroid.enable = true;
     podman = {
       enable = true;
@@ -33,6 +37,7 @@
     };
     oci-containers.backend = "podman";
   };
+  users.groups."libvirtd".members = [ "diffumist" ];
 
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;

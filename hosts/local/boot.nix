@@ -1,27 +1,37 @@
 { lib, config, pkgs, ... }:
 {
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "rtsx_pci_sdmmc" ]; # only loaded on demand
-  boot.kernelPackages = pkgs.linuxPackages_xanmod;
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    (pkgs.linuxPackages_xanmod.nvidia_x11.override { inherit kernel; })
-  ];
+  boot.initrd = {
+    availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "rtsx_pci_sdmmc" ]; # only loaded on demand
+    kernelModules = [ "i915" ];
+  };
   # Ref: https://thesofproject.github.io/latest/getting_started/intel_debug/introduction.html
   # use legacy drivers
-  boot.kernelParams = [
-    "snd-intel-dspcfg.dsp_driver=1"
-    "nowatchdog"
-  ];
-  boot.kernel.sysctl = {
-    "kernel.sysrq" = 1;
-    "kernel.panic" = 10;
-    "vm.swappiness" = 10;
-    "net.ipv4.tcp_congestion_control" = "bbr";
+  boot = {
+    kernelPackages = pkgs.linuxPackages_zen;
+    kernelModules = [ "kvm-intel" ];
+    kernelParams = [
+      "snd-intel-dspcfg.dsp_driver=1"
+      "mitigations=off"
+      "quiet"
+    ];
+    kernel.sysctl = {
+      "kernel.sysrq" = 1;
+      "kernel.panic" = 10;
+      "vm.swappiness" = 10;
+      "net.ipv4.ip_forward" = 1;
+    };
+    extraModprobeConfig = ''
+      options i915 enable_guc=2
+      options i915 enable_fbc=1
+      options i915 fastboot=1
+    '';
   };
-  boot.supportedFilesystems = [ "ntfs-3g" ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.timeout = 1;
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+    timeout = 1;
+  };
 
   fileSystems =
     let

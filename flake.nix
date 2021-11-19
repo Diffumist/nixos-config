@@ -40,10 +40,16 @@
       url = "github:NickCao/flakes";
       flake = false;
     };
+    # secrets
+    nix-secrets = {
+      url = "github:Diffumist/nix-secrets";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = { self, ... } @inputs:
+  outputs = { self, nix-secrets, nixpkgs, utils, ... } @inputs:
     let
       system = "x86_64-linux";
+      this = import ./pkgs;
       nixcao = import "${inputs.nickpkgs}/pkgs";
       other.overlay = final: prev: {
         # Ref: https://github.com/NickCao/flakes/blob/08044fc9e40fab5eec0dbcb336777477a6d4bfaa/nixos/local/default.nix#L21
@@ -72,9 +78,12 @@
         inputs.home.nixosModules.home-manager
       ];
       mkSystem = hostname:
-        inputs.nixpkgs.lib.nixosSystem {
+        nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit inputs; };
+          specialArgs = {
+            inherit inputs self;
+            inherit (nix-secrets) secrets;
+          };
           modules = [{ nixpkgs = { inherit overlays; }; }]
             ++ hostname
             ++ nixosModules;
@@ -87,7 +96,7 @@
       };
     in
     {
-      overlay = (import ./pkgs).overlay;
+      overlay = this.overlay;
       nixosConfigurations = {
         local = mkSystem [ ./hosts/local ];
         mist = mkSystem [ ./hosts/mist ];
@@ -97,6 +106,21 @@
         vessel = mkDeployNodes "vessel";
         mist = mkDeployNodes "mist";
       };
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
-    };
+    } // utils.lib.eachSystem [ "x86_64-linux" ]
+      (
+        system:
+        let
+          pkgs = import nixpkgs {
+            inherit system overlays;
+            config.allowUnfree = true;
+          };
+        in
+        rec {
+          packages = this.packages pkgs;
+          checks = packages // (inputs.deploy-rs.lib."${system}".deployChecks {
+            nodes = pkgs.lib.filterAttrs (name: cfg: cfg.profiles.system.path.system == system) self.deploy.nodes;
+          });
+          legacyPackages = pkgs;
+        }
+      );
 }

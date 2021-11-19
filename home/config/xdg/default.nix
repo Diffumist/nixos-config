@@ -67,8 +67,6 @@ in
         version: "0.1"
         sort: by_weight
         use_preset_vocabulary: true
-        style:
-          horizontal: true
         import_tables:
           - luna_pinyin
           - zhwiki

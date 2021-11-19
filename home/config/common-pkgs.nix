@@ -4,40 +4,15 @@
   home.packages = with pkgs; map lib.lowPrio [
     # CLI
     curl
-    neofetch
-    htop
-    ncdu
     lsof
     dnsutils
     fd
     ripgrep
-    tealdeer
     man-pages
-    jq
-    gnupg
-    file
-    rsync
     libarchive
     runzip
-    pandoc
-    sops
-    age
-    compsize
-    prime-run
-    nali
-    traceroute
-    bubblewrap
-    nixpkgs-review
     nixpkgs-fmt
-    pkg-config
-    deploy-rs.deploy-rs
-    nvfetcher
-    cachix
-    scrcpy
-    dconf2nix
-    ydcv-rs
     # GUI
-    obs-studio
     jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland
@@ -47,7 +22,7 @@
     qbittorrent-enhanced
     wine
     winetricks
-    # steam
+    steam
     taxi
     cawbird
     # Env

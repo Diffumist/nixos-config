@@ -143,6 +143,26 @@
         "type": "github"
       }
     },
+    "nix-secrets": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1637331768,
+        "narHash": "sha256-JdE1Hp9Y8ZGR4nlPKw6x8g17tyMXejPYxEv+RRL4uRA=",
+        "owner": "Diffumist",
+        "repo": "nix-secrets",
+        "rev": "e98e21da06df5ce5a693cfadb8a87175ffcb0917",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Diffumist",
+        "repo": "nix-secrets",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1636800699,
@@ -205,6 +225,7 @@
         "home": "home",
         "impermanence": "impermanence",
         "nickpkgs": "nickpkgs",
+        "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "rust-overlay": "rust-overlay",

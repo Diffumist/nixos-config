@@ -1,4 +1,4 @@
-{ lib, pkgs, inputs, dmist, ... }:
+{ lib, pkgs, dmist, secrets, ... }:
 {
   imports = [
     ./boot.nix
@@ -32,11 +32,13 @@
         "${smartdns-china-list}/apple.china.smartdns.conf"
         "${smartdns-china-list}/google.china.smartdns.conf"
       ];
-      bind = [ "127.0.0.1:1053" ];
+      bind = [ "127.0.0.5:53" ];
       prefetch-domain = true;
+      speed-check-mode = "ping,tcp:80";
       server = [
         "223.5.5.5 -group china -exclude-default-group"
       ];
+      server-tls = [ "8.8.8.8:853" "1.1.1.1:853" ];
       server-https = "https://cloudflare-dns.com/dns-query -exclude-default-group";
     };
   };
@@ -64,9 +66,11 @@
       hashedPassword = "$6$pdVI5OMHlykFwtcC$Hh1wEakcsiI5nG/zRI7Xdt10OD99e7D3SaKQu5SQWi9p.vpM6jgG01RtIlWfDwSp/K5jumRIWqS8NigILAlCi/";
     };
   };
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    extraSpecialArgs = { inherit secrets; };
     users.diffumist = import ../../home;
   };
 }
