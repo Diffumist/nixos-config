@@ -6,7 +6,7 @@ on:
   pull_request:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 4'
+    - cron: '0 0 * * *'
 jobs:
   cachix:
     runs-on: ubuntu-latest
@@ -30,7 +30,8 @@ jobs:
           git config --global user.name "github-actions"
       - name: Flake update
         run: |
-          cd pkgs && nix run github:nixos/nixpkgs/nixos-unstable#nvfetcher && cd ..
+          nix develop
+          cd pkgs && nvfetcher && cd ..
           nix flake update
           git add -A
           git commit -m "Automatic update flakes"
@@ -44,12 +45,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: flakes-actions
           force: true
-      - name: Send to telegram
-        uses: appleboy/telegram-action@v0.1.1
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-            ${{ github.workflow }} already built successfully:
-            
-            See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}

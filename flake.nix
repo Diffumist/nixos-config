@@ -48,7 +48,6 @@
   };
   outputs = { self, nix-secrets, nixpkgs, utils, ... } @inputs:
     let
-      system = "x86_64-linux";
       this = import ./pkgs;
       nixcao = import "${inputs.nickpkgs}/pkgs";
       other.overlay = final: prev: {
@@ -77,43 +76,39 @@
         inputs.impermanence.nixosModules.impermanence
         inputs.home.nixosModules.home-manager
       ];
-      mkSystem = hostname:
-        nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs self;
-            inherit (nix-secrets) secrets;
-          };
-          modules = [{ nixpkgs = { inherit overlays; }; }]
-            ++ hostname
-            ++ nixosModules;
-        };
-      mkDeployNodes = hostname: {
-        sshUser = "root";
-        sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-        hostname = "${hostname}.diffumist.me";
-        profiles.system.path = inputs.deploy-rs.lib."${system}".activate.nixos self.nixosConfigurations."${hostname}";
-      };
+      hosts = builtins.attrNames (builtins.readDir ./hosts);
     in
     {
       overlay = this.overlay;
-      nixosConfigurations = {
-        local = mkSystem [ ./hosts/local ];
-        mist = mkSystem [ ./hosts/mist ];
-        vessel = mkSystem [ ./hosts/vessel ];
-      };
-      deploy.nodes = {
-        vessel = mkDeployNodes "vessel";
-        mist = mkDeployNodes "mist";
-      };
-    } // utils.lib.eachSystem [ "x86_64-linux" ]
+      nixosConfigurations =
+        let
+          mkSystem = hostname:
+            nixpkgs.lib.nixosSystem {
+              system = builtins.readFile (./hosts + "/${hostname}/system");
+              specialArgs = {
+                inherit inputs self;
+                inherit (nix-secrets) secrets;
+              };
+              modules = [{ nixpkgs = { inherit overlays; }; }]
+              ++ [ (import (./hosts + "/${hostname}")) ]
+              ++ nixosModules;
+            };
+        in
+        nixpkgs.lib.genAttrs hosts mkSystem;
+      deploy.nodes = (builtins.mapAttrs
+        (name: machine: {
+          sshUser = "root";
+          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
+          hostname = machine.config.networking.fqdn;
+          profiles.system.path = inputs.deploy-rs.lib."${machine.pkgs.system}".activate.nixos machine;
+        })
+        (nixpkgs.lib.filterAttrs (n: v: n != "local") self.nixosConfigurations));
+    } //
+    utils.lib.eachSystem [ "x86_64-linux" ]
       (
         system:
         let
-          pkgs = import nixpkgs {
-            inherit system overlays;
-            config.allowUnfree = true;
-          };
+          pkgs = import nixpkgs { inherit system overlays; };
         in
         rec {
           packages = this.packages pkgs;
@@ -123,7 +118,7 @@
           legacyPackages = pkgs;
           devShell = with pkgs; mkShell {
             nativeBuildInputs = [
-              deploy-rs.deploy-rs 
+              deploy-rs.deploy-rs
               nvfetcher
               nixpkgs-fmt
             ];
