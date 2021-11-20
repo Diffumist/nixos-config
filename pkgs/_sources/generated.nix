@@ -46,9 +46,7 @@
     };
     cargoLock = {
       lockFile = ./ydcv-rs-7756945e0e44c138416727f66f9e7a81b896792c/Cargo.lock;
-      outputHashes = {
-        
-      };
+      outputHashes = { };
     };
   };
 }

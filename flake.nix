@@ -121,6 +121,13 @@
             nodes = pkgs.lib.filterAttrs (name: cfg: cfg.profiles.system.path.system == system) self.deploy.nodes;
           });
           legacyPackages = pkgs;
+          devShell = with pkgs; mkShell {
+            nativeBuildInputs = [
+              deploy-rs.deploy-rs 
+              nvfetcher
+              nixpkgs-fmt
+            ];
+          };
         }
       );
 }

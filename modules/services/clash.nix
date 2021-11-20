@@ -14,7 +14,7 @@ let
     iptables -t nat -N CLASH
     iptables -t nat -A CLASH -d 0.0.0.0/8 -j RETURN
     iptables -t nat -A CLASH -d 127.0.0.1/32 -j RETURN
-    iptables -t nat -A CLASH -d 192.168.0.0/16 -j RETURN
+    iptables -t nat -A CLASH -d 192.168.0.0/24 -j RETURN
     iptables -t nat -A CLASH -m owner --uid-owner ${clashUser} -j RETURN
     iptables -t nat -A CLASH -p tcp -j REDIRECT --to-ports ${toString redirPort}
     iptables -t nat -A OUTPUT -p tcp -j CLASH

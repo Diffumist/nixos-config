@@ -4,13 +4,11 @@
   home.packages = with pkgs; map lib.lowPrio [
     # CLI
     curl
-    lsof
     dnsutils
     fd
     ripgrep
     man-pages
     libarchive
-    runzip
     nixpkgs-fmt
     # GUI
     jetbrains.idea-ultimate

@@ -24,24 +24,6 @@
   };
   time.timeZone = "Asia/Shanghai";
 
-  services.smartdns = {
-    enable = true;
-    settings = {
-      conf-file = with pkgs; [
-        "${smartdns-china-list}/accelerated-domains.china.smartdns.conf"
-        "${smartdns-china-list}/apple.china.smartdns.conf"
-        "${smartdns-china-list}/google.china.smartdns.conf"
-      ];
-      bind = [ "127.0.0.5:53" ];
-      prefetch-domain = true;
-      speed-check-mode = "ping,tcp:80";
-      server = [
-        "223.5.5.5 -group china -exclude-default-group"
-      ];
-      server-tls = [ "8.8.8.8:853" "1.1.1.1:853" ];
-      server-https = "https://cloudflare-dns.com/dns-query -exclude-default-group";
-    };
-  };
   # modules options
   dmist = {
     gnome-env = {
