@@ -26,10 +26,6 @@
       inputs.flake-compat.follows = "flake-compat";
       inputs.flake-utils.follows = "utils";
     };
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # other pkgs
     nur.url = "github:nix-community/NUR";
     berberman = {
@@ -66,13 +62,11 @@
         self
         other
         nixcao
-        sops-nix
         deploy-rs
         berberman
         rust-overlay
       ];
       nixosModules = import ./modules ++ [
-        inputs.sops-nix.nixosModules.sops
         inputs.impermanence.nixosModules.impermanence
         inputs.home.nixosModules.home-manager
       ];

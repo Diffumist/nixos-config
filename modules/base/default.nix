@@ -15,12 +15,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    sops = {
-      defaultSopsFile = ./secrets.yaml;
-      age = {
-        keyFile = "/var/lib/sops.key";
-      };
-    };
 
     swapDevices = [
       {

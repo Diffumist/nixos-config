@@ -38,6 +38,7 @@
     directories = [
       "/var/log"
       "/var/lib"
+      "/var/db"
     ];
     files = [
       "/etc/machine-id"

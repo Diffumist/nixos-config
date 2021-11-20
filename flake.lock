@@ -150,11 +150,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1637331768,
-        "narHash": "sha256-JdE1Hp9Y8ZGR4nlPKw6x8g17tyMXejPYxEv+RRL4uRA=",
+        "lastModified": 1637418445,
+        "narHash": "sha256-UDeIUT9819Dq5cqI3x51CSFssF6WsRCJEMYTlelvY+g=",
         "owner": "Diffumist",
         "repo": "nix-secrets",
-        "rev": "e98e21da06df5ce5a693cfadb8a87175ffcb0917",
+        "rev": "ed827afaacd6229564a77923d5dc6633200692f6",
         "type": "github"
       },
       "original": {
@@ -229,7 +229,6 @@
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "rust-overlay": "rust-overlay",
-        "sops-nix": "sops-nix",
         "utils": "utils_2"
       }
     },
@@ -253,26 +252,6 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "type": "github"
-      }
-    },
-    "sops-nix": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1636842446,
-        "narHash": "sha256-fsA6OextnFjJkfiatKyoa/zPSEpvCTrG+zKQiaTHKwc=",
-        "owner": "Mic92",
-        "repo": "sops-nix",
-        "rev": "9a961ab91c3e1b5561725b0c833c862cf22dc76a",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Mic92",
-        "repo": "sops-nix",
         "type": "github"
       }
     },
