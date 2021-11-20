@@ -30,8 +30,6 @@ jobs:
           git config --global user.name "github-actions"
       - name: Flake update
         run: |
-          nix develop
-          cd pkgs && nvfetcher && cd ..
           nix flake update
           git add -A
           git commit -m "Automatic update flakes"

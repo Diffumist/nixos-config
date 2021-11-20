@@ -123,6 +123,9 @@ in
           proxyWebsockets = true;
           extraConfig = ''
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+            proxy_headers_hash_max_size 51200;
+            proxy_headers_hash_bucket_size 6400;
           '';
         };
       };
