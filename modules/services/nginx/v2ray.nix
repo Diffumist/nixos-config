@@ -3,10 +3,10 @@
 with lib;
 with secrets.v2ray;
 let
-  cfg = config.modules.services.v2ray;
+  cfg = config.modules.v2ray;
 in
 {
-  options.modules.services.v2ray = {
+  options.modules.v2ray = {
     enable = mkEnableOption "v2ray";
     port = mkOption {
       default = 47531;
@@ -89,6 +89,15 @@ in
                 };
               };
             }
+            {
+              listen = "0.0.0.0";
+              port = 13425;
+              protocol = "shadowsocks";
+              settings = {
+                method = "aes-256-gcm";
+                inherit (ss) password;
+              };
+            }
           ];
           outbounds = [
             {
@@ -129,6 +138,10 @@ in
           '';
         };
       };
+    };
+    networking.firewall = rec {
+      allowedTCPPorts = [ 13425 ];
+      allowedUDPPorts = allowedTCPPorts;
     };
   };
 }

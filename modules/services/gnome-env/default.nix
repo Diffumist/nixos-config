@@ -2,10 +2,10 @@
 
 with lib;
 let
-  cfg = config.dmist.gnome-env;
+  cfg = config.modules.gnome-env;
 in
 {
-  options.dmist.gnome-env = {
+  options.modules.gnome-env = {
     enable = mkEnableOption "GNOME";
     waylandEnable = mkEnableOption "GNOME on wayland";
   };
@@ -18,12 +18,15 @@ in
         kooha
         evince
         drawing
+        gparted
         remmina
         lollypop
         newsflash
+        celluloid
         gnome.eog
         gnome.ghex
         gnome.gedit
+        gnome.geary
         libreoffice
         gnome.gpaste
         virt-manager
@@ -39,6 +42,7 @@ in
         gnomeExtensions.gsconnect
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
+        gnomeExtensions.net-speed-simplified
         materia-theme
         papirus-icon-theme
         capitaine-cursors
@@ -115,9 +119,9 @@ in
           allowedUDPPortRanges = allowedTCPPortRanges;
         };
       };
-
     })
-    (mkIf (cfg.waylandEnable) {
+
+    (mkIf cfg.waylandEnable {
       services.xserver.displayManager.gdm = {
         wayland = mkForce true;
         nvidiaWayland = true;

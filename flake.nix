@@ -38,11 +38,12 @@
     };
     # secrets
     nix-secrets = {
-      url = "github:Diffumist/nix-secrets";
+      # url = "github:diffumist/nix-secrets";
+      url = "/home/diffumist/Documents/Project/nix-secrets";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { self, nix-secrets, nixpkgs, utils, ... } @inputs:
+  outputs = { self, nixpkgs, ... } @inputs:
     let
       this = import ./pkgs;
       nixcao = import "${inputs.nickpkgs}/pkgs";
@@ -70,18 +71,18 @@
         inputs.impermanence.nixosModules.impermanence
         inputs.home.nixosModules.home-manager
       ];
-      hosts = builtins.attrNames (builtins.readDir ./hosts);
     in
     {
       overlay = this.overlay;
       nixosConfigurations =
         let
+          hosts = builtins.attrNames (builtins.readDir ./hosts);
           mkSystem = hostname:
             nixpkgs.lib.nixosSystem {
               system = builtins.readFile (./hosts + "/${hostname}/system");
               specialArgs = {
                 inherit inputs self;
-                inherit (nix-secrets) secrets;
+                inherit (inputs.nix-secrets) secrets;
               };
               modules = [{ nixpkgs = { inherit overlays; }; }]
               ++ [ (import (./hosts + "/${hostname}")) ]
@@ -98,11 +99,14 @@
         })
         (nixpkgs.lib.filterAttrs (n: v: n != "local") self.nixosConfigurations));
     } //
-    utils.lib.eachSystem [ "x86_64-linux" ]
+    inputs.utils.lib.eachSystem [ "x86_64-linux" ]
       (
         system:
         let
-          pkgs = import nixpkgs { inherit system overlays; };
+          pkgs = import nixpkgs {
+            inherit system overlays;
+            config.allowUnfree = true;
+          };
         in
         rec {
           packages = this.packages pkgs;

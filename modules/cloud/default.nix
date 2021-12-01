@@ -2,11 +2,11 @@
 
 with lib;
 let
-  cfg = config.dmist.cloud;
+  cfg = config.modules.cloud;
 in
 {
   options = {
-    dmist.cloud = {
+    modules.cloud = {
       enable = mkEnableOption "cloud";
     };
   };

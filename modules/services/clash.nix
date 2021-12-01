@@ -2,7 +2,7 @@
 
 with lib;
 let
-  cfg = config.dmist.clash;
+  cfg = config.modules.clash;
   clashDir = "/var/lib/clash";
   redirPort = 7891;
   clashUser = "clash";
@@ -26,7 +26,7 @@ let
   inherit (pkgs.nur.repos.linyinfeng) clash-premium;
 in
 {
-  options.dmist.clash = {
+  options.modules.clash = {
     enable = mkEnableOption "clash services";
   };
 

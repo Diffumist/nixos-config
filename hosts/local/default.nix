@@ -1,15 +1,10 @@
-{ lib, pkgs, dmist, secrets, ... }:
+{ lib, pkgs, secrets, config, ... }:
 {
   imports = [
     ./boot.nix
     ./software.nix
   ];
-  # swapfile
-  swapDevices = [
-    {
-      device = "/var/swapfile/swapfile";
-    }
-  ];
+
   # network
   networking = {
     hostName = "local";
@@ -21,11 +16,12 @@
       path = /var/lib/NetworkManager/system-connections
     '';
     nameservers = [ "127.0.0.1" ];
+    firewall.enable = lib.mkForce false;
   };
   time.timeZone = "Asia/Shanghai";
 
   # modules options
-  dmist = {
+  modules = {
     gnome-env = {
       enable = true;
       waylandEnable = false;
@@ -45,7 +41,7 @@
       group = "diffumist";
       extraGroups = [ "wheel" "networkmanager" ];
       shell = pkgs.fish;
-      hashedPassword = "$6$pdVI5OMHlykFwtcC$Hh1wEakcsiI5nG/zRI7Xdt10OD99e7D3SaKQu5SQWi9p.vpM6jgG01RtIlWfDwSp/K5jumRIWqS8NigILAlCi/";
+      hashedPassword = "$6$6J91Plm9yvX7KiMs$DOUaBLnKLqpxJXlIAdIWA6KNs8boT58CuavOoMka2DFAZbLe9hRu5ubMBfYfiukHld3LC/rx/CA4B2eBetB.60";
     };
   };
 

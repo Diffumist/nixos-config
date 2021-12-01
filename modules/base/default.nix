@@ -2,11 +2,11 @@
 
 with lib;
 let
-  cfg = config.dmist.base;
+  cfg = config.modules.base;
 in
 {
   options = {
-    dmist.base = {
+    modules.base = {
       enable = mkOption {
         type = types.bool;
         default = true;
@@ -15,13 +15,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    swapDevices = [
-      {
-        device = "/var/swapfile/swapfile";
-      }
-    ];
-
     networking.firewall.enable = true;
     system.stateVersion = "20.09";
   };

@@ -32,6 +32,13 @@
       "/nix" = btrfs [ "subvol=nix" ];
       "/persist" = btrfs [ "subvol=persist" ];
       "/var/swapfile" = btrfs [ "subvol=swap" ];
+
+      "/var/lib/transmission" = {
+        fsType = "btrfs";
+        device = "/dev/disk/by-label/block";
+        options = [ "noatime" "compress-force=zstd" "space_cache=v2" ];
+      };
+
     };
   # swapfile
   swapDevices = [

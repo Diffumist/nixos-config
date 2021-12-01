@@ -2,10 +2,10 @@
 
 with lib;
 let
-  cfg = config.modules.services.vaultwarden;
+  cfg = config.modules.vaultwarden;
 in
 {
-  options.modules.services.vaultwarden = {
+  options.modules.vaultwarden = {
     enable = mkEnableOption "vaultwarden";
     backupDir = mkOption {
       type = types.path;
@@ -13,7 +13,7 @@ in
     };
     openPorts = mkOption {
       type = types.port;
-      default = 1443;
+      default = 443;
     };
   };
 
@@ -32,7 +32,7 @@ in
       };
       inherit (cfg) backupDir;
     };
-    # for backupDir
+
     system.activationScripts.initVaultwarden = ''
       mkdir -p "${cfg.backupDir}"
       chown "${config.users.users.vaultwarden.name}" "${cfg.backupDir}"

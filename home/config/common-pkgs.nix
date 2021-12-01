@@ -6,10 +6,12 @@
     curl
     dnsutils
     fd
+    duf
     ripgrep
     man-pages
     libarchive
     nixpkgs-fmt
+    prime-run
     # GUI
     jetbrains.idea-ultimate
     jetbrains.clion

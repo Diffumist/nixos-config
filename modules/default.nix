@@ -10,6 +10,7 @@
   # networking
   ./services/clash.nix
   ./services/nginx/v2ray.nix
+  ./services/transmission.nix
   # web services
   ./services/nginx
   ./services/nginx/vaultwarden.nix

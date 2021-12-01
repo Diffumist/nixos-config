@@ -2,10 +2,10 @@
 
 with lib;
 let
-  cfg = config.modules.services.nginx;
+  cfg = config.modules.nginx;
 in
 {
-  options.modules.services.nginx = {
+  options.modules.nginx = {
     enable = mkEnableOption "nginx";
   };
 

@@ -2,18 +2,18 @@
 
 with lib;
 let
-  cfg = config.dmist.hardware;
+  cfg = config.modules.hardware;
 in
 {
   options = {
-    dmist.hardware = {
+    modules.hardware = {
       enable = mkEnableOption "base hardware for laptop";
       nvidiaEnable = mkEnableOption "hardware for nvidia";
     };
   };
 
-  config = mkMerge [
-    (mkIf (cfg.enable) {
+  config = mkIf cfg.enable (mkMerge [
+    ({
       hardware.cpu.intel.updateMicrocode = true;
       hardware.opengl = {
         enable = true;
@@ -43,12 +43,13 @@ in
       };
     })
 
-    (mkIf (cfg.nvidiaEnable) {
+    (mkIf cfg.nvidiaEnable {
       hardware.nvidia = {
         prime = {
           offload.enable = true;
           intelBusId = "PCI:0:2:0";
           nvidiaBusId = "PCI:2:0:0";
+          sync.allowExternalGpu = true;
         };
         powerManagement = {
           enable = true;
@@ -59,5 +60,5 @@ in
       };
       services.xserver.videoDrivers = [ "nvidia" ];
     })
-  ];
+  ]);
 }

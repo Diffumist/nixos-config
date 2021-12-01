@@ -79,9 +79,9 @@ in
     dataFile = {
       "cargo/config".text = ''
         [source.crates-io]
-        replace-with = 'ustc'
-        [source.ustc]
-        registry = "https://mirrors.ustc.edu.cn/crates.io-index"
+        replace-with = 'sjtu'
+        [source.sjtu]
+        registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index/"
       '';
     };
   };

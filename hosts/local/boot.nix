@@ -4,14 +4,16 @@
     availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "rtsx_pci_sdmmc" ]; # only loaded on demand
     kernelModules = [ "i915" ];
   };
-  # Ref: https://thesofproject.github.io/latest/getting_started/intel_debug/introduction.html
-  # use legacy drivers
+
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages_5_14;
     kernelModules = [ "kvm-intel" ];
     kernelParams = [
-      "snd-intel-dspcfg.dsp_driver=1"
+      "snd-intel-dspcfg.dsp_driver=1" # enable legacy DSP driver
       "mitigations=off"
+      "nvidia-drm.modeset=1"
+      "intel_iommu=on"
+      "iommu=pt"
       "quiet"
     ];
     kernel.sysctl = {
@@ -24,6 +26,7 @@
       options i915 enable_guc=2
       options i915 enable_fbc=1
       options i915 fastboot=1
+      options kvm_intel nested=1
     '';
   };
 
@@ -33,9 +36,11 @@
     timeout = 1;
   };
 
+  boot.supportedFilesystems = [ "ntfs" ];
+
   fileSystems =
     let
-      espDev = "/dev/disk/by-uuid/E245-3FCF";
+      espDev = "/dev/disk/by-uuid/E245-3FCF"; # EFI System Partition
       btrfsDev = "/dev/disk/by-label/NixOS";
 
       btrfs = options: {
@@ -60,6 +65,12 @@
         fsType = "vfat";
       };
     };
+  # swapfile
+  swapDevices = [
+    {
+      device = "/var/swapfile/swapfile";
+    }
+  ];
 
   environment.persistence."/persist" = {
     directories = [

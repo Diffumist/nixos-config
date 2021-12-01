@@ -2,10 +2,10 @@
 
 with lib;
 let
-  cfg = config.modules.services.fail2ban;
+  cfg = config.modules.fail2ban;
 in
 {
-  options.modules.services.fail2ban = {
+  options.modules.fail2ban = {
     enable = mkEnableOption "fail2ban";
   };
 

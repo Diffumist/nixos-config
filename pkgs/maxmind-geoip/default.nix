@@ -10,5 +10,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Maxmind GeoIP database";
     homepage = "https://github.com/Dreamacro/maxmind-geoip";
+    license = licenses.unfree;
   };
 }

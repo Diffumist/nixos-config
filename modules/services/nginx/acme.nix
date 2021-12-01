@@ -2,11 +2,11 @@
 
 with lib;
 let
-  cfg = config.modules.services.acme;
+  cfg = config.modules.acme;
 
 in
 {
-  options.modules.services.acme = {
+  options.modules.acme = {
     enable = mkEnableOption "acme";
   };
 
