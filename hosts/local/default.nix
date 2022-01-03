@@ -8,6 +8,7 @@
   # network
   networking = {
     hostName = "local";
+    domain = "diffumist.me";
     networkmanager.dns = "none";
     networkmanager.extraConfig = ''
       [main]

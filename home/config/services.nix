@@ -9,15 +9,21 @@
     maxCacheTtl = 24 * 3600;
   };
 
-  systemd.user.services.aria2 = {
-    Unit = {
-      Description = "aria2 Service";
-      After = [ "graphical-session.target" ];
+  systemd.user.services = {
+    mpris-proxy = {
+      Unit.Description = "Mpris proxy";
+      Unit.After = [ "network.target" "sound.target" ];
+      Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
+      Install.WantedBy = [ "default.target" ];
     };
-    Service = {
-      ExecStart = "${pkgs.aria2}/bin/aria2c --enable-rpc --conf-path=${config.xdg.configHome}/aria2/aria2.conf";
-      ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-      Restart = "on-abort";
+    aria2 = {
+      Unit.Description = "aria2 Service";
+      Unit.After = [ "graphical-session.target" ];
+      Service = {
+        ExecStart = "${pkgs.aria2}/bin/aria2c --enable-rpc --conf-path=${config.xdg.configHome}/aria2/aria2.conf";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        Restart = "on-abort";
+      };
     };
   };
 
@@ -25,8 +31,6 @@
     enable = true;
     settings = {
       dir = "${config.home.homeDirectory}/Downloads";
-      input-file = "${config.xdg.configHome}/aria2/aria2.session";
-      save-session = "${config.xdg.configHome}/aria2/aria2.session";
       continue = true;
       enable-dht = true;
       bt-enable-lpd = true;

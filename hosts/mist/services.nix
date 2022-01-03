@@ -1,18 +1,21 @@
 { config, lib, pkgs, secrets, ... }: {
   services.telegraf = {
     enable = true;
+    environmentFiles = [ secrets.telegraf.envFile ];
     extraConfig = {
       outputs = {
         influxdb_v2 = {
           urls = [ "https://stats-v.diffumist.me" ];
-          inherit (secrets.telegraf) token;
+          token = "$INFLUX_TOKEN";
           organization = "diffumist";
           bucket = "diffumist";
         };
       };
       inputs = {
         cpu = { };
-        disk = { };
+        disk = {
+          ignore_fs = [ "tmpfs" "devtmpfs" "devfs" "overlay" "aufs" "squashfs" ];
+        };
         diskio = { };
         mem = { };
         net = { };

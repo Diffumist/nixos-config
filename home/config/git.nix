@@ -6,7 +6,7 @@
     userEmail = "git@diffumist.me";
     signing = {
       signByDefault = true;
-      key = "5647BF1E460733062EBF468BC68CA02B61625AEB";
+      key = "ADBDDA207B6217EB";
     };
     aliases = {
       br = "branch";
@@ -33,7 +33,7 @@
   programs.gpg = {
     enable = true;
     settings = {
-      default-key = "5647BF1E460733062EBF468BC68CA02B61625AEB";
+      default-key = "11ED5BEA37BFEF75";
     };
   };
 }

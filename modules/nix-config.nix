@@ -22,7 +22,7 @@
     autoOptimiseStore = true;
 
     extraOptions = ''
-      experimental-features = nix-command flakes ca-references
+      experimental-features = nix-command flakes
       flake-registry = /etc/nix/registry.json
 
       keep-outputs = true

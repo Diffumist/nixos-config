@@ -3,7 +3,7 @@
   # set implicitly installed packages to be low-priority.
   home.packages = with pkgs; map lib.lowPrio [
     # CLI
-    curl
+    xh
     dnsutils
     fd
     duf
@@ -11,6 +11,7 @@
     man-pages
     libarchive
     nixpkgs-fmt
+    yubikey-manager
     prime-run
     # GUI
     jetbrains.idea-ultimate
@@ -20,11 +21,13 @@
     kotatogram-desktop
     netease-cloud-music-gtk
     qbittorrent-enhanced
+    # nur.repos.linyinfeng.icalingua
     wine
     winetricks
     steam
     taxi
     cawbird
+    solaar
     # Env
     pkg-config
     patchelf

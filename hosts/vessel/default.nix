@@ -22,19 +22,5 @@
         ];
       };
     };
-    firewall = {
-      allowedTCPPorts = [ 12345 12346 ];
-    };
-  };
-
-  virtualisation.oci-containers.containers = {
-    subconverter = {
-      image = "docker.io/tindy2013/subconverter:latest";
-      ports = [ "0.0.0.0:12345:80" ];
-    };
-    clash-web = {
-      image = "docker.io/careywong/subweb:latest";
-      ports = [ "0.0.0.0:12346:80" ];
-    };
   };
 }

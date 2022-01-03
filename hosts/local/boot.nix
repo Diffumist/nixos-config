@@ -6,12 +6,13 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_5_14;
+    kernelPackages = pkgs.linuxPackages_latest;
     kernelModules = [ "kvm-intel" ];
     kernelParams = [
       "snd-intel-dspcfg.dsp_driver=1" # enable legacy DSP driver
-      "mitigations=off"
       "nvidia-drm.modeset=1"
+      "kvm_intel.nested=1"
+      "mitigations=off"
       "intel_iommu=on"
       "iommu=pt"
       "quiet"
@@ -26,7 +27,7 @@
       options i915 enable_guc=2
       options i915 enable_fbc=1
       options i915 fastboot=1
-      options kvm_intel nested=1
+      blacklist ideapad_laptop
     '';
   };
 

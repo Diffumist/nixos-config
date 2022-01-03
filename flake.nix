@@ -38,7 +38,6 @@
     };
     # secrets
     nix-secrets = {
-      # url = "github:diffumist/nix-secrets";
       url = "/home/diffumist/Documents/Project/nix-secrets";
       inputs.nixpkgs.follows = "nixpkgs";
     };

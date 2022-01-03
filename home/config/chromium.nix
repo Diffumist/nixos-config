@@ -8,7 +8,7 @@
         --enable-gpu-rasterization \
         --enable-zero-copy \
         --enable-features=VaapiVideoDecoder \
-        --ignore-gpu-blocklist
+        --ignore-gpu-blocklist \
       '';
     };
     extensions = [
@@ -24,7 +24,7 @@
       "padekgcemlokbadohgkifijomclgjgif" # Proxy SwitchyOmega
       "ennpfpdlaclocpomkiablnmbppdnlhoh" # Rust Search Extension
       "mpkodccbngfoacfalldjimigbofkhgjn" # Aria2 for Chrome
-      "aleakchihdccplidncghkekgioiakgal"
+      "aleakchihdccplidncghkekgioiakgal" # h264ify
     ];
   };
 
