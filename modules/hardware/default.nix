@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, secrets, ... }:
 
 with lib;
 let
@@ -9,6 +9,7 @@ in
     modules.hardware = {
       enable = mkEnableOption "base hardware for laptop";
       nvidiaEnable = mkEnableOption "hardware for nvidia";
+      canokeyEnable = mkEnableOption "hardware for canokey";
     };
   };
 
@@ -32,6 +33,12 @@ in
 
       sound.enable = true;
       hardware.pulseaudio.enable = false;
+      # SSD trim
+      services.fstrim = {
+        enable = true;
+        interval = "Sun";
+      };
+
       services.pipewire = {
         enable = true;
         pulse.enable = true;
@@ -49,7 +56,6 @@ in
           offload.enable = true;
           intelBusId = "PCI:0:2:0";
           nvidiaBusId = "PCI:2:0:0";
-          sync.allowExternalGpu = true;
         };
         powerManagement = {
           enable = true;
@@ -59,6 +65,38 @@ in
         nvidiaSettings = false;
       };
       services.xserver.videoDrivers = [ "nvidia" ];
+    })
+    (mkIf cfg.canokeyEnable {
+      # Canokey
+      services.pcscd = {
+        enable = true;
+        plugins = [ pkgs.ccid ];
+      };
+      hardware.gpgSmartcards.enable = true;
+
+      security.pam.u2f = {
+        enable = true;
+        authFile = secrets.u2f.authFile;
+        control = "sufficient";
+        cue = true;
+      };
+
+      services.udev = {
+        packages = [ pkgs.libu2f-host ];
+        extraRules = ''
+          # GnuPG/pcsclite
+          SUBSYSTEM!="usb", GOTO="canokeys_rules_end"
+          ACTION!="add|change", GOTO="canokeys_rules_end"
+          ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="42d4", ENV{ID_SMARTCARD_READER}="1"
+          LABEL="canokeys_rules_end"
+
+          # FIDO2/U2F
+          KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="42d4", TAG+="uaccess"
+
+          # make this usb device accessible for users, used in WebUSB
+          SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", TAG+="uaccess"
+        '';
+      };
     })
   ]);
 }

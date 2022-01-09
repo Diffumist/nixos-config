@@ -1,4 +1,4 @@
-{ pkgs, secrets, ... }: {
+{ pkgs, ... }: {
   # HiDPI display
   hardware.video.hidpi.enable = true;
   console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u24n.psf.gz";
@@ -9,28 +9,6 @@
 
   programs.adb.enable = true;
   users.groups."adbusers".members = [ "diffumist" ];
-
-  # SSD trim
-  services.fstrim = {
-    enable = true;
-    interval = "Sun";
-  };
-
-  # Canokey
-  services.pcscd.enable = true;
-  security.pam.u2f = {
-    enable = true;
-    authFile = secrets.u2f.authFile;
-    control = "sufficient";
-    cue = true;
-  };
-
-  services.udev = {
-    packages = [ pkgs.libu2f-host ];
-    extraRules = ''
-      SUBSYSTEMS=="usb", ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="42d4", MODE="0666"
-    '';
-  };
 
   services.earlyoom = {
     enable = true;
@@ -59,11 +37,6 @@
     oci-containers.backend = "podman";
   };
   users.groups."libvirtd".members = [ "diffumist" ];
-
-  programs.wireshark = {
-    enable = true;
-  };
-  users.groups."wireshark".members = [ "diffumist" ];
 
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;

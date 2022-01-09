@@ -35,5 +35,8 @@
     settings = {
       default-key = "11ED5BEA37BFEF75";
     };
+    scdaemonSettings = {
+      disable-ccid = true;
+    };
   };
 }
