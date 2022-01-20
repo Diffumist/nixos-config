@@ -68,11 +68,11 @@ in
     })
     (mkIf cfg.canokeyEnable {
       # Canokey
+      hardware.gpgSmartcards.enable = true;
       services.pcscd = {
         enable = true;
         plugins = [ pkgs.ccid ];
       };
-      hardware.gpgSmartcards.enable = true;
 
       security.pam.u2f = {
         enable = true;
@@ -81,22 +81,7 @@ in
         cue = true;
       };
 
-      services.udev = {
-        packages = [ pkgs.libu2f-host ];
-        extraRules = ''
-          # GnuPG/pcsclite
-          SUBSYSTEM!="usb", GOTO="canokeys_rules_end"
-          ACTION!="add|change", GOTO="canokeys_rules_end"
-          ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="42d4", ENV{ID_SMARTCARD_READER}="1"
-          LABEL="canokeys_rules_end"
-
-          # FIDO2/U2F
-          KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="42d4", TAG+="uaccess"
-
-          # make this usb device accessible for users, used in WebUSB
-          SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", TAG+="uaccess"
-        '';
-      };
+      services.udev.packages = [ pkgs.nur.repos.linyinfeng.canokey-udev-rules ];
     })
   ]);
 }

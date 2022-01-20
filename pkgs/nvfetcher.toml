@@ -7,8 +7,11 @@ git.branch = "release"
 src.git = "https://github.com/marko-cerovac/material.nvim"
 fetch.github = "marko-cerovac/material.nvim"
 [rime-pinyin-moegirl]
-src.manual = "20210923"
-fetch.url = "https://github.com/outloudvi/mw2fcitx/releases/download/20211014/moegirl.dict.yaml"
+src.manual = "20220114"
+fetch.url = "https://github.com/outloudvi/mw2fcitx/releases/download/20220114/moegirl.dict.yaml"
+[rime-pinyin-zhwiki]
+src.manual = "20220101"
+fetch.url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.2.3/zhwiki-20220101.dict.yaml"
 [ydcv-rs]
 src.git = "https://github.com/farseerfc/ydcv-rs"
 fetch.github = "farseerfc/ydcv-rs"

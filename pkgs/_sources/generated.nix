@@ -3,34 +3,42 @@
 {
   material-nvim = {
     pname = "material-nvim";
-    version = "f62b22127c74db1de30b186c96d7dfc3ec35aed0";
+    version = "8abf1b1cdc75a3e1846ced199ee86a36b9a758c4";
     src = fetchgit {
       url = "https://github.com/marko-cerovac/material.nvim";
-      rev = "f62b22127c74db1de30b186c96d7dfc3ec35aed0";
+      rev = "8abf1b1cdc75a3e1846ced199ee86a36b9a758c4";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "0agm2iw67b8dsnmhm1bx0q5a5x5c7bn0r76yyadm3qr5gv61a66x";
+      sha256 = "16ajmv2kwbnj8y40ysdfmqmikajpw63sqq7bqzx7nz0vv8vpiv8z";
     };
   };
   maxmind-geoip = {
     pname = "maxmind-geoip";
-    version = "fab6f581e3d341648c4053e4b4275b97e3548571";
+    version = "c42cc48b23016fa2ccb18cc5ba8a14b3b8d2b1a9";
     src = fetchgit {
       url = "https://github.com/Dreamacro/maxmind-geoip";
-      rev = "fab6f581e3d341648c4053e4b4275b97e3548571";
+      rev = "c42cc48b23016fa2ccb18cc5ba8a14b3b8d2b1a9";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "05zdlxh1fqd7yjw0nzn3g4bxrnpr9kjc82k62k7yl97cncsdqgg8";
+      sha256 = "1f24prdvs6pv038d7agmzr6fjxk6d0clr63xj732r9kgmcdw6fws";
     };
   };
   rime-pinyin-moegirl = {
     pname = "rime-pinyin-moegirl";
-    version = "20210923";
+    version = "20220114";
     src = fetchurl {
-      url = "https://github.com/outloudvi/mw2fcitx/releases/download/20211014/moegirl.dict.yaml";
-      sha256 = "13hd8ivwkkxgminfc0g5hdy2m0kd8ikxirj4dz4ihh6kv2vhh31m";
+      url = "https://github.com/outloudvi/mw2fcitx/releases/download/20220114/moegirl.dict.yaml";
+      sha256 = "0n8c4bvzklgm02rai2kli2iql7qbwh06n7qs863ny75aam4aq1r4";
+    };
+  };
+  rime-pinyin-zhwiki = {
+    pname = "rime-pinyin-zhwiki";
+    version = "20220101";
+    src = fetchurl {
+      url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.2.3/zhwiki-20220101.dict.yaml";
+      sha256 = "0z17bx7jky7nybv20ymnsa88qilg92qm09m4sqqbfd83vjj27kmw";
     };
   };
   ydcv-rs = {
@@ -46,7 +54,9 @@
     };
     cargoLock = {
       lockFile = ./ydcv-rs-7756945e0e44c138416727f66f9e7a81b896792c/Cargo.lock;
-      outputHashes = { };
+      outputHashes = {
+        
+      };
     };
   };
 }

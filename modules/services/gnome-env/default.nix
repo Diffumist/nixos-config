@@ -20,7 +20,6 @@ in
         drawing
         gparted
         remmina
-        lollypop
         newsflash
         celluloid
         gnome.eog
@@ -28,7 +27,6 @@ in
         gnome.gedit
         gnome.geary
         libreoffice
-        gnome.gpaste
         virt-manager
         gnome-builder
         gnome.seahorse

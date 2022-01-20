@@ -25,6 +25,7 @@
     wine
     winetricks
     steam
+    citra
     taxi
     cawbird
     solaar

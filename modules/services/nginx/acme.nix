@@ -12,7 +12,7 @@ in
 
   config = mkIf cfg.enable {
     security.acme = {
-      email = "me@diffumist.me";
+      defaults.email = "me@diffumist.me";
       # for test
       # production = false;
       acceptTerms = true;
