@@ -40,6 +40,7 @@ in
         gnomeExtensions.gsconnect
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
+        gnomeExtensions.color-picker
         gnomeExtensions.net-speed-simplified
         materia-theme
         papirus-icon-theme

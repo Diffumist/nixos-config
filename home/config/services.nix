@@ -11,19 +11,20 @@
 
   systemd.user.services = {
     mpris-proxy = {
-      Unit.Description = "Mpris proxy";
+      Unit.Description = "Mpris Proxy";
       Unit.After = [ "network.target" "sound.target" ];
       Service.ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
       Install.WantedBy = [ "default.target" ];
     };
     aria2 = {
-      Unit.Description = "aria2 Service";
+      Unit.Description = "Aria2 Service";
       Unit.After = [ "graphical-session.target" ];
       Service = {
         ExecStart = "${pkgs.aria2}/bin/aria2c --enable-rpc --conf-path=${config.xdg.configHome}/aria2/aria2.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-abort";
       };
+      Install.WantedBy = [ "default.target" ];
     };
   };
 

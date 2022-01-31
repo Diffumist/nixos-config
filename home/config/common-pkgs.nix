@@ -9,6 +9,7 @@
     duf
     ripgrep
     man-pages
+    hyperfine
     libarchive
     nixpkgs-fmt
     yubikey-manager
@@ -21,7 +22,6 @@
     kotatogram-desktop
     netease-cloud-music-gtk
     qbittorrent-enhanced
-    # nur.repos.linyinfeng.icalingua
     wine
     winetricks
     steam

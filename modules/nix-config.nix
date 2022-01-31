@@ -4,14 +4,14 @@
 
   nix = {
     package = pkgs.nixFlakes;
-    trustedUsers = [ "root" "diffumist" ];
+    settings.trusted-users = [ "root" "diffumist" ];
 
-    binaryCaches = lib.mkBefore [
+    settings.substituters = lib.mkBefore [
       "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://diffumist.cachix.org"
       "https://cache.nixos.org"
     ];
-    binaryCachePublicKeys = [ "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk=" ];
+    settings.trusted-public-keys = [ "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk=" ];
 
     gc = {
       automatic = true;
@@ -19,7 +19,7 @@
       options = "--delete-older-than 20d";
     };
 
-    autoOptimiseStore = true;
+    settings.auto-optimise-store = true;
 
     extraOptions = ''
       experimental-features = nix-command flakes

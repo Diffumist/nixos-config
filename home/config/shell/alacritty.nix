@@ -15,10 +15,9 @@
   mouse.hide_when_typing = true;
   font.size = 10;
   draw_bold_text_with_bright_colors = true;
-  background_opacity = 1;
   colors = {
     primary = {
-      background = "#373737";
+      background = "#424242";
       foreground = "#eff0eb";
     };
     selection = {
