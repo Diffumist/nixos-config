@@ -25,7 +25,7 @@
   modules = {
     gnome-env = {
       enable = true;
-      waylandEnable = false;
+      waylandEnable = true;
     };
     clash.enable = true;
     hardware = {

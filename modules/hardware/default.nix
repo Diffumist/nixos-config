@@ -63,6 +63,7 @@ in
         };
         modesetting.enable = true;
         nvidiaSettings = false;
+        nvidiaPersistenced = true;
       };
       services.xserver.videoDrivers = [ "nvidia" ];
     })
