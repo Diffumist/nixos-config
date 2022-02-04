@@ -21,11 +21,12 @@
   };
   time.timeZone = "Asia/Shanghai";
 
+  security.pki.certificateFiles = [ ./mitmproxy-ca-cert.pem ];
   # modules options
   modules = {
     gnome-env = {
       enable = true;
-      waylandEnable = true;
+      waylandEnable = false;
     };
     clash.enable = true;
     hardware = {

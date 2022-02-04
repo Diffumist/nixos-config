@@ -1,6 +1,6 @@
 { config, lib, pkgs, secrets, ... }: {
   services.telegraf = {
-    enable = true;
+    enable = false;
     environmentFiles = [ secrets.telegraf.envFile ];
     extraConfig = {
       outputs = {

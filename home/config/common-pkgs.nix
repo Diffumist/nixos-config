@@ -22,6 +22,7 @@
     kotatogram-desktop
     netease-cloud-music-gtk
     qbittorrent-enhanced
+    yuzu
     wine
     winetricks
     steam

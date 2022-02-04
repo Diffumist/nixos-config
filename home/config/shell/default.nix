@@ -7,7 +7,7 @@
       set -g fish_greeting
     '';
     shellAliases = {
-      fzf = "zi";
+      oath = "ykman -r Canokey oath accounts code";
     };
   };
   # utils
@@ -49,7 +49,7 @@
       config = {
         theme = "ansi";
         pager = "less -FR";
-        style = "";
+        style = "plain,header";
       };
     };
     alacritty = {
