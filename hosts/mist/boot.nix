@@ -2,6 +2,7 @@
 {
   boot.loader.grub.device = "/dev/vda";
   boot.initrd.kernelModules = [ "nvme" ];
+  boot.initrd.postDeviceCommands = "sleep 2";
 
   boot.kernel.sysctl = {
     "vm.swappiness" = 10;
@@ -9,7 +10,6 @@
     "net.ipv4.ip_forward" = 1;
   };
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
 
   fileSystems =
     let
@@ -33,6 +33,18 @@
       "/persist" = btrfs [ "subvol=persist" ];
       "/var/swapfile" = btrfs [ "subvol=swap" ];
     };
+
+  environment.persistence."/persist" = {
+    directories = [
+      "/var/log"
+      "/var/lib"
+      "/var/db"
+    ];
+    files = [
+      "/etc/machine-id"
+      "/etc/ssh/ssh_host_ed25519_key"
+    ];
+  };
   # swapfile
   swapDevices = [
     {

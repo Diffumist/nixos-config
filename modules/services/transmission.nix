@@ -7,29 +7,23 @@ in
 {
   options.modules.transmission = {
     enable = mkEnableOption "transmission";
-    rpcPort = mkOption {
-      type = types.port;
-      default = 9091;
-    };
   };
   config = mkIf cfg.enable {
     services.transmission = {
       enable = true;
       openRPCPort = true;
       openPeerPorts = true;
-      settings.watch-dir-enabled = true;
-      settings.rpc-bind-address = "0.0.0.0";
-      settings.download-dir = "/var/lib/transmission/Downloads";
+      settings.rpc-host-whitelist-enabled = false;
       inherit (secrets.transmission) credentialsFile;
     };
 
-    services.nginx.virtualHosts."vault.diffumist.me" = {
+    services.nginx.virtualHosts."rpc.diffumist.me" = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
       listen = [
         {
           addr = "0.0.0.0";
-          port = 9092;
+          port = 443;
           ssl = true;
         }
       ];

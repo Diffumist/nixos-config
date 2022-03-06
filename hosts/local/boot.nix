@@ -6,10 +6,9 @@
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_zen;
     kernelModules = [ "kvm-intel" ];
     kernelParams = [
-      "snd-intel-dspcfg.dsp_driver=1" # enable legacy DSP driver
       "nvidia-drm.modeset=1"
       "kvm_intel.nested=1"
       "mitigations=off"

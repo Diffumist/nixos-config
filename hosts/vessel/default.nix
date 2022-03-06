@@ -2,9 +2,15 @@
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
-    ./boot.nix
+    ../mist/boot.nix
     ./options.nix
   ];
+
+  fileSystems."/var/lib/transmission" = {
+    fsType = "btrfs";
+    device = "/dev/disk/by-label/block";
+    options = [ "noatime" "compress-force=zstd" "space_cache=v2" ];
+  };
 
   networking = {
     hostName = "vessel";

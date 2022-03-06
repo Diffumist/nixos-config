@@ -3,14 +3,14 @@
 {
   material-nvim = {
     pname = "material-nvim";
-    version = "8abf1b1cdc75a3e1846ced199ee86a36b9a758c4";
+    version = "e57df0a28e3cec66f4c4287aca4324ad4c8bf278";
     src = fetchgit {
       url = "https://github.com/marko-cerovac/material.nvim";
-      rev = "8abf1b1cdc75a3e1846ced199ee86a36b9a758c4";
+      rev = "e57df0a28e3cec66f4c4287aca4324ad4c8bf278";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "16ajmv2kwbnj8y40ysdfmqmikajpw63sqq7bqzx7nz0vv8vpiv8z";
+      sha256 = "066mk7vqc77d3zv4nx98mrfjr6gc4fwslwj2111gr0576s6xpqjx";
     };
   };
   maxmind-geoip = {
@@ -41,6 +41,18 @@
       sha256 = "0z17bx7jky7nybv20ymnsa88qilg92qm09m4sqqbfd83vjj27kmw";
     };
   };
+  waydroid-script = {
+    pname = "waydroid-script";
+    version = "fb429d2cd6aa8e2b1a4c0e2cfdf968977f4c5731";
+    src = fetchgit {
+      url = "https://github.com/casualsnek/waydroid_script";
+      rev = "fb429d2cd6aa8e2b1a4c0e2cfdf968977f4c5731";
+      fetchSubmodules = false;
+      deepClone = false;
+      leaveDotGit = false;
+      sha256 = "195rdl0bx4lql9f614zfnh3an5wlia1syiy4ynv20k4s6j8vb9w9";
+    };
+  };
   ydcv-rs = {
     pname = "ydcv-rs";
     version = "7756945e0e44c138416727f66f9e7a81b896792c";
@@ -54,9 +66,7 @@
     };
     cargoLock = {
       lockFile = ./ydcv-rs-7756945e0e44c138416727f66f9e7a81b896792c/Cargo.lock;
-      outputHashes = {
-        
-      };
+      outputHashes = { };
     };
   };
 }

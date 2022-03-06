@@ -16,6 +16,7 @@ in
         meld
         srain
         kooha
+        guake
         evince
         drawing
         gparted
@@ -41,6 +42,7 @@ in
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
         gnomeExtensions.color-picker
+        gnomeExtensions.light-dict
         gnomeExtensions.net-speed-simplified
         materia-theme
         papirus-icon-theme
@@ -95,7 +97,7 @@ in
       };
 
       i18n = {
-        defaultLocale = "en_US.UTF-8";
+        defaultLocale = "zh_CN.UTF-8";
         supportedLocales = [ "en_US.UTF-8/UTF-8" "zh_CN.UTF-8/UTF-8" ];
 
         inputMethod = {

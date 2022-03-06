@@ -26,18 +26,6 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAd/6aBTs/HVmH0g1xHZ+ECETUjEOEHVI7PJuxELqYCg noname"
     ];
 
-    environment.persistence."/persist" = {
-      directories = [
-        "/var/log"
-        "/var/lib"
-        "/var/db"
-      ];
-      files = [
-        "/etc/machine-id"
-        "/etc/ssh/ssh_host_ed25519_key"
-      ];
-    };
-
     virtualisation = {
       podman = {
         enable = true;

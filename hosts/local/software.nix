@@ -29,7 +29,6 @@
       enable = true;
       vgpus.i915-GVTg_V5_4.uuid = [ "9dfe21be-dd2f-411e-b21c-6eef9c8b3703" ];
     };
-    # waydroid.enable = true;
     podman = {
       enable = true;
       dockerCompat = true;

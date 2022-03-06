@@ -10,8 +10,12 @@
       "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://diffumist.cachix.org"
       "https://cache.nixos.org"
+      "https://ilya-fedin.cachix.org"
     ];
-    settings.trusted-public-keys = [ "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk=" ];
+    settings.trusted-public-keys = [
+      "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk="
+      "ilya-fedin.cachix.org-1:QveU24a5ePPMh82mAFSxLk1P+w97pRxqe9rh+MJqlag="
+    ];
 
     gc = {
       automatic = true;

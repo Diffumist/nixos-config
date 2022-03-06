@@ -38,7 +38,11 @@
   };
   programs = {
     zoxide.enable = true;
-    fzf.enable = true;
+    fzf = {
+      enable = true;
+      defaultCommand = "rg --files --hidden";
+      defaultOptions = [ "--preview 'bat --color=always --style=plain --line-range=:500 {}'" ];
+    };
     nix-index.enable = true;
     exa = {
       enable = true;
@@ -49,7 +53,7 @@
       config = {
         theme = "ansi";
         pager = "less -FR";
-        style = "plain,header";
+        style = "plain";
       };
     };
     alacritty = {

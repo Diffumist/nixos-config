@@ -32,6 +32,9 @@
     enable = true;
     settings = {
       dir = "${config.home.homeDirectory}/Downloads";
+      input-file = "${config.xdg.configHome}/aria2/aria2.session";
+      save-session = "${config.xdg.configHome}/aria2/aria2.session";
+      file-allocation = "falloc";
       continue = true;
       enable-dht = true;
       bt-enable-lpd = true;

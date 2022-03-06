@@ -14,12 +14,13 @@
     nixpkgs-fmt
     yubikey-manager
     prime-run
+    ydcv-rs
     # GUI
     jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland
     android-studio
-    kotatogram-desktop
+    nur.repos.ilya-fedin.kotatogram-desktop
     netease-cloud-music-gtk
     qbittorrent-enhanced
     yuzu
@@ -30,6 +31,7 @@
     taxi
     cawbird
     solaar
+    ciscoPacketTracer7
     # Env
     pkg-config
     patchelf
