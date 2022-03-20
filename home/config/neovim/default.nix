@@ -1,5 +1,4 @@
-{ pkgs, lib, ... }:
-{
+{ pkgs, lib, ... }: {
   programs.neovim = {
     enable = true;
     vimAlias = true;
@@ -19,6 +18,7 @@
       lspkind-nvim
       (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
       # tweak
+      orgmode
       neoformat
       direnv-vim
       nvim-web-devicons

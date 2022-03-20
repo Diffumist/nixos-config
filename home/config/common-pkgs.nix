@@ -7,6 +7,7 @@
     dnsutils
     fd
     duf
+    nix-top
     ripgrep
     man-pages
     hyperfine
@@ -21,27 +22,32 @@
     jetbrains.goland
     android-studio
     nur.repos.ilya-fedin.kotatogram-desktop
+    fractal
     netease-cloud-music-gtk
     qbittorrent-enhanced
-    yuzu
     wine
     winetricks
     steam
     citra
     taxi
     cawbird
+    easytag
     solaar
+    meld
+    srain
+    kooha
+    guake
+    drawing
+    remmina
+    newsflash
+    celluloid
+    wemeet
     ciscoPacketTracer7
     # Env
-    pkg-config
-    patchelf
-    gnumake
-    cmake
-    lld
-    binutils
-    python3
     nodejs
-    mono
-    go
+    python3
+    python3.pkgs.pygobject3
+    patchelf
+    binutils
   ];
 }

@@ -3,26 +3,26 @@
 {
   material-nvim = {
     pname = "material-nvim";
-    version = "e57df0a28e3cec66f4c4287aca4324ad4c8bf278";
+    version = "596270a53ac5e19a3b9f9f1777d7e99dcf67f71e";
     src = fetchgit {
       url = "https://github.com/marko-cerovac/material.nvim";
-      rev = "e57df0a28e3cec66f4c4287aca4324ad4c8bf278";
+      rev = "596270a53ac5e19a3b9f9f1777d7e99dcf67f71e";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "066mk7vqc77d3zv4nx98mrfjr6gc4fwslwj2111gr0576s6xpqjx";
+      sha256 = "0zzdks5dgfz19srflvxa4jj9gxzbany6a697p000vaq5zb59k9v2";
     };
   };
   maxmind-geoip = {
     pname = "maxmind-geoip";
-    version = "c42cc48b23016fa2ccb18cc5ba8a14b3b8d2b1a9";
+    version = "5ad5a0c87646df616a2574dbf69b316e688fdbf0";
     src = fetchgit {
       url = "https://github.com/Dreamacro/maxmind-geoip";
-      rev = "c42cc48b23016fa2ccb18cc5ba8a14b3b8d2b1a9";
+      rev = "5ad5a0c87646df616a2574dbf69b316e688fdbf0";
       fetchSubmodules = false;
       deepClone = false;
       leaveDotGit = false;
-      sha256 = "1f24prdvs6pv038d7agmzr6fjxk6d0clr63xj732r9kgmcdw6fws";
+      sha256 = "0a8n1gb3ddgnqrcgizfz7gjniplrdwhnixy238lybxf6lpi5dpn0";
     };
   };
   rime-pinyin-moegirl = {
@@ -41,18 +41,6 @@
       sha256 = "0z17bx7jky7nybv20ymnsa88qilg92qm09m4sqqbfd83vjj27kmw";
     };
   };
-  waydroid-script = {
-    pname = "waydroid-script";
-    version = "fb429d2cd6aa8e2b1a4c0e2cfdf968977f4c5731";
-    src = fetchgit {
-      url = "https://github.com/casualsnek/waydroid_script";
-      rev = "fb429d2cd6aa8e2b1a4c0e2cfdf968977f4c5731";
-      fetchSubmodules = false;
-      deepClone = false;
-      leaveDotGit = false;
-      sha256 = "195rdl0bx4lql9f614zfnh3an5wlia1syiy4ynv20k4s6j8vb9w9";
-    };
-  };
   ydcv-rs = {
     pname = "ydcv-rs";
     version = "7756945e0e44c138416727f66f9e7a81b896792c";
@@ -66,7 +54,9 @@
     };
     cargoLock = {
       lockFile = ./ydcv-rs-7756945e0e44c138416727f66f9e7a81b896792c/Cargo.lock;
-      outputHashes = { };
+      outputHashes = {
+        
+      };
     };
   };
 }

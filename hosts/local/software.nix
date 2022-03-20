@@ -20,8 +20,10 @@
       enable = true;
       qemu = {
         package = pkgs.qemu_kvm;
+        ovmf.enable = true;
         verbatimConfig = ''
           seccomp_sandbox = 0
+          capability_filters = [ "device.json" ]
         '';
       };
     };

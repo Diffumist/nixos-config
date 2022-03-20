@@ -4,20 +4,18 @@ let
     # cache
     __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
     CUDA_CACHE_PATH = "${config.xdg.cacheHome}/nv";
-    NODE_REPL_HISTORY = "${config.xdg.cacheHome}/node_repl_history";
-    HISTFILE = "${config.xdg.cacheHome}/bash_history";
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd_hrgb -Djava.util.prefs.userRoot=${config.xdg.cacheHome}/java";
-    # See: https://github.com/NixOS/nixpkgs/pull/95019
-    XCOMPOSECACHE = "${config.xdg.cacheHome}/compose";
-    # XCOMPOSEFILE = "${config.xdg.cacheHome}/compose";
     # config
     NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
     # data
     WINEPREFIX = "${config.xdg.dataHome}/wineprefixes/default";
     GRADLE_USER_HOME = "${config.xdg.dataHome}/gradle";
-    LESSHISTFILE = "${config.xdg.dataHome}/lesshst";
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
     NALI_DB_HOME = "${config.xdg.dataHome}/nali";
+    # state
+    HISTFILE = "${config.xdg.stateHome}/bash_history";
+    LESSHISTFILE = "${config.xdg.stateHome}/lesshst";
+    NODE_REPL_HISTORY = "${config.xdg.stateHome}/node_repl_history";
   };
 in
 {

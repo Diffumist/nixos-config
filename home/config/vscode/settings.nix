@@ -1,6 +1,4 @@
-_:
-
-{
+{ config, ... }: {
   "editor.renderWhitespace" = "all";
   "editor.renderControlCharacters" = true;
   "editor.fontFamily" = "'JetBrains Mono','JetBrainsMono Nerd Font'";
@@ -62,4 +60,12 @@ _:
   "telemetry.enableCrashReporter" = false;
   "security.workspace.trust.untrustedFiles" = "open";
   "terminal.integrated.persistentSessionReviveProcess" = "never";
+  "editor.inlineSuggest.enabled" = true;
+  "files.autoGuessEncoding" = false;
+  "github.copilot.enable" = {
+    "*" = true;
+  };
+  "leetcode.endpoint" = "leetcode-cn";
+  "leetcode.hint.configWebviewMarkdown" = false;
+  "ccls.cache.directory" = "${config.xdg.cacheHome}/ccls-cache";
 }

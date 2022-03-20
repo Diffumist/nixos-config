@@ -13,28 +13,14 @@ in
   config = mkIf cfg.enable (mkMerge [
     ({
       environment.systemPackages = with pkgs; [
-        meld
-        srain
-        kooha
-        guake
-        evince
-        drawing
         gparted
-        remmina
-        newsflash
-        celluloid
         gnome.eog
         gnome.ghex
-        gnome.gedit
         gnome.geary
         libreoffice
         virt-manager
-        gnome-builder
-        gnome.seahorse
-        gnome.nautilus
-        gnome.file-roller
+        gnome.nautilus-python
         gnome.gnome-tweaks
-        gnome.dconf-editor
         gnome.gnome-screenshot
         gnome.gnome-power-manager
         gnome.gnome-system-monitor
@@ -42,24 +28,25 @@ in
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
         gnomeExtensions.color-picker
-        gnomeExtensions.light-dict
+        gnomeExtensions.blur-my-shell
         gnomeExtensions.net-speed-simplified
         materia-theme
         papirus-icon-theme
         capitaine-cursors
+        shared-mime-info
+        nautilus-open-any-terminal
       ];
 
       services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
       services.gnome = {
-        core-utilities.enable = false;
-        core-developer-tools.enable = false;
+        core-utilities.enable = true;
+        core-developer-tools.enable = true;
         evolution-data-server.enable = true;
-        gnome-online-accounts.enable = false;
         gnome-keyring.enable = true;
+        glib-networking.enable = true;
       };
 
       programs = {
-        dconf.enable = true;
         gpaste.enable = true;
       };
 
