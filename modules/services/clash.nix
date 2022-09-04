@@ -62,5 +62,25 @@ in
         ports = [ "127.0.0.1:1234:80" ];
       };
     };
+
+    services.smartdns = {
+      enable = false;
+      settings = with pkgs; {
+        conf-file = [
+          "${smartdns-china-list}/accelerated-domains.china.smartdns.conf"
+          "${smartdns-china-list}/apple.china.smartdns.conf"
+          "${smartdns-china-list}/google.china.smartdns.conf"
+        ];
+        bind = [ "127.0.0.1:53" ];
+        server-https = [
+          "https://1.0.0.1/dns-query"
+          "https://1.1.1.1/dns-query"
+          "https://185.222.222.222/dns-query"
+        ];
+        server = [
+          "127.0.0.1 -group china -exclude-default-group"
+        ];
+      };
+    };
   };
 }

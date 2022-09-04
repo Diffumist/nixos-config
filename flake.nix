@@ -57,15 +57,14 @@
           '';
         };
       };
-      overlays = with inputs; map (x: x.overlay) [
+      overlays = with inputs; [ rust-overlay.overlays.default ] ++ (map (x: x.overlay) [
         nur
         self
         other
         nixcao
         deploy-rs
         berberman
-        rust-overlay
-      ];
+      ]);
       nixosModules = import ./modules ++ [
         inputs.impermanence.nixosModules.impermanence
         inputs.home.nixosModules.home-manager

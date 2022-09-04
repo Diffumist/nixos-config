@@ -56,8 +56,7 @@
 
   "update.showReleaseNotes" = false;
   "update.mode" = "none";
-  "telemetry.enableTelemetry" = false;
-  "telemetry.enableCrashReporter" = false;
+  "telemetry.telemetryLevel" = "off";
   "security.workspace.trust.untrustedFiles" = "open";
   "terminal.integrated.persistentSessionReviveProcess" = "never";
   "editor.inlineSuggest.enabled" = true;

@@ -21,7 +21,7 @@
     jetbrains.clion
     jetbrains.goland
     android-studio
-    nur.repos.ilya-fedin.kotatogram-desktop
+    tdesktop
     fractal
     netease-cloud-music-gtk
     qbittorrent-enhanced
@@ -46,6 +46,7 @@
     # Env
     nodejs
     python3
+    jdk
     python3.pkgs.pygobject3
     patchelf
     binutils

@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ pkgs, config, ... }: {
   # HiDPI display
   hardware.video.hidpi.enable = true;
   console.font = "${pkgs.terminus_font}/share/consolefonts/ter-u24n.psf.gz";

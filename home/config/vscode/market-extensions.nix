@@ -29,4 +29,16 @@
     version = "0.18.0";
     sha256 = "bGZ67OsM/L9dYchgklRmI8hIAAYK3XhBdq4zqH9wSh0=";
   })
+  (extensionFromVscodeMarketplace {
+    publisher = "vscode-org-mode";
+    name = "org-mode";
+    version = "1.0.0";
+    sha256 = "o9CIjMlYQQVRdtTlOp9BAVjqrfFIhhdvzlyhlcOv5rY=";
+  })
+  (extensionFromVscodeMarketplace {
+    publisher = "adpyke";
+    name = "codesnap";
+    version = "1.3.4";
+    sha256 = "dR6qODSTK377OJpmUqG9R85l1sf9fvJJACjrYhSRWgQ=";
+  })
 ]

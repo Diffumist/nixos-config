@@ -18,6 +18,7 @@
     '';
     nameservers = [ "127.0.0.1" ];
     firewall.enable = lib.mkForce false;
+    # proxy.default = "socks5://127.0.0.1:7890"; for debug
   };
   time.timeZone = "Asia/Shanghai";
 

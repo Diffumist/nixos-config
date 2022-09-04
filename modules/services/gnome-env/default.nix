@@ -21,15 +21,13 @@ in
         virt-manager
         gnome.nautilus-python
         gnome.gnome-tweaks
-        gnome.gnome-screenshot
         gnome.gnome-power-manager
         gnome.gnome-system-monitor
         gnomeExtensions.gsconnect
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
         gnomeExtensions.color-picker
-        gnomeExtensions.blur-my-shell
-        gnomeExtensions.net-speed-simplified
+        gnomeExtensions.simple-net-speed
         materia-theme
         papirus-icon-theme
         capitaine-cursors
@@ -45,6 +43,8 @@ in
         gnome-keyring.enable = true;
         glib-networking.enable = true;
       };
+
+      services.printing.enable = false;
 
       programs = {
         gpaste.enable = true;
