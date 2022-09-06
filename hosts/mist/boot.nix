@@ -9,6 +9,7 @@
     "net.ipv4.tcp_congestion_control" = "bbr";
     "net.ipv4.ip_forward" = 1;
   };
+  boot.enableContainers = false;
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   fileSystems =

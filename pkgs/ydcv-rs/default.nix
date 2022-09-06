@@ -10,7 +10,9 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  inherit (source) pname version src cargoLock;
+  inherit (source) pname version src;
+
+  cargoSha256 = "sha256-GoR57IaP8rVxvDA+aovmvDgnBieQ+1jzW/PwTvEvDfA=";
 
   buildInputs = [
     dbus

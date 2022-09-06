@@ -1,6 +1,7 @@
 { pkgs, inputs, self, lib, config, secrets, ... }: {
 
   nixpkgs.config.allowUnfree = true;
+  documentation.doc.enable = false;
 
   nix = {
     package = pkgs.nixFlakes;

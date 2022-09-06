@@ -100,11 +100,11 @@
         "utils": "utils_2"
       },
       "locked": {
-        "lastModified": 1661824092,
-        "narHash": "sha256-nSWLWytlXbeLrx5A+r5Pso7CvVrX5EgmIIXW/EXvPHQ=",
+        "lastModified": 1662382359,
+        "narHash": "sha256-X8O4fns0XtXkBBzgKQ2+7TUGIdFOvg+TQpCI7wFHP74=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "5bd66dc6cd967033489c69d486402b75d338eeb6",
+        "rev": "140aaed3dffbe33bb8b2e0cf333c67f36765c85e",
         "type": "github"
       },
       "original": {
@@ -151,11 +151,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1650676381,
-        "narHash": "sha256-+rFhwk0G4AoKBnsKI7/rn/6lUIUifJhZwtVfj9v0LG0=",
-        "ref": "main",
-        "rev": "870e8fdf64ad8a9015d00396de419c352ae10178",
-        "revCount": 9,
+        "lastModified": 1662386912,
+        "narHash": "sha256-7PtL5kb6Dgq3zPFl6O11xIQtRTLibyZ+f4ucPafwQ8o=",
+        "ref": "refs/heads/main",
+        "rev": "f36811734b73d285466553cb5ddb0f59d9665d27",
+        "revCount": 10,
         "type": "git",
         "url": "file:///home/diffumist/Documents/Project/nix-secrets"
       },
@@ -182,11 +182,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1662229521,
-        "narHash": "sha256-Dy3NAVDB6nLK0YjMOObNV9AH8+Gh+ohUwopF1KvVRCw=",
+        "lastModified": 1662383706,
+        "narHash": "sha256-IV/gpfYowYDTT8P7ubuF4/tIM5JSK0SM0/yFqykVojA=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "bc2a588269deab82c5580bb9d2b9d5fb633b8dd2",
+        "rev": "50cfb60eed47a76d98ba5720f54fbbdbb35fd407",
         "type": "github"
       },
       "original": {
@@ -243,11 +243,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1662173844,
-        "narHash": "sha256-+ZgW98Y8fZkgFSylE+Mzalumw+kw3SVivZznbJqQaj8=",
+        "lastModified": 1662346831,
+        "narHash": "sha256-kV2/98qORIAD1PJG3QMoatDxtj7u1l594YT7QwIuZiA=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "8ac6d40380dc4ec86f1ff591d5c14c8ae1d77a18",
+        "rev": "10d890fee54e15deec4312fed58d538e3a1a01a6",
         "type": "github"
       },
       "original": {

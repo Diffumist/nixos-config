@@ -16,7 +16,6 @@
       tamasfe.even-better-toml
       redhat.vscode-yaml
       jnoortheen.nix-ide
-      github.copilot
       ms-ceintl.vscode-language-pack-zh-hans
     ] ++ import ./market-extensions.nix {
       inherit (pkgs.vscode-utils) extensionFromVscodeMarketplace;

@@ -22,24 +22,17 @@
     jetbrains.goland
     android-studio
     tdesktop
-    fractal
     netease-cloud-music-gtk
     qbittorrent-enhanced
     wine
     winetricks
     steam
-    citra
     taxi
     cawbird
-    easytag
     solaar
     meld
-    srain
-    kooha
-    guake
     drawing
     remmina
-    newsflash
     celluloid
     wemeet
     ciscoPacketTracer7

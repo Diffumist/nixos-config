@@ -1,33 +1,31 @@
 { lib, config, pkgs, ... }:
 {
   boot.initrd = {
-    availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "rtsx_pci_sdmmc" ]; # only loaded on demand
+    availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "ahci" ]; # only loaded on demand
     kernelModules = [ "i915" ];
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_zen;
+    kernelPackages = pkgs.linuxPackages;
     kernelModules = [ "kvm-intel" ];
     kernelParams = [
-      "nvidia-drm.modeset=1"
-      "kvm_intel.nested=1"
       "mitigations=off"
       "intel_iommu=on"
       "iommu=pt"
-      "quiet"
+      "nowatchdog"
     ];
     kernel.sysctl = {
       "kernel.sysrq" = 1;
       "kernel.panic" = 10;
-      "vm.swappiness" = 10;
-      "net.ipv4.ip_forward" = 1;
     };
     extraModprobeConfig = ''
       options i915 enable_guc=2
       options i915 enable_fbc=1
       options i915 fastboot=1
       blacklist ideapad_laptop
+      options kvm_intel nested=1
     '';
+    enableContainers = false;
   };
 
   boot.loader = {

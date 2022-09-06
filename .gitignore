@@ -1,3 +1,4 @@
 result*
 result-*
 .deploy-gc
+pkgs/_sources

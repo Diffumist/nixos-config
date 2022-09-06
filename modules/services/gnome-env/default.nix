@@ -14,9 +14,6 @@ in
     ({
       environment.systemPackages = with pkgs; [
         gparted
-        gnome.eog
-        gnome.ghex
-        gnome.geary
         libreoffice
         virt-manager
         gnome.nautilus-python
@@ -35,13 +32,33 @@ in
         nautilus-open-any-terminal
       ];
 
+      environment.gnome.excludePackages = with pkgs.gnome; [
+        gnome-weather
+        gnome-clocks
+        gnome-contacts
+        gnome-characters
+        gnome-font-viewer
+        gnome-logs
+        yelp
+        totem
+        cheese
+        epiphany
+        simple-scan
+        gnome-maps
+        gnome-music
+        pkgs.gnome-photos
+        pkgs.gnome-console
+        pkgs.gnome-connections
+      ];
+
       services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
       services.gnome = {
         core-utilities.enable = true;
-        core-developer-tools.enable = true;
-        evolution-data-server.enable = true;
+        core-developer-tools.enable = mkForce false;
+        evolution-data-server.enable = mkForce false;
         gnome-keyring.enable = true;
-        glib-networking.enable = true;
+        glib-networking.enable = mkForce false;
+        gnome-initial-setup.enable = mkForce false;
       };
 
       services.printing.enable = false;
@@ -53,6 +70,7 @@ in
       services.xserver = {
         enable = true;
         layout = "us";
+        excludePackages = [ pkgs.xterm ];
         desktopManager.gnome.enable = true;
         displayManager = {
           gdm = {

@@ -15,7 +15,7 @@ rec {
     mapPackages (name:
       let
         sources = (import ./_sources/generated.nix) {
-          inherit (final) fetchurl fetchgit;
+          inherit (final) fetchurl fetchgit fetchFromGitHub;
         };
         package = import (./. + "/${name}");
         args = builtins.intersectAttrs (builtins.functionArgs package) {

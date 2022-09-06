@@ -12,12 +12,16 @@ let
     }
     iptables -t nat -F CLASH
     iptables -t nat -N CLASH
+
     iptables -t nat -A CLASH -d 0.0.0.0/8 -j RETURN
-    iptables -t nat -A CLASH -d 127.0.0.1/32 -j RETURN
-    iptables -t nat -A CLASH -d 192.168.0.0/24 -j RETURN
-    iptables -t nat -A CLASH -m owner --uid-owner ${clashUser} -j RETURN
-    iptables -t nat -A CLASH -p tcp -j REDIRECT --to-ports ${toString redirPort}
-    iptables -t nat -A OUTPUT -p tcp -j CLASH
+    iptables -t nat -A CLASH -d 10.0.0.0/8 -j RETURN
+    iptables -t nat -A CLASH -d 127.0.0.0/8 -j RETURN
+    iptables -t nat -A CLASH -d 172.16.0.0/12 -j RETURN
+    iptables -t nat -A CLASH -d 192.168.0.0/16 -j RETURN
+    iptables -t nat -A CLASH -d 224.0.0.0/4 -j RETURN
+    iptables -t nat -A CLASH -d 240.0.0.0/4 -j RETURN
+
+    iptables -t nat -A OUTPUT -p tcp -m owner ! --uid-owner ${clashUser} -j REDIRECT --to-port ${toString redirPort}
   '';
   stopScript = writeShellScript "clash-poststop" ''
     ${iptables}/bin/iptables-save -c|${ripgrep}/bin/rg -v CLASH|${iptables}/bin/iptables-restore -c
@@ -64,21 +68,18 @@ in
     };
 
     services.smartdns = {
-      enable = false;
+      enable = true;
       settings = with pkgs; {
         conf-file = [
           "${smartdns-china-list}/accelerated-domains.china.smartdns.conf"
           "${smartdns-china-list}/apple.china.smartdns.conf"
           "${smartdns-china-list}/google.china.smartdns.conf"
         ];
-        bind = [ "127.0.0.1:53" ];
+        bind = [ "127.0.0.53:53" ];
         server-https = [
           "https://1.0.0.1/dns-query"
-          "https://1.1.1.1/dns-query"
-          "https://185.222.222.222/dns-query"
-        ];
-        server = [
-          "127.0.0.1 -group china -exclude-default-group"
+          "https://dns.google/dns-query"
+          "https://223.5.5.5/dns-query -group china -exclude-default-group"
         ];
       };
     };
