@@ -64,8 +64,8 @@ in
             {
               listen = "127.0.0.1";
               inherit (cfg) port;
-              protocol = "vless";
-              tag = "vless-in";
+              protocol = "vmess";
+              tag = "vmess-in";
               sniffing = {
                 enabled = true;
                 metadataOnly = false;
@@ -82,20 +82,10 @@ in
               };
               streamSettings = {
                 network = "ws";
-                security = "none";
                 wsSettings = {
                   inherit path;
                   header.Host = "${cfg.name}.${host}";
                 };
-              };
-            }
-            {
-              listen = "0.0.0.0";
-              port = 13425;
-              protocol = "shadowsocks";
-              settings = {
-                method = "aes-256-gcm";
-                inherit (ss) password;
               };
             }
           ];
@@ -138,10 +128,6 @@ in
           '';
         };
       };
-    };
-    networking.firewall = rec {
-      allowedTCPPorts = [ 13425 ];
-      allowedUDPPorts = allowedTCPPorts;
     };
   };
 }

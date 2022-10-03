@@ -4,7 +4,7 @@ let
     # cache
     __GL_SHADER_DISK_CACHE_PATH = "${config.xdg.cacheHome}/nv";
     CUDA_CACHE_PATH = "${config.xdg.cacheHome}/nv";
-    _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd_hrgb -Djava.util.prefs.userRoot=${config.xdg.cacheHome}/java";
+    _JAVA_OPTIONS = "-Djava.util.prefs.userRoot=${config.xdg.cacheHome}/java";
     # config
     NPM_CONFIG_USERCONFIG = "${config.xdg.configHome}/npm/npmrc";
     # data
@@ -53,26 +53,12 @@ in
         [storage]
         driver = "btrfs"
       '';
-      "ibus/rime/default.custom.yaml".text = ''
-        patch:
-          translator/dictionary: pinyin_simp
-          schema_list:
-            - schema: luna_pinyin_simp
+      "fcitx5/conf/classicui.conf".text = ''
+        Vertical Candidate List=False
+        Font="Noto Sans CJK SC 10"
+        UseInputMethodLangaugeToDisplayText=True
+        Theme=Material-Color-Black
       '';
-      "ibus/rime/pinyin_simp.dict.yaml".text = ''
-        ---
-        name: pinyin_simp
-        version: "0.1"
-        sort: by_weight
-        use_preset_vocabulary: true
-        import_tables:
-          - luna_pinyin
-          - zhwiki
-          - moegirl
-        ...
-      '';
-      "ibus/rime/zhwiki.dict.yaml".source = "${pkgs.rime-pinyin-zhwiki}/share/rime-data/zhwiki.dict.yaml";
-      "ibus/rime/moegirl.dict.yaml".source = "${pkgs.rime-pinyin-moegirl}/share/rime-data/moegirl.dict.yaml";
     };
     dataFile = {
       "cargo/config".text = ''

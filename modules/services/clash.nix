@@ -68,7 +68,7 @@ in
     };
 
     services.smartdns = {
-      enable = true;
+      enable = false;
       settings = with pkgs; {
         conf-file = [
           "${smartdns-china-list}/accelerated-domains.china.smartdns.conf"

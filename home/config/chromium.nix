@@ -26,6 +26,7 @@
       "mpkodccbngfoacfalldjimigbofkhgjn" # Aria2 for Chrome
       "aleakchihdccplidncghkekgioiakgal" # h264ify
       "amknoiejhlmhancpahfcfcfhllgkpbld" # Hoppscotch Browser Extension
+      "oomoeacogjkolheacgdkkkhbjipaomkn"
     ];
   };
 

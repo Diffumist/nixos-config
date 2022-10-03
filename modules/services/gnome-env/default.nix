@@ -46,6 +46,7 @@ in
         simple-scan
         gnome-maps
         gnome-music
+        pkgs.gnome-tour
         pkgs.gnome-photos
         pkgs.gnome-console
         pkgs.gnome-connections
@@ -65,6 +66,7 @@ in
 
       programs = {
         gpaste.enable = true;
+        geary.enable = mkForce false;
       };
 
       services.xserver = {
@@ -106,8 +108,13 @@ in
         supportedLocales = [ "en_US.UTF-8/UTF-8" "zh_CN.UTF-8/UTF-8" ];
 
         inputMethod = {
-          enabled = "ibus";
-          ibus.engines = with pkgs.ibus-engines; [ rime ];
+          enabled = "fcitx5";
+          fcitx5.addons = with pkgs; [
+            fcitx5-chinese-addons
+            fcitx5-pinyin-zhwiki
+            fcitx5-pinyin-moegirl
+            fcitx5-material-color
+          ];
         };
       };
 

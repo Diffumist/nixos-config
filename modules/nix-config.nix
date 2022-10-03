@@ -8,8 +8,8 @@
     settings.trusted-users = [ "root" "diffumist" ];
 
     settings.substituters = lib.mkBefore [
-      "https://mirrors.ustc.edu.cn/nix-channels/store"
       "https://diffumist.cachix.org"
+      "https://mirror.sjtu.edu.cn/nix-channels/store"
       "https://cache.nixos.org"
       "https://ilya-fedin.cachix.org"
     ];
