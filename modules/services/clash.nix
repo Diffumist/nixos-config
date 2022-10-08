@@ -68,18 +68,23 @@ in
     };
 
     services.smartdns = {
-      enable = false;
+      enable = true;
       settings = with pkgs; {
+        log-level = "info";
+        speed-check-mode = "none";
         conf-file = [
           "${smartdns-china-list}/accelerated-domains.china.smartdns.conf"
           "${smartdns-china-list}/apple.china.smartdns.conf"
           "${smartdns-china-list}/google.china.smartdns.conf"
         ];
-        bind = [ "127.0.0.53:53" ];
+        bind = [ "0.0.0.0:53" ];
+        server = [
+          "127.0.0.1:1053"
+        ];
         server-https = [
           "https://1.0.0.1/dns-query"
-          "https://dns.google/dns-query"
-          "https://223.5.5.5/dns-query -group china -exclude-default-group"
+          "https://8.8.8.8/dns-query"
+          "https://185.222.222.222/dns-query"
         ];
       };
     };

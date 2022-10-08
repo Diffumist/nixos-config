@@ -4,14 +4,13 @@
   documentation.doc.enable = false;
 
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
     settings.trusted-users = [ "root" "diffumist" ];
 
     settings.substituters = lib.mkBefore [
-      "https://diffumist.cachix.org"
-      "https://mirror.sjtu.edu.cn/nix-channels/store"
       "https://cache.nixos.org"
       "https://ilya-fedin.cachix.org"
+      "https://diffumist.cachix.org"
     ];
     settings.trusted-public-keys = [
       "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk="

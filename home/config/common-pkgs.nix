@@ -15,7 +15,6 @@
     nixpkgs-fmt
     yubikey-manager
     prime-run
-    ydcv-rs
     # GUI
     jetbrains.idea-ultimate
     jetbrains.clion

@@ -1,16 +1,13 @@
-{ config, options, lib, pkgs, ... }:
+{ config, options, lib, pkgs, secrets, ... }:
 
 with lib;
 let
   cfg = config.modules.vaultwarden;
+  dbPassword = secrets.vaultwarden.password;
 in
 {
   options.modules.vaultwarden = {
     enable = mkEnableOption "vaultwarden";
-    backupDir = mkOption {
-      type = types.path;
-      default = "/persist/private/vaultwarden";
-    };
     openPorts = mkOption {
       type = types.port;
       default = 443;
@@ -18,25 +15,39 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.postgresql = {
+      enable = true;
+      package = pkgs.postgresql_14;
+      ensureDatabases = [ "bitwarden" ];
+      ensureUsers = [{ name = "vaultwarden"; ensurePermissions."DATABASE bitwarden" = "ALL PRIVILEGES"; }];
+
+      initialScript = pkgs.writeText "postgresql-init.sql" ''
+        CREATE DATABASE bitwarden;
+        CREATE USER vaultwarden WITH PASSWORD '${dbPassword}';
+        GRANT ALL PRIVILEGES ON DATABASE bitwarden TO vaultwarden;
+      '';
+    };
+
     services.vaultwarden = {
       enable = true;
+      dbBackend = "postgresql";
       config = {
+        signupsAllowed = false;
         webVaultEnabled = true;
         websocketEnabled = true;
-        signupsVerify = true;
-        websocketAddress = "127.0.0.1";
-        rocketAddress = "127.0.0.1";
         rocketPort = 3011;
+        domain = "https://vault.diffumist.me";
+        databaseUrl = "postgresql://vaultwarden:${dbPassword}@localhost/bitwarden";
         logFile = "/var/log/bitwarden_rs.log";
         showPasswordHint = false;
       };
-      inherit (cfg) backupDir;
     };
 
-    system.activationScripts.initVaultwarden = ''
-      mkdir -p "${cfg.backupDir}"
-      chown "${config.users.users.vaultwarden.name}" "${cfg.backupDir}"
-    '';
+    systemd.services.vaultwarden.after = [ "postgresql.service" ];
+    services.postgresqlBackup = {
+      enable = true;
+      databases = [ "bitwarden" ];
+    };
 
     services.nginx.virtualHosts."vault.diffumist.me" = {
       useACMEHost = config.networking.domain;
@@ -51,28 +62,15 @@ in
       locations = {
         "/" = {
           proxyPass = "http://localhost:3011";
-          extraConfig = ''
-            proxy_set_header X-Real-IP $remote_addr;
-          '';
+          proxyWebsockets = true;
         };
         "/notifications/hub" = {
           proxyPass = "http://localhost:3012";
           proxyWebsockets = true;
-          extraConfig = ''
-            proxy_set_header X-Real-IP $remote_addr;
-          '';
         };
         "/notifications/hub/negotiate" = {
           proxyPass = "http://localhost:3011";
-          extraConfig = ''
-            proxy_set_header X-Real-IP $remote_addr;
-          '';
-        };
-        "/admin" = {
-          proxyPass = "http://localhost:3011";
-          extraConfig = ''
-            proxy_set_header X-Real-IP $remote_addr;
-          '';
+          proxyWebsockets = true;
         };
       };
     };

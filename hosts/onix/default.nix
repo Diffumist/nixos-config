@@ -7,7 +7,7 @@
 
   # network
   networking = {
-    hostName = "local";
+    hostName = "onix";
     domain = "diffumist.me";
     networkmanager.dns = "none";
     networkmanager.extraConfig = ''

@@ -1,7 +1,6 @@
 { config, lib, pkgs, secrets, ... }:
 
 with lib;
-with secrets.v2ray;
 let
   cfg = config.modules.v2ray;
 in
@@ -9,12 +8,8 @@ in
   options.modules.v2ray = {
     enable = mkEnableOption "v2ray";
     port = mkOption {
-      default = 47531;
+      default = 25433;
       type = types.port;
-    };
-    name = mkOption {
-      default = "mist";
-      type = types.str;
     };
   };
 
@@ -25,7 +20,8 @@ in
         enable = true;
         config = {
           log = {
-            access = "none";
+            access = "/dev/null";
+            error = "/dev/null";
             loglevel = "warning";
           };
           routing = {
@@ -50,11 +46,6 @@ in
               }
               {
                 type = "field";
-                port = 25;
-                outboundTag = "blocked";
-              }
-              {
-                type = "field";
                 network = "tcp,udp";
                 outboundTag = "out";
               }
@@ -62,30 +53,12 @@ in
           };
           inbounds = [
             {
-              listen = "127.0.0.1";
-              inherit (cfg) port;
-              protocol = "vmess";
-              tag = "vmess-in";
-              sniffing = {
-                enabled = true;
-                metadataOnly = false;
-              };
+              port = 10240;
+              protocol = "shadowsocks";
               settings = {
-                clients = [
-                  {
-                    inherit id;
-                    alterId = 0;
-                    email = "me@diffumist.me";
-                  }
-                ];
-                decryption = "none";
-              };
-              streamSettings = {
-                network = "ws";
-                wsSettings = {
-                  inherit path;
-                  header.Host = "${cfg.name}.${host}";
-                };
+                method = "aes-128-gcm";
+                ota = true;
+                inherit (secrets.v2ray.ss) password;
               };
             }
           ];
@@ -101,33 +74,9 @@ in
           ];
         };
       };
-
-      nginx.virtualHosts."${cfg.name}.${host}" = {
-        useACMEHost = config.networking.domain;
-        forceSSL = true;
-        listen = [
-          {
-            addr = "0.0.0.0";
-            port = 443;
-            ssl = true;
-          }
-          {
-            addr = "0.0.0.0";
-            port = 80;
-            ssl = false;
-          }
-        ];
-        locations."${path}" = {
-          proxyPass = "http://127.0.0.1:${toString cfg.port}";
-          proxyWebsockets = true;
-          extraConfig = ''
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-            proxy_headers_hash_max_size 51200;
-            proxy_headers_hash_bucket_size 6400;
-          '';
-        };
-      };
+    };
+    networking.firewall = {
+      allowedTCPPorts = [ 10240 ];
     };
   };
 }
