@@ -27,14 +27,17 @@
       inputs.flake-utils.follows = "utils";
     };
     # other pkgs
-    nur.url = "github:nix-community/NUR";
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     berberman = {
       url = "github:berberman/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nickpkgs = {
       url = "github:NickCao/flakes";
-      flake = false;
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # secrets
     nix-secrets = {
@@ -45,33 +48,31 @@
   outputs = { self, nixpkgs, ... } @inputs:
     let
       this = import ./pkgs;
-      nixcao = import "${inputs.nickpkgs}/pkgs";
-      other.overlay = final: prev: {
-        # Ref: https://github.com/NickCao/flakes/blob/08044fc9e40fab5eec0dbcb336777477a6d4bfaa/nixos/local/default.nix#L21
-        alacritty = final.symlinkJoin {
-          name = "alacritty";
-          paths = [ prev.alacritty ];
-          buildInputs = [ final.makeWrapper ];
-          postBuild = ''
-            wrapProgram $out/bin/alacritty --unset WAYLAND_DISPLAY
-          '';
-        };
-      };
-      overlays = with inputs; [ rust-overlay.overlays.default ] ++ (map (x: x.overlay) [
-        nur
-        self
-        other
-        nixcao
-        deploy-rs
-        berberman
-      ]);
-      nixosModules = import ./modules ++ [
-        inputs.impermanence.nixosModules.impermanence
-        inputs.home.nixosModules.home-manager
+      overlays = [
+        self.overlays.default
+        inputs.nickpkgs.overlays.default
+        inputs.berberman.overlays.default
+        inputs.rust-overlay.overlays.default
       ];
     in
-    {
-      overlay = this.overlay;
+    inputs.utils.lib.eachSystem [ "x86_64-linux" ]
+      (
+        system: rec {
+          pkgs = import nixpkgs {
+            inherit overlays system;
+            config.allowUnfree = true;
+          };
+          packages = this.packages pkgs;
+          devShell = with pkgs; mkShell {
+            nativeBuildInputs = [
+              deploy-rs
+              nvfetcher
+              nixpkgs-fmt
+            ];
+          };
+        }
+      ) // {
+      overlays.default = this.overlay;
       nixosConfigurations =
         let
           hosts = builtins.attrNames (builtins.readDir ./hosts);
@@ -84,7 +85,11 @@
               };
               modules = [{ nixpkgs = { inherit overlays; }; }]
               ++ [ (import (./hosts + "/${hostname}")) ]
-              ++ nixosModules;
+              ++ import ./modules ++ [
+                inputs.impermanence.nixosModules.impermanence
+                inputs.home.nixosModules.home-manager
+                inputs.nur.nixosModules.nur
+              ];
             };
         in
         nixpkgs.lib.genAttrs hosts mkSystem;
@@ -96,29 +101,5 @@
           profiles.system.path = inputs.deploy-rs.lib."${machine.pkgs.system}".activate.nixos machine;
         })
         (nixpkgs.lib.filterAttrs (n: v: n != "local") self.nixosConfigurations));
-    } //
-    inputs.utils.lib.eachSystem [ "x86_64-linux" ]
-      (
-        system:
-        let
-          pkgs = import nixpkgs {
-            inherit system overlays;
-            config.allowUnfree = true;
-          };
-        in
-        rec {
-          packages = this.packages pkgs;
-          checks = packages // (inputs.deploy-rs.lib."${system}".deployChecks {
-            nodes = pkgs.lib.filterAttrs (name: cfg: cfg.profiles.system.path.system == system) self.deploy.nodes;
-          });
-          legacyPackages = pkgs;
-          devShell = with pkgs; mkShell {
-            nativeBuildInputs = [
-              deploy-rs.deploy-rs
-              nvfetcher
-              nixpkgs-fmt
-            ];
-          };
-        }
-      );
+    };
 }

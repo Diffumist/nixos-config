@@ -4,7 +4,7 @@
     (modulesPath + "/profiles/qemu-guest.nix")
     ./boot.nix
     ./options.nix
-    ./services.nix
+    # ./services.nix
   ];
 
   networking = {

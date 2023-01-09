@@ -23,8 +23,7 @@ in
         gnomeExtensions.gsconnect
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
-        gnomeExtensions.color-picker
-        gnomeExtensions.simple-net-speed
+        gnomeExtensions.night-theme-switcher
         materia-theme
         papirus-icon-theme
         capitaine-cursors

@@ -27,7 +27,7 @@ let
     ${iptables}/bin/iptables-save -c|${ripgrep}/bin/rg -v CLASH|${iptables}/bin/iptables-restore -c
   '';
   inherit (pkgs) writeShellScript iptables maxmind-geoip ripgrep;
-  inherit (pkgs.nur.repos.linyinfeng) clash-premium;
+  inherit (config.nur.repos.linyinfeng) clash-premium;
 in
 {
   options.modules.clash = {
@@ -68,7 +68,7 @@ in
     };
 
     services.smartdns = {
-      enable = true;
+      enable = false;
       settings = with pkgs; {
         log-level = "info";
         speed-check-mode = "none";
@@ -77,9 +77,11 @@ in
           "${smartdns-china-list}/apple.china.smartdns.conf"
           "${smartdns-china-list}/google.china.smartdns.conf"
         ];
-        bind = [ "0.0.0.0:53" ];
+        bind = [ "127.0.0.1:53" ];
         server = [
           "127.0.0.1:1053"
+          "223.5.5.5"
+          "119.29.29.29"
         ];
         server-https = [
           "https://1.0.0.1/dns-query"

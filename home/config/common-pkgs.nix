@@ -19,22 +19,21 @@
     jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland
-    android-studio
+    # android-studio
     tdesktop
-    netease-cloud-music-gtk
+    spotify
     qbittorrent-enhanced
     wine
     winetricks
     steam
     taxi
+    obsidian
     cawbird
     solaar
     meld
-    drawing
     remmina
     celluloid
     wemeet
-    ciscoPacketTracer7
     # Env
     nodejs
     python3

@@ -38,7 +38,7 @@
 
   fileSystems =
     let
-      espDev = "/dev/disk/by-uuid/E245-3FCF"; # EFI System Partition
+      espDev = "/dev/disk/by-label/ESP"; # EFI System Partition
       btrfsDev = "/dev/disk/by-label/NixOS";
 
       btrfs = options: {

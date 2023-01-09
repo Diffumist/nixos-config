@@ -17,7 +17,7 @@
       "jklfcpboamajpiikgkbjcnnnnooefbhh" # pakku for bilibili
       "aapbdbdomjkkjkaonfhkkikfgjllcleb" # Google Translate
       "niloccemoadcdkdjlinkgdfekeahmflj" # Save to Pocket
-      "dhdgffkkebhmkfjojejmpbldmpobfkfo" # Tampermonkey
+      "gcalenpjmijncebpfijmoaglllgpjagf" # Tampermonkey
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
       "pncfbmialoiaghdehhbnbhkkgmjanfhe" # uBlacklist
       "dkndmhgdcmjdmkdonmbgjpijejdcilfh" # PixivBatchDownloader
