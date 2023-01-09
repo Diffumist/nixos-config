@@ -16,7 +16,7 @@
     yubikey-manager
     prime-run
     # GUI
-    jetbrains.idea-ultimate
+    # jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland
     # android-studio

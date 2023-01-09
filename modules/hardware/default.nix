@@ -82,7 +82,7 @@ in
         cue = true;
       };
 
-      services.udev.packages = [ config.nur.repos.linyinfeng.canokey-udev-rules ];
+      services.udev.packages = [ config.nur.repos.linyinfeng.canokey-udev-rules pkgs.yubikey-personalization pkgs.libu2f-host ];
     })
   ]);
 }
