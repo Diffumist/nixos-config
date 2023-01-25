@@ -2,26 +2,20 @@
 
 with lib;
 let
-  cfg = config.modules.v2ray;
+  cfg = config.modules.xray;
 in
 {
-  options.modules.v2ray = {
-    enable = mkEnableOption "v2ray";
-    port = mkOption {
-      default = 25433;
-      type = types.port;
-    };
+  options.modules.xray = {
+    enable = mkEnableOption "xray";
   };
 
   config = mkIf cfg.enable {
 
     services = {
-      v2ray = {
+      xray = {
         enable = true;
-        config = {
+        settings = {
           log = {
-            access = "/dev/null";
-            error = "/dev/null";
             loglevel = "warning";
           };
           routing = {
@@ -53,12 +47,24 @@ in
           };
           inbounds = [
             {
-              port = 10240;
-              protocol = "shadowsocks";
+              port = 4432;
+              listen = "127.0.0.1";
+              protocol = "vless";
               settings = {
-                method = "aes-128-gcm";
-                ota = true;
-                inherit (secrets.v2ray.ss) password;
+                clients = [
+                  {
+                    inherit (secrets.v2ray) id;
+                    level = 0;
+                  }
+                ];
+                decryption = "none";
+              };
+              streamSettings = {
+                network = "ws";
+                security = "none";
+                wsSettings = {
+                  path = "/ray";
+                };
               };
             }
           ];
@@ -75,8 +81,22 @@ in
         };
       };
     };
-    networking.firewall = {
-      allowedTCPPorts = [ 10240 ];
+    services.nginx.virtualHosts."v2.diffumist.me" = {
+      useACMEHost = "v2.diffumist.me";
+      forceSSL = true;
+      listen = [
+        {
+          addr = "0.0.0.0";
+          port = 443;
+          ssl = true;
+        }
+      ];
+      locations = {
+        "/ray" = {
+          proxyPass = "http://localhost:4432";
+          proxyWebsockets = true;
+        };
+      };
     };
   };
 }

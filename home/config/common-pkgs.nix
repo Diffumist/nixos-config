@@ -15,6 +15,7 @@
     nixpkgs-fmt
     yubikey-manager
     prime-run
+    frp
     # GUI
     # jetbrains.idea-ultimate
     jetbrains.clion
@@ -39,6 +40,7 @@
     python3
     jdk
     python3.pkgs.pygobject3
+    python3.pkgs.pyusb
     patchelf
     binutils
   ];

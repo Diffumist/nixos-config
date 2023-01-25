@@ -9,7 +9,7 @@
 
   # networking
   ./services/clash.nix
-  ./services/nginx/v2ray.nix
+  ./services/nginx/xray.nix
   ./services/transmission.nix
   # web services
   ./services/nginx

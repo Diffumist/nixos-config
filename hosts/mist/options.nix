@@ -6,6 +6,6 @@ _: {
     nginx.enable = true;
     fail2ban.enable = true;
     acme.enable = true;
-    v2ray.enable = true;
+    xray.enable = true;
   };
 }
