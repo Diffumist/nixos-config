@@ -14,9 +14,7 @@ rec {
   overlay = final: prev:
     mapPackages (name:
       let
-        sources = (import ./_sources/generated.nix) {
-          inherit (final) fetchurl fetchgit fetchFromGitHub;
-        };
+        sources = final.callPackage ./_sources/generated.nix { };
         package = import (./. + "/${name}");
         args = builtins.intersectAttrs (builtins.functionArgs package) {
           source = sources."${name}";

@@ -24,12 +24,10 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-compat.follows = "flake-compat";
-      inputs.flake-utils.follows = "utils";
     };
     # other pkgs
     nur = {
       url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
     berberman = {
       url = "github:berberman/flakes";
@@ -63,7 +61,8 @@
             config.allowUnfree = true;
           };
           packages = this.packages pkgs;
-          devShell = with pkgs; mkShell {
+          legacyPackages = pkgs;
+          devShells.default = with pkgs; mkShell {
             nativeBuildInputs = [
               deploy-rs
               nvfetcher

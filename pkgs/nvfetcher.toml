@@ -1,17 +1,20 @@
 [maxmind-geoip]
-src.git = "https://github.com/Dreamacro/maxmind-geoip"
+src.git = "https://github.com/Loyalsoldier/geoip"
 src.branch = "release"
-fetch.github = "Dreamacro/maxmind-geoip"
+fetch.github = "Loyalsoldier/geoip"
 git.branch = "release"
 [material-nvim]
 src.git = "https://github.com/marko-cerovac/material.nvim"
 fetch.github = "marko-cerovac/material.nvim"
 [rime-pinyin-moegirl]
 src.manual = "20220114"
-fetch.url = "https://github.com/outloudvi/mw2fcitx/releases/download/20220114/moegirl.dict.yaml"
+fetch.url = "https://github.com/outloudvi/mw2fcitx/releases/download/20230214/moegirl.dict.yaml"
 [rime-pinyin-zhwiki]
 src.manual = "20220101"
-fetch.url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.2.3/zhwiki-20220101.dict.yaml"
+fetch.url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.2.4/zhwiki-20220416.dict.yaml"
 [ydcv-rs]
 src.git = "https://github.com/farseerfc/ydcv-rs"
 fetch.github = "farseerfc/ydcv-rs"
+[clash-meta]
+src.git = "https://github.com/MetaCubeX/Clash.Meta"
+fetch.github = "MetaCubeX/Clash.Meta"

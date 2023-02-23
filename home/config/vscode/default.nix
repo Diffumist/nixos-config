@@ -12,11 +12,9 @@
       esbenp.prettier-vscode
       pkief.material-icon-theme
       eamodio.gitlens
-      dbaeumer.vscode-eslint
-      tamasfe.even-better-toml
-      redhat.vscode-yaml
       jnoortheen.nix-ide
       ms-ceintl.vscode-language-pack-zh-hans
+      piousdeer.adwaita-theme
     ] ++ import ./market-extensions.nix {
       inherit (pkgs.vscode-utils) extensionFromVscodeMarketplace;
     };

@@ -31,7 +31,6 @@
   "files.autoSave" = "onFocusChange";
   "terminal.external.linuxExec" = "alacritty";
   "extensions.autoUpdate" = false;
-  "workbench.colorTheme" = "Material Theme Darker";
   "files.associations" = {
     "*.md" = "markdown";
     "*.json" = "jsonc";
@@ -53,7 +52,7 @@
     "editor.tabSize" = 2;
   };
   "nix.enableLanguageServer" = true;
-
+  "window.titleBarStyle" = "custom";
   "update.showReleaseNotes" = false;
   "update.mode" = "none";
   "telemetry.telemetryLevel" = "off";
@@ -61,10 +60,10 @@
   "terminal.integrated.persistentSessionReviveProcess" = "never";
   "editor.inlineSuggest.enabled" = true;
   "files.autoGuessEncoding" = false;
-  "github.copilot.enable" = {
-    "*" = true;
-  };
-  "leetcode.endpoint" = "leetcode-cn";
-  "leetcode.hint.configWebviewMarkdown" = false;
   "ccls.cache.directory" = "${config.xdg.cacheHome}/ccls-cache";
+  "workbench.productIconTheme" = "adwaita";
+  "window.commandCenter" = true;
+  "workbench.colorTheme" = "Gnome Dark (Atom One)";
+  "google-translate.serverDomain" = "https://translate.google.com";
+  "google-translate.switchFunctionTranslation" = true;
 }

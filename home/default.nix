@@ -10,7 +10,7 @@ _:
     ./config/video.nix
     ./config/services.nix
     ./config/xdg
-    ./config/neovim
+    ./config/helix
     ./config/vscode
     ./config/shell
 

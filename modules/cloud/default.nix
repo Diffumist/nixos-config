@@ -19,7 +19,7 @@ in
     services.openssh = {
       enable = true;
       ports = [ 22 ];
-      passwordAuthentication = false;
+      settings.PasswordAuthentication = false;
     };
 
     users.users.root.openssh.authorizedKeys.keys = [

@@ -15,6 +15,7 @@ let
     # state
     HISTFILE = "${config.xdg.stateHome}/bash_history";
     LESSHISTFILE = "${config.xdg.stateHome}/lesshst";
+    SQLITE_HISTORY = "${config.xdg.stateHome}/sqlite/history";
     NODE_REPL_HISTORY = "${config.xdg.stateHome}/node_repl_history";
   };
 in
@@ -44,11 +45,6 @@ in
         init-module=${config.xdg.configHome}/npm/config/npm-init.js
         store-dir=${config.xdg.dataHome}/pnpm-store
       '';
-      "dosbox/dosbox.conf".text = ''
-        [sdl]
-        windowresolution=1080x800
-        output=opengl
-      '';
       "containers/storage.conf".text = ''
         [storage]
         driver = "btrfs"
@@ -58,6 +54,11 @@ in
         Font="Noto Sans CJK SC 10"
         UseInputMethodLangaugeToDisplayText=True
         Theme=Material-Color-Black
+      '';
+      "JetBrains/template.vmoptions".text = ''
+        -javaagent:${config.xdg.configHome}/JetBrains/jetbra/ja-netfilter.jar=jetbrains
+        --add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED
+        --add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED
       '';
     };
     dataFile = {
@@ -73,7 +74,7 @@ in
     enable = true;
     font = { name = "Sarasa Gothic SC"; size = 11; };
     iconTheme = { name = "Papirus"; };
-    theme = { name = "Materia"; };
+    theme = { name = "Orchis-Dark"; };
     gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
     gtk3.bookmarks = [
       "file:///home/diffumist/Documents/Project"

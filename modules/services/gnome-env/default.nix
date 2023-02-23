@@ -24,7 +24,9 @@ in
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
         gnomeExtensions.night-theme-switcher
-        materia-theme
+        gnomeExtensions.blur-my-shell
+        gnomeExtensions.color-picker
+        orchis-theme
         papirus-icon-theme
         capitaine-cursors
         shared-mime-info

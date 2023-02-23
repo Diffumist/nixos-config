@@ -16,17 +16,14 @@
       "ponfpcnoihfmfllpaingbgckeeldkhle" # Enhancer for YouTube
       "jklfcpboamajpiikgkbjcnnnnooefbhh" # pakku for bilibili
       "aapbdbdomjkkjkaonfhkkikfgjllcleb" # Google Translate
-      "niloccemoadcdkdjlinkgdfekeahmflj" # Save to Pocket
       "gcalenpjmijncebpfijmoaglllgpjagf" # Tampermonkey
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
       "pncfbmialoiaghdehhbnbhkkgmjanfhe" # uBlacklist
       "dkndmhgdcmjdmkdonmbgjpijejdcilfh" # PixivBatchDownloader
       "padekgcemlokbadohgkifijomclgjgif" # Proxy SwitchyOmega
-      "ennpfpdlaclocpomkiablnmbppdnlhoh" # Rust Search Extension
       "mpkodccbngfoacfalldjimigbofkhgjn" # Aria2 for Chrome
       "aleakchihdccplidncghkekgioiakgal" # h264ify
       "amknoiejhlmhancpahfcfcfhllgkpbld" # Hoppscotch Browser Extension
-      "oomoeacogjkolheacgdkkkhbjipaomkn"
     ];
   };
 

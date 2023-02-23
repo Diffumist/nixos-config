@@ -1,4 +1,4 @@
 result*
 result-*
 .deploy-gc
-pkgs/_sources
+pkgs/_sources/generated.json

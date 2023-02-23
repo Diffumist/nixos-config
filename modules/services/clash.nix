@@ -6,8 +6,7 @@ let
   clashDir = "/var/lib/clash";
   redirPort = 7891;
   clashUser = "clash";
-  inherit (pkgs) writeShellScript iptables maxmind-geoip ripgrep;
-  inherit (config.nur.repos.linyinfeng) clash-premium;
+  inherit (pkgs) writeShellScript iptables maxmind-geoip ripgrep clash-meta;
 in
 {
   options.modules.clash = {
@@ -19,12 +18,13 @@ in
       mkdir -p "${clashDir}"
       chown "${clashUser}" "${clashDir}"
       ln -nfs "${maxmind-geoip}/Country.mmdb" "${clashDir}/Country.mmdb"
+      ln -nfs "${maxmind-geoip}/geoip.dat" "${clashDir}/GeoIP.dat"
     '';
 
     systemd.services.clash = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = "exec ${clash-premium}/bin/clash-premium -d ${clashDir}";
+      script = "exec ${clash-meta}/bin/clash -d ${clashDir}";
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_NET_ADMIN";
         User = clashUser;
@@ -39,8 +39,8 @@ in
     };
 
     virtualisation.oci-containers.containers = {
-      clash-web = {
-        image = "docker.io/haishanh/yacd:latest";
+      yacd-meta = {
+        image = "docker.io/asnil/yacd-meta:latest";
         ports = [ "127.0.0.1:1234:80" ];
       };
     };

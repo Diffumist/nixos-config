@@ -10,7 +10,6 @@
     nix-top
     ripgrep
     man-pages
-    hyperfine
     libarchive
     nixpkgs-fmt
     yubikey-manager
@@ -20,27 +19,22 @@
     # jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland
+    jetbrains.pycharm-professional
+    jetbrains.webstorm
     # android-studio
     tdesktop
     spotify
-    qbittorrent-enhanced
+    # qbittorrent-enhanced
     wine
     winetricks
     steam
-    taxi
     obsidian
-    cawbird
     solaar
     meld
-    remmina
-    celluloid
     wemeet
     # Env
     nodejs
     python3
-    jdk
-    python3.pkgs.pygobject3
-    python3.pkgs.pyusb
     patchelf
     binutils
   ];
