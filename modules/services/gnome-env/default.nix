@@ -87,7 +87,7 @@ in
         fonts = with pkgs; [
           jetbrains-mono
           sarasa-gothic
-          noto-fonts-emoji
+          apple-emoji
           noto-fonts-cjk
           (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
         ];

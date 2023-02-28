@@ -55,16 +55,18 @@
     in
     inputs.utils.lib.eachSystem [ "x86_64-linux" ]
       (
-        system: rec {
+        system:
+        let
           pkgs = import nixpkgs {
             inherit overlays system;
             config.allowUnfree = true;
           };
+        in
+        {
           packages = this.packages pkgs;
-          legacyPackages = pkgs;
           devShells.default = with pkgs; mkShell {
             nativeBuildInputs = [
-              deploy-rs
+              colmena
               nvfetcher
               nixpkgs-fmt
             ];
@@ -72,6 +74,7 @@
         }
       ) // {
       overlays.default = this.overlay;
+      nixosModules.default = import ./modules;
       nixosConfigurations =
         let
           hosts = builtins.attrNames (builtins.readDir ./hosts);
@@ -83,22 +86,29 @@
                 inherit (inputs.nix-secrets) secrets;
               };
               modules = [{ nixpkgs = { inherit overlays; }; }]
-              ++ [ (import (./hosts + "/${hostname}")) ]
-              ++ import ./modules ++ [
-                inputs.impermanence.nixosModules.impermanence
-                inputs.home.nixosModules.home-manager
-                inputs.nur.nixosModules.nur
-              ];
+              ++ [ (import (./hosts + "/${hostname}")) ];
             };
         in
         nixpkgs.lib.genAttrs hosts mkSystem;
-      deploy.nodes = (builtins.mapAttrs
-        (name: machine: {
-          sshUser = "root";
-          sshOpts = [ "-o" "StrictHostKeyChecking=no" ];
-          hostname = machine.config.networking.fqdn;
-          profiles.system.path = inputs.deploy-rs.lib."${machine.pkgs.system}".activate.nixos machine;
-        })
-        (nixpkgs.lib.filterAttrs (n: v: n != "local") self.nixosConfigurations));
+      colmena = {
+        meta = {
+          specialArgs = {
+            inherit self inputs;
+            inherit (inputs.nix-secrets) secrets;
+          };
+          nixpkgs = import nixpkgs {
+            system = "x86_64-linux";
+            inherit overlays;
+            config.allowUnfree = true;
+          };
+        };
+        mist = { name, ... }: {
+          deployment = {
+            targetHost = "${name}.diffumist.me";
+            tags = [ "main" ];
+          };
+          imports = [ ./hosts/${name} ];
+        };
+      };
     };
 }

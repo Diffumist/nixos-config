@@ -1,8 +1,12 @@
-{ lib, pkgs, secrets, config, ... }:
+{ lib, pkgs, secrets, config, inputs, self, ... }:
 {
   imports = [
     ./boot.nix
     ./software.nix
+    inputs.impermanence.nixosModules.impermanence
+    inputs.home.nixosModules.home-manager
+    inputs.nur.nixosModules.nur
+    self.nixosModules.default
   ];
 
   # network

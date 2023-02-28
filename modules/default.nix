@@ -1,19 +1,19 @@
-[
-  # env
-  ./base
-  ./cloud
-  ./nix-config.nix
-
-  ./services/gnome-env
-  ./hardware
-
-  # networking
-  ./services/clash.nix
-  ./services/nginx/xray.nix
-  ./services/transmission.nix
-  # web services
-  ./services/nginx
-  ./services/nginx/vaultwarden.nix
-  ./services/nginx/acme.nix
-  ./services/nginx/fail2ban.nix
-]
+{ ... }: {
+  imports = [
+    # env
+    (import ./base)
+    (import ./cloud)
+    (import ./nix-config.nix)
+    (import ./services/gnome-env)
+    (import ./hardware)
+    # networking
+    (import ./services/clash.nix)
+    (import ./services/transmission.nix)
+    # web services
+    (import ./services/nginx)
+    (import ./services/nginx/vaultwarden.nix)
+    (import ./services/nginx/acme.nix)
+    (import ./services/nginx/fail2ban.nix)
+    (import ./services/nginx/xray.nix)
+  ];
+}
