@@ -19,8 +19,8 @@
     # jetbrains.idea-ultimate
     jetbrains.clion
     jetbrains.goland
-    jetbrains.pycharm-professional
-    jetbrains.webstorm
+    # jetbrains.pycharm-professional
+    # jetbrains.webstorm
     # android-studio
     tdesktop
     spotify

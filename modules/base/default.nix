@@ -16,6 +16,6 @@ in
 
   config = mkIf cfg.enable {
     networking.firewall.enable = true;
-    system.stateVersion = "20.09";
+    system.stateVersion = "21.11";
   };
 }
