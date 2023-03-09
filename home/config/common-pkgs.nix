@@ -25,6 +25,8 @@
     tdesktop
     spotify
     # qbittorrent-enhanced
+    yubikey-personalization-gui
+    yubioath-flutter
     wine
     winetricks
     steam

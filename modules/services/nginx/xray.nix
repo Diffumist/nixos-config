@@ -63,7 +63,7 @@ in
                 network = "ws";
                 security = "none";
                 wsSettings = {
-                  path = "/ray";
+                  path = "/r";
                 };
               };
             }
@@ -81,8 +81,8 @@ in
         };
       };
     };
-    services.nginx.virtualHosts."v2.diffumist.me" = {
-      useACMEHost = "v2.diffumist.me";
+    services.nginx.virtualHosts."v.diffumist.me" = {
+      useACMEHost = "v.diffumist.me";
       forceSSL = true;
       listen = [
         {
@@ -92,7 +92,7 @@ in
         }
       ];
       locations = {
-        "/ray" = {
+        "/r" = {
           proxyPass = "http://localhost:4432";
           proxyWebsockets = true;
         };

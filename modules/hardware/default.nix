@@ -9,7 +9,7 @@ in
     modules.hardware = {
       enable = mkEnableOption "base hardware for laptop";
       nvidiaEnable = mkEnableOption "hardware for nvidia";
-      canokeyEnable = mkEnableOption "hardware for canokey";
+      yubikeyEnable = mkEnableOption "hardware for Yubikey";
     };
   };
 
@@ -67,8 +67,8 @@ in
       };
       services.xserver.videoDrivers = [ "nvidia" ];
     })
-    (mkIf cfg.canokeyEnable {
-      # Canokey
+    (mkIf cfg.yubikeyEnable {
+      # Yubikey
       hardware.gpgSmartcards.enable = true;
       services.pcscd = {
         enable = true;
@@ -81,8 +81,10 @@ in
         control = "sufficient";
         cue = true;
       };
+      security.pam.services.login.u2fAuth = true;
+      security.pam.services.gdm.u2fAuth = true;
 
-      services.udev.packages = [ config.nur.repos.linyinfeng.canokey-udev-rules pkgs.yubikey-personalization pkgs.libu2f-host ];
+      services.udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ];
     })
   ]);
 }

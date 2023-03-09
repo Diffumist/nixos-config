@@ -37,7 +37,7 @@
     hardware = {
       enable = true;
       nvidiaEnable = true;
-      canokeyEnable = true;
+      yubikeyEnable = true;
     };
   };
 

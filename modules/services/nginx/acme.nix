@@ -27,11 +27,11 @@ in
             "diffumist.me"
           ];
         };
-        "v2.diffumist.me" = {
+        "v.diffumist.me" = {
           credentialsFile = pkgs.writeText "credentials" ''
             CLOUDFLARE_DNS_API_TOKEN=${secrets.cloudflare-token}
           '';
-          domain = "v2.diffumist.me";
+          domain = "v.diffumist.me";
           dnsProvider = "cloudflare";
         };
       };
