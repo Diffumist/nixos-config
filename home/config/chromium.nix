@@ -15,7 +15,7 @@
       "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
       "ponfpcnoihfmfllpaingbgckeeldkhle" # Enhancer for YouTube
       "jklfcpboamajpiikgkbjcnnnnooefbhh" # pakku for bilibili
-      "aapbdbdomjkkjkaonfhkkikfgjllcleb" # Google Translate
+      "ogjibjphoadhljaoicdnjnmgokohngcc" # Openai Translator
       "gcalenpjmijncebpfijmoaglllgpjagf" # Tampermonkey
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
       "pncfbmialoiaghdehhbnbhkkgmjanfhe" # uBlacklist

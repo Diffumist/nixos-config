@@ -80,7 +80,7 @@
           hosts = builtins.attrNames (builtins.readDir ./hosts);
           mkSystem = hostname:
             nixpkgs.lib.nixosSystem {
-              system = builtins.readFile (./hosts + "/${hostname}/system");
+              system = "x86_64-linux";
               specialArgs = {
                 inherit inputs self;
                 inherit (inputs.nix-secrets) secrets;
