@@ -20,11 +20,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "utils";
     };
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-compat.follows = "flake-compat";
-    };
     # other pkgs
     nur = {
       url = "github:nix-community/NUR";
@@ -64,6 +59,8 @@
         in
         {
           packages = this.packages pkgs;
+          formatter = pkgs.nixpkgs-fmt;
+          legacyPackages = pkgs;
           devShells.default = with pkgs; mkShell {
             nativeBuildInputs = [
               colmena

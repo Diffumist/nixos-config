@@ -6,7 +6,7 @@
     userEmail = "git@diffumist.me";
     signing = {
       signByDefault = true;
-      key = "5C8709FEE5EBAC01";
+      key = "8BA330B49A5694A6";
     };
     aliases = {
       br = "branch";
@@ -33,7 +33,7 @@
   programs.gpg = {
     enable = true;
     settings = {
-      default-key = "1361F9453CAA1B3A";
+      default-key = "3F3A6B9E784C7DB6";
     };
     scdaemonSettings = {
       disable-ccid = true;

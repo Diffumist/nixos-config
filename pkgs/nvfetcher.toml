@@ -4,7 +4,7 @@ src.branch = "release"
 fetch.github = "Loyalsoldier/geoip"
 git.branch = "release"
 [material-nvim]
-src.git = "https://github.com/marko-cerovac/material.nvim"
+src.github = "marko-cerovac/material.nvim"
 fetch.github = "marko-cerovac/material.nvim"
 [rime-pinyin-moegirl]
 src.manual = "20220114"
@@ -13,8 +13,10 @@ fetch.url = "https://github.com/outloudvi/mw2fcitx/releases/download/20230214/mo
 src.manual = "20220101"
 fetch.url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.2.4/zhwiki-20220416.dict.yaml"
 [ydcv-rs]
-src.git = "https://github.com/farseerfc/ydcv-rs"
+src.github_tag = "farseerfc/ydcv-rs"
 fetch.github = "farseerfc/ydcv-rs"
+use_latest_release = true
 [clash-meta]
-src.git = "https://github.com/MetaCubeX/Clash.Meta"
+src.github_tag = "MetaCubeX/Clash.Meta"
 fetch.github = "MetaCubeX/Clash.Meta"
+use_latest_release = true

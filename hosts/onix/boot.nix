@@ -31,14 +31,13 @@
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
-    timeout = 1;
   };
 
   boot.supportedFilesystems = [ "ntfs" ];
 
   fileSystems =
     let
-      espDev = "/dev/disk/by-label/ESP"; # EFI System Partition
+      espDev = "/dev/disk/by-label/ESP_EFI"; # EFI System Partition
       btrfsDev = "/dev/disk/by-label/NixOS";
 
       btrfs = options: {
@@ -56,7 +55,7 @@
       "/.subvols" = btrfs [ ];
       "/home" = btrfs [ "subvol=@home" ];
       "/nix" = btrfs [ "subvol=@nix" ];
-      "/var/swapfile" = btrfs [ "subvol=@swap" ];
+      "/var/swap" = btrfs [ "subvol=@swap" ];
       "/persist" = btrfs [ "subvol=@persist" ];
       "/boot" = {
         device = espDev;
@@ -66,7 +65,7 @@
   # swapfile
   swapDevices = [
     {
-      device = "/var/swapfile/swapfile";
+      device = "/var/swap/swapfile";
     }
   ];
 

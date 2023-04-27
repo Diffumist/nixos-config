@@ -12,28 +12,23 @@
     man-pages
     libarchive
     nixpkgs-fmt
-    yubikey-manager
-    prime-run
     frp
     # GUI
     # jetbrains.idea-ultimate
     jetbrains.clion
-    jetbrains.goland
-    # jetbrains.pycharm-professional
+    # jetbrains.goland
+    jetbrains.pycharm-professional
     # jetbrains.webstorm
     # android-studio
     tdesktop
     spotify
-    # qbittorrent-enhanced
-    yubikey-personalization-gui
-    yubioath-flutter
+    qbittorrent
     wine
     winetricks
     steam
     obsidian
     solaar
     meld
-    wemeet
     # Env
     nodejs
     python3
