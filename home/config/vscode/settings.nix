@@ -66,4 +66,7 @@
   "workbench.colorTheme" = "Gnome Dark (Atom One)";
   "google-translate.serverDomain" = "https://translate.google.com";
   "google-translate.switchFunctionTranslation" = true;
+  "extensions.autoCheckUpdates" = false;
+  "workbench.startupEditor" = "none";
+  "wakatime.apiKey" = "waka_fea6ba41-b033-430d-9d4e-6d513ab26d58";
 }

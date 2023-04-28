@@ -16,7 +16,7 @@ in
   config = mkIf cfg.enable {
     system.activationScripts.initClashScripts = ''
       mkdir -p "${clashDir}"
-      chown "${clashUser}" "${clashDir}"
+      chown -R "${clashUser}" "${clashDir}"
       ln -nfs "${maxmind-geoip}/Country.mmdb" "${clashDir}/Country.mmdb"
       ln -nfs "${maxmind-geoip}/geoip.dat" "${clashDir}/GeoIP.dat"
     '';

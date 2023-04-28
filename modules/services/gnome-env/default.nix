@@ -15,7 +15,7 @@ in
       environment.systemPackages = with pkgs; [
         gparted
         libreoffice
-        virt-manager
+        gnome.dconf-editor
         gnome.nautilus-python
         gnome.gnome-tweaks
         gnome.gnome-power-manager
@@ -23,7 +23,6 @@ in
         gnomeExtensions.gsconnect
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
-        gnomeExtensions.night-theme-switcher
         gnomeExtensions.blur-my-shell
         gnomeExtensions.color-picker
         orchis-theme

@@ -13,9 +13,12 @@
   };
 
   virtualisation = {
-    podman.enable = true;
-    oci-containers.backend = "podman";
-  };
+      podman = {
+        enable = true;
+        dockerCompat = true;
+      };
+      oci-containers.backend = "podman";
+    };
 
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;

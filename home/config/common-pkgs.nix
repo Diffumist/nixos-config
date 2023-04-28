@@ -25,7 +25,6 @@
     qbittorrent
     wine
     winetricks
-    steam
     obsidian
     solaar
     meld
