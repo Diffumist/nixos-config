@@ -29,7 +29,6 @@ in
         papirus-icon-theme
         capitaine-cursors
         shared-mime-info
-        nautilus-open-any-terminal
       ];
 
       environment.gnome.excludePackages = with pkgs.gnome; [

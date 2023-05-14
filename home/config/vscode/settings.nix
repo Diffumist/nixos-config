@@ -1,4 +1,4 @@
-{ config, ... }: {
+{ config, secrets, ... }: {
   "editor.renderWhitespace" = "all";
   "editor.renderControlCharacters" = true;
   "editor.fontFamily" = "'JetBrains Mono','JetBrainsMono Nerd Font'";
@@ -68,5 +68,5 @@
   "google-translate.switchFunctionTranslation" = true;
   "extensions.autoCheckUpdates" = false;
   "workbench.startupEditor" = "none";
-  "wakatime.apiKey" = "waka_fea6ba41-b033-430d-9d4e-6d513ab26d58";
+  "wakatime.apiKey" = secrets.wakapi;
 }

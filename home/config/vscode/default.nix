@@ -1,11 +1,11 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, secrets, ... }:
 
 {
   # Ref: https://github.com/oxalica/nixos-config
   programs.vscode = {
     enable = true;
     package = pkgs.vscode;
-    userSettings = import ./settings.nix { inherit config; };
+    userSettings = import ./settings.nix { inherit config secrets; };
 
     extensions = with pkgs.vscode-extensions; [
       matklad.rust-analyzer
