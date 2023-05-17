@@ -23,9 +23,6 @@ in
         gnomeExtensions.gsconnect
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
-        gnomeExtensions.blur-my-shell
-        gnomeExtensions.color-picker
-        orchis-theme
         papirus-icon-theme
         capitaine-cursors
         shared-mime-info

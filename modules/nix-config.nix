@@ -4,18 +4,27 @@
   documentation.doc.enable = false;
 
   nix = {
-    package = pkgs.nixVersions.stable;
-    settings.trusted-users = [ "root" "diffumist" ];
-
-    settings.substituters = lib.mkBefore [
-      "https://cache.nixos.org"
-      "https://ilya-fedin.cachix.org"
-      "https://diffumist.cachix.org"
-    ];
-    settings.trusted-public-keys = [
-      "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk="
-      "ilya-fedin.cachix.org-1:QveU24a5ePPMh82mAFSxLk1P+w97pRxqe9rh+MJqlag="
-    ];
+    settings = {
+      trusted-users = [ "root" "@wheel" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+        "auto-allocate-uids"
+        "cgroups"
+      ];
+      auto-allocate-uids = true;
+      use-cgroups = true;
+      substituters = lib.mkBefore [
+        "https://cache.nixos.org"
+        "https://ilya-fedin.cachix.org"
+        "https://diffumist.cachix.org"
+      ];
+      trusted-public-keys = [
+        "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk="
+        "ilya-fedin.cachix.org-1:QveU24a5ePPMh82mAFSxLk1P+w97pRxqe9rh+MJqlag="
+      ];
+      auto-optimise-store = true;
+    };
 
     gc = {
       automatic = true;
@@ -23,19 +32,18 @@
       options = "--delete-older-than 20d";
     };
 
-    settings.auto-optimise-store = true;
-
     extraOptions = ''
-      experimental-features = nix-command flakes
       flake-registry = /etc/nix/registry.json
-
-      keep-outputs = true
-      keep-derivations = true
-
       access-tokens = github.com=${secrets.github-token}
     '';
 
-    registry.p.flake = self;
+    registry = {
+      nixpkgs = {
+        from = { id = "nixpkgs"; type = "indirect"; };
+        flake = inputs.nixpkgs;
+      };
+      p.flake = self;
+    };
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
   };
 }
