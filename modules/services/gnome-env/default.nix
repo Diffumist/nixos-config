@@ -29,6 +29,7 @@ in
         papirus-icon-theme
         capitaine-cursors
         shared-mime-info
+        hicolor-icon-theme
       ];
 
       environment.gnome.excludePackages = with pkgs.gnome; [

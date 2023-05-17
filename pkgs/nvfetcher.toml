@@ -6,3 +6,6 @@ use_latest_release = true
 [clash-meta]
 src.aur = "clash-meta"
 fetch.url = "https://github.com/MetaCubeX/Clash.Meta/releases/download/v$ver/clash.meta-linux-amd64-v$ver.gz"
+[chatbox-bin]
+src.aur = "chatbox-bin"
+fetch.url = "https://github.com/Bin-Huang/chatbox/releases/download/v$ver/chatbox_$ver_amd64.deb"

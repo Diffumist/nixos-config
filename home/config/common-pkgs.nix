@@ -23,6 +23,7 @@
     tdesktop
     spotify
     qbittorrent
+    chatbox-bin
     wine
     winetricks
     obsidian
