@@ -1,4 +1,4 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, ... }:
 {
   # set implicitly installed packages to be low-priority.
   home.packages = with pkgs; map lib.lowPrio [
@@ -7,12 +7,12 @@
     dnsutils
     fd
     duf
-    nix-top
     ripgrep
     man-pages
     libarchive
     nixpkgs-fmt
-    frp
+    nixpkgs-review
+    systemd-run-app
     # GUI
     # jetbrains.idea-ultimate
     jetbrains.clion

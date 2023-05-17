@@ -6,12 +6,14 @@
     ./options.nix
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
-    self.nixosModules.default
+    self.nixosModules.services
+    self.nixosModules.server
   ];
 
   networking = {
     hostName = "mist";
     domain = "diffumist.me";
+    firewall.enable = true;
   };
 
   systemd.services.frps = {
@@ -29,23 +31,5 @@
     isSystemUser = true;
   };
 
-  nix = {
-    settings.substituters = lib.mkForce [
-      "https://cache.nixos.org"
-      "https://diffumist.cachix.org"
-    ];
-    settings.trusted-public-keys = [
-      "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk="
-    ];
-    gc = {
-      automatic = true;
-      dates = "Sun";
-      options = "--delete-older-than 20d";
-    };
-
-    settings.auto-optimise-store = true;
-
-    registry.p.flake = self;
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-  };
+  system.stateVersion = "21.11";
 }

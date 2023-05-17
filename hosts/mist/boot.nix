@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   boot.loader.grub.device = "/dev/vda";
   boot.initrd.kernelModules = [ "nvme" ];

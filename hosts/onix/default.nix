@@ -1,4 +1,4 @@
-{ lib, pkgs, secrets, config, inputs, self, ... }:
+{ lib, pkgs, secrets, inputs, self, ... }:
 {
   imports = [
     ./boot.nix
@@ -32,7 +32,6 @@
       enable = true;
       waylandEnable = false;
     };
-    clash.enable = true;
     hardware = {
       enable = true;
       nvidiaEnable = true;
@@ -55,4 +54,6 @@
     extraSpecialArgs = { inherit secrets; };
     users.diffumist = import ../../home;
   };
+
+  system.stateVersion = "21.11";
 }

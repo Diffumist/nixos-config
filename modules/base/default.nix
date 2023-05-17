@@ -1,21 +1,17 @@
-{ lib, config, pkgs, ... }:
-
-with lib;
-let
-  cfg = config.modules.base;
-in
+{ ... }:
 {
-  options = {
-    modules.base = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-      };
-    };
+  i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
+
+  networking.firewall.allowedTCPPorts = [ 22 ];
+  services.openssh = {
+    enable = true;
+    ports = [ 22 ];
+    settings.PasswordAuthentication = false;
   };
 
-  config = mkIf cfg.enable {
-    networking.firewall.enable = true;
-    system.stateVersion = "21.11";
-  };
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB5+ekQWrbKupUzdeLcawo2BxqmW8MDLpocNpUBVItle noname"
+  ];
+
+  powerManagement.cpuFreqGovernor = "ondemand";
 }

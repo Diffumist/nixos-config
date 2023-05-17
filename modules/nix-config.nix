@@ -1,4 +1,4 @@
-{ pkgs, inputs, self, lib, config, secrets, ... }: {
+{ inputs, self, lib, secrets, ... }: {
 
   nixpkgs.config.allowUnfree = true;
   documentation.doc.enable = false;

@@ -4,7 +4,7 @@
   # Ref: https://github.com/oxalica/nixos-config
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode;
+    package = pkgs.vscodium;
     userSettings = import ./settings.nix { inherit config secrets; };
 
     extensions = with pkgs.vscode-extensions; [
@@ -14,7 +14,6 @@
       eamodio.gitlens
       jnoortheen.nix-ide
       ms-ceintl.vscode-language-pack-zh-hans
-      piousdeer.adwaita-theme
     ] ++ import ./market-extensions.nix {
       inherit (pkgs.vscode-utils) extensionFromVscodeMarketplace;
     };

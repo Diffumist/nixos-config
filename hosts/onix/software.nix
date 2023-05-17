@@ -1,4 +1,4 @@
-{ pkgs, config, ... }: {
+{ ... }: {
 
   environment.sessionVariables = {
     WINIT_X11_SCALE_FACTOR = "1.5"; # Ref: https://github.com/alacritty/alacritty/issues/3792

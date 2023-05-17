@@ -1,5 +1,5 @@
-{ stdenvNoCC, source, lib, }:
-stdenvNoCC.mkDerivation rec {
+{ stdenvNoCC, source, }:
+stdenvNoCC.mkDerivation {
   inherit (source) pname version src;
   phases = [ "installPhase" ];
   installPhase = ''

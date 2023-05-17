@@ -72,7 +72,7 @@
         }
       ) // {
       overlays.default = this.overlay;
-      nixosModules.default = import ./modules;
+      nixosModules = import ./modules;
       nixosConfigurations =
         let
           hosts = builtins.attrNames (builtins.readDir ./hosts);

@@ -7,7 +7,7 @@ in
 {
   options = {
     modules.hardware = {
-      enable = mkEnableOption "base hardware for laptop";
+      enable = mkEnableOption "base hardware";
       nvidiaEnable = mkEnableOption "hardware for nvidia";
       yubikeyEnable = mkEnableOption "hardware for Yubikey";
     };

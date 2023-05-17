@@ -2,7 +2,7 @@
   "editor.renderWhitespace" = "all";
   "editor.renderControlCharacters" = true;
   "editor.fontFamily" = "'JetBrains Mono','JetBrainsMono Nerd Font'";
-  "editor.fontSize" = 18;
+  "editor.fontSize" = 16;
   "editor.fontLigatures" = true;
   "workbench.iconTheme" = "material-icon-theme";
   "git.autofetch" = true;
@@ -52,7 +52,6 @@
     "editor.tabSize" = 2;
   };
   "nix.enableLanguageServer" = true;
-  "window.titleBarStyle" = "custom";
   "update.showReleaseNotes" = false;
   "update.mode" = "none";
   "telemetry.telemetryLevel" = "off";
@@ -61,12 +60,13 @@
   "editor.inlineSuggest.enabled" = true;
   "files.autoGuessEncoding" = false;
   "ccls.cache.directory" = "${config.xdg.cacheHome}/ccls-cache";
-  "workbench.productIconTheme" = "adwaita";
-  "window.commandCenter" = true;
-  "workbench.colorTheme" = "Gnome Dark (Atom One)";
-  "google-translate.serverDomain" = "https://translate.google.com";
-  "google-translate.switchFunctionTranslation" = true;
   "extensions.autoCheckUpdates" = false;
   "workbench.startupEditor" = "none";
-  "wakatime.apiKey" = secrets.wakapi;
+  "workbench.colorTheme" = "Gnome Dark (Atom One)";
+  "nix.serverPath" = "nil";
+  "nix.serverSettings" = {
+    "nil" = {
+      "formatting" = { "command" = [ "nixpkgs-fmt" ]; };
+    };
+  };
 }
