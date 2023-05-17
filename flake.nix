@@ -63,6 +63,7 @@
           legacyPackages = pkgs;
           devShells.default = with pkgs; mkShell {
             nativeBuildInputs = [
+              cachix
               colmena
               nvfetcher
               nixpkgs-fmt

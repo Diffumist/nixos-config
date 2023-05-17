@@ -97,7 +97,7 @@ in
             monospace = [ "Jetbrains Mono" ];
             sansSerif = [ "Sarasa Gothic SC" ];
             serif = sansSerif;
-            emoji = [ "Noto Color Emoji" ];
+            emoji = [ "Apple Emoji" ];
           };
         };
       };
