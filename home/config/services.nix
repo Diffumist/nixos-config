@@ -14,8 +14,9 @@
     package = pkgs.spotifyd.override { withPulseAudio = true; withKeyring = true; withMpris = true; };
     settings = {
       global = {
-        username = secrets.spotify.username;
-        password = secrets.spotify.password;
+        inherit (secrets.spotify) username;
+        inherit (secrets.spotify) password;
+        backend = "pulseaudio";
         device_name = "onix";
       };
     };
