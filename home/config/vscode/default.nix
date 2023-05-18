@@ -15,6 +15,7 @@
       jnoortheen.nix-ide
       ms-pyright.pyright
       golang.go
+      bungcip.better-toml
       ms-ceintl.vscode-language-pack-zh-hans
     ] ++ import ./market-extensions.nix {
       inherit (pkgs.vscode-utils) extensionFromVscodeMarketplace;

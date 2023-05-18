@@ -546,11 +546,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1684391782,
-        "narHash": "sha256-NvW/vKDKmxcUa4kqqO38BssxsCLjmmhu0a1y6y3teDY=",
+        "lastModified": 1684425147,
+        "narHash": "sha256-Eo7rV7CCkRKZ/yUbWpsWV77rnzV6zoOFeoBvPgQr7oM=",
         "ref": "refs/heads/main",
-        "rev": "b65c4d6e85f1a65385c7d56e846311d6da544f37",
-        "revCount": 16,
+        "rev": "d47577f1523565aff12c553eb0d3889a459b302b",
+        "revCount": 17,
         "type": "git",
         "url": "file:///home/diffumist/Documents/Project/nix-secrets"
       },

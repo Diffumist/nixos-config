@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, secrets, ... }:
 {
   # User unit services
   services.gpg-agent = {
@@ -7,6 +7,18 @@
     enableSshSupport = true;
     defaultCacheTtl = 12 * 3600;
     maxCacheTtl = 24 * 3600;
+  };
+
+  services.spotifyd = {
+    enable = true;
+    package = pkgs.spotifyd.override { withPulseAudio = true; withKeyring = true; withMpris = true; };
+    settings = {
+      global = {
+        username = secrets.spotify.username;
+        password = secrets.spotify.password;
+        device_name = "onix";
+      };
+    };
   };
 
   systemd.user.services = {

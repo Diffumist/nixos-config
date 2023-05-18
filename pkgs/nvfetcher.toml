@@ -2,7 +2,6 @@
 src.git = "https://github.com/Loyalsoldier/geoip"
 src.branch = "release"
 fetch.github = "Loyalsoldier/geoip"
-use_latest_release = true
 [clash-meta]
 src.aur = "clash-meta"
 fetch.url = "https://github.com/MetaCubeX/Clash.Meta/releases/download/v$ver/clash.meta-linux-amd64-v$ver.gz"

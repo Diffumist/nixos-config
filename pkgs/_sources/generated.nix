@@ -19,14 +19,14 @@
   };
   maxmind-geoip = {
     pname = "maxmind-geoip";
-    version = "34b4cd5952e9326578746744ec8f1bd9255ba600";
-    src = fetchFromGitHub ({
+    version = "b42f3aaef30150decd9546e02451515975340415";
+    src = fetchFromGitHub {
       owner = "Loyalsoldier";
       repo = "geoip";
-      rev = "34b4cd5952e9326578746744ec8f1bd9255ba600";
+      rev = "b42f3aaef30150decd9546e02451515975340415";
       fetchSubmodules = false;
-      sha256 = "sha256-Z1+StT0hRKOV24zX7miefeIK4AXnrnGvX1AhpxN4syw=";
-    });
-    date = "2023-05-11";
+      sha256 = "sha256-z6ma1g8Ze3UeykWAft+l4QvHjzJ/QLq7m4CIsAM6wvU=";
+    };
+    date = "2023-05-18";
   };
 }

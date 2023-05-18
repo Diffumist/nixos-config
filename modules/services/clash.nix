@@ -5,7 +5,7 @@ let
   inherit (pkgs) maxmind-geoip clash-meta;
 in
 {
-  system.activationScripts.initClashScripts = ''
+  system.activationScripts.initClashSscripts = ''
     mkdir -p "${clashDir}"
     chown -R "${clashUser}" "${clashDir}"
     ln -nfs "${maxmind-geoip}/Country.mmdb" "${clashDir}/Country.mmdb"
