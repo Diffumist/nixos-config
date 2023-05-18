@@ -1,4 +1,4 @@
-{ lib, pkgs, config, secrets, ... }:
+{ pkgs, config, secrets, ... }:
 
 {
   # Ref: https://github.com/oxalica/nixos-config
@@ -13,6 +13,8 @@
       pkief.material-icon-theme
       eamodio.gitlens
       jnoortheen.nix-ide
+      ms-pyright.pyright
+      golang.go
       ms-ceintl.vscode-language-pack-zh-hans
     ] ++ import ./market-extensions.nix {
       inherit (pkgs.vscode-utils) extensionFromVscodeMarketplace;

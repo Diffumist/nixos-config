@@ -13,6 +13,7 @@
     nixpkgs-fmt
     nixpkgs-review
     systemd-run-app
+    wgcf
     # GUI
     # jetbrains.idea-ultimate
     jetbrains.clion

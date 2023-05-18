@@ -10,9 +10,7 @@ vim.opt.smarttab = true
 vim.opt.timeoutlen = 500
 vim.opt.scrolloff = 5
 
-vim.g.everforest_background = 'soft'
-
-vim.cmd.colorscheme('everforest')
+vim.cmd.colorscheme('tender')
 
 require('nvim-treesitter.configs').setup {
   highlight = {
@@ -48,7 +46,7 @@ local on_attach = function(client, bufnr)
 end
 
 capabilities = require('cmp_nvim_lsp').default_capabilities()
-local servers = { 'gopls', 'rust_analyzer', 'nil_ls', 'clangd', 'texlab', 'pyright' }
+local servers = { 'gopls', 'rust_analyzer', 'nil_ls', 'jsonls', 'bashls', 'clangd', 'pyright' }
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup {
     on_attach = on_attach,
@@ -60,24 +58,6 @@ for _, lsp in pairs(servers) do
       ['nil'] = {
         formatting = {
           command = { 'nixpkgs-fmt' }
-        }
-      },
-      texlab = {
-        build = {
-          executable = 'tectonic',
-          args = { '-X', 'compile', '%f', '--synctex', '--keep-logs', '--keep-intermediates' },
-          forwardSearchAfter = true
-        },
-        forwardSearch = {
-          executable = 'sioyek',
-          args = {
-            '--reuse-instance',
-            '--forward-search-file',
-            '%f',
-            '--forward-search-line',
-            '%l',
-            '%p'
-          }
         }
       }
     }

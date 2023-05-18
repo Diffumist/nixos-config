@@ -10,7 +10,7 @@
       nvim-lspconfig
       nvim-cmp
       cmp-nvim-lsp
-      everforest
+      tender-vim
       luasnip
       vim-lastplace
       editorconfig-nvim
@@ -23,7 +23,8 @@
   # LSP
   home.packages = with pkgs; [
     gopls
-    texlab
+    nodePackages.bash-language-server
+    nodePackages.vscode-json-languageserver
     nil
     pyright
   ];

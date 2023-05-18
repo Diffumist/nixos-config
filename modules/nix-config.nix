@@ -18,10 +18,12 @@
         "https://cache.nixos.org"
         "https://ilya-fedin.cachix.org"
         "https://diffumist.cachix.org"
+        "https://berberman.cachix.org"
       ];
       trusted-public-keys = [
         "diffumist.cachix.org-1:MtOScqYJitYQ6A8Py53l1/hzM1t18TWkkfVwi/kqlHk="
         "ilya-fedin.cachix.org-1:QveU24a5ePPMh82mAFSxLk1P+w97pRxqe9rh+MJqlag="
+        "berberman.cachix.org-1:UHGhodNXVruGzWrwJ12B1grPK/6Qnrx2c3TjKueQPds="
       ];
       auto-optimise-store = true;
     };
