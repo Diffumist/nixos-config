@@ -65,6 +65,11 @@ in
         nvidiaSettings = false;
         nvidiaPersistenced = true;
       };
+      environment.systemPackages = with pkgs; [
+        pciutils
+        cudatoolkit
+      ];
+      hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
       services.xserver.videoDrivers = [ "nvidia" ];
     })
     (mkIf cfg.yubikeyEnable {

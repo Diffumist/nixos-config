@@ -22,7 +22,7 @@
     # jetbrains.webstorm
     # android-studio
     tdesktop
-    spotify
+    spotify-tui
     qbittorrent
     chatbox-bin
     wine
@@ -31,8 +31,6 @@
     solaar
     meld
     # Env
-    nodejs
-    python3
     patchelf
     binutils
   ];
