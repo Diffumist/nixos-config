@@ -1,6 +1,9 @@
 { inputs, self, lib, secrets, ... }: {
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "openssl-1.1.1t"
+  ];
   documentation.doc.enable = false;
 
   nix = {

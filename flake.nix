@@ -5,8 +5,12 @@
     # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # utils
-    utils.url = "github:numtide/flake-utils";
+    flake-utils.url = "github:numtide/flake-utils";
     impermanence.url = "github:nix-community/impermanence";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
@@ -18,7 +22,11 @@
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "utils";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # other pkgs
     nur = {
@@ -28,14 +36,9 @@
       url = "github:berberman/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nickpkgs = {
-      url = "github:NickCao/flakes";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # secrets
     nix-secrets = {
       url = "/home/diffumist/Documents/Project/nix-secrets";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   outputs = { self, nixpkgs, ... } @inputs:
@@ -43,12 +46,11 @@
       this = import ./pkgs;
       overlays = [
         self.overlays.default
-        inputs.nickpkgs.overlays.default
         inputs.berberman.overlays.default
         inputs.rust-overlay.overlays.default
       ];
     in
-    inputs.utils.lib.eachSystem [ "x86_64-linux" ]
+    inputs.flake-utils.lib.eachSystem [ "x86_64-linux" ]
       (
         system:
         let
@@ -59,7 +61,6 @@
         in
         {
           packages = this.packages pkgs;
-          formatter = pkgs.nixpkgs-fmt;
           legacyPackages = pkgs;
           devShells.default = with pkgs; mkShell {
             nativeBuildInputs = [
@@ -102,8 +103,8 @@
         };
         mist = { name, ... }: {
           deployment = {
-            targetHost = "${name}.diffumist.me";
-            tags = [ "main" ];
+            targetHost = "108.166.217.159";
+            targetPort = 2222;
           };
           imports = [ ./hosts/${name} ];
         };

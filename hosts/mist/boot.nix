@@ -29,10 +29,8 @@
         options = [ "defaults" "mode=755" ];
       };
       "/.subvols" = btrfs [ ];
-      "/boot" = btrfs [ "subvol=boot" ];
-      "/nix" = btrfs [ "subvol=nix" ];
-      "/persist" = btrfs [ "subvol=persist" ];
-      "/var/swapfile" = btrfs [ "subvol=swap" ];
+      "/nix" = btrfs [ "subvol=@nix" ];
+      "/persist" = btrfs [ "subvol=@persist" ];
     };
 
   environment.persistence."/persist" = {
@@ -49,9 +47,8 @@
   # swapfile
   swapDevices = [
     {
-      device = "/var/swapfile/swapfile";
+      device = "/dev/disk/by-label/swap";
     }
   ];
 
-  powerManagement.cpuFreqGovernor = "ondemand";
 }

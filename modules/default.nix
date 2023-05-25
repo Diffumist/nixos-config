@@ -12,7 +12,7 @@
     });
   server =
     ({ ... }: {
-      import = [
+      imports = [
         # env
         (import ./base/default.nix)
         (import ./nix-config.nix)
@@ -20,7 +20,7 @@
     });
   services =
     ({ ... }: {
-      import = [
+      imports = [
         # networking
         (import ./services/transmission.nix)
         # web services

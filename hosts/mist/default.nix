@@ -1,4 +1,4 @@
-{ modulesPath, pkgs, config, secrets, inputs, self, ... }:
+{ modulesPath, pkgs, config, secrets, lib, inputs, self, ... }:
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -6,6 +6,7 @@
     ./options.nix
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
+    inputs.sops-nix.nixosModules.sops
     self.nixosModules.services
     self.nixosModules.server
   ];
@@ -13,8 +14,11 @@
   networking = {
     hostName = "mist";
     domain = "diffumist.me";
+    useDHCP = lib.mkDefault true;
     firewall.enable = true;
   };
+
+  time.timeZone = "Asia/Shanghai";
 
   systemd.services.frps = {
     after = [ "network.target" ];

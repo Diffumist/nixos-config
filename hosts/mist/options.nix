@@ -1,10 +1,9 @@
 _: {
   modules = {
-    cloud.enable = true;
-    vaultwarden.enable = true;
+    vaultwarden.enable = false;
     nginx.enable = true;
     fail2ban.enable = true;
     acme.enable = true;
-    xray.enable = false;
+    xray.enable = true;
   };
 }

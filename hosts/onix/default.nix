@@ -6,6 +6,7 @@
     inputs.impermanence.nixosModules.impermanence
     inputs.home.nixosModules.home-manager
     inputs.nur.nixosModules.nur
+    inputs.sops-nix.nixosModules.sops
     self.nixosModules.default
   ];
 

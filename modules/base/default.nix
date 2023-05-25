@@ -2,10 +2,10 @@
 {
   i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
 
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [ 2222 ];
   services.openssh = {
     enable = true;
-    ports = [ 22 ];
+    ports = [ 2222 ];
     settings.PasswordAuthentication = false;
   };
 
