@@ -14,7 +14,7 @@ in
     ({
       environment.systemPackages = with pkgs; [
         gparted
-        libreoffice
+        onlyoffice-bin
         gnome.dconf-editor
         gnome.nautilus-python
         gnome.gnome-tweaks

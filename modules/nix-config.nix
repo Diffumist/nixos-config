@@ -1,4 +1,4 @@
-{ inputs, self, lib, secrets, ... }: {
+{ inputs, self, lib, secrets, pkgs, ... }: {
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
@@ -7,6 +7,7 @@
   documentation.doc.enable = false;
 
   nix = {
+    package = pkgs.nixVersions.stable;
     settings = {
       trusted-users = [ "root" "@wheel" ];
       experimental-features = [
