@@ -82,7 +82,7 @@ in
       };
     };
     services.nginx.virtualHosts."v.diffumist.me" = {
-      useACMEHost = "v.diffumist.me";
+      useACMEHost = "diffumist.me";
       forceSSL = true;
       listen = [
         {
@@ -95,6 +95,12 @@ in
         "/r" = {
           proxyPass = "http://localhost:4432";
           proxyWebsockets = true;
+        };
+        "/robots.txt" = {
+          extraConfig = ''
+            rewrite ^/(.*)  $1;
+            return 200 "User-agent: *\nDisallow: /";
+          '';
         };
       };
     };

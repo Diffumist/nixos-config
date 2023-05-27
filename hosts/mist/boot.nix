@@ -29,6 +29,7 @@
         options = [ "defaults" "mode=755" ];
       };
       "/.subvols" = btrfs [ ];
+      "/boot" = btrfs [ "subvol=@boot" ];
       "/nix" = btrfs [ "subvol=@nix" ];
       "/persist" = btrfs [ "subvol=@persist" ];
     };

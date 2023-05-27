@@ -8,6 +8,10 @@ in
 {
   options.modules.acme = {
     enable = mkEnableOption "acme";
+    domain = mkOption {
+      type = types.str;
+      default = config.networking.domain;
+    };
   };
 
   config = mkIf cfg.enable {
@@ -17,24 +21,17 @@ in
       # production = false;
       acceptTerms = true;
       certs = {
-        "diffumist.me" = {
-          credentialsFile = pkgs.writeText "credentials" ''
+        "${cfg.domain}" = {
+          credentialsFile = "${pkgs.writeText "credentials" ''
             CLOUDFLARE_DNS_API_TOKEN=${secrets.cloudflare-token}
-          '';
-          domain = "*.diffumist.me";
+          ''}";
           dnsProvider = "cloudflare";
           extraDomainNames = [
-            "diffumist.me"
+            "*.${cfg.domain}"
           ];
-        };
-        "v.diffumist.me" = {
-          credentialsFile = pkgs.writeText "credentials" ''
-            CLOUDFLARE_DNS_API_TOKEN=${secrets.cloudflare-token}
-          '';
-          domain = "v.diffumist.me";
-          dnsProvider = "cloudflare";
         };
       };
     };
+    
   };
 }

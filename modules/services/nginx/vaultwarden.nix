@@ -18,35 +18,34 @@ in
     services.postgresql = {
       enable = true;
       package = pkgs.postgresql_14;
-      ensureDatabases = [ "bitwarden" ];
-      ensureUsers = [{ name = "vaultwarden"; ensurePermissions."DATABASE bitwarden" = "ALL PRIVILEGES"; }];
-
-      initialScript = pkgs.writeText "postgresql-init.sql" ''
-        CREATE DATABASE bitwarden;
-        CREATE USER vaultwarden WITH PASSWORD '${dbPassword}';
-        GRANT ALL PRIVILEGES ON DATABASE bitwarden TO vaultwarden;
-      '';
+      settings = {
+        max_connections = "300";
+        shared_buffers = "80MB";
+      };
     };
 
     services.vaultwarden = {
       enable = true;
       dbBackend = "postgresql";
       config = {
-        signupsAllowed = false;
-        webVaultEnabled = true;
-        websocketEnabled = true;
-        rocketPort = 3011;
         domain = "https://vault.diffumist.me";
-        databaseUrl = "postgresql://vaultwarden:${dbPassword}@localhost/bitwarden";
-        logFile = "/var/log/bitwarden_rs.log";
+        signupsAllowed = true;
+        rocketPort = 3011;
+        databaseUrl = "postgresql://vaultwarden@%2Frun%2Fpostgresql/vaultwarden";
+        enableDbWal = "false";
+        websocketEnabled = true;
+        logFile = "/var/log/vaultwarden.log";
         showPasswordHint = false;
       };
     };
 
-    systemd.services.vaultwarden.after = [ "postgresql.service" ];
+    systemd.services.vaultwarden = {
+      requires = [ "postgresql.service" ];
+      after = [ "postgresql.service" ];
+    };
     services.postgresqlBackup = {
       enable = true;
-      databases = [ "bitwarden" ];
+      databases = [ "vaultwarden" ];
     };
 
     services.nginx.virtualHosts."vault.diffumist.me" = {
@@ -71,6 +70,12 @@ in
         "/notifications/hub/negotiate" = {
           proxyPass = "http://localhost:3011";
           proxyWebsockets = true;
+        };
+        "/robots.txt" = {
+          extraConfig = ''
+            rewrite ^/(.*)  $1;
+            return 200 "User-agent: *\nDisallow: /";
+          '';
         };
       };
     };

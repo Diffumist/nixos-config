@@ -4,6 +4,7 @@
   inputs = {
     # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    stable.url = "github:nixos/nixpkgs/release-23.05";
     # utils
     flake-utils.url = "github:numtide/flake-utils";
     impermanence.url = "github:nix-community/impermanence";
@@ -41,7 +42,7 @@
       url = "/home/diffumist/Documents/Project/nix-secrets";
     };
   };
-  outputs = { self, nixpkgs, ... } @inputs:
+  outputs = { self, nixpkgs, stable, ... } @inputs:
     let
       this = import ./pkgs;
       overlays = [
@@ -95,7 +96,7 @@
             inherit self inputs;
             inherit (inputs.nix-secrets) secrets;
           };
-          nixpkgs = import nixpkgs {
+          nixpkgs = import stable {
             system = "x86_64-linux";
             inherit overlays;
             config.allowUnfree = true;

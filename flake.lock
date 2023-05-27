@@ -144,10 +144,7 @@
     "nix-secrets": {
       "locked": {
         "lastModified": 1685027095,
-        "narHash": "sha256-FP3vWIJqPYee4b/crPrRHI1wyVuCPISlztls4I+oEgA=",
-        "ref": "refs/heads/main",
-        "rev": "7d97d350b33d8a9115d0d6a5cb1bb595529b56f9",
-        "revCount": 18,
+        "narHash": "sha256-OCfikXiNhQqg2liwFPKr2EqPho4hHk+NoYgM27IAKDc=",
         "type": "git",
         "url": "file:///home/diffumist/Documents/Project/nix-secrets"
       },
@@ -238,7 +235,8 @@
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "rust-overlay": "rust-overlay",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "stable": "stable"
       }
     },
     "rust-overlay": {
@@ -282,6 +280,22 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "stable": {
+      "locked": {
+        "lastModified": 1685108612,
+        "narHash": "sha256-umqsjNRzzTu/AE8OEVv2pQRMqtle6Ll47FQJ1BYz4sY=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "0514bdfa1ba591af75ba9481aaa99d13b4aec30e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "release-23.05",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
