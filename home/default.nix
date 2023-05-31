@@ -18,6 +18,15 @@ _:
 
   fonts.fontconfig.enable = true;
 
+  sops = {
+    defaultSopsFile = ../secrets/onix.yaml;
+    age = {
+      keyFile = "/var/lib/sops.key";
+      sshKeyPaths = [ ];
+    };
+    gnupg.sshKeyPaths = [ ];
+  };
+
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards

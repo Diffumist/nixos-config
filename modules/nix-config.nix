@@ -7,7 +7,7 @@
   documentation.doc.enable = false;
 
   nix = {
-    package = pkgs.nixVersions.stable;
+    package = pkgs.nixVersions.unstable;
     settings = {
       trusted-users = [ "root" "@wheel" ];
       experimental-features = [
@@ -18,6 +18,8 @@
       ];
       auto-allocate-uids = true;
       use-cgroups = true;
+      use-xdg-base-directories = true;
+      builders-use-substitutes = true;
       substituters = lib.mkBefore [
         "https://cache.nixos.org"
         "https://ilya-fedin.cachix.org"

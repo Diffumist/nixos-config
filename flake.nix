@@ -28,6 +28,7 @@
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-stable.follows= "";
     };
     # other pkgs
     nur = {
@@ -65,6 +66,8 @@
           legacyPackages = pkgs;
           devShells.default = with pkgs; mkShell {
             nativeBuildInputs = [
+              sops
+              age
               cachix
               colmena
               nvfetcher

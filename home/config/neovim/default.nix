@@ -4,6 +4,7 @@
     enable = true;
     vimAlias = true;
     vimdiffAlias = true;
+    defaultEditor = true;
     plugins = with pkgs.vimPlugins; [
       (nvim-treesitter.withPlugins (plugins: pkgs.tree-sitter.allGrammars))
       # tweak

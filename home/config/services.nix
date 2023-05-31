@@ -1,5 +1,9 @@
-{ pkgs, config, secrets, ... }:
+{ pkgs, config, ... }:
 {
+  sops.secrets = {
+    "spotify/user" = { };
+    "spotify/passwd" = { };
+  };
   # User unit services
   services.gpg-agent = {
     enable = true;
@@ -14,13 +18,16 @@
     package = pkgs.spotifyd.override { withPulseAudio = true; withKeyring = true; withMpris = true; };
     settings = {
       global = {
-        inherit (secrets.spotify) username;
-        inherit (secrets.spotify) password;
+        username = config.sops.secrets."spotify/user";
+        password = config.sops.secrets."spotify/passwd";
         backend = "pulseaudio";
         device_name = "onix";
       };
     };
   };
+
+  systemd.user.services.spotifyd.Unit.After = [ "sops-nix.service" ];
+
 
   systemd.user.services = {
     mpris-proxy = {

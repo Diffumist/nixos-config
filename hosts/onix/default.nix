@@ -10,6 +10,16 @@
     self.nixosModules.default
   ];
 
+  sops = {
+    defaultSopsFile = ../../secrets/onix.yaml;
+    secrets = { };
+    age = {
+      keyFile = "/var/lib/sops.key";
+      sshKeyPaths = [ ];
+    };
+    gnupg.sshKeyPaths = [ ];
+  };
+
   # network
   networking = {
     hostName = "onix";
@@ -54,6 +64,9 @@
     useUserPackages = true;
     extraSpecialArgs = { inherit secrets; };
     users.diffumist = import ../../home;
+    sharedModules = [
+      inputs.sops-nix.homeManagerModules.sops
+    ];
   };
 
   system.stateVersion = "21.11";
