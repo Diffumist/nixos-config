@@ -28,5 +28,6 @@
     nodePackages.vscode-json-languageserver
     nil
     pyright
+    typst-lsp
   ];
 }

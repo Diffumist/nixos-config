@@ -13,6 +13,8 @@
     nixpkgs-fmt
     nixpkgs-review
     wgcf
+    typst
+    typst-fmt
     # GUI
     # jetbrains.idea-ultimate
     jetbrains.clion
@@ -23,7 +25,7 @@
     chatbox-bin
     wine
     winetricks
-    obsidian
+    logseq
     solaar
     meld
     # Env

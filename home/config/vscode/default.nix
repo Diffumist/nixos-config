@@ -17,6 +17,7 @@
       golang.go
       bungcip.better-toml
       ms-ceintl.vscode-language-pack-zh-hans
+      nvarner.typst-lsp
     ] ++ import ./market-extensions.nix {
       inherit (pkgs.vscode-utils) extensionFromVscodeMarketplace;
     };
