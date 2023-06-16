@@ -16,7 +16,7 @@
     # GUI
     # jetbrains.idea-ultimate
     jetbrains.clion
-    # jetbrains.goland
+    jetbrains.goland
     tdesktop
     spotify-tui
     qbittorrent
