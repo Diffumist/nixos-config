@@ -3,30 +3,30 @@
 {
   chatbox-bin = {
     pname = "chatbox-bin";
-    version = "0.4.4";
+    version = "0.5.0";
     src = fetchurl {
-      url = "https://github.com/Bin-Huang/chatbox/releases/download/v0.4.4/chatbox_0.4.4_amd64.deb";
-      sha256 = "sha256-IDwUIRID0tcWXwWxUgFibXWtMlv/12RFXq2ro6KryFs=";
+      url = "https://github.com/Bin-Huang/chatbox/releases/download/v0.5.0/chatbox_0.5.0_amd64.deb";
+      sha256 = "sha256-JozZDJAD60zdr5pXf0x3rTPuQKLjxjYRTuaNUGVDwuo=";
     };
   };
   clash-meta = {
     pname = "clash-meta";
-    version = "1.14.4";
+    version = "1.14.5";
     src = fetchurl {
-      url = "https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.14.4/clash.meta-linux-amd64-v1.14.4.gz";
-      sha256 = "sha256-Kvt6Uhgp4uXPDWapc8XWU+f1Ly8vSGM1HQd9bDdV2ng=";
+      url = "https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.14.5/clash.meta-linux-amd64-v1.14.5.gz";
+      sha256 = "sha256-0g27XRaP/hC3eO1+OKyab+RjezqYwx4OPrhj2ZzoDhQ=";
     };
   };
   maxmind-geoip = {
     pname = "maxmind-geoip";
-    version = "b42f3aaef30150decd9546e02451515975340415";
+    version = "f63dc726c58820434e48fa0091d5772ad70c6df3";
     src = fetchFromGitHub {
       owner = "Loyalsoldier";
       repo = "geoip";
-      rev = "b42f3aaef30150decd9546e02451515975340415";
+      rev = "f63dc726c58820434e48fa0091d5772ad70c6df3";
       fetchSubmodules = false;
-      sha256 = "sha256-z6ma1g8Ze3UeykWAft+l4QvHjzJ/QLq7m4CIsAM6wvU=";
+      sha256 = "sha256-ntmB+SyCU5BB+jYOiiHKNzTAf8GJKVGwDQVIw3pO/pE=";
     };
-    date = "2023-05-18";
+    date = "2023-06-15";
   };
 }
