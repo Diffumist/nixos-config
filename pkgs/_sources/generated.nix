@@ -3,10 +3,10 @@
 {
   chatbox-bin = {
     pname = "chatbox-bin";
-    version = "0.5.0";
+    version = "0.5.2";
     src = fetchurl {
-      url = "https://github.com/Bin-Huang/chatbox/releases/download/v0.5.0/chatbox_0.5.0_amd64.deb";
-      sha256 = "sha256-JozZDJAD60zdr5pXf0x3rTPuQKLjxjYRTuaNUGVDwuo=";
+      url = "https://github.com/Bin-Huang/chatbox/releases/download/v0.5.2/chatbox_0.5.2_amd64.deb";
+      sha256 = "sha256-YpCZp9VIEDiXeYsW5wEpuIDDNHu+Ztgd5FfOzlxQuBE=";
     };
   };
   clash-meta = {
