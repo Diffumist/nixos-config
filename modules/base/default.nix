@@ -1,11 +1,11 @@
-{ ... }:
+{ lib, ... }:
 {
   i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
 
   networking.firewall.allowedTCPPorts = [ 2222 ];
   services.openssh = {
     enable = true;
-    ports = [ 2222 ];
+    ports = lib.mkDefault [ 2222 ];
     settings.PasswordAuthentication = false;
   };
 
@@ -13,5 +13,5 @@
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB5+ekQWrbKupUzdeLcawo2BxqmW8MDLpocNpUBVItle noname"
   ];
 
-  powerManagement.cpuFreqGovernor = "ondemand";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 }

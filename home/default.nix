@@ -9,6 +9,7 @@ _:
     ./config/chromium.nix
     ./config/video.nix
     ./config/services.nix
+    ./config/shell/alacritty.nix
     ./config/xdg
     ./config/neovim
     ./config/vscode

@@ -1,6 +1,6 @@
 { config, ... }: {
   modules = {
-    vaultwarden.enable = false;
+    vaultwarden.enable = true;
     nginx.enable = true;
     fail2ban.enable = true;
     acme = {

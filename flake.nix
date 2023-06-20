@@ -20,6 +20,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-stable = {
+      url = "github:nix-community/home-manager/release-23.05";
+      inputs.nixpkgs.follows = "stable";
+    };
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -108,6 +112,13 @@
         mist = { name, ... }: {
           deployment = {
             targetHost = "108.166.217.159";
+            targetPort = 2222;
+          };
+          imports = [ ./hosts/${name} ];
+        };
+        nixlab = { name, ... }: {
+          deployment = {
+            targetHost = "192.168.0.103";
             targetPort = 2222;
           };
           imports = [ ./hosts/${name} ];

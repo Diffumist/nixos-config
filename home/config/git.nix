@@ -20,7 +20,6 @@
       st = "status";
       sub = "submodule";
     };
-    extraConfig.merge.tool = "meld";
   };
 
   programs.ssh = {

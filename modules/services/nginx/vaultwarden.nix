@@ -1,9 +1,8 @@
-{ config, lib, pkgs, secrets, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 let
   cfg = config.modules.vaultwarden;
-  dbPassword = secrets.vaultwarden.password;
 in
 {
   options.modules.vaultwarden = {
@@ -29,12 +28,11 @@ in
       dbBackend = "postgresql";
       config = {
         domain = "https://vault.diffumist.me";
-        signupsAllowed = true;
+        signupsAllowed = false;
         rocketPort = 3011;
         databaseUrl = "postgresql://vaultwarden@%2Frun%2Fpostgresql/vaultwarden";
         enableDbWal = "false";
         websocketEnabled = true;
-        logFile = "/var/log/vaultwarden.log";
         showPasswordHint = false;
       };
     };

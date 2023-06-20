@@ -56,9 +56,5 @@
         style = "plain";
       };
     };
-    alacritty = {
-      enable = true;
-      settings = import ./alacritty.nix;
-    };
   };
 }
