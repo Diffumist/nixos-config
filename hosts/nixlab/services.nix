@@ -10,7 +10,6 @@ _: {
         "Music"
         "Videos"
         "Pictures"
-        "Documents"
         "Other"
       ];
     };

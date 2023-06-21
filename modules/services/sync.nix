@@ -14,7 +14,7 @@ in
     };
     folder = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
     };
   };
   config = mkIf cfg.enable {
@@ -44,6 +44,7 @@ in
       let
         sync = options: {
           path = "/home/${user}/${options}";
+          devices = [ "nixlab" "onix" ];
           versioning = {
             type = "trashcan";
             params.cleanoutDays = "180";
@@ -54,6 +55,14 @@ in
         enable = true;
         openDefaultPorts = true;
         user = "${user}";
+        devices = {
+          "nixlab" = {
+            id = "YWDZUCK-STLKVTN-XMJTVTH-GF4XN7E-V4ZORWA-5P3LBOD-3W5Z6HD-U2SSJQ5";
+          };
+          "onix" = {
+            id = "SYLPCVN-O2F4TZ6-RJCHN3E-XB7UGWA-Z4RQ5CM-KD3LIXP-EGXKKK6-T6GNUQS";
+          };
+        };
         dataDir = "/home/${user}/.local/share/syncthing";
         configDir = "/home/${user}/.config/syncthing";
         guiAddress = "0.0.0.0:8384";

@@ -77,10 +77,9 @@ in
     theme = { name = "Adwaita-dark"; };
     gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
     gtk3.bookmarks = [
+      "file:///home/diffumist/Videos"
+      "file:///home/diffumist/Other"
       "file:///home/diffumist/Documents/Project"
-      "file:///home/diffumist/Documents/School"
-      "file:///home/diffumist/Documents/Book"
-      "file:///home/diffumist/Documents/Note"
     ];
   };
   qt = {

@@ -28,6 +28,14 @@
 
   systemd.user.services.spotifyd.Unit.After = [ "sops-nix.service" ];
 
+  services.syncthing = {
+    enable = true;
+    tray.enable = true;
+    extraOptions = [
+      "--config=/home/diffumist/.config/syncthing"
+      "--data=/home/diffumist/.local/share/syncthing"
+    ];
+  };
 
   systemd.user.services = {
     mpris-proxy = {
