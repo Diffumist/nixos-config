@@ -2,7 +2,6 @@
 {
   imports = [
     ./boot.nix
-    ./software.nix
     inputs.impermanence.nixosModules.impermanence
     inputs.home.nixosModules.home-manager
     inputs.nur.nixosModules.nur
@@ -49,6 +48,9 @@
       yubikeyEnable = true;
     };
   };
+
+  programs.adb.enable = true;
+  users.groups."adbusers".members = [ "diffumist" ];
 
   users.users."diffumist" = {
     isNormalUser = true;

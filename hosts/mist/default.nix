@@ -14,8 +14,6 @@
   networking = {
     hostName = "mist";
     domain = "diffumist.me";
-    useDHCP = lib.mkDefault true;
-    firewall.enable = true;
   };
 
   time.timeZone = "Asia/Shanghai";

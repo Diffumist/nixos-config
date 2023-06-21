@@ -1,6 +1,6 @@
 { lib, pkgs, ... }:
 {
-  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+  powerManagement.cpuFreqGovernor = lib.mkForce "powersave";
 
   boot.initrd = {
     availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "ahci" ]; # only loaded on demand
@@ -24,8 +24,6 @@
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
   };
-
-  boot.supportedFilesystems = [ "ntfs" ];
 
   fileSystems =
     let

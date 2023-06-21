@@ -1,12 +1,4 @@
-{ ... }: {
-
-  environment.sessionVariables = {
-    WINIT_X11_SCALE_FACTOR = "1.5"; # Ref: https://github.com/alacritty/alacritty/issues/3792
-  };
-
-  programs.adb.enable = true;
-  users.groups."adbusers".members = [ "diffumist" ];
-
+{ pkgs, ... }: {
   services.earlyoom = {
     enable = true;
     enableNotifications = true;
@@ -22,4 +14,19 @@
 
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;
+
+  environment.systemPackages = with pkgs; [
+    fd
+    bat
+    exa
+    duf
+    neovim
+    ripgrep
+    binutils
+    dnsutils
+    pciutils
+    tealdeer
+    man-pages
+    libarchive
+  ];
 }

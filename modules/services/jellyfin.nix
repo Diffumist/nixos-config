@@ -18,8 +18,5 @@ in
       enable = true;
       openFirewall = true;
     };
-    networking.firewall = {
-      allowedTCPPorts = [ 80 443 ];
-    };
   };
 }

@@ -3,7 +3,8 @@
     ({ ... }: {
       imports = [
         # env
-        (import ./nix-config.nix)
+        (import ./base/cli.nix)
+        (import ./base/nix-config.nix)
         (import ./services/gnome-env)
         (import ./hardware)
         # networking
@@ -14,8 +15,9 @@
     ({ ... }: {
       imports = [
         # env
-        (import ./base/default.nix)
-        (import ./nix-config.nix)
+        (import ./base)
+        (import ./base/cli.nix)
+        (import ./base/nix-config.nix)
       ];
     });
   services =
@@ -30,6 +32,8 @@
         (import ./services/nginx/fail2ban.nix)
         (import ./services/nginx/xray.nix)
         (import ./services/jellyfin.nix)
+        # file
+        (import ./services/sync.nix)
       ];
     });
 

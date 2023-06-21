@@ -4,12 +4,6 @@
   home.packages = with pkgs; map lib.lowPrio [
     # CLI
     xh
-    dnsutils
-    fd
-    duf
-    ripgrep
-    man-pages
-    libarchive
     nixpkgs-fmt
     nixpkgs-review
     wgcf
@@ -30,6 +24,5 @@
     meld
     # Env
     patchelf
-    binutils
   ];
 }

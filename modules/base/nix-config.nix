@@ -20,7 +20,7 @@
       auto-allocate-uids = true;
       use-cgroups = true;
       builders-use-substitutes = true;
-      substituters = lib.mkBefore [
+      substituters = [
         "https://mirror.sjtu.edu.cn/nix-channels/store"
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
