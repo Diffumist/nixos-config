@@ -21,6 +21,7 @@
     nixpkgs-fmt
     nixpkgs-review
     wgcf
+    cloudflared
     # Env
     patchelf
     binutils

@@ -29,6 +29,7 @@
         (import ./services/nginx/acme.nix)
         (import ./services/nginx/fail2ban.nix)
         (import ./services/nginx/xray.nix)
+        (import ./services/jellyfin.nix)
       ];
     });
 

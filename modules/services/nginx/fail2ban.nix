@@ -12,7 +12,7 @@ in
   config = mkIf cfg.enable {
     services.fail2ban = {
       enable = true;
-      ignoreIP = [ "127.0.0.1/16" "192.168.1.0/24" ];
+      ignoreIP = [ "127.0.0.1/16" "192.168.0.0/16" ];
       banaction-allports = "iptables-allports";
       bantime-increment = {
         enable = true;

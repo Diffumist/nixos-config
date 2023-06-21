@@ -3,6 +3,7 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     ./boot.nix
+    ./services.nix
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
     inputs.home-stable.nixosModules.home-manager
@@ -25,6 +26,7 @@
     ports = [ 2222 ];
     settings.PasswordAuthentication = false;
   };
+  networking.firewall.allowedTCPPorts = [ 2222 ];
 
   users.users = {
     root.openssh.authorizedKeys.keys = [
@@ -80,6 +82,45 @@
     shell = pkgs.fish;
     hashedPassword = "$6$6J91Plm9yvX7KiMs$DOUaBLnKLqpxJXlIAdIWA6KNs8boT58CuavOoMka2DFAZbLe9hRu5ubMBfYfiukHld3LC/rx/CA4B2eBetB.60";
   };
+
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vaapiIntel
+      vaapiVdpau
+      libvdpau-va-gl
+      intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
+    ];
+  };
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  };
+
+  services.samba = {
+    enable = true;
+    openFirewall = true;
+    nsswins = true;
+    extraConfig = ''
+      guest account = nobody
+      map to guest = bad user
+    '';
+    shares = {
+      Music = {
+        path = "/home/diffumist/Music";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+      };
+      Videos = {
+        path = "/home/diffumist/Videos";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+      };
+    };
+  };
+  services.samba-wsdd.enable = true;
 
   services.earlyoom.enable = true;
 

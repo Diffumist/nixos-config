@@ -17,14 +17,11 @@ in
       inherit (secrets.transmission) credentialsFile;
     };
 
-    services.nginx.virtualHosts."rpc.diffumist.me" = {
-      useACMEHost = config.networking.domain;
-      forceSSL = true;
+    services.nginx.virtualHosts."transmission" = {
       listen = [
         {
           addr = "0.0.0.0";
-          port = 443;
-          ssl = true;
+          port = 9092;
         }
       ];
       locations = {
@@ -43,7 +40,7 @@ in
         };
       };
     };
-
+    networking.firewall.allowedTCPPorts = [ 9092 ];
     environment.systemPackages = with pkgs; [ mktorrent ];
   };
 }
