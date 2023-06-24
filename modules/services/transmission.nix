@@ -13,8 +13,13 @@ in
       enable = true;
       openRPCPort = true;
       openPeerPorts = true;
-      settings.rpc-host-whitelist-enabled = false;
+      settings = {
+        umask = 7; # 660
+        rpc-host-whitelist-enabled = false;
+        watch-dir-enabled = true;
+      };
       inherit (secrets.transmission) credentialsFile;
+      downloadDirPermissions = "770";
     };
 
     services.nginx.virtualHosts."transmission" = {

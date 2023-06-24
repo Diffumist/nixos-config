@@ -24,11 +24,6 @@
       url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "stable";
     };
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -53,7 +48,6 @@
       overlays = [
         self.overlays.default
         inputs.berberman.overlays.default
-        inputs.rust-overlay.overlays.default
       ];
     in
     inputs.flake-utils.lib.eachSystem [ "x86_64-linux" ]
@@ -118,7 +112,7 @@
         };
         nixlab = { name, ... }: {
           deployment = {
-            targetHost = "192.168.0.103";
+            targetHost = "192.168.0.100";
             targetPort = 2222;
           };
           imports = [ ./hosts/${name} ];

@@ -36,10 +36,17 @@ in
           guest account = nobody
           map to guest = bad user
         '';
-        shares = lib.genAttrs dir smb;
+        shares = lib.genAttrs dir smb // {
+          Transmission = {
+            path = "/var/lib/transmission/Downloads";
+            browseable = "yes";
+            "read only" = "no";
+            "guest ok" = "no";
+            "create mask" = "0644";
+            "directory mask" = "0775";
+          };
+        };
       };
-    services.samba-wsdd.enable = true;
-
     services.syncthing =
       let
         sync = options: {

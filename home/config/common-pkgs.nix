@@ -19,7 +19,7 @@
     chatbox-bin
     wine
     winetricks
-    obsidian
+    logseq
     solaar
     meld
     # Env

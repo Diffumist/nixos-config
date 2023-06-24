@@ -1,4 +1,4 @@
-{ modulesPath, pkgs, config, secrets, lib, inputs, self, ... }:
+{ modulesPath, pkgs, secrets, lib, inputs, self, ... }:
 let
   user = "diffumist";
 in
@@ -52,7 +52,7 @@ in
 
   users.users.${user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "transmission" ];
     shell = pkgs.fish;
     hashedPassword = "$6$6J91Plm9yvX7KiMs$DOUaBLnKLqpxJXlIAdIWA6KNs8boT58CuavOoMka2DFAZbLe9hRu5ubMBfYfiukHld3LC/rx/CA4B2eBetB.60";
   };

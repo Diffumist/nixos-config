@@ -168,10 +168,7 @@
     "nix-secrets": {
       "locked": {
         "lastModified": 1687282133,
-        "narHash": "sha256-mKtWBeAUcudBEk0GviZFfoKBBo+mod2mQMRoBoMSovM=",
-        "ref": "refs/heads/main",
-        "rev": "9de3ae6f8f33b61eda900e246dcc998ee2d2bc79",
-        "revCount": 20,
+        "narHash": "sha256-XWAVmJeWcHF6GRzQe1hikoA+pDRU1EaSc6IjWBFKTt4=",
         "type": "git",
         "url": "file:///home/diffumist/Documents/Project/nix-secrets"
       },
@@ -246,32 +243,8 @@
         "nix-secrets": "nix-secrets",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
-        "rust-overlay": "rust-overlay",
         "sops-nix": "sops-nix",
         "stable": "stable"
-      }
-    },
-    "rust-overlay": {
-      "inputs": {
-        "flake-utils": [
-          "flake-utils"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1686882360,
-        "narHash": "sha256-6iWVGIdIzmx/CgXPVLPyyxxBhPGYMl8sG09S8hpQ6pc=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "b519b1d7a31f1bd35423990398adecc6f7dd4dd2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
       }
     },
     "sops-nix": {
