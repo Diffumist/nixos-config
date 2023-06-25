@@ -27,6 +27,11 @@
     compression = true;
     hashKnownHosts = true;
     matchBlocks = secrets.home.ssh { inherit config; };
+    extraConfig = ''
+      Host *
+        StrictHostKeyChecking no
+        UserKnownHostsFile /dev/null
+    '';
   };
 
   programs.gpg = {

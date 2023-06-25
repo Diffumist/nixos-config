@@ -23,17 +23,12 @@
   services =
     ({ ... }: {
       imports = [
-        # networking
-        (import ./services/transmission.nix)
         # web services
         (import ./services/nginx)
         (import ./services/nginx/vaultwarden.nix)
         (import ./services/nginx/acme.nix)
         (import ./services/nginx/fail2ban.nix)
         (import ./services/nginx/xray.nix)
-        (import ./services/jellyfin.nix)
-        # file
-        (import ./services/sync.nix)
       ];
     });
 

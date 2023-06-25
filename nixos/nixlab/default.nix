@@ -1,18 +1,17 @@
-{ modulesPath, pkgs, secrets, lib, inputs, self, ... }:
+{ pkgs, secrets, lib, inputs, self, config, ... }:
 let
   user = "diffumist";
 in
 {
   imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
     ./boot.nix
-    ./services.nix
+    ./modules
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
     inputs.home-stable.nixosModules.home-manager
     inputs.sops-nix.nixosModules.sops
-    self.nixosModules.services
     self.nixosModules.server
+    self.nixosModules.services
   ];
 
   networking = {
@@ -23,17 +22,25 @@ in
   time.timeZone = "Asia/Shanghai";
 
   nix = {
-    settings.substituters = lib.mkForce [
-      "https://mirror.sjtu.edu.cn/nix-channels/store"
-    ];
-    gc.options = lib.mkForce "--delete-older-than 60d";
-    registry = lib.mkForce {
-      p = {
-        from = { id = "nixpkgs"; type = "indirect"; };
-        flake = inputs.stable;
-      };
+    settings = {
+      substituters = lib.mkForce [
+        "https://mirror.sjtu.edu.cn/nix-channels/store"
+      ];
+      nix-path = [ "nixpkgs=${inputs.stable}" ];
     };
-    nixPath = lib.mkForce [ "nixpkgs=${inputs.stable}" ];
+    registry = lib.mkForce {
+      p.flake = inputs.stable;
+    };
+  };
+
+  sops = {
+    defaultSopsFile = ../nixlab.yaml;
+    secrets.passwd.neededForUsers = true;
+    age = {
+      keyFile = "/var/lib/sops.key";
+      sshKeyPaths = [ ];
+    };
+    gnupg.sshKeyPaths = [ ];
   };
 
   hardware.opengl = {
@@ -54,7 +61,7 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" "transmission" ];
     shell = pkgs.fish;
-    hashedPassword = "$6$6J91Plm9yvX7KiMs$DOUaBLnKLqpxJXlIAdIWA6KNs8boT58CuavOoMka2DFAZbLe9hRu5ubMBfYfiukHld3LC/rx/CA4B2eBetB.60";
+    passwordFile = config.sops.secrets.passwd.path;
   };
   home-manager = {
     useGlobalPkgs = true;
@@ -66,5 +73,6 @@ in
     ];
   };
 
+  modules.nginx.enable = true;
   system.stateVersion = "21.11";
 }

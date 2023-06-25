@@ -1,4 +1,4 @@
-{ lib, pkgs, secrets, inputs, self, ... }:
+{ lib, pkgs, secrets, inputs, config, self, ... }:
 {
   imports = [
     ./boot.nix
@@ -10,8 +10,8 @@
   ];
 
   sops = {
-    defaultSopsFile = ../../secrets/onix.yaml;
-    secrets = { };
+    defaultSopsFile = ../onix.yaml;
+    secrets.passwd.neededForUsers = true;
     age = {
       keyFile = "/var/lib/sops.key";
       sshKeyPaths = [ ];
@@ -56,7 +56,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     shell = pkgs.fish;
-    hashedPassword = "$6$6J91Plm9yvX7KiMs$DOUaBLnKLqpxJXlIAdIWA6KNs8boT58CuavOoMka2DFAZbLe9hRu5ubMBfYfiukHld3LC/rx/CA4B2eBetB.60";
+    passwordFile = config.sops.secrets.passwd.path;
   };
 
   home-manager = {

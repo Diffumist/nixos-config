@@ -13,7 +13,27 @@
     wgcf
     cloudflared
   ];
-
+  sops = {
+    defaultSopsFile = ../nixlab.yaml;
+    secrets = {
+      "syncthing/nixlab" = { };
+      "syncthing/onix" = { };
+    };
+    age = {
+      keyFile = "/var/lib/sops.key";
+      sshKeyPaths = [ ];
+    };
+    gnupg.sshKeyPaths = [ ];
+  };
+  services.syncthing = {
+    enable = true;
+    extraOptions = [
+      "--config=/home/diffumist/.config/syncthing"
+      "--data=/home/diffumist/.local/share/syncthing"
+      "--gui-address=0.0.0.0:8384"
+      "--no-upgrade"
+    ];
+  };
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards

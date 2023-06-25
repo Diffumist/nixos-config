@@ -7,7 +7,7 @@ keys:
   - &age1 age1aneevlvx7wkk00r4ryhpmlpwulmp68c0yq0hdv00nfv8g94wm4rs2m9z5q
   - &git_age age1mgw2q0ytdsnyxh40me6fu5pvcvcf7nug3dm05s8wu0v9ay20eenqatudqj
 creation_rules:
-  - path_regex: secrets/[^/]+\.yaml$
+  - path_regex: nixos/[^/]+\.yaml$
     key_groups:
     - pgp:
       - *dmist-pgp

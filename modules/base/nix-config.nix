@@ -1,4 +1,4 @@
-{ inputs, self, lib, secrets, pkgs, ... }: {
+{ self, pkgs, ... }: {
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.permittedInsecurePackages = [
@@ -39,18 +39,6 @@
       options = "--delete-older-than 20d";
     };
 
-    extraOptions = ''
-      flake-registry = /etc/nix/registry.json
-      access-tokens = github.com=${secrets.github-token}
-    '';
-
-    registry = {
-      nixpkgs = {
-        from = { id = "nixpkgs"; type = "indirect"; };
-        flake = inputs.nixpkgs;
-      };
-      p.flake = self;
-    };
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+    registry.p.flake = self;
   };
 }

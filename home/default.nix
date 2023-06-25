@@ -20,7 +20,7 @@ _:
   fonts.fontconfig.enable = true;
 
   sops = {
-    defaultSopsFile = ../secrets/onix.yaml;
+    defaultSopsFile = ../nixos/onix.yaml;
     age = {
       keyFile = "/var/lib/sops.key";
       sshKeyPaths = [ ];

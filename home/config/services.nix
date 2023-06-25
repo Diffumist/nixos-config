@@ -30,7 +30,6 @@
 
   services.syncthing = {
     enable = true;
-    tray.enable = true;
     extraOptions = [
       "--config=/home/diffumist/.config/syncthing"
       "--data=/home/diffumist/.local/share/syncthing"

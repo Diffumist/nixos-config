@@ -78,7 +78,7 @@
       nixosModules = import ./modules;
       nixosConfigurations =
         let
-          hosts = builtins.attrNames (builtins.readDir ./hosts);
+          hosts = builtins.attrNames (builtins.readDir ./nixos);
           mkSystem = hostname:
             nixpkgs.lib.nixosSystem {
               system = "x86_64-linux";
@@ -87,7 +87,7 @@
                 inherit (inputs.nix-secrets) secrets;
               };
               modules = [{ nixpkgs = { inherit overlays; }; }]
-              ++ [ (import (./hosts + "/${hostname}")) ];
+              ++ [ (import (./nixos + "/${hostname}")) ];
             };
         in
         nixpkgs.lib.genAttrs hosts mkSystem;
@@ -108,14 +108,14 @@
             targetHost = "108.166.217.159";
             targetPort = 2222;
           };
-          imports = [ ./hosts/${name} ];
+          imports = [ ./nixos/${name} ];
         };
         nixlab = { name, ... }: {
           deployment = {
-            targetHost = "192.168.0.100";
+            targetHost = "192.168.0.103";
             targetPort = 2222;
           };
-          imports = [ ./hosts/${name} ];
+          imports = [ ./nixos/${name} ];
         };
       };
     };

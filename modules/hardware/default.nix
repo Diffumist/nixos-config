@@ -52,6 +52,7 @@ in
 
     (mkIf cfg.nvidiaEnable {
       hardware.nvidia = {
+        package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
         prime = {
           offload.enable = true;
           intelBusId = "PCI:0:2:0";
@@ -65,11 +66,6 @@ in
         nvidiaSettings = false;
         nvidiaPersistenced = true;
       };
-      environment.systemPackages = with pkgs; [
-        pciutils
-        cudatoolkit
-      ];
-      hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
       services.xserver.videoDrivers = [ "nvidia" ];
     })
     (mkIf cfg.yubikeyEnable {
