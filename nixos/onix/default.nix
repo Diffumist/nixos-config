@@ -2,6 +2,7 @@
 {
   imports = [
     ./boot.nix
+    ./modules
     inputs.impermanence.nixosModules.impermanence
     inputs.home.nixosModules.home-manager
     inputs.nur.nixosModules.nur

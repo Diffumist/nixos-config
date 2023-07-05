@@ -1,9 +1,8 @@
-{ lib, config, ... }:
+{ lib, ... }:
 let
   folders = [
     "Other"
     "Pictures"
-    "Documents"
   ];
   mkSync = options: {
     path = "/persist/storage/${options}";

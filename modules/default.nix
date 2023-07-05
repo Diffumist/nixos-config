@@ -7,8 +7,6 @@
         (import ./base/nix-config.nix)
         (import ./services/gnome-env)
         (import ./hardware)
-        # networking
-        (import ./services/clash.nix)
       ];
     });
   server =
