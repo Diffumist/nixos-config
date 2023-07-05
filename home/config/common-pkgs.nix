@@ -24,5 +24,12 @@
     meld
     # Env
     patchelf
+    # LSP
+    gopls
+    nodePackages.bash-language-server
+    nodePackages.vscode-json-languageserver
+    nil
+    pyright
+    typst-lsp
   ];
 }

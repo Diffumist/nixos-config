@@ -167,8 +167,11 @@
     },
     "nix-secrets": {
       "locked": {
-        "lastModified": 1687282133,
-        "narHash": "sha256-XWAVmJeWcHF6GRzQe1hikoA+pDRU1EaSc6IjWBFKTt4=",
+        "lastModified": 1688131741,
+        "narHash": "sha256-YSwj8DU6gl9e9eWUAQKJBgA9xZMcvs8g4iBswAWNqIk=",
+        "ref": "refs/heads/main",
+        "rev": "04925d14b0048ee32944ba7f578b8ef7daa8e62a",
+        "revCount": 21,
         "type": "git",
         "url": "file:///home/diffumist/Documents/Project/nix-secrets"
       },

@@ -1,4 +1,4 @@
-{ pkgs, secrets, lib, inputs, self, config, ... }:
+{ pkgs, lib, inputs, self, config, ... }:
 let
   user = "diffumist";
 in
@@ -17,6 +17,12 @@ in
   networking = {
     hostName = "nixlab";
     domain = "diffumist.me";
+    useNetworkd = true;
+    interfaces.eno1 = {
+      useDHCP = true;
+      ipv4.addresses = [{ address = "192.168.0.252"; prefixLength = 24; }];
+      ipv4.routes = [{ address = "192.168.0.1"; prefixLength = 24; }];
+    };
   };
 
   time.timeZone = "Asia/Shanghai";
@@ -62,15 +68,6 @@ in
     extraGroups = [ "wheel" "transmission" ];
     shell = pkgs.fish;
     passwordFile = config.sops.secrets.passwd.path;
-  };
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    extraSpecialArgs = { inherit secrets; };
-    users.diffumist = import ./home.nix;
-    sharedModules = [
-      inputs.sops-nix.homeManagerModules.sops
-    ];
   };
 
   modules.nginx.enable = true;

@@ -21,13 +21,4 @@
     ];
     extraConfig = '':source ${./nvim.lua}'';
   };
-  # LSP
-  home.packages = with pkgs; [
-    gopls
-    nodePackages.bash-language-server
-    nodePackages.vscode-json-languageserver
-    nil
-    pyright
-    typst-lsp
-  ];
 }

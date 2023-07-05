@@ -21,6 +21,7 @@
       "pncfbmialoiaghdehhbnbhkkgmjanfhe" # uBlacklist
       "mpkodccbngfoacfalldjimigbofkhgjn" # Aria2 for Chrome
       "onnepejgdiojhiflfoemillegpgpabdm" # V2ex Polish
+      "dkndmhgdcmjdmkdonmbgjpijejdcilfh" # pixiv
     ];
   };
 

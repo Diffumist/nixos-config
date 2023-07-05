@@ -43,10 +43,6 @@
         options = [ "defaults" "mode=755" ];
       };
       "/.subvols" = btrfs [ ];
-      "/home" = {
-        fsType = "tmpfs";
-        options = [ "defaults" "mode=755" ];
-      };
       "/nix" = btrfs [ "subvol=@nix" ];
       "/var/swap" = btrfs [ "subvol=@swap" ];
       "/persist" = btrfs [ "subvol=@persist" ];
@@ -72,21 +68,5 @@
       "/etc/machine-id"
       "/etc/ssh/ssh_host_ed25519_key"
     ];
-    users.diffumist = {
-      directories = [
-        "Downloads"
-        "Music"
-        "Pictures"
-        "Documents"
-        "Videos"
-        "Other"
-        { directory = ".gnupg"; mode = "0700"; }
-        { directory = ".ssh"; mode = "0700"; }
-        { directory = ".local/share/keyrings"; mode = "0700"; }
-        ".config"
-        ".local"
-        ".cache"
-      ];
-    };
   };
 }

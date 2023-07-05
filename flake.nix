@@ -112,7 +112,7 @@
         };
         nixlab = { name, ... }: {
           deployment = {
-            targetHost = "192.168.0.103";
+            targetHost = "192.168.0.252";
             targetPort = 2222;
           };
           imports = [ ./nixos/${name} ];
