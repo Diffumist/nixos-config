@@ -77,9 +77,5 @@ in
         };
       };
     };
-
-    networking.firewall = {
-      allowedTCPPorts = [ cfg.openPorts ];
-    };
   };
 }

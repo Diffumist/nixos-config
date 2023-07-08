@@ -7,11 +7,10 @@
     inputs.home.nixosModules.home-manager
     inputs.nur.nixosModules.nur
     inputs.sops-nix.nixosModules.sops
-    self.nixosModules.default
   ];
 
   sops = {
-    defaultSopsFile = ../onix.yaml;
+    defaultSopsFile = ../../secrets/onix.yaml;
     secrets.passwd.neededForUsers = true;
     age = {
       keyFile = "/var/lib/sops.key";
@@ -19,6 +18,8 @@
     };
     gnupg.sshKeyPaths = [ ];
   };
+
+  nix.registry.p.flake = self;
 
   # network
   networking = {

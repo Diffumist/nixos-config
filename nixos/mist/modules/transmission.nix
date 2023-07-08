@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ config, ... }:
 {
   sops.secrets = {
     "transmission/username" = {
@@ -24,11 +24,14 @@
     };
   };
 
-  services.nginx.virtualHosts."transmission" = {
+  services.nginx.virtualHosts."bt.diffumist.me" = {
+    useACMEHost = config.networking.domain;
+    forceSSL = true;
     listen = [
       {
         addr = "0.0.0.0";
-        port = 9092;
+        port = 443;
+        ssl = true;
       }
     ];
     locations = {
@@ -40,6 +43,4 @@
       };
     };
   };
-  networking.firewall.allowedTCPPorts = [ 9092 ];
-  environment.systemPackages = with pkgs; [ mktorrent ];
 }

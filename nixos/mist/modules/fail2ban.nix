@@ -20,11 +20,6 @@ in
         factor = "4";
       };
       jails = {
-        DEFAULT = ''
-          blocktype = DROP
-          bantime = 1h
-          findtime = 1h
-        '';
         # See https://github.com/dani-garcia/bitwarden_rs/wiki/Fail2Ban-Setup
         vaultwarden = ''
           enabled = true

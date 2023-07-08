@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, self, config, ... }:
+{ pkgs, lib, inputs, config, ... }:
 let
   user = "diffumist";
 in
@@ -10,7 +10,6 @@ in
     inputs.nur.nixosModules.nur
     inputs.home-stable.nixosModules.home-manager
     inputs.sops-nix.nixosModules.sops
-    self.nixosModules.server
   ];
 
   networking = {
@@ -33,13 +32,13 @@ in
       ];
       nix-path = [ "nixpkgs=${inputs.stable}" ];
     };
-    registry = lib.mkForce {
+    registry = {
       p.flake = inputs.stable;
     };
   };
 
   sops = {
-    defaultSopsFile = ../nixlab.yaml;
+    defaultSopsFile = ../../secrets/nixlab.yaml;
     secrets.passwd.neededForUsers = true;
     age = {
       keyFile = "/var/lib/sops.key";

@@ -1,4 +1,4 @@
-{ stdenv, source, lib, webkitgtk, makeWrapper, wrapGAppsHook, glib, glibc, gtk3, fontconfig, openssl_1_1, gdk-pixbuf, cairo, hicolor-icon-theme, pango }:
+{ stdenv, source, lib, webkitgtk, makeWrapper, wrapGAppsHook, glib, glibc, gtk3, fontconfig, openssl, gdk-pixbuf, cairo, hicolor-icon-theme, pango }:
 stdenv.mkDerivation rec {
   inherit (source) pname version src;
   deps = [
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     glibc
     gtk3
     fontconfig
-    openssl_1_1
+    openssl
     gdk-pixbuf
     pango
     cairo

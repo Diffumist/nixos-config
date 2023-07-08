@@ -21,6 +21,7 @@
     exa
     duf
     neovim
+    onefetch
     ripgrep
     binutils
     dnsutils

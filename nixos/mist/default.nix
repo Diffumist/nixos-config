@@ -1,4 +1,4 @@
-{ modulesPath, pkgs, config, secrets, lib, inputs, self, ... }:
+{ modulesPath, pkgs, config, secrets, lib, inputs, ... }:
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -7,7 +7,6 @@
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
     inputs.sops-nix.nixosModules.sops
-    self.nixosModules.server
   ];
 
   modules = {
@@ -19,6 +18,25 @@
       domain = config.networking.domain;
     };
     xray.enable = true;
+  };
+
+  sops = {
+    defaultSopsFile = ../../secrets/mist.yaml;
+    secrets.passwd.neededForUsers = true;
+    age = {
+      keyFile = "/var/lib/sops.key";
+      sshKeyPaths = [ ];
+    };
+    gnupg.sshKeyPaths = [ ];
+  };
+
+  nix = {
+    settings = {
+      nix-path = [ "nixpkgs=${inputs.stable}" ];
+    };
+    registry = {
+      p.flake = inputs.stable;
+    };
   };
 
   networking = {

@@ -1,10 +1,6 @@
-{ self, pkgs, ... }: {
+{ pkgs, ... }: {
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "openssl-1.1.1u"
-    "openssl-1.1.1t"
-  ];
   documentation.doc.enable = false;
 
   nix = {
@@ -32,7 +28,5 @@
       dates = "Sun";
       options = "--delete-older-than 20d";
     };
-
-    registry.p.flake = self;
   };
 }

@@ -8,6 +8,7 @@
     (import ./nginx.nix)
     (import ./sshd.nix)
     (import ./nix-config.nix)
-    (import ./common.nix)
+    (import ./packages.nix)
+    (import ./transmission.nix)
   ];
 }

@@ -53,14 +53,14 @@
     inputs.flake-utils.lib.eachSystem [ "x86_64-linux" ]
       (
         system:
-        let
+        rec
+        {
           pkgs = import nixpkgs {
             inherit overlays system;
             config.allowUnfree = true;
           };
-        in
-        {
           packages = this.packages pkgs;
+          check = packages;
           legacyPackages = pkgs;
           devShells.default = with pkgs; mkShell {
             nativeBuildInputs = [
@@ -75,7 +75,6 @@
         }
       ) // {
       overlays.default = this.overlay;
-      nixosModules = import ./modules;
       nixosConfigurations =
         let
           hosts = builtins.attrNames (builtins.readDir ./nixos);
