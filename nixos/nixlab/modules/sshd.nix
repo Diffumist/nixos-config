@@ -4,7 +4,7 @@
 
   networking = {
     useDHCP = lib.mkDefault false;
-    firewall.enable = true;
+    firewall.enable = lib.mkDefault false;
     firewall.allowedTCPPorts = [ 2222 ];
   };
   services.openssh = {
@@ -16,6 +16,4 @@
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB5+ekQWrbKupUzdeLcawo2BxqmW8MDLpocNpUBVItle noname"
   ];
-
-  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 }

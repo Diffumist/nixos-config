@@ -3,13 +3,23 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
     ./boot.nix
-    ./services.nix
+    ./modules
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
     inputs.sops-nix.nixosModules.sops
-    self.nixosModules.services
     self.nixosModules.server
   ];
+
+  modules = {
+    vaultwarden.enable = true;
+    nginx.enable = true;
+    fail2ban.enable = true;
+    acme = {
+      enable = true;
+      domain = config.networking.domain;
+    };
+    xray.enable = true;
+  };
 
   networking = {
     useDHCP = lib.mkForce true;

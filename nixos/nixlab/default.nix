@@ -11,7 +11,6 @@ in
     inputs.home-stable.nixosModules.home-manager
     inputs.sops-nix.nixosModules.sops
     self.nixosModules.server
-    self.nixosModules.services
   ];
 
   networking = {
@@ -65,7 +64,7 @@ in
 
   users.users.${user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "transmission" ];
+    extraGroups = [ "wheel" ];
     shell = pkgs.fish;
     passwordFile = config.sops.secrets.passwd.path;
   };
