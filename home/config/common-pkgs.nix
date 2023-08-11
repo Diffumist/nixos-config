@@ -16,6 +16,7 @@
     tdesktop
     spotify-tui
     qbittorrent
+    transgui
     chatbox-bin
     wine
     winetricks

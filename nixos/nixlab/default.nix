@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, config, ... }:
+{ pkgs, inputs, config, ... }:
 let
   user = "diffumist";
 in
@@ -8,7 +8,6 @@ in
     ./modules
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
-    inputs.home-stable.nixosModules.home-manager
     inputs.sops-nix.nixosModules.sops
   ];
 
@@ -27,13 +26,10 @@ in
 
   nix = {
     settings = {
-      substituters = lib.mkForce [
-        "https://mirror.sjtu.edu.cn/nix-channels/store"
-      ];
-      nix-path = [ "nixpkgs=${inputs.stable}" ];
+      nix-path = [ "nixpkgs=${inputs.nixpkgs}" ];
     };
     registry = {
-      p.flake = inputs.stable;
+      p.flake = inputs.nixpkgs;
     };
   };
 
@@ -63,7 +59,7 @@ in
 
   users.users.${user} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "transmission" ];
     shell = pkgs.fish;
     passwordFile = config.sops.secrets.passwd.path;
   };

@@ -22,7 +22,6 @@
 
   sops = {
     defaultSopsFile = ../../secrets/mist.yaml;
-    secrets.passwd.neededForUsers = true;
     age = {
       keyFile = "/var/lib/sops.key";
       sshKeyPaths = [ ];
@@ -32,10 +31,13 @@
 
   nix = {
     settings = {
-      nix-path = [ "nixpkgs=${inputs.stable}" ];
+      substituters = lib.mkForce [
+        "https://cache.nixos.org"
+      ];
+      nix-path = [ "nixpkgs=${inputs.nixpkgs}" ];
     };
     registry = {
-      p.flake = inputs.stable;
+      p.flake = inputs.nixpkgs;
     };
   };
 

@@ -38,11 +38,12 @@
   };
   time.timeZone = "Asia/Shanghai";
 
+
   # modules options
   modules = {
     gnome-env = {
       enable = true;
-      waylandEnable = false;
+      waylandEnable = true;
     };
     hardware = {
       enable = true;

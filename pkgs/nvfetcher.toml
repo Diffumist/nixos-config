@@ -8,3 +8,6 @@ fetch.url = "https://github.com/MetaCubeX/Clash.Meta/releases/download/v$ver/cla
 [chatbox-bin]
 src.aur = "chatbox-bin"
 fetch.url = "https://github.com/Bin-Huang/chatbox/releases/download/v$ver/chatbox_$ver_amd64.deb"
+[alist-bin]
+src.aur = "alist-bin"
+fetch.url = "https://github.com/alist-org/alist/releases/download/v$ver/alist-linux-amd64.tar.gz"

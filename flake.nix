@@ -4,7 +4,6 @@
   inputs = {
     # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    stable.url = "github:nixos/nixpkgs/release-23.05";
     # utils
     flake-utils.url = "github:numtide/flake-utils";
     impermanence.url = "github:nix-community/impermanence";
@@ -20,14 +19,9 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    home-stable = {
-      url = "github:nix-community/home-manager/release-23.05";
-      inputs.nixpkgs.follows = "stable";
-    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-stable.follows= "";
     };
     # other pkgs
     nur = {
@@ -42,12 +36,22 @@
       url = "/home/diffumist/Documents/Project/nix-secrets";
     };
   };
-  outputs = { self, nixpkgs, stable, ... } @inputs:
+  outputs = { self, nixpkgs, ... } @inputs:
     let
       this = import ./pkgs;
       overlays = [
         self.overlays.default
         inputs.berberman.overlays.default
+        (final: prev: {
+          alacritty = final.symlinkJoin {
+            name = "alacritty";
+            paths = [ prev.alacritty ];
+            buildInputs = [ final.makeWrapper ];
+            postBuild = ''
+              wrapProgram $out/bin/alacritty --unset WAYLAND_DISPLAY
+            '';
+          };
+        })
       ];
     in
     inputs.flake-utils.lib.eachSystem [ "x86_64-linux" ]
@@ -58,6 +62,9 @@
           pkgs = import nixpkgs {
             inherit overlays system;
             config.allowUnfree = true;
+            config.permittedInsecurePackages = [
+              "openssl-1.1.1u"
+            ];
           };
           packages = this.packages pkgs;
           check = packages;
@@ -67,6 +74,7 @@
               sops
               age
               cachix
+              backblaze-b2
               colmena
               nvfetcher
               nixpkgs-fmt
@@ -96,7 +104,7 @@
             inherit self inputs;
             inherit (inputs.nix-secrets) secrets;
           };
-          nixpkgs = import stable {
+          nixpkgs = import nixpkgs {
             system = "x86_64-linux";
             inherit overlays;
             config.allowUnfree = true;

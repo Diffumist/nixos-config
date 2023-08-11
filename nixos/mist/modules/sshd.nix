@@ -4,7 +4,7 @@
 
   networking = {
     useDHCP = lib.mkDefault false;
-    firewall.enable = lib.mkDefault false;
+    firewall.enable = lib.mkDefault true;
     firewall.allowedTCPPorts = [ 2222 ];
   };
   services.openssh = {

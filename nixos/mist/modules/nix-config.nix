@@ -1,6 +1,10 @@
-{ pkgs, ... }: {
+{ pkgs, lib, ... }: {
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "openssl-1.1.1u"
+    "openssl-1.1.1v"
+  ];
   documentation.doc.enable = false;
 
   nix = {
@@ -16,9 +20,8 @@
       auto-allocate-uids = true;
       use-cgroups = true;
       builders-use-substitutes = true;
-      substituters = [
+      substituters = lib.mkDefault [
         "https://mirror.sjtu.edu.cn/nix-channels/store"
-        "https://cache.nixos.org"
       ];
       auto-optimise-store = true;
     };

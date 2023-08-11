@@ -14,7 +14,6 @@ in
     ({
       environment.systemPackages = with pkgs; [
         gparted
-        onlyoffice-bin
         gnome.dconf-editor
         gnome.nautilus-python
         gnome.gnome-tweaks
@@ -116,10 +115,22 @@ in
       };
 
       networking = {
+        wireless.iwd = {
+          enable = true;
+          settings = {
+            Network = {
+              EnableIPv6 = true;
+              RoutePriorityOffset = 300;
+            };
+            Settings = {
+              AutoConnect = true;
+            };
+          };
+        };
         networkmanager = {
           enable = true;
           wifi = {
-            backend = "wpa_supplicant";
+            backend = "iwd";
             macAddress = "preserve";
           };
         };
@@ -134,7 +145,6 @@ in
     (mkIf cfg.waylandEnable {
       services.xserver.displayManager.gdm = {
         wayland = mkForce true;
-        nvidiaWayland = true;
       };
     })
   ]);

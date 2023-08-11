@@ -24,6 +24,16 @@ in
       guest account = nobody
       map to guest = bad user
     '';
-    shares = lib.genAttrs folders mkSmb;
+    shares = lib.genAttrs folders mkSmb // {
+      Transmission = {
+        path = "/var/lib/transmission/Downloads";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "create mask" = "0664";
+        "directory mask" = "0775";
+        comment = "Transmission samba share.";
+      };
+    };
   };
 }
