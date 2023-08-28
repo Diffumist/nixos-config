@@ -32,12 +32,22 @@
       [keyfile]
       path = /var/lib/NetworkManager/system-connections
     '';
-    nameservers = [ "127.0.0.1" ];
+    nameservers = [ "8.8.8.8" ];
     firewall.enable = lib.mkForce false;
     # proxy.default = "socks5://127.0.0.1:7890"; for debug
   };
+
+  services.dae.enable = true;
+  environment.etc."dae/config.dae" = {
+    source = secrets.dae.configFile;
+    mode = "0600";
+  };
+  
   time.timeZone = "Asia/Shanghai";
 
+  # FHS fix for nixos
+  services.envfs.enable = true;
+  programs.nix-ld.enable = true;
 
   # modules options
   modules = {

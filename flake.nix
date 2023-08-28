@@ -74,9 +74,8 @@
               sops
               age
               cachix
-              backblaze-b2
               colmena
-              nvfetcher
+              # nvfetcher
               nixpkgs-fmt
             ];
           };

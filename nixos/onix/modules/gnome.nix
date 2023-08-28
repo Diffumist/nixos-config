@@ -79,7 +79,7 @@ in
       };
 
       fonts = {
-        fonts = with pkgs; [
+        packages = with pkgs; [
           jetbrains-mono
           sarasa-gothic
           apple-emoji
