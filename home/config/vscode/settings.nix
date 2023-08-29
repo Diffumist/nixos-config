@@ -52,6 +52,12 @@
     "editor.tabSize" = 2;
   };
   "nix.enableLanguageServer" = true;
+  "nix.serverPath" = "nil";
+  "nix.serverSettings" = {
+    "nil" = {
+      "formatting" = { "command" = [ "nixpkgs-fmt" ]; };
+    };
+  };
   "update.showReleaseNotes" = false;
   "update.mode" = "none";
   "telemetry.telemetryLevel" = "off";
@@ -59,14 +65,7 @@
   "terminal.integrated.persistentSessionReviveProcess" = "never";
   "editor.inlineSuggest.enabled" = true;
   "files.autoGuessEncoding" = false;
-  "ccls.cache.directory" = "${config.xdg.cacheHome}/ccls-cache";
   "extensions.autoCheckUpdates" = false;
   "workbench.startupEditor" = "none";
-  "workbench.colorTheme" = "Gnome Dark (Atom One)";
-  "nix.serverPath" = "nil";
-  "nix.serverSettings" = {
-    "nil" = {
-      "formatting" = { "command" = [ "nixpkgs-fmt" ]; };
-    };
-  };
+  "workbench.productIconTheme" = "material-product-icons";
 }

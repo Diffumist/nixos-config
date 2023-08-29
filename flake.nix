@@ -31,6 +31,7 @@
       url = "github:berberman/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     # secrets
     nix-secrets = {
       url = "/home/diffumist/Documents/Project/nix-secrets";
@@ -42,6 +43,7 @@
       overlays = [
         self.overlays.default
         inputs.berberman.overlays.default
+        inputs.nix-vscode-extensions.overlays.default
         (final: prev: {
           alacritty = final.symlinkJoin {
             name = "alacritty";

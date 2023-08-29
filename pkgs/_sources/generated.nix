@@ -3,10 +3,10 @@
 {
   alist-bin = {
     pname = "alist-bin";
-    version = "3.20.1";
+    version = "3.26.0";
     src = fetchurl {
-      url = "https://github.com/alist-org/alist/releases/download/v3.20.1/alist-linux-amd64.tar.gz";
-      sha256 = "sha256-gm1kkgw2MXC09BEnq5xupBlduA2wbLqGkwz5r6g7ZQU=";
+      url = "https://github.com/alist-org/alist/releases/download/v3.26.0/alist-linux-amd64.tar.gz";
+      sha256 = "sha256-VVqEgq7tsVoOKKem4Zho1BeBbT8js3toyrWXt7/BDJo=";
     };
   };
   chatbox-bin = {
@@ -19,22 +19,22 @@
   };
   clash-meta = {
     pname = "clash-meta";
-    version = "1.15.0";
+    version = "1.15.1";
     src = fetchurl {
-      url = "https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.15.0/clash.meta-linux-amd64-v1.15.0.gz";
-      sha256 = "sha256-7tXUyj0EksX4DSNRRYlBrQR7M7HPN0R3eBzm/cj7Os8=";
+      url = "https://github.com/MetaCubeX/Clash.Meta/releases/download/v1.15.1/clash.meta-linux-amd64-v1.15.1.gz";
+      sha256 = "sha256-TwdZhazeqs3RzErRQmsxdTObk9pHumMPzizGADDP4gk=";
     };
   };
   maxmind-geoip = {
     pname = "maxmind-geoip";
-    version = "a9a937858aa76624be26958bfed4c59fde60466a";
+    version = "5df36816bf794d58b82e6d2db816d1d723669070";
     src = fetchFromGitHub {
       owner = "Loyalsoldier";
       repo = "geoip";
-      rev = "a9a937858aa76624be26958bfed4c59fde60466a";
+      rev = "5df36816bf794d58b82e6d2db816d1d723669070";
       fetchSubmodules = false;
-      sha256 = "sha256-wzAZKGpXeUAebKbRq73HIs16Cg2AhxCW667vAzHEBHg=";
+      sha256 = "sha256-lYiWy30eBhhQgseOVzN9FEwTatcVDdHUPepJB/7+cVY=";
     };
-    date = "2023-07-06";
+    date = "2023-08-24";
   };
 }
