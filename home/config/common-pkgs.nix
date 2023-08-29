@@ -11,8 +11,6 @@
     typst-fmt
     # GUI
     # jetbrains.idea-ultimate
-    jetbrains.clion
-    jetbrains.goland
     tdesktop
     spotify-tui
     qbittorrent

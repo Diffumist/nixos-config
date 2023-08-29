@@ -34,7 +34,7 @@
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     # secrets
     nix-secrets = {
-      url = "/home/diffumist/Documents/Project/nix-secrets";
+      url = "git+ssh://git@github.com/Diffumist/nix-secrets";
     };
   };
   outputs = { self, nixpkgs, ... } @inputs:

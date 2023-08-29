@@ -186,11 +186,11 @@
         "rev": "e07f4a3330b6264f66db3b704ac2798cf3146ecc",
         "revCount": 23,
         "type": "git",
-        "url": "file:///home/diffumist/Documents/Project/nix-secrets"
+        "url": "ssh://git@github.com/Diffumist/nix-secrets"
       },
       "original": {
         "type": "git",
-        "url": "file:///home/diffumist/Documents/Project/nix-secrets"
+        "url": "ssh://git@github.com/Diffumist/nix-secrets"
       }
     },
     "nix-vscode-extensions": {

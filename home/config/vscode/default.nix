@@ -18,6 +18,8 @@
       nvarner.typst-lsp
       mkhl.direnv
       pkief.material-product-icons
+      llvm-vs-code-extensions.vscode-clangd
+      dnlytras.nord-wave
     ];
   };
 }
