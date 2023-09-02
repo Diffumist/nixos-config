@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   programs.fish = {
     enable = true;
@@ -56,5 +56,35 @@
         style = "plain";
       };
     };
+  };
+  programs.tmux = {
+    enable = true;
+    mouse = true;
+    clock24 = true;
+    shell = "${pkgs.fish}/bin/fish";
+    plugins = with pkgs.tmuxPlugins; [
+      sensible
+      {
+        plugin = yank;
+        extraConfig = "set -g @yank_with_mouse on";
+      }
+      {
+        plugin = dracula;
+        extraConfig = ''
+          set-option -g status-position top
+          set -s copy-command 'wl-copy'
+          unbind-key MouseDown2Pane
+          bind-key -n MouseDown2Pane run "wl-paste | tmux load-buffer -; tmux paste-buffer"
+          set -g @dracula-plugins "ram-usage"
+          set -g @dracula-refresh-rate 10
+          set -g @dracula-show-battery false
+          set -g @dracula-show-timezone false
+          set -g @dracula-show-powerline true
+          set -g @dracula-network-bandwidth-show-interface false
+          set -g @dracula-show-timezone false
+          set -g @dracula-git-disable-status false
+        '';
+      }
+    ];
   };
 }

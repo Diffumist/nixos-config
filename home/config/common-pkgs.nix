@@ -9,6 +9,7 @@
     wgcf
     typst
     typst-fmt
+    wl-clipboard
     # GUI
     # jetbrains.idea-ultimate
     tdesktop
