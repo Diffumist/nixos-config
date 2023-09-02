@@ -72,17 +72,12 @@
         plugin = dracula;
         extraConfig = ''
           set-option -g status-position top
-          set -s copy-command 'wl-copy'
+          set -s copy-command '${pkgs.wl-clipboard}/bin/wl-copy'
           unbind-key MouseDown2Pane
-          bind-key -n MouseDown2Pane run "wl-paste | tmux load-buffer -; tmux paste-buffer"
+          bind-key -n MouseDown2Pane run "${pkgs.wl-clipboard}/bin/wl-paste | tmux load-buffer -; tmux paste-buffer"
           set -g @dracula-plugins "ram-usage"
           set -g @dracula-refresh-rate 10
-          set -g @dracula-show-battery false
-          set -g @dracula-show-timezone false
           set -g @dracula-show-powerline true
-          set -g @dracula-network-bandwidth-show-interface false
-          set -g @dracula-show-timezone false
-          set -g @dracula-git-disable-status false
         '';
       }
     ];

@@ -14,7 +14,7 @@ _: {
         };
         dynamic_title = true;
       };
-      shell.program = "fish";
+      shell.program = "tmux";
       mouse.hide_when_typing = true;
       font.size = 11;
       draw_bold_text_with_bright_colors = true;

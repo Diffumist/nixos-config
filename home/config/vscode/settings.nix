@@ -1,4 +1,4 @@
-{ config, ... }: {
+{ ... }: {
   "editor.renderWhitespace" = "all";
   "editor.renderControlCharacters" = true;
   "editor.fontFamily" = "'JetBrains Mono','JetBrainsMono Nerd Font'";
