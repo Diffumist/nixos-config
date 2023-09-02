@@ -16,7 +16,7 @@ _: {
       };
       shell.program = "fish";
       mouse.hide_when_typing = true;
-      font.size = 10;
+      font.size = 11;
       draw_bold_text_with_bright_colors = true;
       colors = {
         primary = {

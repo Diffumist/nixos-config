@@ -7,6 +7,7 @@
     inputs.home.nixosModules.home-manager
     inputs.nur.nixosModules.nur
     inputs.sops-nix.nixosModules.sops
+    inputs.daeuniverse.nixosModules.dae
   ];
 
   sops = {
@@ -36,18 +37,25 @@
     firewall.enable = lib.mkForce false;
   };
 
-  services.dae.enable = true;
-  environment.etc."dae/config.dae" = {
-    source = secrets.dae.configFile;
-    mode = "0600";
+  # services.dae.enable = true;
+  # environment.etc."dae/config.dae" = {
+  #   source = secrets.dae.configFile;
+  #   mode = "0600";
+  # };
+
+  services.dae = {
+    enable = true;
+    disableTxChecksumIpGeneric = false;
+    config = lib.readFile secrets.dae.configFile;
+    assets = with pkgs; [ v2ray-geoip v2ray-domain-list-community ];
   };
-  
+
   time.timeZone = "Asia/Shanghai";
 
   # FHS fix for nixos
   services.envfs.enable = true;
   programs.nix-ld.enable = true;
-  
+
 
   # modules options
   modules = {

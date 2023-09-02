@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, secrets, ... }:
 {
   sops.secrets = {
     "spotify/user" = { };
@@ -18,8 +18,8 @@
     package = pkgs.spotifyd.override { withPulseAudio = true; withKeyring = true; withMpris = true; };
     settings = {
       global = {
-        username = config.sops.secrets."spotify/user";
-        password = config.sops.secrets."spotify/passwd";
+        username = secrets.spotify.username;
+        password = secrets.spotify.password;
         backend = "pulseaudio";
         device_name = "onix";
       };
