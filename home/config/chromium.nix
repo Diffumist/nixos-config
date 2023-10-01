@@ -16,7 +16,7 @@
       "ponfpcnoihfmfllpaingbgckeeldkhle" # Enhancer for YouTube
       "jklfcpboamajpiikgkbjcnnnnooefbhh" # pakku for bilibili
       "ogjibjphoadhljaoicdnjnmgokohngcc" # Openai Translator
-      "gcalenpjmijncebpfijmoaglllgpjagf" # Tampermonkey
+      "dhdgffkkebhmkfjojejmpbldmpobfkfo" # Tampermonkey
       "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
       "pncfbmialoiaghdehhbnbhkkgmjanfhe" # uBlacklist
       "mpkodccbngfoacfalldjimigbofkhgjn" # Aria2 for Chrome

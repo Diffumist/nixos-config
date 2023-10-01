@@ -33,7 +33,7 @@
       [keyfile]
       path = /var/lib/NetworkManager/system-connections
     '';
-    nameservers = [ "8.8.8.8" ];
+    nameservers = [ "127.0.0.1" ];
     firewall.enable = lib.mkForce false;
   };
 
@@ -43,12 +43,12 @@
   #   mode = "0600";
   # };
 
-  services.dae = {
-    enable = true;
-    disableTxChecksumIpGeneric = false;
-    config = lib.readFile secrets.dae.configFile;
-    assets = with pkgs; [ v2ray-geoip v2ray-domain-list-community ];
-  };
+  # services.dae = {
+  #   enable = true;
+  #   disableTxChecksumIpGeneric = false;
+  #   config = lib.readFile secrets.dae.configFile;
+  #   assets = with pkgs; [ v2ray-geoip v2ray-domain-list-community ];
+  # };
 
   time.timeZone = "Asia/Shanghai";
 
@@ -77,7 +77,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     shell = pkgs.fish;
-    passwordFile = config.sops.secrets.passwd.path;
+    hashedPasswordFile = config.sops.secrets.passwd.path;
   };
 
   home-manager = {

@@ -18,7 +18,7 @@
   environment.systemPackages = with pkgs; [
     fd
     bat
-    exa
+    eza
     duf
     neovim
     onefetch

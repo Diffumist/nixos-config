@@ -61,7 +61,7 @@ in
     isNormalUser = true;
     extraGroups = [ "wheel" "transmission" ];
     shell = pkgs.fish;
-    passwordFile = config.sops.secrets.passwd.path;
+    hashedPasswordFile = config.sops.secrets.passwd.path;
   };
 
   modules.nginx.enable = true;

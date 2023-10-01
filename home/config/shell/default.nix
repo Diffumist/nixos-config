@@ -44,7 +44,7 @@
       defaultOptions = [ "--preview 'bat --color=always --style=plain --line-range=:500 {}'" ];
     };
     nix-index.enable = true;
-    exa = {
+    eza = {
       enable = true;
       enableAliases = true;
     };

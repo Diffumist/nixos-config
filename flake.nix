@@ -24,9 +24,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # other pkgs
-    nur = {
-      url = "github:nix-community/NUR";
-    };
+    nur.url = "github:nix-community/NUR";
     berberman = {
       url = "github:berberman/flakes";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -34,9 +32,7 @@
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     daeuniverse.url = "github:daeuniverse/flake.nix";
     # secrets
-    nix-secrets = {
-      url = "git+ssh://git@github.com/Diffumist/nix-secrets";
-    };
+    nix-secrets.url = "git+ssh://git@github.com/Diffumist/nix-secrets";
   };
   outputs = { self, nixpkgs, ... } @inputs:
     let
