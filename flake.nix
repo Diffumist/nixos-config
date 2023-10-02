@@ -42,12 +42,12 @@
         inputs.berberman.overlays.default
         inputs.nix-vscode-extensions.overlays.default
         (final: prev: {
-          alacritty = final.symlinkJoin {
-            name = "alacritty";
-            paths = [ prev.alacritty ];
+          wezterm = final.symlinkJoin {
+            name = "wezterm";
+            paths = [ prev.wezterm ];
             buildInputs = [ final.makeWrapper ];
             postBuild = ''
-              wrapProgram $out/bin/alacritty --unset WAYLAND_DISPLAY
+              wrapProgram $out/bin/wezterm --unset WAYLAND_DISPLAY
             '';
           };
         })
@@ -62,7 +62,7 @@
             inherit overlays system;
             config.allowUnfree = true;
             config.permittedInsecurePackages = [
-              "openssl-1.1.1u"
+              "openssl-1.1.1w"
             ];
           };
           packages = this.packages pkgs;

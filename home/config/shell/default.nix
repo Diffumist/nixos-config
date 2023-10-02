@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+_:
 {
   programs.fish = {
     enable = true;
@@ -56,30 +56,5 @@
         style = "plain";
       };
     };
-  };
-  programs.tmux = {
-    enable = true;
-    mouse = true;
-    clock24 = true;
-    shell = "${pkgs.fish}/bin/fish";
-    plugins = with pkgs.tmuxPlugins; [
-      sensible
-      {
-        plugin = yank;
-        extraConfig = "set -g @yank_with_mouse on";
-      }
-      {
-        plugin = dracula;
-        extraConfig = ''
-          set-option -g status-position top
-          set -s copy-command '${pkgs.wl-clipboard}/bin/wl-copy'
-          unbind-key MouseDown2Pane
-          bind-key -n MouseDown2Pane run "${pkgs.wl-clipboard}/bin/wl-paste | tmux load-buffer -; tmux paste-buffer"
-          set -g @dracula-plugins "ram-usage"
-          set -g @dracula-refresh-rate 10
-          set -g @dracula-show-powerline true
-        '';
-      }
-    ];
   };
 }
