@@ -9,6 +9,7 @@
     wgcf
     typst
     typst-fmt
+    darkman
     # GUI
     # jetbrains.idea-ultimate
     tdesktop

@@ -22,7 +22,6 @@ in
         gnomeExtensions.gsconnect
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
-        gnomeExtensions.rounded-window-corners
         papirus-icon-theme
         capitaine-cursors
         shared-mime-info

@@ -69,6 +69,4 @@
   "workbench.startupEditor" = "none";
   "workbench.productIconTheme" = "material-product-icons";
   "workbench.colorTheme" = "Nord Wave";
-  "window.titleBarStyle" = "custom";
-  "window.commandCenter" = true;
 }

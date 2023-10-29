@@ -1,4 +1,4 @@
-_: {
+{ pkgs, ... }: {
   programs.mpv = {
     enable = true;
     config = {
@@ -17,6 +17,15 @@ _: {
     DOWN = "add volume -5";
     LEFT = "seek -5";
     RIGHT = "seek 5";
+  };
+
+  programs.obs-studio = {
+    enable = true;
+    plugins = with pkgs.obs-studio-plugins; [
+      wlrobs
+      obs-vaapi
+      obs-vkcapture
+    ];
   };
 
 }

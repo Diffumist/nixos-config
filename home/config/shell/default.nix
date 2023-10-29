@@ -3,12 +3,8 @@ _:
   programs.fish = {
     enable = true;
     shellInit = ''
-      export LANG="en_US.UTF-8"
       set -g fish_greeting
     '';
-    shellAliases = {
-      oath = "ykman -r Canokey oath accounts code";
-    };
   };
   # utils
   programs.starship = {
