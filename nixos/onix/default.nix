@@ -7,7 +7,7 @@
     inputs.home.nixosModules.home-manager
     inputs.nur.nixosModules.nur
     inputs.sops-nix.nixosModules.sops
-    inputs.daeuniverse.nixosModules.dae
+    inputs.daeuniverse.nixosModules.daed
   ];
 
   sops = {
@@ -33,22 +33,24 @@
       [keyfile]
       path = /var/lib/NetworkManager/system-connections
     '';
-    nameservers = [ "127.0.0.1" ];
+    nameservers = [ "1.1.1.1" ];
     firewall.enable = lib.mkForce false;
   };
 
-  # services.dae.enable = true;
-  # environment.etc."dae/config.dae" = {
-  #   source = secrets.dae.configFile;
-  #   mode = "0600";
-  # };
+  services.daed = {
+    enable = true;
+    configDir = "/var/lib/daed";
+    listen = "127.0.0.1:2023";
+    openFirewall = {
+      enable = true;
+      port = 12345;
+    };
+  };
 
-  # services.dae = {
-  #   enable = true;
-  #   disableTxChecksumIpGeneric = false;
-  #   config = lib.readFile secrets.dae.configFile;
-  #   assets = with pkgs; [ v2ray-geoip v2ray-domain-list-community ];
-  # };
+  system.activationScripts.initDaedSscripts = ''
+    ln -nfs "${pkgs.v2ray-rules-dat}/geoip.dat" "/var/lib/daed/geoip.dat"
+    ln -nfs "${pkgs.v2ray-rules-dat}/geosite.dat" "/var/lib/daed/geosite.dat"
+  '';
 
   time.timeZone = "Asia/Shanghai";
 
@@ -65,7 +67,7 @@
     };
     hardware = {
       enable = true;
-      nvidiaEnable = true;
+      nvidiaEnable = false;
       yubikeyEnable = true;
     };
   };

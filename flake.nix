@@ -74,7 +74,7 @@
               age
               cachix
               colmena
-              # nvfetcher
+              nvfetcher
               nixpkgs-fmt
             ];
           };

@@ -4,7 +4,7 @@
   nixpkgs.config.nvidia.acceptLicense = true;
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1w"
-    "electron-24.8.6"
+    "electron-25.9.0"
   ];
   documentation.doc.enable = false;
 

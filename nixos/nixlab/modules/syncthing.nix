@@ -17,17 +17,17 @@ in
   services.syncthing = {
     enable = true;
     openDefaultPorts = true;
-    devices = {
-      "onix" = {
-        id = "SYLPCVN-O2F4TZ6-RJCHN3E-XB7UGWA-Z4RQ5CM-KD3LIXP-EGXKKK6-T6GNUQS";
-      };
-    };
     guiAddress = "0.0.0.0:8384";
-    folders = lib.genAttrs folders mkSync;
-    extraOptions = {
+    settings = {
+      folders = lib.genAttrs folders mkSync;
       options = {
         natEnabled = false;
         globalAnnounceEnabled = false;
+      };
+      devices = {
+        "onix" = {
+          id = "SYLPCVN-O2F4TZ6-RJCHN3E-XB7UGWA-Z4RQ5CM-KD3LIXP-EGXKKK6-T6GNUQS";
+        };
       };
     };
   };
