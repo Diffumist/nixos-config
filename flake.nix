@@ -30,7 +30,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
-    daeuniverse.url = "github:daeuniverse/flake.nix";
     # secrets
     nix-secrets.url = "git+ssh://git@github.com/Diffumist/nix-secrets";
   };
@@ -110,14 +109,14 @@
         };
         mist = { name, ... }: {
           deployment = {
-            targetHost = "108.166.217.159";
+            targetHost = "74.48.73.20";
             targetPort = 2222;
           };
           imports = [ ./nixos/${name} ];
         };
         nixlab = { name, ... }: {
           deployment = {
-            targetHost = "192.168.0.252";
+            targetHost = "192.168.2.252";
             targetPort = 2222;
           };
           imports = [ ./nixos/${name} ];

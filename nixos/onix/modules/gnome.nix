@@ -71,9 +71,13 @@ in
         excludePackages = [ pkgs.xterm ];
         desktopManager.gnome.enable = true;
         displayManager = {
+          autoLogin = {
+            enable = true;
+            user = "diffumist";
+          };
           gdm = {
             enable = true;
-            wayland = false;
+            wayland = true;
           };
         };
       };
@@ -139,12 +143,6 @@ in
           allowedTCPPortRanges = [{ from = 1714; to = 1764; }];
           allowedUDPPortRanges = allowedTCPPortRanges;
         };
-      };
-    })
-
-    (mkIf cfg.waylandEnable {
-      services.xserver.displayManager.gdm = {
-        wayland = mkForce true;
       };
     })
   ]);

@@ -19,7 +19,7 @@ in
       hardware.opengl = {
         enable = true;
         driSupport32Bit = true;
-        extraPackages = with pkgs; [ intel-media-driver ];
+        # extraPackages = with pkgs; [ intel-media-driver ];
       };
       hardware.firmware = with pkgs; [
         firmwareLinuxNonfree
@@ -29,7 +29,6 @@ in
       hardware.enableRedistributableFirmware = lib.mkDefault true;
 
       hardware.bluetooth.enable = true;
-      hardware.logitech.wireless.enable = true;
 
       sound.enable = true;
       hardware.pulseaudio.enable = false;
@@ -40,6 +39,7 @@ in
       };
 
       security.rtkit.enable = true;
+      services.xserver.videoDrivers = [ "amdgpu" ];
       services.pipewire = {
         enable = true;
         pulse.enable = true;

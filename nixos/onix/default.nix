@@ -7,18 +7,17 @@
     inputs.home.nixosModules.home-manager
     inputs.nur.nixosModules.nur
     inputs.sops-nix.nixosModules.sops
-    inputs.daeuniverse.nixosModules.daed
   ];
 
-  sops = {
-    defaultSopsFile = ../../secrets/onix.yaml;
-    secrets.passwd.neededForUsers = true;
-    age = {
-      keyFile = "/var/lib/sops.key";
-      sshKeyPaths = [ ];
-    };
-    gnupg.sshKeyPaths = [ ];
-  };
+  # sops = {
+  #   defaultSopsFile = ../../secrets/onix.yaml;
+  #   secrets.passwd.neededForUsers = true;
+  #   age = {
+  #     keyFile = "/var/lib/sops.key";
+  #     sshKeyPaths = [ ];
+  #   };
+  #   gnupg.sshKeyPaths = [ ];
+  # };
 
   nix.registry.p.flake = self;
 
@@ -37,21 +36,6 @@
     firewall.enable = lib.mkForce false;
   };
 
-  services.daed = {
-    enable = true;
-    configDir = "/var/lib/daed";
-    listen = "127.0.0.1:2023";
-    openFirewall = {
-      enable = true;
-      port = 12345;
-    };
-  };
-
-  system.activationScripts.initDaedSscripts = ''
-    ln -nfs "${pkgs.v2ray-rules-dat}/geoip.dat" "/var/lib/daed/geoip.dat"
-    ln -nfs "${pkgs.v2ray-rules-dat}/geosite.dat" "/var/lib/daed/geosite.dat"
-  '';
-
   time.timeZone = "Asia/Shanghai";
 
   # FHS fix for nixos
@@ -61,10 +45,7 @@
 
   # modules options
   modules = {
-    gnome-env = {
-      enable = true;
-      waylandEnable = true;
-    };
+    gnome-env.enable = true;
     hardware = {
       enable = true;
       nvidiaEnable = false;
@@ -72,14 +53,16 @@
     };
   };
   services.lorri.enable = true;
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
   programs.adb.enable = true;
   users.groups."adbusers".members = [ "diffumist" ];
 
   users.users."diffumist" = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "libvirtd" ];
     shell = pkgs.fish;
-    hashedPasswordFile = config.sops.secrets.passwd.path;
+    hashedPassword = "$6$bBKQTanNcRjDBHwJ$dQBwXZvEzgiBLZ/iUXiGPeL1OMNmoCQ8RlO0MY2oCR5P4xyZvEl/TPVzvwwHTqCmPLXQhbEMVCteD6zZSz72Q/";
   };
 
   home-manager = {
@@ -92,5 +75,5 @@
     ];
   };
 
-  system.stateVersion = "21.11";
+  system.stateVersion = "23.11";
 }

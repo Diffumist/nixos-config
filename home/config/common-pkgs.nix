@@ -10,16 +10,16 @@
     typst
     typst-fmt
     darkman
+    btop
     # GUI
     # jetbrains.idea-ultimate
-    tdesktop
+    kotatogram-desktop
     spotify-tui
     qbittorrent
     transgui
     wine
     winetricks
     logseq
-    solaar
     meld
     # Env
     patchelf

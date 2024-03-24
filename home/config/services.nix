@@ -1,9 +1,9 @@
 { pkgs, config, secrets, ... }:
 {
-  sops.secrets = {
-    "spotify/user" = { };
-    "spotify/passwd" = { };
-  };
+  # sops.secrets = {
+  #   "spotify/user" = { };
+  #   "spotify/passwd" = { };
+  # };
   # User unit services
   services.gpg-agent = {
     enable = true;
@@ -13,20 +13,20 @@
     maxCacheTtl = 24 * 3600;
   };
 
-  services.spotifyd = {
-    enable = true;
-    package = pkgs.spotifyd.override { withPulseAudio = true; withKeyring = true; withMpris = true; };
-    settings = {
-      global = {
-        username = secrets.spotify.username;
-        password = secrets.spotify.password;
-        backend = "pulseaudio";
-        device_name = "onix";
-      };
-    };
-  };
+  # services.spotifyd = {
+  #   enable = true;
+  #   package = pkgs.spotifyd.override { withPulseAudio = true; withKeyring = true; withMpris = true; };
+  #   settings = {
+  #     global = {
+  #       username = secrets.spotify.username;
+  #       password = secrets.spotify.password;
+  #       backend = "pulseaudio";
+  #       device_name = "onix";
+  #     };
+  #   };
+  # };
 
-  systemd.user.services.spotifyd.Unit.After = [ "sops-nix.service" ];
+  # systemd.user.services.spotifyd.Unit.After = [ "sops-nix.service" ];
 
   services.syncthing = {
     enable = true;
