@@ -7,28 +7,31 @@ in
 {
   options.modules.gnome-env = {
     enable = mkEnableOption "GNOME";
-    waylandEnable = mkEnableOption "GNOME on wayland";
   };
 
   config = mkIf cfg.enable (mkMerge [
     ({
       environment.systemPackages = with pkgs; [
+        kooha
         gparted
-        gnome.dconf-editor
-        gnome.nautilus-python
-        gnome.gnome-tweaks
-        gnome.gnome-power-manager
-        gnome.gnome-system-monitor
-        gnomeExtensions.gsconnect
+        mission-center
+        dconf-editor
+        nautilus-python
+        gnome-tweaks
+        gnome-power-manager
+        gnome-sound-recorder
         gnomeExtensions.appindicator
         gnomeExtensions.espresso
+        gnomeExtensions.unite
+        gnomeExtensions.blur-my-shell
+        gnomeExtensions.dash-to-dock
         papirus-icon-theme
         capitaine-cursors
         shared-mime-info
         hicolor-icon-theme
       ];
 
-      environment.gnome.excludePackages = with pkgs.gnome; [
+      environment.gnome.excludePackages = with pkgs; [
         gnome-weather
         gnome-clocks
         gnome-contacts
@@ -47,8 +50,9 @@ in
         pkgs.gnome-console
         pkgs.gnome-connections
       ];
+      environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-      services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+      services.udev.packages = with pkgs; [ gnome-settings-daemon ];
       services.gnome = {
         core-utilities.enable = true;
         core-developer-tools.enable = mkForce false;
@@ -63,17 +67,21 @@ in
       programs = {
         gpaste.enable = true;
         geary.enable = mkForce false;
+        thunderbird = {
+          enable = true;
+          preferencesStatus = "default";
+        };
       };
 
       services.xserver = {
         enable = true;
-        layout = "us";
+        xkb.layout = "us";
         excludePackages = [ pkgs.xterm ];
         desktopManager.gnome.enable = true;
         displayManager = {
           gdm = {
             enable = true;
-            wayland = false;
+            wayland = true;
           };
         };
       };
@@ -83,7 +91,7 @@ in
           jetbrains-mono
           sarasa-gothic
           apple-emoji
-          noto-fonts-cjk
+          noto-fonts-cjk-sans
           (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
         ];
 
@@ -102,9 +110,9 @@ in
       i18n = {
         defaultLocale = "zh_CN.UTF-8";
         supportedLocales = [ "en_US.UTF-8/UTF-8" "zh_CN.UTF-8/UTF-8" ];
-
         inputMethod = {
-          enabled = "fcitx5";
+          enable = true;
+          type = "fcitx5";
           fcitx5.addons = with pkgs; [
             fcitx5-chinese-addons
             fcitx5-pinyin-zhwiki
@@ -139,12 +147,6 @@ in
           allowedTCPPortRanges = [{ from = 1714; to = 1764; }];
           allowedUDPPortRanges = allowedTCPPortRanges;
         };
-      };
-    })
-
-    (mkIf cfg.waylandEnable {
-      services.xserver.displayManager.gdm = {
-        wayland = mkForce true;
       };
     })
   ]);

@@ -2,11 +2,12 @@
 {
   boot.initrd = {
     availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "ahci" ]; # only loaded on demand
-    kernelModules = [ "i915" ];
+    # kernelModules = [ "i915" ];
+    kernelModules = [ "amdgpu" ];
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages;
+    # kernelPackages = pkgs.linuxPackages;
     kernelModules = [ "kvm-intel" ];
     kernelParams = [
       "mitigations=off"
@@ -26,6 +27,7 @@
       options kvm_intel nested=1
     '';
     enableContainers = false;
+    plymouth.enable = true;
   };
 
   boot.loader = {
@@ -37,8 +39,8 @@
 
   fileSystems =
     let
-      espDev = "/dev/disk/by-label/ESP_EFI"; # EFI System Partition
-      btrfsDev = "/dev/disk/by-label/NixOS";
+      espDev = "/dev/disk/by-id/nvme-SAMSUNG_MZVLB512HBJQ-000L2_S4DYNF1M903404-part1"; # EFI System Partition
+      btrfsDev = "/dev/disk/by-id/nvme-SAMSUNG_MZVLB512HBJQ-000L2_S4DYNF1M903404-part2";
 
       btrfs = options: {
         device = btrfsDev;
@@ -55,7 +57,7 @@
       "/.subvols" = btrfs [ ];
       "/home" = btrfs [ "subvol=@home" ];
       "/nix" = btrfs [ "subvol=@nix" ];
-      "/var/swap" = btrfs [ "subvol=@swap" ];
+      "/.swap" = btrfs [ "subvol=@swap" ];
       "/persist" = btrfs [ "subvol=@persist" ];
       "/boot" = {
         device = espDev;
@@ -65,7 +67,7 @@
   # swapfile
   swapDevices = [
     {
-      device = "/var/swap/swapfile";
+      device = "/.swap/rel-path";
     }
   ];
 

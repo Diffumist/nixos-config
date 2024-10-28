@@ -9,6 +9,6 @@
     (import ./sshd.nix)
     (import ./nix-config.nix)
     (import ./packages.nix)
-    (import ./transmission.nix)
+    # (import ./transmission.nix)
   ];
 }

@@ -6,7 +6,7 @@
     ./modules
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
-    inputs.sops-nix.nixosModules.sops
+    # inputs.sops-nix.nixosModules.sops
   ];
 
   modules = {
@@ -20,14 +20,14 @@
     xray.enable = true;
   };
 
-  sops = {
-    defaultSopsFile = ../../secrets/mist.yaml;
-    age = {
-      keyFile = "/var/lib/sops.key";
-      sshKeyPaths = [ ];
-    };
-    gnupg.sshKeyPaths = [ ];
-  };
+  # sops = {
+  #   defaultSopsFile = ../../secrets/mist.yaml;
+  #   age = {
+  #     keyFile = "/var/lib/sops.key";
+  #     sshKeyPaths = [ ];
+  #   };
+  #   gnupg.sshKeyPaths = [ ];
+  # };
 
   nix = {
     settings = {
@@ -64,5 +64,5 @@
     isSystemUser = true;
   };
 
-  system.stateVersion = "21.11";
+  system.stateVersion = "22.05";
 }

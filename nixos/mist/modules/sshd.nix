@@ -3,7 +3,6 @@
   i18n.supportedLocales = [ "en_US.UTF-8/UTF-8" ];
 
   networking = {
-    useDHCP = lib.mkDefault false;
     firewall.enable = lib.mkDefault true;
     firewall.allowedTCPPorts = [ 2222 ];
   };

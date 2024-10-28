@@ -17,8 +17,8 @@ in
     useNetworkd = true;
     interfaces.eno1 = {
       useDHCP = true;
-      ipv4.addresses = [{ address = "192.168.0.252"; prefixLength = 24; }];
-      ipv4.routes = [{ address = "192.168.0.1"; prefixLength = 24; }];
+      # ipv4.addresses = [{ address = "192.168.0.252"; prefixLength = 24; }];
+      # ipv4.routes = [{ address = "192.168.0.1"; prefixLength = 24; }];
     };
   };
 

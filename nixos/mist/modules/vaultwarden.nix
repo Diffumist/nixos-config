@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, secrets, ... }:
 
 with lib;
 let
@@ -39,6 +39,9 @@ in
 
     systemd.services.vaultwarden = {
       requires = [ "postgresql.service" ];
+      serviceConfig = {
+        EnvironmentFile = "/var/lib/vaultwarden.env";
+      };
       after = [ "postgresql.service" ];
     };
     services.postgresqlBackup = {

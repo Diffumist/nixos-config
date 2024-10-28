@@ -7,86 +7,68 @@ in
 {
   options = {
     modules.hardware = {
-      enable = mkEnableOption "base hardware";
-      nvidiaEnable = mkEnableOption "hardware for nvidia";
-      yubikeyEnable = mkEnableOption "hardware for Yubikey";
+      enable = mkEnableOption "hardware config";
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
-    ({
-      hardware.cpu.intel.updateMicrocode = true;
-      hardware.opengl = {
-        enable = true;
-        driSupport32Bit = true;
-        extraPackages = with pkgs; [ intel-media-driver ];
-      };
-      hardware.firmware = with pkgs; [
-        firmwareLinuxNonfree
-        sof-firmware
-        alsa-firmware
-      ];
-      hardware.enableRedistributableFirmware = lib.mkDefault true;
+  config = mkIf cfg.enable {
+    hardware.cpu.intel.updateMicrocode = true;
+    hardware.graphics = {
+      enable = true;
+      enable32Bit = true;
+      # extraPackages = with pkgs; [ intel-media-driver ];
+    };
+    hardware.firmware = with pkgs; [
+      firmwareLinuxNonfree
+      sof-firmware
+      alsa-firmware
+    ];
+    hardware.enableRedistributableFirmware = lib.mkDefault true;
+    # AMDVLK
+    hardware.amdgpu.initrd.enable = true;
+    hardware.amdgpu.opencl.enable = true;
+    hardware.amdgpu.amdvlk = {
+      enable = true;
+      support32Bit.enable = true;
+    };
 
-      hardware.bluetooth.enable = true;
-      hardware.logitech.wireless.enable = true;
+    hardware.bluetooth.enable = true;
+    hardware.pulseaudio.enable = false;
+    # SSD trim
+    services.fstrim = {
+      enable = true;
+      interval = "Sun";
+    };
 
-      sound.enable = true;
-      hardware.pulseaudio.enable = false;
-      # SSD trim
-      services.fstrim = {
+    security.rtkit.enable = true;
+    # services.xserver.videoDrivers = [ "amdgpu" ];
+    services.pipewire = {
+      enable = true;
+      pulse.enable = true;
+      alsa = {
         enable = true;
-        interval = "Sun";
+        support32Bit = true;
       };
+      jack.enable = true;
+    };
+    # Yubikey
+    hardware.gpgSmartcards.enable = true;
+    services.pcscd = {
+      enable = true;
+      plugins = [ pkgs.ccid ];
+    };
 
-      security.rtkit.enable = true;
-      services.pipewire = {
-        enable = true;
-        pulse.enable = true;
-        alsa = {
-          enable = true;
-          support32Bit = true;
-        };
-        jack.enable = true;
-      };
-    })
-
-    (mkIf cfg.nvidiaEnable {
-      hardware.nvidia = {
-        package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
-        prime = {
-          offload.enable = true;
-          intelBusId = "PCI:0:2:0";
-          nvidiaBusId = "PCI:2:0:0";
-        };
-        powerManagement = {
-          enable = true;
-          finegrained = true;
-        };
-        modesetting.enable = true;
-        nvidiaSettings = false;
-        nvidiaPersistenced = true;
-      };
-      services.xserver.videoDrivers = [ "nvidia" ];
-    })
-    (mkIf cfg.yubikeyEnable {
-      # Yubikey
-      hardware.gpgSmartcards.enable = true;
-      services.pcscd = {
-        enable = true;
-        plugins = [ pkgs.ccid ];
-      };
-
-      security.pam.u2f = {
-        enable = true;
+    security.pam.u2f = {
+      enable = true;
+      settings = {
         authFile = secrets.u2f.authFile;
-        control = "sufficient";
         cue = true;
       };
-      security.pam.services.login.u2fAuth = true;
-      security.pam.services.gdm.u2fAuth = true;
+      control = "sufficient";
+    };
+    security.pam.services.login.u2fAuth = true;
+    security.pam.services.gdm.u2fAuth = true;
 
-      services.udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ];
-    })
-  ]);
+    services.udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ];
+  };
 }

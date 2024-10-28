@@ -40,10 +40,7 @@ _:
       defaultOptions = [ "--preview 'bat --color=always --style=plain --line-range=:500 {}'" ];
     };
     nix-index.enable = true;
-    eza = {
-      enable = true;
-      enableAliases = true;
-    };
+    eza.enable = true;
     bat = {
       enable = true;
       config = {

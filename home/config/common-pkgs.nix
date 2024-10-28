@@ -4,23 +4,25 @@
   home.packages = with pkgs; map lib.lowPrio [
     # CLI
     xh
-    nixpkgs-fmt
+    nix-update
+    nix-init
+    nixfmt-rfc-style
     nixpkgs-review
+    ncdu
     wgcf
     typst
     typst-fmt
-    darkman
+    btop
+    comma
+    yubikey-manager
     # GUI
     # jetbrains.idea-ultimate
     tdesktop
-    spotify-tui
     qbittorrent
     transgui
-    chatbox-bin
     wine
     winetricks
     logseq
-    solaar
     meld
     # Env
     patchelf

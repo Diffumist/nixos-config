@@ -73,18 +73,24 @@ in
   gtk = {
     enable = true;
     font = { name = "Sarasa Gothic SC"; size = 11; };
-    iconTheme = { name = "Papirus"; };
-    theme = { name = "Adwaita-dark"; };
+    iconTheme = { name = "Papirus-Dark"; };
+    theme = { name = "Adwaita"; };
     gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
     gtk3.bookmarks = [
       "file:///home/diffumist/Videos"
       "file:///home/diffumist/Other"
       "file:///home/diffumist/Documents/Project"
     ];
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 0;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 0;
+    };
   };
   qt = {
     enable = true;
-    platformTheme = "gtk";
+    platformTheme.name = "gtk";
     style = { package = pkgs.adwaita-qt; name = "adwaita"; };
   };
   systemd.user.sessionVariables = xdgdirs;

@@ -1,16 +1,12 @@
-{ pkgs, ... }:
+{ ... }:
 {
   boot.loader.grub.device = "/dev/vda";
-  boot.initrd.kernelModules = [ "nvme" ];
-  boot.initrd.postDeviceCommands = "sleep 2";
 
   boot.kernel.sysctl = {
     "vm.swappiness" = 10;
     "net.ipv4.tcp_congestion_control" = "bbr";
     "net.ipv4.ip_forward" = 1;
   };
-  boot.enableContainers = false;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   fileSystems =
     let
@@ -26,7 +22,7 @@
     {
       "/" = {
         fsType = "tmpfs";
-        options = [ "defaults" "mode=755" ];
+        options = [ "defaults" ];
       };
       "/.subvols" = btrfs [ ];
       "/boot" = btrfs [ "subvol=@boot" ];
