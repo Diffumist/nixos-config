@@ -1,25 +1,19 @@
-{ lib, pkgs, secrets, inputs, config, self, ... }:
+{
+  lib,
+  pkgs,
+  secrets,
+  inputs,
+  self,
+  ...
+}:
 {
   imports = [
     ./boot.nix
-    ./modules
+    self.nixosModules.default
     inputs.impermanence.nixosModules.impermanence
     inputs.home.nixosModules.home-manager
     inputs.nur.nixosModules.nur
-    inputs.sops-nix.nixosModules.sops
   ];
-
-  # sops = {
-  #   defaultSopsFile = ../../secrets/onix.yaml;
-  #   secrets.passwd.neededForUsers = true;
-  #   age = {
-  #     keyFile = "/var/lib/sops.key";
-  #     sshKeyPaths = [ ];
-  #   };
-  #   gnupg.sshKeyPaths = [ ];
-  # };
-
-  nix.registry.p.flake = self;
 
   # network
   networking = {
@@ -28,7 +22,7 @@
     networkmanager.dns = "none";
     networkmanager.settings.main.manager = "unmanaged";
     networkmanager.settings.keyfile.path = "/var/lib/NetworkManager/system-connections";
-    nameservers = [ "1.1.1.1" ];
+    nameservers = [ "223.5.5.5" ];
     firewall.enable = lib.mkForce false;
   };
 
@@ -38,27 +32,22 @@
     configFile = "/home/diffumist/.config/clash-verge/profiles/r5pTU9CK4Jq5.yaml";
   };
 
-  time.timeZone = "Asia/Shanghai";
-
-  # FHS fix for nixos
-  services.envfs.enable = true;
-  programs.nix-ld.enable = true;
-
+  services.systembus-notify.enable = true;
+  services.earlyoom.enableNotifications = true;
+  services.lorri.enable = true;
 
   # modules options
   modules = {
-    gnome-env.enable = true;
+    gnome-desktop.enable = true;
     hardware.enable = true;
   };
-  services.lorri.enable = true;
-  virtualisation.libvirtd.enable = true;
-  programs.virt-manager.enable = true;
-  programs.adb.enable = true;
-  users.groups."adbusers".members = [ "diffumist" ];
 
   users.users."diffumist" = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "libvirtd" ];
+    extraGroups = [
+      "wheel"
+      "libvirtd"
+    ];
     shell = pkgs.fish;
     hashedPassword = "$6$bBKQTanNcRjDBHwJ$dQBwXZvEzgiBLZ/iUXiGPeL1OMNmoCQ8RlO0MY2oCR5P4xyZvEl/TPVzvwwHTqCmPLXQhbEMVCteD6zZSz72Q/";
   };
@@ -66,12 +55,12 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    extraSpecialArgs = { inherit secrets; };
+    extraSpecialArgs = {
+      inherit secrets;
+    };
     users.diffumist = import ../../home;
-    sharedModules = [
-      inputs.sops-nix.homeManagerModules.sops
-    ];
+    sharedModules = [ ];
   };
 
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 }

@@ -1,4 +1,0 @@
-[v2ray-rules-dat]
-src.git = "https://github.com/Loyalsoldier/v2ray-rules-dat"
-src.branch = "release"
-fetch.github = "Loyalsoldier/v2ray-rules-dat"

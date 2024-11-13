@@ -15,7 +15,11 @@
       btrfs = options: {
         device = btrfsDev;
         fsType = "btrfs";
-        options = [ "noatime" "compress-force=zstd" "space_cache=v2" ] ++ options;
+        options = [
+          "noatime"
+          "compress-force=zstd"
+          "space_cache=v2"
+        ] ++ options;
         neededForBoot = true;
       };
     in

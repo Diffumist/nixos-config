@@ -1,33 +1,26 @@
 { pkgs, ... }:
 {
   boot.initrd = {
-    availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "ahci" ]; # only loaded on demand
-    # kernelModules = [ "i915" ];
+    availableKernelModules = [
+      "xhci_pci"
+      "nvme"
+      "usbhid"
+      "ahci"
+    ]; # only loaded on demand
     kernelModules = [ "amdgpu" ];
   };
 
   boot = {
-    # kernelPackages = pkgs.linuxPackages;
-    kernelModules = [ "kvm-intel" ];
-    kernelParams = [
-      "mitigations=off"
-      "intel_iommu=on"
-      "iommu=pt"
-      "nowatchdog"
-    ];
+    kernelPackages = pkgs.linuxKernel.packages.linux_lqx;
     kernel.sysctl = {
       "kernel.sysrq" = 1;
       "kernel.panic" = 10;
     };
-    extraModprobeConfig = ''
-      options i915 enable_guc=2
-      options i915 enable_fbc=1
-      options i915 fastboot=1
-      blacklist ideapad_laptop
-      options kvm_intel nested=1
-    '';
+    kernelParams = [
+      "i915.force_probe=!4908"
+      "xe.force_probe=4908" # Xe Graphics For DG1
+    ];
     enableContainers = false;
-    plymouth.enable = true;
   };
 
   boot.loader = {
@@ -45,14 +38,21 @@
       btrfs = options: {
         device = btrfsDev;
         fsType = "btrfs";
-        options = [ "noatime" "space_cache=v2" "compress-force=zstd" ] ++ options;
+        options = [
+          "noatime"
+          "space_cache=v2"
+          "compress-force=zstd"
+        ] ++ options;
         neededForBoot = true;
       };
     in
     {
       "/" = {
         fsType = "tmpfs";
-        options = [ "defaults" "mode=755" ];
+        options = [
+          "defaults"
+          "mode=755"
+        ];
       };
       "/.subvols" = btrfs [ ];
       "/home" = btrfs [ "subvol=@home" ];

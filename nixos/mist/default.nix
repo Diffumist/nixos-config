@@ -1,12 +1,18 @@
-{ modulesPath, pkgs, config, secrets, lib, inputs, ... }:
+{
+  pkgs,
+  config,
+  secrets,
+  lib,
+  inputs,
+  self,
+  ...
+}:
 {
   imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
     ./boot.nix
-    ./modules
+    self.nixosModules.default
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
-    # inputs.sops-nix.nixosModules.sops
   ];
 
   modules = {
@@ -20,34 +26,15 @@
     xray.enable = true;
   };
 
-  # sops = {
-  #   defaultSopsFile = ../../secrets/mist.yaml;
-  #   age = {
-  #     keyFile = "/var/lib/sops.key";
-  #     sshKeyPaths = [ ];
-  #   };
-  #   gnupg.sshKeyPaths = [ ];
-  # };
-
-  nix = {
-    settings = {
-      substituters = lib.mkForce [
-        "https://cache.nixos.org"
-      ];
-      nix-path = [ "nixpkgs=${inputs.nixpkgs}" ];
-    };
-    registry = {
-      p.flake = inputs.nixpkgs;
-    };
-  };
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB5+ekQWrbKupUzdeLcawo2BxqmW8MDLpocNpUBVItle noname"
+  ];
 
   networking = {
-    useDHCP = lib.mkForce true;
+    useDHCP = true;
     hostName = "mist";
     domain = "diffumist.me";
   };
-
-  time.timeZone = "Asia/Shanghai";
 
   systemd.services.frps = {
     after = [ "network.target" ];

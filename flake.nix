@@ -5,16 +5,13 @@
     # nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # utils
-    flake-utils.url = "github:numtide/flake-utils";
-    impermanence.url = "github:nix-community/impermanence";
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
     };
+    flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    impermanence.url = "github:nix-community/impermanence";
     home = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,94 +30,69 @@
     # secrets
     nix-secrets.url = "git+ssh://git@github.com/Diffumist/nix-secrets";
   };
-  outputs = { self, nixpkgs, ... } @inputs:
-    let
-      this = import ./pkgs;
-      overlays = [
-        self.overlays.default
-        inputs.berberman.overlays.default
-        inputs.nix-vscode-extensions.overlays.default
-        (final: prev: {
-          wezterm = final.symlinkJoin {
-            name = "wezterm";
-            paths = [ prev.wezterm ];
-            buildInputs = [ final.makeWrapper ];
-            postBuild = ''
-              wrapProgram $out/bin/wezterm --unset WAYLAND_DISPLAY
-            '';
-          };
-        })
-      ];
-    in
-    inputs.flake-utils.lib.eachSystem [ "x86_64-linux" ]
-      (
-        system:
-        rec
+  outputs =
+    { self, ... }@inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = inputs.flake-utils.lib.defaultSystems;
+      perSystem =
         {
-          pkgs = import nixpkgs {
-            inherit overlays system;
-            config.allowUnfree = true;
-            config.permittedInsecurePackages = [
-              "openssl-1.1.1w"
-            ];
-          };
-          packages = this.packages pkgs;
-          check = packages;
-          legacyPackages = pkgs;
-          devShells.default = with pkgs; mkShell {
-            nativeBuildInputs = [
-              sops
-              age
-              cachix
-              colmena
-              nvfetcher
-              nixpkgs-fmt
-            ];
-          };
-        }
-      ) // {
-      overlays.default = this.overlay;
-      nixosConfigurations =
-        let
-          hosts = builtins.attrNames (builtins.readDir ./nixos);
-          mkSystem = hostname:
-            nixpkgs.lib.nixosSystem {
-              system = "x86_64-linux";
-              specialArgs = {
-                inherit inputs self;
-                inherit (inputs.nix-secrets) secrets;
-              };
-              modules = [{ nixpkgs = { inherit overlays; }; }]
-              ++ [ (import (./nixos + "/${hostname}")) ];
+          config,
+          self',
+          inputs',
+          pkgs,
+          system,
+          ...
+        }:
+        {
+          devShells.default = import ./shell.nix { inherit pkgs; };
+        };
+      flake = {
+        nixosModules.default = import ./modules;
+        overlays.default = import ./overlay { inherit inputs; };
+        nixosConfigurations = inputs.nixpkgs.lib.genAttrs (builtins.attrNames (builtins.readDir ./nixos)) (
+          hostname:
+          inputs.nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            specialArgs = {
+              inherit inputs self;
+              inherit (inputs.nix-secrets) secrets;
             };
-        in
-        nixpkgs.lib.genAttrs hosts mkSystem;
+            modules = [
+              (import (./nixos + "/${hostname}"))
+              {
+                nixpkgs.overlays = [
+                  self.overlays.default
+                  inputs.berberman.overlays.default
+                  inputs.nix-vscode-extensions.overlays.default
+                ];
+              }
+            ];
+          }
+        );
+      };
+    }
+    // {
+      # Remote Build
       colmena = {
         meta = {
           specialArgs = {
             inherit self inputs;
             inherit (inputs.nix-secrets) secrets;
           };
-          nixpkgs = import nixpkgs {
+          nixpkgs = import inputs.nixpkgs {
             system = "x86_64-linux";
-            inherit overlays;
             config.allowUnfree = true;
           };
         };
-        mist = { name, ... }: {
-          deployment = {
-            targetHost = "74.48.73.20";
-            targetPort = 2222;
+        mist =
+          { name, ... }:
+          {
+            deployment = {
+              targetHost = "74.48.73.20";
+              targetPort = 2222;
+            };
+            imports = [ ./nixos/${name} ];
           };
-          imports = [ ./nixos/${name} ];
-        };
-        nixlab = { name, ... }: {
-          deployment = {
-            targetHost = "192.168.2.252";
-            targetPort = 2222;
-          };
-          imports = [ ./nixos/${name} ];
-        };
       };
     };
 }
