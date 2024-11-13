@@ -2,7 +2,6 @@
   pkgs,
   config,
   secrets,
-  lib,
   inputs,
   self,
   ...
@@ -11,6 +10,7 @@
   imports = [
     ./boot.nix
     self.nixosModules.default
+    self.nixosModules.cloud
     inputs.impermanence.nixosModules.impermanence
     inputs.nur.nixosModules.nur
   ];
@@ -23,7 +23,6 @@
       enable = true;
       domain = config.networking.domain;
     };
-    xray.enable = true;
   };
 
   users.users.root.openssh.authorizedKeys.keys = [

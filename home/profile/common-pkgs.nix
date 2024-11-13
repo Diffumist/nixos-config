@@ -24,6 +24,7 @@
       meld
       # LSP
       gopls
+      nodejs
       nodePackages.bash-language-server
       nodePackages.vscode-json-languageserver
       nil

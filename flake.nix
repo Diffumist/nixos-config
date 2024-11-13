@@ -47,7 +47,7 @@
           devShells.default = import ./shell.nix { inherit pkgs; };
         };
       flake = {
-        nixosModules.default = import ./modules;
+        nixosModules = import ./modules;
         overlays.default = import ./overlay { inherit inputs; };
         nixosConfigurations = inputs.nixpkgs.lib.genAttrs (builtins.attrNames (builtins.readDir ./nixos)) (
           hostname:
