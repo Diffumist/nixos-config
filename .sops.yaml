@@ -1,0 +1,3 @@
+creation_rules:
+  - path_regex: nixos/common/secrets\.yaml$
+    pgp: '8BA330B49A5694A6'
