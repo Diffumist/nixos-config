@@ -8,19 +8,14 @@
 {
   imports = [
     ./boot.nix
-
-    ./services/caddy.nix
-    ./services/easytier.nix
-    ./services/immich.nix
-    ./services/rqbit.nix
+    
+    # ./services/caddy.nix
+    # ./services/easytier.nix
+    ./services/vaultwarden.nix
   ];
 
-  networking = {
-    nftables.enable = true;
-    useNetworkd = true;
-    networkmanager.enable = false;
-  };
-
+  networking.networkmanager.enable = false;
+  networking.useNetworkd = true;
   systemd.network = {
     enable = true;
     networks."10-lan" = {
@@ -43,5 +38,5 @@
       };
     };
   };
-  networking.hostName = "liteserver";
+  networking.hostName = "phoenix";
 }

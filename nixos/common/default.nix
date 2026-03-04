@@ -1,8 +1,10 @@
 { pkgs, lib, ... }:
 {
   imports = [
-    ./sshd.nix
     ./nixconfig.nix
+    ./kernel.nix
+    ./services/fail2ban.nix
+    ./services/sshd.nix
   ];
 
   environment.systemPackages = with pkgs; [
@@ -21,10 +23,7 @@
     libarchive
   ];
 
-  # ntp
   time.timeZone = "Asia/Shanghai";
-  services.timesyncd.enable = false;
-  services.ntpd-rs.enable = true;
 
   i18n = {
     defaultLocale = "zh_CN.UTF-8";
@@ -40,6 +39,8 @@
     podman = {
       enable = true;
       dockerCompat = true;
+      dockerSocket.enable = true;
+      defaultNetwork.settings.dns_enabled = true;
     };
     oci-containers.backend = "podman";
   };

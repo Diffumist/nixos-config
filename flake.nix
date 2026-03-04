@@ -1,42 +1,12 @@
 {
   description = "diffumist's NixOS configuration";
 
-  outputs =
-    { self, nixpkgs, ... }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-      };
-    in
-    {
-      devShells.${system}.default = pkgs.mkShell {
-        name = "snowflake";
-        packages = with pkgs; [
-          nil
-          sops
-          nixfmt
-          deploy-rs
-          yaml-language-server
-        ];
-      };
-      formatter.${system} = pkgs.nixfmt;
-      deploy = import ./nixos/deploy.nix inputs;
-      nixosConfigurations = import ./nixos inputs;
-      checks = builtins.mapAttrs (
-        system: deployLib: deployLib.deployChecks self.deploy
-      ) inputs.deploy-rs.lib;
-    };
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    dns = {
-      url = "github:nix-community/dns.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     devshell = {
@@ -61,5 +31,65 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "flake-utils";
     };
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nur-xddxdd = {
+      url = "github:xddxdd/nur-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    codex-cli-nix.url = "github:sadjow/codex-cli-nix";
   };
+
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      flake-utils,
+      ...
+    }:
+    flake-utils.lib.eachSystem
+      [
+        "x86_64-linux"
+      ]
+      (
+        system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+            overlays = [ self.overlays.default ];
+          };
+        in
+        {
+          devShells.default =
+            with pkgs;
+            mkShell {
+              nativeBuildInputs = [
+                age
+                sops
+                ninja
+                deploy-rs
+                nvfetcher
+                ssh-to-age
+              ];
+            };
+          formatter = pkgs.nixfmt;
+          checks = inputs.deploy-rs.lib.${system}.deployChecks self.deploy;
+        }
+      )
+    // {
+      overlays.default = (import ./overlay { inherit inputs; });
+      deploy = import ./nixos/deploy.nix { inherit inputs self; };
+      nixosConfigurations = import ./nixos { inherit inputs self; };
+    };
 }

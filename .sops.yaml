@@ -1,3 +1,12 @@
+keys:
+  - &diffumist age1mgw2q0ytdsnyxh40me6fu5pvcvcf7nug3dm05s8wu0v9ay20eenqatudqj
+  - &private age1aneevlvx7wkk00r4ryhpmlpwulmp68c0yq0hdv00nfv8g94wm4rs2m9z5q
 creation_rules:
-  - path_regex: nixos/common/secrets\.yaml$
-    pgp: '8BA330B49A5694A6'
+  - path_regex: nixos/hawkpoint/secrets\.yaml$
+    key_groups:
+      - age:
+        - *diffumist
+  - path_regex: .*\.yaml$
+    key_groups:
+      - age:
+        - *private

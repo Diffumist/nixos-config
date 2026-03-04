@@ -8,6 +8,7 @@
     efiInstallAsRemovable = true;
   };
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.supportedFilesystems.zfs = lib.mkForce false;
 
   fileSystems."/" = {
     device = "tmpfs";

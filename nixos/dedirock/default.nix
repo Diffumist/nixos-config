@@ -8,11 +8,6 @@
 {
   imports = [
     ./boot.nix
-
-    ./services/caddy.nix
-    ./services/easytier.nix
-    ./services/immich.nix
-    ./services/rqbit.nix
   ];
 
   networking = {
@@ -27,12 +22,12 @@
       matchConfig.Name = "ens3";
       networkConfig = {
         Address = [
-          "150.129.9.29/24"
-          "2a04:52c0:0138:d282::8964"
+          "216.45.50.94/25"
+          "2607:9d00:2000:f8::a51d:57e1/64"
         ];
         Gateway = [
-          "150.129.9.1"
-          "2a04:52c0:0138:d282::1"
+          "216.45.50.1"
+          "2607:9d00:2000:f8::1"
         ];
         DNS = [
           "1.0.0.1"
@@ -43,5 +38,5 @@
       };
     };
   };
-  networking.hostName = "liteserver";
+  networking.hostName = "dedirock";
 }
