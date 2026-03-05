@@ -118,6 +118,24 @@
       };
     };
   };
+  services.envfs.enable = true;
+  # TODO upstream https://github.com/Mic92/envfs/issues/203
+  fileSystems."/usr/bin".options = lib.mkIf config.boot.initrd.systemd.enable [
+    "x-systemd.requires=modprobe@fuse.service"
+    "x-systemd.after=modprobe@fuse.service"
+  ];
+  fileSystems."/bin".enable = lib.mkIf config.boot.initrd.systemd.enable false;
+  boot.initrd.systemd.tmpfiles.settings = lib.mkIf config.boot.initrd.systemd.enable {
+    "50-usr-bin" = {
+      "/sysroot/usr/bin" = {
+        d = {
+          group = "root";
+          mode = "0755";
+          user = "root";
+        };
+      };
+    };
+  };
   environment.systemPackages = with pkgs; [
     # CLI
     duf

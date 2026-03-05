@@ -175,12 +175,18 @@
       enable = true;
       package = pkgs.vscodium;
       profiles.default.extensions = with pkgs.vscode-marketplace; [
+        golang.go
         mkhl.direnv
+        docker.docker
         oxc.oxc-vscode
         jnoortheen.nix-ide
+        rust-lang.rust-analyzer
         piousdeer.adwaita-theme
         pkief.material-icon-theme
         pkief.material-product-icons
+        ms-python.python
+        ms-python.debugpy
+        ms-python.vscode-python-envs
         ms-ceintl.vscode-language-pack-zh-hans
       ];
     };
