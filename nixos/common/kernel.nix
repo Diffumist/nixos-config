@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 {
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
-  boot.kernelParams = [
+  boot.kernelParams = lib.mkDefault [
     "vdso32=0"
     "vsyscall=none"
     "cfi=kcfi"
@@ -12,7 +12,7 @@
     "page_alloc.shuffle=1"
   ];
   # Ref: https://github.com/k4yt3x/sysctl/blob/master/sysctl.conf
-  boot.kernel.sysctl = {
+  boot.kernel.sysctl = lib.mkDefault {
     # --- Network Optimization ---
     "net.ipv4.tcp_congestion_control" = "bbr";
     "net.core.default_qdisc" = "fq";
