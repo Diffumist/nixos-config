@@ -56,9 +56,6 @@
   services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
   security.sudo.wheelNeedsPassword = lib.mkForce false;
 
-  # nix-config
-  nixpkgs.config.allowUnfree = true;
-
   nix = {
     channel.enable = true;
     settings = {

@@ -4,7 +4,7 @@
   ...
 }:
 {
-  import = [
+  imports = [
     ./dev.nix
     ./shell.nix
     ./xdgdir.nix
@@ -80,13 +80,11 @@
   };
   home.packages = with pkgs; [
     # CLI
-    rclone
-    dnscontrol
     bubblewrap
     steam-run
     systemd-run-app
     # TUI
-    inputs.codex-cli-nix.packages.${pkgs.system}.default
+    codex-cli
     # opencode
     gemini-cli-bin
     # claude-code
@@ -103,6 +101,7 @@
     antigravity-fhs
     ayugram-desktop
     qbittorrent-enhanced
+    netease-cloud-music-gtk
     # uncategorized.dingtalk
   ];
   # rime

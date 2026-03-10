@@ -9,10 +9,11 @@
   imports = [
     ./boot.nix
 
-    ./services/caddy.nix
-    ./services/easytier.nix
-    ./services/immich.nix
-    ./services/rqbit.nix
+    # ./services/caddy.nix
+    # ./services/sing-box.nix
+    # ./services/netbird.nix
+    # ./services/immich.nix
+    # ./services/rqbit.nix
   ];
 
   networking = {

@@ -1,17 +1,14 @@
-inputs:
+{ inputs, self }:
 let
-  inherit (inputs.nixpkgs.lib) mapAttrs filterAttrs;
-  filteredConfigurations = filterAttrs (
-    name: _:
-    !(builtins.elem name [
-      "nixiso"
-      "hawkpoint"
-    ])
-  ) inputs.self.nixosConfigurations;
+  inherit (inputs.nixpkgs.lib) mapAttrs;
+  deployConfigurations = import ./default.nix {
+    inherit inputs self;
+    hostFilter = _: h: h.deploy or false;
+  };
   mkNode =
     name:
     let
-      cfg = filteredConfigurations.${name};
+      cfg = deployConfigurations.${name};
       # nixosSystem 的返回通常既有 `system` 也有 `pkgs.system`；这里做兼容兜底
       system =
         if cfg ? pkgs && cfg.pkgs ? system then
@@ -25,7 +22,7 @@ let
       hostname = name;
       profiles.system.path = inputs.deploy-rs.lib.${system}.activate.nixos cfg;
       user = "root";
-      sshUser = "diffumist";
+      sshUser = "root";
       fastConnection = true;
       # DEBUG
       autoRollback = false;
@@ -34,5 +31,5 @@ let
     };
 in
 {
-  nodes = mapAttrs (name: _: mkNode name) filteredConfigurations;
+  nodes = mapAttrs (name: _: mkNode name) deployConfigurations;
 }

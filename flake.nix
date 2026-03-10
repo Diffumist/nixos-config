@@ -31,10 +31,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.utils.follows = "flake-utils";
     };
-    noctalia = {
-      url = "github:noctalia-dev/noctalia-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nur-xddxdd = {
       url = "github:xddxdd/nur-packages";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,6 +41,10 @@
     };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    dms-plugin-registry = {
+      url = "github:AvengeMedia/dms-plugin-registry";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
@@ -88,7 +88,7 @@
         }
       )
     // {
-      overlays.default = (import ./overlay { inherit inputs; });
+      overlays.default = import ./overlay inputs;
       deploy = import ./nixos/deploy.nix { inherit inputs self; };
       nixosConfigurations = import ./nixos { inherit inputs self; };
     };

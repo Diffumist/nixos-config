@@ -12,6 +12,11 @@
   };
   programs = {
     uv.enable = true;
+    # programs.ssh = {
+    #   extraConfig = ''
+    #   Include ${config.sops.secrets.ssh-hosts.path}
+    # '';
+    # };
     go = {
       enable = true;
       env = {
@@ -63,7 +68,6 @@
   };
   home.packages = with pkgs; [
     xh
-    tokei
     age
     sops
     nixd

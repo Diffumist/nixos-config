@@ -24,5 +24,6 @@ importedPkgs
         --replace "VSCODE = 'code'" "VSCODE = 'codium'"
     '';
   });
+  codex-cli = inputs.codex-cli-nix.packages.${prev.stdenv.hostPlatform.system}.default;
   # stable-package = inputs.nixpkgs-stable.legacyPackages.${prev.system}.some-package;
 }

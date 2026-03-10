@@ -1,5 +1,4 @@
-_:
-{
+_: {
   programs = {
     fd.enable = true;
     fzf.enable = true;

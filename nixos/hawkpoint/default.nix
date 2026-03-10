@@ -100,7 +100,6 @@
     enable = true;
     useNautilus = true;
   };
-  services.noctalia-shell.enable = true;
   security.soteria.enable = true;
   services.greetd = {
     enable = true;
@@ -141,22 +140,26 @@
     duf
     ncdu
     lstr
+    tokei
+    rclone
     binutils
     dnsutils
     pciutils
+    dnscontrol
     libarchive
     # GUI
     eog
     glib
     adw-gtk3
+    bibata-cursors
     nwg-look
     nautilus
     code-nautilus
     mission-center
     seahorse
+    pinentry-gnome3
     gsettings-desktop-schemas
     papirus-icon-theme
-    capitaine-cursors-themed
     polkit_gnome
     gnome-text-editor
     gpu-screen-recorder
@@ -164,7 +167,14 @@
   ];
 
   programs = {
+    dms-shell = {
+      enable = true;
+      plugins = {
+        dankBitwarden.enable = true;
+      };
+    };
     nix-ld.enable = true;
+    nh.enable = true;
     fish = {
       enable = true;
       useBabelfish = true;

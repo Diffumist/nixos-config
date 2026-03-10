@@ -59,7 +59,7 @@ Build flow:
 
 | Host | Role | Status | Notes |
 |---|---|---|---|
-| `hawkpoint` | Local desktop | Mature | Niri + Noctalia + Home Manager, CachyOS kernel overlay. |
+| `hawkpoint` | Local desktop | Mature | Niri + Home Manager, CachyOS kernel overlay. |
 | `nixiso` | Custom installer ISO | Usable | Used to bootstrap VPS from provider panel ISO mount. |
 | `liteserver` | Remote service node | Partial | Caddy, EasyTier, Immich, rqbit, SOPS secrets. |
 | `phoenix` | Remote service node | Partial | Vaultwarden configured; `services/caddy.nix` is empty. |
@@ -98,7 +98,6 @@ Owner-declared hardware:
 
 Configured stack:
 - WM/compositor: `programs.niri.enable = true`
-- Shell layer: `services.noctalia-shell.enable = true` (Quickshell preset)
 - User environment: Home Manager (`nixos/hawkpoint/home/default.nix`)
 - Kernel: `pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-zen4`
 
@@ -121,7 +120,6 @@ Treat this as the intended server baseline, but not fully normalized yet.
 - `nix-community/disko`: declarative partition/filesystem config in Nix.
 - `serokell/deploy-rs`: remote NixOS deployment.
 - `nix-community/impermanence`: persist allowlisted paths, keep rest ephemeral.
-- `noctalia-dev/noctalia-shell`: Quickshell preset for richer desktop shell with Niri.
 - `xddxdd/nur-packages`: extra package/module source.
 - `nix-community/nix-vscode-extensions`: extensions overlay for VSCode/VSCodium.
 - `xddxdd/nix-cachyos-kernel`: third-party CachyOS kernel overlay.

@@ -1,0 +1,50 @@
+name: Deploy liteserver
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: "write"
+      contents: "read"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@main
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes
+            substituters = https://mirrors.cernet.edu.cn/nix-channels/store https://cache.garnix.io ${{ vars.NIX_EXTRA_SUBSTITUTERS }}
+            trusted-public-keys = cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= ${{ vars.NIX_EXTRA_TRUSTED_PUBLIC_KEYS }}
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - name: Configure SSH
+        env:
+          SSH_USER: ${{ secrets.STAGING_SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.STAGING_SSH_KEY }}
+          SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+          cat <<EOF > ~/.ssh/config
+          Host liteserver
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/id_ed25519
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+          EOF
+
+      - name: Eval liteserver deploy target
+        run: nix eval .#deploy.nodes.liteserver.hostname --raw
+
+      - name: Deploy liteserver
+        run: nix develop -c deploy .#liteserver
