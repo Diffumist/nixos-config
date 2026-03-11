@@ -44,7 +44,6 @@
   # programs
   programs = {
     home-manager.enable = true;
-    btop.enable = true;
     fastfetch.enable = true;
     aria2 = {
       enable = true;
@@ -80,6 +79,7 @@
   };
   home.packages = with pkgs; [
     # CLI
+    sing-box
     bubblewrap
     steam-run
     systemd-run-app

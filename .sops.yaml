@@ -1,12 +1,19 @@
 keys:
   - &diffumist age1mgw2q0ytdsnyxh40me6fu5pvcvcf7nug3dm05s8wu0v9ay20eenqatudqj
-  - &private age1aneevlvx7wkk00r4ryhpmlpwulmp68c0yq0hdv00nfv8g94wm4rs2m9z5q
+  - &bitsflow age1zz3wjh6j4nmcsh6l89prs4npeghxh9qcnph963g2u90z4ktujyyqrlkr89
+  - &liteserver age1stxzjpql49a6u6yl603r44g4t682606d99paxevhrl2ve3t9gugswxjfg8
 creation_rules:
-  - path_regex: nixos/hawkpoint/secrets\.yaml$
+  - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
         - *diffumist
-  - path_regex: .*\.yaml$
+  - path_regex: ^nixos/liteserver/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-        - *private
+        - *liteserver
+        - *diffumist
+  - path_regex: ^nixos/bitsflow/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+        - *bitsflow
+        - *diffumist

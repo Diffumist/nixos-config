@@ -65,6 +65,11 @@ let
     #   system = "x86_64-linux";
     #   path = ./qiniu;
     # };
+    bitsflow = {
+      system = "x86_64-linux";
+      path = ./bitsflow;
+      deploy = true;
+    };
     nixiso = {
       system = "x86_64-linux";
       path = ./nixiso;

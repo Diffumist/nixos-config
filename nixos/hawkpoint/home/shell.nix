@@ -4,6 +4,7 @@ _: {
     fzf.enable = true;
     ripgrep.enable = true;
     zoxide.enable = true;
+    jq.enable = true;
     nix-index-database.comma.enable = true;
     eza = {
       enable = true;
@@ -45,35 +46,8 @@ _: {
     ghostty = {
       enable = true;
       settings = {
-        theme = "noctalia";
-      };
-      themes = {
-        noctalia = {
-          background = "#131313";
-          foreground = "#e2e2e2";
-          cursor-color = "#e2e2e2";
-          cursor-text = "#131313";
-          selection-background = "#d3bfe6";
-          selection-foreground = "#382a49";
-          palette = [
-            "0 = #474747"
-            "1 = #ffb4ab"
-            "2 = #97cbff"
-            "3 = #b9c8da"
-            "4 = #d3bfe6"
-            "5 = #97cbff"
-            "6 = #b9c8da"
-            "7 = #e2e2e2"
-            "8 = #c6c6c6"
-            "9 = #ffb4ab"
-            "10 = #97cbff"
-            "11 = #b9c8da"
-            "12 = #d3bfe6"
-            "13 = #97cbff"
-            "14 = #b9c8da"
-            "15 = #e2e2e2"
-          ];
-        };
+        theme = "dankcolors";
+        font-family = "FiraCode Nerd Font Mono";
       };
     };
     direnv = {

@@ -9,11 +9,7 @@
   imports = [
     ./boot.nix
 
-    # ./services/caddy.nix
-    # ./services/sing-box.nix
-    # ./services/netbird.nix
-    # ./services/immich.nix
-    # ./services/rqbit.nix
+    ./services/sing-box.nix
   ];
 
   sops.age.keyFile = "/var/lib/age/key.txt";
@@ -32,15 +28,15 @@
   systemd.network = {
     enable = true;
     networks."10-lan" = {
-      matchConfig.Name = "ens3";
+      matchConfig.Name = "eth0";
       networkConfig = {
         Address = [
-          "150.129.9.29/24"
-          "2a04:52c0:0138:d282::8964"
+          "216.23.85.225/24"
+          "2a13:edc0:24:1de::8964/64"
         ];
         Gateway = [
-          "150.129.9.1"
-          "2a04:52c0:0138:d282::1"
+          "216.23.85.1"
+          "2a13:edc0:24::1"
         ];
         DNS = [
           "1.0.0.1"
@@ -51,5 +47,5 @@
       };
     };
   };
-  networking.hostName = "liteserver";
+  networking.hostName = "bitsflow";
 }
