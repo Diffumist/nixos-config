@@ -199,7 +199,33 @@
       gamescopeSession.enable = true;
     };
   };
-
+  services.samba = {
+    enable = true;
+    settings = {
+      global = {
+        "invalid users" = [
+          "root"
+        ];
+        "passwd program" = "/run/wrappers/bin/passwd %u";
+        security = "user";
+        "hosts allow" = "192.168.0. 127.0.0.1";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+        "workgroup" = "WORKGROUP";
+        "netbios name" = "hawkpoint-smb";
+        "server string" = "NixOS-Samba";
+      };
+      public = {
+        browseable = "yes";
+        path = "/run/media/diffumist";
+        "guest ok" = "no";
+        "read only" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+        "force user" = "diffumist";
+      };
+    };
+  };
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
