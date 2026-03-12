@@ -4,6 +4,10 @@
   ...
 }:
 {
+  sops.secrets.sshosts = {
+    sopsFile = ./sshosts.keytab;
+    format = "binary";
+  };
   services.gpg-agent = {
     enable = true;
     enableScDaemon = true;
@@ -12,11 +16,25 @@
   };
   programs = {
     uv.enable = true;
-    # programs.ssh = {
-    #   extraConfig = ''
-    #   Include ${config.sops.secrets.ssh-hosts.path}
-    # '';
-    # };
+    ssh = {
+      enable = true;
+      enableDefaultConfig = false;
+      extraConfig = ''
+        Include ${config.sops.secrets.sshosts.path}
+      '';
+      matchBlocks."*" = {
+        compression = false;
+      };
+      extraOptionOverrides = {
+        SetEnv = "TERM=xterm-256color";
+        UpdateHostKeys = "no";
+        StrictHostKeyChecking = "no";
+        HostKeyAlgorithms = "ssh-ed25519-cert-v01@openssh.com,ssh-ed25519";
+        KexAlgorithms = "mlkem768x25519-sha256,sntrup761x25519-sha512@openssh.com";
+        MACs = "hmac-sha2-512-etm@openssh.com";
+        Ciphers = "chacha20-poly1305@openssh.com";
+      };
+    };
     go = {
       enable = true;
       env = {
@@ -54,13 +72,11 @@
         docker.docker
         oxc.oxc-vscode
         jnoortheen.nix-ide
+        antfu.file-nesting
         rust-lang.rust-analyzer
         piousdeer.adwaita-theme
         pkief.material-icon-theme
         pkief.material-product-icons
-        ms-python.python
-        ms-python.debugpy
-        ms-python.vscode-python-envs
         ms-ceintl.vscode-language-pack-zh-hans
       ];
     };

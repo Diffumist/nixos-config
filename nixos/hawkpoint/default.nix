@@ -174,6 +174,7 @@
       };
     };
     nix-ld.enable = true;
+    nexttrace.enable = true;
     nh.enable = true;
     fish = {
       enable = true;

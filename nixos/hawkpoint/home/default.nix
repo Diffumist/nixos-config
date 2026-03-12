@@ -9,6 +9,7 @@
     ./shell.nix
     ./xdgdir.nix
   ];
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   # services
   systemd.user.services.cli-proxy-api = {
     Unit = {

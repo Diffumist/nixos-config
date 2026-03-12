@@ -31,7 +31,8 @@
       "zh_CN.UTF-8/UTF-8"
     ];
   };
-
+  
+  programs.nexttrace.enable = true;
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;
 
