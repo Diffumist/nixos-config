@@ -12,7 +12,7 @@
     bat
     eza
     duf
-    ncdu
+    dua
     btop
     ripgrep
     binutils

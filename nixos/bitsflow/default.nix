@@ -28,7 +28,7 @@
   systemd.network = {
     enable = true;
     networks."10-lan" = {
-      matchConfig.Name = "eth0";
+      matchConfig.Name = "ens3";
       networkConfig = {
         Address = [
           "216.23.85.225/24"

@@ -39,9 +39,6 @@
       "amdgpu.dcdebugmask=0x12"
       "mt7921e.disable_aspm=1"
     ];
-    kernel.sysctl = {
-
-    };
     loader = {
       systemd-boot = {
         enable = true;

@@ -79,6 +79,28 @@
       };
     };
   };
+  # rime
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+    fcitx5 = {
+      addons = with pkgs; [
+        (fcitx5-rime.override {
+          rimeDataPkgs = [
+            rime-data
+            uncategorized.rime-ice
+            uncategorized.rime-moegirl
+            uncategorized.rime-zhwiki
+          ];
+        })
+        libsForQt5.fcitx5-qt
+        kdePackages.fcitx5-qt
+        fcitx5-gtk
+        fcitx5-material-color
+      ];
+      waylandFrontend = true;
+    };
+  };
   users.users.diffumist = {
     isNormalUser = true;
     extraGroups = [
@@ -101,21 +123,10 @@
     useNautilus = true;
   };
   security.soteria.enable = true;
-  services.greetd = {
+  services.displayManager.dms-greeter = {
     enable = true;
-    settings = {
-      default_session = {
-        command = ''
-          ${lib.getExe pkgs.tuigreet} \
-          --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
-          --time \
-          --time-format '%Y-%m-%d %H:%M' \
-          --asterisks \
-          --remember \
-          --remember-session
-        '';
-      };
-    };
+    configHome = "/home/diffumist";
+    compositor.name = "niri";
   };
   services.envfs.enable = true;
   # TODO upstream https://github.com/Mic92/envfs/issues/203
@@ -138,7 +149,7 @@
   environment.systemPackages = with pkgs; [
     # CLI
     duf
-    ncdu
+    dua
     lstr
     tokei
     rclone
@@ -151,7 +162,6 @@
     eog
     glib
     adw-gtk3
-    bibata-cursors
     nwg-look
     nautilus
     code-nautilus
@@ -167,12 +177,7 @@
   ];
 
   programs = {
-    dms-shell = {
-      enable = true;
-      plugins = {
-        dankBitwarden.enable = true;
-      };
-    };
+    dms-shell.enable = true;
     nix-ld.enable = true;
     nexttrace.enable = true;
     nh.enable = true;

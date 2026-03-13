@@ -23,12 +23,15 @@
         Include ${config.sops.secrets.sshosts.path}
       '';
       matchBlocks."*" = {
-        compression = false;
+        compression = true;
       };
       extraOptionOverrides = {
         SetEnv = "TERM=xterm-256color";
         UpdateHostKeys = "no";
         StrictHostKeyChecking = "no";
+        ControlMaster = "auto";
+        ControlPath = "~/.ssh/master-%r@%h:%p";
+        ControlPersist = "10m";
         HostKeyAlgorithms = "ssh-ed25519-cert-v01@openssh.com,ssh-ed25519";
         KexAlgorithms = "mlkem768x25519-sha256,sntrup761x25519-sha512@openssh.com";
         MACs = "hmac-sha2-512-etm@openssh.com";

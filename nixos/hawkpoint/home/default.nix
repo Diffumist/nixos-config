@@ -105,25 +105,6 @@
     netease-cloud-music-gtk
     # uncategorized.dingtalk
   ];
-  # rime
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-    fcitx5 = {
-      addons = with pkgs; [
-        (fcitx5-rime.override {
-          rimeDataPkgs = [
-            rime-data
-            uncategorized.rime-ice
-            uncategorized.rime-moegirl
-            uncategorized.rime-zhwiki
-          ];
-        })
-        fcitx5-gtk
-      ];
-      waylandFrontend = true;
-    };
-  };
   home.shell.enableFishIntegration = true;
   home.preferXdgDirectories = true;
   home.stateVersion = "25.11";

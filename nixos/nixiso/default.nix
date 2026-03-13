@@ -47,7 +47,7 @@
     duf
     age
     sops
-    ncdu
+    dua
     btop
     disko
     helix
