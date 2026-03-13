@@ -60,6 +60,7 @@
         key = "8BA330B49A5694A6";
       };
     };
+    lazygit.enable = true;
     gpg = {
       enable = true;
       homedir = "${config.xdg.dataHome}/gnupg";
@@ -83,7 +84,10 @@
         ms-ceintl.vscode-language-pack-zh-hans
       ];
     };
-    lazygit.enable = true;
+    zed-editor = {
+      enable = true;
+      extensions = [ "nix" ];
+    };
   };
   home.packages = with pkgs; [
     xh
