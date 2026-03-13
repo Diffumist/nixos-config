@@ -196,6 +196,11 @@
     };
     steam = {
       enable = true;
+      package = pkgs.steam.override {
+        extraEnv = {
+          HOME = "${config.users.users.diffumist.home}/.local/share/steam_home";
+        };
+      };
       extest.enable = true;
       protontricks.enable = true;
       extraCompatPackages = with pkgs; [
