@@ -67,7 +67,7 @@
     packages = with pkgs; [
       sarasa-gothic
       nerd-fonts.fira-code
-      twemoji-color-font
+      apple-emoji-font
     ];
     fontDir.enable = true;
     fontconfig = {
@@ -75,7 +75,7 @@
         monospace = [ "Fira Code Nerd Font" ];
         sansSerif = [ "Sarasa Gothic SC" ];
         serif = sansSerif;
-        emoji = [ "Twitter Color Emoji" ];
+        emoji = [ "Apple Color Emoji" ];
       };
     };
   };

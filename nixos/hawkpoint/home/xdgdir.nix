@@ -42,12 +42,6 @@
       '';
     };
   };
-  fonts.fontconfig = {
-    enable = true;
-    hinting = "full";
-    antialiasing = true;
-    subpixelRendering = "rgb";
-  };
   gtk = {
     enable = true;
     font = {

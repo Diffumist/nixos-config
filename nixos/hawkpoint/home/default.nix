@@ -83,7 +83,7 @@
     sing-box
     bubblewrap
     steam-run
-    systemd-run-app
+    android-tools
     # TUI
     codex-cli
     # opencode
