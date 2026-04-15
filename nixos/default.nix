@@ -40,11 +40,11 @@ let
         inputs.dms-plugin-registry.modules.default
       ];
     };
-    phoenix = {
-      system = "x86_64-linux";
-      path = ./phoenix;
-      deploy = true;
-    };
+    # phoenix = {
+    #   system = "x86_64-linux";
+    #   path = ./phoenix;
+    #   deploy = true;
+    # };
     liteserver = {
       system = "x86_64-linux";
       path = ./liteserver;
@@ -63,6 +63,11 @@ let
     dedirock = {
       system = "x86_64-linux";
       path = ./dedirock;
+      deploy = true;
+    };
+    hostdzire = {
+      system = "x86_64-linux";
+      path = ./hostdzire;
       deploy = true;
     };
     bitsflow = {

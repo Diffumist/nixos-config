@@ -3,6 +3,7 @@ keys:
   - &bitsflow age1zz3wjh6j4nmcsh6l89prs4npeghxh9qcnph963g2u90z4ktujyyqrlkr89
   - &liteserver age1stxzjpql49a6u6yl603r44g4t682606d99paxevhrl2ve3t9gugswxjfg8
   - &dedirock age19s2tuyn05d5ruppvhc2rdk3pwekf4uy2dz8mz2nj0339nqsw7qas9qs3hz
+  - &hostdzire age1399u28ycws4cq367wteqlt9lmjd55cn0julf6uexwuhnd43vxayskzhr22
   - &nosla-lax age1sngsh924drssawk9jthlguqz5f8dx6chrky24flf77p52drypets4q95ms
   - &nosla-sjc age1lnjfhcaz05u4u93j3jfn8mwhssph8vd0zh60fn5357ef5ls5acrq6upfep
 creation_rules:
@@ -19,6 +20,11 @@ creation_rules:
     key_groups:
       - age:
           - *dedirock
+          - *diffumist
+  - path_regex: ^nixos/hostdzire/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *hostdzire
           - *diffumist
   - path_regex: ^nixos/bitsflow/.*\.(json|ya?ml|keytab)$
     key_groups:
