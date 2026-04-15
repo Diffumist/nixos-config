@@ -3,18 +3,19 @@ _: {
     enable = true;
     ignoreIP = [
       "127.0.0.1/16"
-      "10.144.144.0/24"
     ];
     bantime-increment = {
       enable = true;
       maxtime = "168h";
       factor = "4";
+      overalljails = true;
     };
     jails = {
       easytier = ''
         enabled = true
         filter  = easytier
         maxretry = 5
+        findtime = 5m
       '';
     };
   };

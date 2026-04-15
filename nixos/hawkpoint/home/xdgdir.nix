@@ -72,9 +72,12 @@
         gtk-application-prefer-dark-theme = 1;
       };
     };
-    gtk4.extraConfig = {
-      gtk-decoration-layout = ":none";
-      gtk-application-prefer-dark-theme = 1;
+    gtk4 = {
+      theme = config.gtk.theme;
+      extraConfig = {
+        gtk-decoration-layout = ":none";
+        gtk-application-prefer-dark-theme = 1;
+      };
     };
   };
   qt = {

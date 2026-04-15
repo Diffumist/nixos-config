@@ -5,10 +5,7 @@
   ...
 }:
 {
-  hardware = {
-    enableRedistributableFirmware = lib.mkDefault true;
-    cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-  };
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   boot = {
     initrd = {
       systemd.enable = true;
@@ -23,14 +20,10 @@
       ];
     };
     extraModulePackages = [
-      config.boot.kernelPackages.acpi_call
-      config.boot.kernelPackages.tuxedo-drivers
       config.boot.kernelPackages.yt6801
     ];
     kernelModules = [
       "kvm-amd"
-      "acpi_call"
-      "tuxedo-drivers"
       "yt6801"
     ];
     kernelParams = lib.mkAfter [

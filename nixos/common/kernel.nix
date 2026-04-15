@@ -1,6 +1,8 @@
 { pkgs, lib, ... }:
 {
-  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+  hardware.enableRedistributableFirmware = lib.mkDefault true;
+
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_xanmod;
   boot.kernelParams = [
     "vdso32=0"
     "vsyscall=none"

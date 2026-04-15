@@ -8,10 +8,8 @@
 {
   imports = [
     ./boot.nix
-    
-    # ./services/caddy.nix
-    # ./services/easytier.nix
-    ./services/vaultwarden.nix
+
+    ./services/sing-box.nix
   ];
 
   sops = {
@@ -31,7 +29,7 @@
       owner = "systemd-network";
       content = ''
         [Match]
-        Name=ens3
+        Name=enp3s0
 
         [Network]
         Address=${config.sops.placeholder.ipv4_address}/24
@@ -53,5 +51,5 @@
   systemd.network.wait-online.enable = false;
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "phoenix";
+  networking.hostName = "nosla-lax";
 }

@@ -97,6 +97,7 @@
     vesktop
     gapless
     clapper
+    piliplus
     localsend
     fluffychat
     antigravity-fhs

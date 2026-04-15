@@ -2,18 +2,36 @@ keys:
   - &diffumist age1mgw2q0ytdsnyxh40me6fu5pvcvcf7nug3dm05s8wu0v9ay20eenqatudqj
   - &bitsflow age1zz3wjh6j4nmcsh6l89prs4npeghxh9qcnph963g2u90z4ktujyyqrlkr89
   - &liteserver age1stxzjpql49a6u6yl603r44g4t682606d99paxevhrl2ve3t9gugswxjfg8
+  - &dedirock age19s2tuyn05d5ruppvhc2rdk3pwekf4uy2dz8mz2nj0339nqsw7qas9qs3hz
+  - &nosla-lax age1sngsh924drssawk9jthlguqz5f8dx6chrky24flf77p52drypets4q95ms
+  - &nosla-sjc age1lnjfhcaz05u4u93j3jfn8mwhssph8vd0zh60fn5357ef5ls5acrq6upfep
 creation_rules:
   - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-        - *diffumist
+          - *diffumist
   - path_regex: ^nixos/liteserver/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-        - *liteserver
-        - *diffumist
+          - *liteserver
+          - *diffumist
+  - path_regex: ^nixos/dedirock/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *dedirock
+          - *diffumist
   - path_regex: ^nixos/bitsflow/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-        - *bitsflow
-        - *diffumist
+          - *bitsflow
+          - *diffumist
+  - path_regex: ^nixos/nosla-lax/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *nosla-lax
+          - *diffumist
+  - path_regex: ^nixos/nosla-sjc/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *nosla-sjc
+          - *diffumist

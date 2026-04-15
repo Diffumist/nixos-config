@@ -50,6 +50,26 @@ let
       path = ./liteserver;
       deploy = true;
     };
+    nosla-lax = {
+      system = "x86_64-linux";
+      path = ./nosla-lax;
+      deploy = true;
+    };
+    nosla-sjc = {
+      system = "x86_64-linux";
+      path = ./nosla-sjc;
+      deploy = true;
+    };
+    dedirock = {
+      system = "x86_64-linux";
+      path = ./dedirock;
+      deploy = true;
+    };
+    bitsflow = {
+      system = "x86_64-linux";
+      path = ./bitsflow;
+      deploy = true;
+    };
     # colocrossing = {
     #   system = "x86_64-linux";
     #   path = ./colocrossing;
@@ -58,19 +78,10 @@ let
     #   system = "x86_64-linux";
     #   path = ./solidvps;
     # };
-    # dedirock = {
-    #   system = "x86_64-linux";
-    #   path = ./dedirock;
-    # };
     # qiniu = {
     #   system = "x86_64-linux";
     #   path = ./qiniu;
     # };
-    bitsflow = {
-      system = "x86_64-linux";
-      path = ./bitsflow;
-      deploy = true;
-    };
     nixiso = {
       system = "x86_64-linux";
       path = ./nixiso;

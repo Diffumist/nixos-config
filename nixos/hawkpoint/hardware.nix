@@ -12,10 +12,6 @@
       enable = true;
       enable32Bit = true;
     };
-    tuxedo-rs = {
-      enable = true;
-      tailor-gui.enable = true;
-    };
   };
 
   services = {
