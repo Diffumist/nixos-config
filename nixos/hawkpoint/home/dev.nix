@@ -75,6 +75,7 @@
         mkhl.direnv
         docker.docker
         oxc.oxc-vscode
+        jinxcappa.sopsie
         jnoortheen.nix-ide
         antfu.file-nesting
         rust-lang.rust-analyzer

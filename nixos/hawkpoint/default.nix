@@ -13,6 +13,20 @@
     ./hardware.nix
   ];
 
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  sops.secrets = {
+    user_passwd_hash = {
+      sopsFile = ./secrets.yaml;
+      neededForUsers = true;
+    };
+    github_access_token = {
+      sopsFile = ./secrets.yaml;
+      neededForUsers = true;
+    };
+  };
+  nix.extraOptions = ''
+    !include ${config.sops.secrets.github_access_token.path}
+  '';
   nix.channel.enable = false;
 
   networking = {
@@ -111,11 +125,6 @@
     ];
     initialHashedPassword = config.sops.secrets.user_passwd_hash.path;
     shell = pkgs.fish;
-  };
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  sops.secrets.user_passwd_hash = {
-    sopsFile = ./secrets.yaml;
-    neededForUsers = true;
   };
   # niri
   programs.niri = {

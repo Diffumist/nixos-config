@@ -8,7 +8,6 @@ let
   lib = inputs.nixpkgs.lib;
   overlays = [
     self.overlays.default
-    inputs.quickshell.overlays.default
     inputs.nix-cachyos-kernel.overlays.pinned
     inputs.nix-vscode-extensions.overlays.default
   ];
