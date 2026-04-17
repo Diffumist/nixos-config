@@ -190,6 +190,7 @@
     nix-ld.enable = true;
     nexttrace.enable = true;
     nh.enable = true;
+    direnv.enable = true;
     fish = {
       enable = true;
       useBabelfish = true;
@@ -216,6 +217,12 @@
         proton-ge-bin
       ];
       gamescopeSession.enable = true;
+    };
+  };
+  services.angrr = {
+    enable = true;
+    settings = {
+      period = "1month";
     };
   };
   services.samba = {
