@@ -42,6 +42,7 @@
       WantedBy = [ "default.target" ];
     };
   };
+  services.system76-scheduler-niri.enable = true;
   # programs
   programs = {
     home-manager.enable = true;
@@ -75,6 +76,8 @@
         "--enable-features=VaapiVideoDecodeLinuxGL"
         "--ignore-gpu-blocklist"
         "--enable-gpu-rasterization"
+        "--enable-wayland-ime"
+        "--wayland-text-input-version=3"
       ];
     };
   };

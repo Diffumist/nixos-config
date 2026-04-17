@@ -138,23 +138,6 @@
     compositor.name = "niri";
   };
   services.envfs.enable = true;
-  # TODO upstream https://github.com/Mic92/envfs/issues/203
-  fileSystems."/usr/bin".options = lib.mkIf config.boot.initrd.systemd.enable [
-    "x-systemd.requires=modprobe@fuse.service"
-    "x-systemd.after=modprobe@fuse.service"
-  ];
-  fileSystems."/bin".enable = lib.mkIf config.boot.initrd.systemd.enable false;
-  boot.initrd.systemd.tmpfiles.settings = lib.mkIf config.boot.initrd.systemd.enable {
-    "50-usr-bin" = {
-      "/sysroot/usr/bin" = {
-        d = {
-          group = "root";
-          mode = "0755";
-          user = "root";
-        };
-      };
-    };
-  };
   environment.systemPackages = with pkgs; [
     # CLI
     duf
@@ -168,7 +151,7 @@
     dnscontrol
     libarchive
     # GUI
-    eog
+    loupe
     glib
     adw-gtk3
     nwg-look
@@ -179,7 +162,6 @@
     pinentry-gnome3
     gsettings-desktop-schemas
     papirus-icon-theme
-    polkit_gnome
     gnome-text-editor
     gpu-screen-recorder
     xwayland-satellite
@@ -219,6 +201,10 @@
       gamescopeSession.enable = true;
     };
   };
+  security.pam.services.login.enableGnomeKeyring = true;
+  services.system76-scheduler.enable = true;
+  systemd.user.services.niri-flake-polkit.serviceConfig.ExecStart =
+    lib.mkForce "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
   services.angrr = {
     enable = true;
     settings = {
@@ -258,6 +244,7 @@
     users.diffumist = import ./home;
     extraSpecialArgs = { inherit inputs; };
     sharedModules = [
+      inputs.system76-scheduler-niri.homeModules.default
       inputs.nix-index-database.homeModules.default
       inputs.sops-nix.homeManagerModules.sops
     ];

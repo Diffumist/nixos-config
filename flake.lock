@@ -658,7 +658,8 @@
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixpkgs": "nixpkgs_3",
         "nur-xddxdd": "nur-xddxdd",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "system76-scheduler-niri": "system76-scheduler-niri"
       }
     },
     "sops-nix": {
@@ -678,6 +679,26 @@
       "original": {
         "owner": "Mic92",
         "repo": "sops-nix",
+        "type": "github"
+      }
+    },
+    "system76-scheduler-niri": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1769878625,
+        "narHash": "sha256-cOLzS70XjXcxPi4vkTjbvSBOZ5o+CmzkLXX/AgtJMRQ=",
+        "owner": "Kirottu",
+        "repo": "system76-scheduler-niri",
+        "rev": "9fe30d78748bd8f655c3f8ec8b3ce8cd25577182",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Kirottu",
+        "repo": "system76-scheduler-niri",
         "type": "github"
       }
     },

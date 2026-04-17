@@ -47,6 +47,10 @@
       url = "github:AvengeMedia/dms-plugin-registry";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    system76-scheduler-niri = {
+      url = "github:Kirottu/system76-scheduler-niri";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
   };
 
