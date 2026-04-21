@@ -87,7 +87,6 @@
     bubblewrap
     steam-run
     android-tools
-    nix-output-monitor
     # TUI
     codex-cli
     # opencode

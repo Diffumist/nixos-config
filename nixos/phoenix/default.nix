@@ -8,10 +8,10 @@
 {
   imports = [
     ./boot.nix
-    
+
     # ./services/caddy.nix
     # ./services/easytier.nix
-    ./services/vaultwarden.nix
+    # ./services/vaultwarden.nix
   ];
 
   sops = {

@@ -8,6 +8,11 @@
 {
   imports = [
     ./boot.nix
+
+    ./services/acme.nix
+    ./services/memos.nix
+    ./services/postgresql.nix
+    ./services/vaultwarden.nix
   ];
 
   sops = {

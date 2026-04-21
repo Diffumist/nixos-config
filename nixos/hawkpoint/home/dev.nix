@@ -78,6 +78,8 @@
         jinxcappa.sopsie
         jnoortheen.nix-ide
         antfu.file-nesting
+        thegeeklab.yamlfmt-ng
+        tamasfe.even-better-toml
         rust-lang.rust-analyzer
         piousdeer.adwaita-theme
         pkief.material-icon-theme
@@ -96,6 +98,8 @@
     sops
     nixd
     nixfmt
+    taplo
+    yamlfmt
     gdb
     gcc
     cmake
