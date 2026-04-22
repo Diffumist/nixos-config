@@ -8,8 +8,6 @@
 {
   imports = [
     ./boot.nix
-
-    ./services/sing-box.nix
   ];
 
   sops = {
@@ -49,6 +47,13 @@
     networkmanager.enable = false;
   };
   systemd.network.wait-online.enable = false;
+
+  virtualisation.podman.enable = false;
+
+  my.services.sing-box = {
+    enable = true;
+    configSopsFile = ./sing-box.json;
+  };
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "nosla-lax";

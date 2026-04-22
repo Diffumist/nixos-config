@@ -5,6 +5,7 @@
     ./kernel.nix
     ./services/fail2ban.nix
     ./services/sshd.nix
+    ./services/sing-box.nix
   ];
 
   environment.systemPackages = with pkgs; [
@@ -26,20 +27,21 @@
   time.timeZone = "Asia/Shanghai";
 
   i18n = {
-    defaultLocale = "en_US.UTF-8";
+    defaultLocale = "zh_CN.UTF-8";
     supportedLocales = [
       "en_US.UTF-8/UTF-8"
       "zh_CN.UTF-8/UTF-8"
     ];
   };
-  
+
   programs.nexttrace.enable = true;
+  users.defaultUserShell = pkgs.fish;
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;
 
   virtualisation = {
     podman = {
-      enable = true;
+      enable = lib.mkDefault true;
       dockerCompat = true;
       dockerSocket.enable = true;
       defaultNetwork.settings.dns_enabled = true;

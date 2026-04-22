@@ -109,6 +109,7 @@
     oxfmt
     oxlint
     tsgolint
+    typescript
     nodejs
     rustup
     python3

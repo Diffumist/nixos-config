@@ -6,6 +6,10 @@ keys:
   - &hostdzire age1399u28ycws4cq367wteqlt9lmjd55cn0julf6uexwuhnd43vxayskzhr22
   - &nosla-lax age1sngsh924drssawk9jthlguqz5f8dx6chrky24flf77p52drypets4q95ms
   - &nosla-sjc age1lnjfhcaz05u4u93j3jfn8mwhssph8vd0zh60fn5357ef5ls5acrq6upfep
+  - &phoenix age192l4kxls84864ruzynms33ysy3tzsrv96dkw9em3pq0hd9u47sjqx7vr73
+  - &solidvps age1npey8allr4v2re5scd4kphy5chn5mvssys9uqrvmdny7eh8rqstq55qjzz
+  - &colocrossing age1994hdy3fx47zscjvk0xjne0t3xpw7gqujqdklnjqclya7cdpg40sxkmate
+  - &qiniu age1spplgm3093agu48lzarge9xd56nestjdyctymdc56x29xgjrdgasfg9arx
 creation_rules:
   - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
     key_groups:
@@ -26,6 +30,26 @@ creation_rules:
       - age:
           - *hostdzire
           - *diffumist
+  - path_regex: ^nixos/phoenix/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *phoenix
+          - *diffumist
+  - path_regex: ^nixos/solidvps/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *solidvps
+          - *diffumist
+  - path_regex: ^nixos/colocrossing/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *colocrossing
+          - *diffumist
+  - path_regex: ^nixos/qiniu/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *colocrossing
+          - *qiniu
   - path_regex: ^nixos/bitsflow/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:

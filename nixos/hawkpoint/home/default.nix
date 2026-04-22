@@ -83,6 +83,7 @@
   };
   home.packages = with pkgs; [
     # CLI
+    mosh
     sing-box
     bubblewrap
     steam-run

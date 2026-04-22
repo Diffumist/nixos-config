@@ -39,11 +39,11 @@ let
         inputs.dms-plugin-registry.modules.default
       ];
     };
-    # phoenix = {
-    #   system = "x86_64-linux";
-    #   path = ./phoenix;
-    #   deploy = true;
-    # };
+    phoenix = {
+      system = "x86_64-linux";
+      path = ./phoenix;
+      deploy = true;
+    };
     liteserver = {
       system = "x86_64-linux";
       path = ./liteserver;
@@ -74,18 +74,16 @@ let
       path = ./bitsflow;
       deploy = true;
     };
-    # colocrossing = {
-    #   system = "x86_64-linux";
-    #   path = ./colocrossing;
-    # };
-    # solidvps = {
-    #   system = "x86_64-linux";
-    #   path = ./solidvps;
-    # };
-    # qiniu = {
-    #   system = "x86_64-linux";
-    #   path = ./qiniu;
-    # };
+    colocrossing = {
+      system = "x86_64-linux";
+      path = ./colocrossing;
+      deploy = true;
+    };
+    solidvps = {
+      system = "x86_64-linux";
+      path = ./solidvps;
+      deploy = true;
+    };
     nixiso = {
       system = "x86_64-linux";
       path = ./nixiso;

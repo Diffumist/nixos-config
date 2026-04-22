@@ -1,7 +1,5 @@
 { pkgs, lib, ... }:
 {
-  hardware.enableRedistributableFirmware = lib.mkDefault true;
-
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_xanmod;
   boot.kernelParams = [
     "vdso32=0"

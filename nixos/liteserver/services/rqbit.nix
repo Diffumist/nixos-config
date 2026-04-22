@@ -9,6 +9,10 @@
     downloadDir = "/persist/var/storage/rqbit";
   };
 
+  systemd.tmpfiles.rules = [
+    "d /persist/var/storage/rqbit 0750 rqbit rqbit -"
+  ];
+
   services.caddy.virtualHosts."rqbit.diffumist.me" = {
     useACMEHost = "rqbit.diffumist.me";
     extraConfig = ''
@@ -16,7 +20,7 @@
       request_body {
         max_size 128MB
       }
-      reverse_proxy 127.0.0.1:3030
+      reverse_proxy 127.0.0.1:${toString config.services.rqbit.httpPort}
     '';
   };
 

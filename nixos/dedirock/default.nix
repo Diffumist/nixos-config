@@ -8,8 +8,6 @@
 {
   imports = [
     ./boot.nix
-
-    ./services/sing-box.nix
   ];
 
   sops = {
@@ -50,6 +48,11 @@
   };
   systemd.network.wait-online.enable = false;
 
+  my.services.sing-box = {
+    enable = true;
+    configSopsFile = ./sing-box.json;
+  };
+  
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "dedirock";
 }

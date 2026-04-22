@@ -1,6 +1,6 @@
 { pkgs, modulesPath, ... }:
 {
-   imports = [
+  imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
   boot.kernelModules = [ "kvm-amd" ];
@@ -42,7 +42,7 @@
               "@swap" = {
                 mountpoint = "/.swap";
                 swap = {
-                  swapfile.size = "8192M";
+                  swapfile.size = "2048M";
                   swapfile.path = "real-path";
                 };
               };

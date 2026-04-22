@@ -9,11 +9,10 @@
   imports = [
     ./boot.nix
 
-    # ./services/caddy.nix
-    # ./services/sing-box.nix
-    # ./services/netbird.nix
-    # ./services/immich.nix
-    # ./services/rqbit.nix
+    ./services/acme.nix
+    ./services/postgresql.nix
+    ./services/immich.nix
+    ./services/rqbit.nix
   ];
 
   sops = {
@@ -53,7 +52,9 @@
     networkmanager.enable = false;
   };
   systemd.network.wait-online.enable = false;
-
+  systemd.tmpfiles.rules = [
+    "d /persist/var/storage 0755 root root -"
+  ];
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "liteserver";
 }
