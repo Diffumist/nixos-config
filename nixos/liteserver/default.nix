@@ -9,8 +9,6 @@
   imports = [
     ./boot.nix
 
-    ./services/acme.nix
-    ./services/postgresql.nix
     ./services/immich.nix
     ./services/rqbit.nix
   ];

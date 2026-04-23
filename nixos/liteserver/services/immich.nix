@@ -9,6 +9,19 @@
     settings.server.externalDomain = "https://immich.diffumist.me";
   };
 
+  my.services.postgresql.enable = true;
+  services.postgresql = {
+    ensureDatabases = [
+      "immich"
+    ];
+    ensureUsers = [
+      {
+        name = "immich";
+        ensureDBOwnership = true;
+      }
+    ];
+  };
+
   systemd.tmpfiles.rules = [
     "d /persist/var/storage/immich 0700 immich immich -"
   ];

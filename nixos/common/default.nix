@@ -3,9 +3,11 @@
   imports = [
     ./nixconfig.nix
     ./kernel.nix
-    ./services/fail2ban.nix
+    ./services/acme.nix
     ./services/sshd.nix
+    ./services/fail2ban.nix
     ./services/sing-box.nix
+    ./services/postgresql.nix
   ];
 
   environment.systemPackages = with pkgs; [

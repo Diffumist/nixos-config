@@ -17,6 +17,20 @@
     after = [ "postgresql.service" ];
   };
 
+  my.services.postgresql.enable = true;
+  services.postgresql = {
+    ensureDatabases = [
+      "memos"
+    ];
+    ensureUsers = [
+      {
+        name = "memos";
+        ensureDBOwnership = true;
+      }
+    ];
+  };
+
+  my.services.acme.enable = true;
   services.caddy.virtualHosts."memos.diffumist.me" = {
     useACMEHost = "memos.diffumist.me";
     extraConfig = ''

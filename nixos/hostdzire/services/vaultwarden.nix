@@ -18,11 +18,25 @@
     };
   };
 
+  my.services.postgresql.enable = true;
+  services.postgresql = {
+    ensureDatabases = [
+      "vaultwarden"
+    ];
+    ensureUsers = [
+      {
+        name = "vaultwarden";
+        ensureDBOwnership = true;
+      }
+    ];
+  };
+
   systemd.services.vaultwarden = {
     requires = [ "postgresql.service" ];
     after = [ "postgresql.service" ];
   };
 
+  my.services.acme.enable = true;
   services.caddy.virtualHosts."vault.diffumist.me" = {
     useACMEHost = "vault.diffumist.me";
     extraConfig = ''
