@@ -26,6 +26,7 @@
     "d /persist/var/storage/immich 0700 immich immich -"
   ];
 
+  my.services.caddy.enable = true;
   services.caddy.virtualHosts."immich.diffumist.me" = {
     useACMEHost = "immich.diffumist.me";
     extraConfig = ''

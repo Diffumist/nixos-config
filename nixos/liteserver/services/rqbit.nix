@@ -13,6 +13,7 @@
     "d /persist/var/storage/rqbit 0750 rqbit rqbit -"
   ];
 
+  my.services.caddy.enable = true;
   services.caddy.virtualHosts."rqbit.diffumist.me" = {
     useACMEHost = "rqbit.diffumist.me";
     extraConfig = ''

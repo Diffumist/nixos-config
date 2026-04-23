@@ -47,6 +47,7 @@ in
       acceptTerms = true;
       defaults.email = "services@diffumist.me";
     };
+
     services.caddy = {
       enable = true;
       globalConfig = ''

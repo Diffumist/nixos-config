@@ -50,9 +50,9 @@
     networkmanager.enable = false;
   };
   systemd.network.wait-online.enable = false;
-  systemd.tmpfiles.rules = [
-    "d /persist/var/storage 0755 root root -"
-  ];
+
+  my.services.postgresql.totalRamMB = 2 * 1024;
+
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "liteserver";
 }

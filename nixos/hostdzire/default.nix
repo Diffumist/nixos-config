@@ -28,6 +28,8 @@
   };
   systemd.network.wait-online.enable = false;
 
+  my.services.postgresql.totalRamMB = 6 * 1024;
+
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "hostdzire";
 }

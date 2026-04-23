@@ -52,7 +52,8 @@
     enable = true;
     configSopsFile = ./sing-box.json;
   };
-  
+  my.services.postgresql.totalRamMB = 2 * 1024;
+
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "dedirock";
 }

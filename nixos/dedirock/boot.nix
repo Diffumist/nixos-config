@@ -82,4 +82,7 @@
     ];
   };
 
+  systemd.tmpfiles.rules = [
+    "d /persist/var/storage 0755 root root -"
+  ];
 }
