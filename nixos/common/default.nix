@@ -3,9 +3,9 @@
   imports = [
     ./nixconfig.nix
     ./kernel.nix
-    ./services/acme.nix
     ./services/sshd.nix
     ./services/fail2ban.nix
+    ./services/caddy.nix
     ./services/sing-box.nix
     ./services/postgresql.nix
   ];

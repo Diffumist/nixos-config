@@ -45,7 +45,7 @@ in
       in
       {
         enable = true;
-        package = lib.mkDefault pkgs.postgresql_18;
+        package = pkgs.postgresql_18;
 
         settings = {
           shared_buffers = "${toString sharedBuffersMB}MB";

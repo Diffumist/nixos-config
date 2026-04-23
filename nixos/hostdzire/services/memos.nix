@@ -30,7 +30,7 @@
     ];
   };
 
-  my.services.acme.enable = true;
+  my.services.caddy.enable = true;
   services.caddy.virtualHosts."memos.diffumist.me" = {
     useACMEHost = "memos.diffumist.me";
     extraConfig = ''

@@ -36,7 +36,7 @@
     after = [ "postgresql.service" ];
   };
 
-  my.services.acme.enable = true;
+  my.services.caddy.enable = true;
   services.caddy.virtualHosts."vault.diffumist.me" = {
     useACMEHost = "vault.diffumist.me";
     extraConfig = ''
