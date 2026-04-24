@@ -1,0 +1,8 @@
+[apple-emoji-font]
+src.github = "samuelngs/apple-emoji-ttf"
+fetch.url = "https://github.com/samuelngs/apple-emoji-ttf/releases/download/$ver/ttf-apple-emoji.pkg.tar.zst"
+
+[cli-proxy-api]
+src.github = "router-for-me/CLIProxyAPI"
+src.prefix = "v"
+fetch.url = "https://github.com/router-for-me/CLIProxyAPI/releases/download/v$ver/CLIProxyAPI_$ver_linux_amd64.tar.gz"

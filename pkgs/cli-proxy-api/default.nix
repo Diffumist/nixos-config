@@ -1,28 +1,12 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  sources,
   ...
 }:
 
-let
-  pname = "cli-proxy-api";
-  version = "6.9.36";
-
-  srcs = {
-    x86_64-linux = fetchurl {
-      url = "https://github.com/router-for-me/CLIProxyAPI/releases/download/v${version}/CLIProxyAPI_${version}_linux_amd64.tar.gz";
-      hash = "sha256-4C0ylDjj0qWhGWiF8FtnfkatPb1xbQu1sXhEHw03flc=";
-    };
-  };
-
-in
 stdenv.mkDerivation {
-  inherit pname version;
-
-  src =
-    srcs.${stdenv.hostPlatform.system}
-      or (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
+  inherit (sources.cli-proxy-api) pname version src;
 
   sourceRoot = ".";
 

@@ -1,19 +1,13 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
   zstd,
+  sources,
   ...
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "apple-emoji-font";
-  version = "2.0.0.20260219.2aa12422";
-
-  src = fetchurl {
-    url = "https://github.com/samuelngs/apple-emoji-ttf/releases/download/macos-26-20260219-2aa12422/ttf-apple-emoji.pkg.tar.zst";
-    hash = "sha256-bKP82lRDdnXo6lXNwa0G1MM7SFsE6t0OdHY/BAv5wCE=";
-  };
+  inherit (sources.apple-emoji-font) pname version src;
 
   nativeBuildInputs = [ zstd ];
 

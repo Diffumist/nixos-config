@@ -2,11 +2,14 @@ inputs: final: prev:
 let
   lib = prev.lib;
   pkgsDir = ../pkgs;
-  pkgDirs = lib.filterAttrs (_name: ty: ty == "directory") (builtins.readDir pkgsDir);
+  sources = import (pkgsDir + "/_sources/generated.nix") {
+    inherit (prev) fetchgit fetchurl fetchFromGitHub dockerTools;
+  };
+  pkgDirs = lib.filterAttrs (name: ty: ty == "directory" && name != "_sources") (builtins.readDir pkgsDir);
   importedPkgs = lib.mapAttrs (
     name: _ty:
     final.callPackage (pkgsDir + "/${name}") {
-      inherit inputs;
+      inherit inputs sources;
     }
   ) pkgDirs;
 in
