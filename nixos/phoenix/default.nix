@@ -9,9 +9,7 @@
   imports = [
     ./boot.nix
 
-    # ./services/caddy.nix
-    # ./services/easytier.nix
-    # ./services/vaultwarden.nix
+    ./services/forgejo.nix
   ];
 
   sops = {
