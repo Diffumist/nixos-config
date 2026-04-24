@@ -18,14 +18,16 @@
   services.caddy.virtualHosts."code.diffumist.me" = {
     useACMEHost = "code.diffumist.me";
     extraConfig = ''
+      forward_auth 127.0.0.1:9091 {
+        uri /api/authz/forward-auth
+        copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
+      }
       encode zstd gzip
       reverse_proxy 127.0.0.1:${toString config.services.code-server.port}
     '';
   };
 
-  sops.secrets.cloudflare_api_token = {
-    sopsFile = ../secrets.yaml;
-  };
+  sops.secrets.cloudflare_api_token.sopsFile = ../secrets.yaml;
 
   security.acme.certs."code.diffumist.me" = {
     dnsProvider = "cloudflare";

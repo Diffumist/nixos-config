@@ -11,6 +11,7 @@
 
     ./services/forgejo.nix
     ./services/code-server.nix
+    ./services/authelia.nix
     # ./services/caddy.nix
     # ./services/easytier.nix
     # ./services/vaultwarden.nix
