@@ -7,12 +7,12 @@
 
 let
   pname = "cli-proxy-api";
-  version = "6.9.24";
+  version = "6.9.36";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/router-for-me/CLIProxyAPI/releases/download/v${version}/CLIProxyAPI_${version}_linux_amd64.tar.gz";
-      hash = "sha256-n6UtlJS/wtYePQcLF19TDsxIaebnhXncmoKDe5bMeqE=";
+      hash = "sha256-4C0ylDjj0qWhGWiF8FtnfkatPb1xbQu1sXhEHw03flc=";
     };
   };
 

@@ -9,12 +9,10 @@ let
     name:
     let
       cfg = deployConfigurations.${name};
-      # nixosSystem 的返回通常既有 `system` 也有 `pkgs.system`；这里做兼容兜底
+      # `pkgs.system` is deprecated in favor of `pkgs.stdenv.hostPlatform.system`.
       system =
-        if cfg ? pkgs && cfg.pkgs ? system then
-          cfg.pkgs.system
-        else if cfg ? system then
-          cfg.system
+        if cfg ? pkgs && cfg.pkgs ? stdenv && cfg.pkgs.stdenv ? hostPlatform then
+          cfg.pkgs.stdenv.hostPlatform.system
         else
           throw "deploy: cannot determine system for host '${name}'";
     in
