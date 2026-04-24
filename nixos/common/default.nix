@@ -23,6 +23,7 @@
     pciutils
     tealdeer
     man-pages
+    fastfetch
     libarchive
   ];
 

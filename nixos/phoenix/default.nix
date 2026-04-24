@@ -10,6 +10,10 @@
     ./boot.nix
 
     ./services/forgejo.nix
+    ./services/code-server.nix
+    # ./services/caddy.nix
+    # ./services/easytier.nix
+    # ./services/vaultwarden.nix
   ];
 
   sops = {
