@@ -9,7 +9,8 @@ keys:
   - &phoenix age192l4kxls84864ruzynms33ysy3tzsrv96dkw9em3pq0hd9u47sjqx7vr73
   - &solidvps age1npey8allr4v2re5scd4kphy5chn5mvssys9uqrvmdny7eh8rqstq55qjzz
   - &colocrossing age1994hdy3fx47zscjvk0xjne0t3xpw7gqujqdklnjqclya7cdpg40sxkmate
-  - &qiniu age1spplgm3093agu48lzarge9xd56nestjdyctymdc56x29xgjrdgasfg9arx
+  - &vmiss age1r77gqf8weqj4p4tl3h8ft5f9n9kls86qkumfmpn9y2qstsacl43s8qlnk9
+  - &vmrack age127uvvs4mpgurr6xwmv9wtfmg3c5feup8j5ez04nneylpplz6gc0qldjgas
 creation_rules:
   - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
     key_groups:
@@ -45,11 +46,6 @@ creation_rules:
       - age:
           - *colocrossing
           - *diffumist
-  - path_regex: ^nixos/qiniu/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *colocrossing
-          - *qiniu
   - path_regex: ^nixos/bitsflow/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
@@ -64,4 +60,14 @@ creation_rules:
     key_groups:
       - age:
           - *nosla-sjc
+          - *diffumist
+  - path_regex: ^nixos/vmiss/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *vmiss
+          - *diffumist
+  - path_regex: ^nixos/vmrack/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *vmrack
           - *diffumist

@@ -19,8 +19,6 @@
       };
       ipv4_address.sopsFile = ./secrets.yaml;
       ipv4_gateway.sopsFile = ./secrets.yaml;
-      ipv6_address.sopsFile = ./secrets.yaml;
-      ipv6_gateway.sopsFile = ./secrets.yaml;
     };
     templates."10-lan.network" = {
       path = "/etc/systemd/network/10-lan.network";
@@ -30,10 +28,8 @@
         Name=ens3
 
         [Network]
-        Address=${config.sops.placeholder.ipv4_address}/25
-        Address=${config.sops.placeholder.ipv6_address}/64
+        Address=${config.sops.placeholder.ipv4_address}/24
         Gateway=${config.sops.placeholder.ipv4_gateway}
-        Gateway=${config.sops.placeholder.ipv6_gateway}
         DNS=1.0.0.1
         DNS=8.8.4.4
         DNS=2606:4700:4700::1001
@@ -48,12 +44,13 @@
   };
   systemd.network.wait-online.enable = false;
 
+  virtualisation.podman.enable = false;
+
   my.services.sing-box = {
     enable = true;
     configSopsFile = ./services/sing-box.json;
   };
-  my.services.postgresql.totalRamMB = 2 * 1024;
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "dedirock";
+  networking.hostName = "vmrack";
 }

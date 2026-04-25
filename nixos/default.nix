@@ -59,6 +59,16 @@ let
       path = ./nosla-sjc;
       deploy = true;
     };
+    vmrack = {
+      system = "x86_64-linux";
+      path = ./vmrack;
+      deploy = true;
+    };
+    vmiss = {
+      system = "x86_64-linux";
+      path = ./vmiss;
+      deploy = true;
+    };
     dedirock = {
       system = "x86_64-linux";
       path = ./dedirock;

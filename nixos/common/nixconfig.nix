@@ -10,7 +10,10 @@ _: {
         "auto-allocate-uids"
         "cgroups"
       ];
-      substituters = [ "https://mirrors.cernet.edu.cn/nix-channels/store" "https://cache.garnix.io" ];
+      substituters = [
+        "https://mirrors.ustc.edu.cn/nix-channels/store"
+        "https://cache.garnix.io"
+      ];
       trusted-public-keys = [ "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=" ];
       auto-allocate-uids = true;
       download-buffer-size = 536870912; # 512 MiB

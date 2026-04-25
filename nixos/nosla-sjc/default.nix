@@ -52,7 +52,7 @@
 
   my.services.sing-box = {
     enable = true;
-    configSopsFile = ./sing-box.json;
+    configSopsFile = ./services/sing-box.json;
   };
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
