@@ -85,6 +85,7 @@
     platformTheme.name = "gtk3";
   };
   home.sessionVariables = {
+    DO_NOT_TRACK = 1;
     # xdg dir base
     XDG_CONFIG_HOME = "${config.xdg.configHome}";
     XDG_CACHE_HOME = "${config.xdg.cacheHome}";

@@ -12,9 +12,6 @@
     ./services/forgejo.nix
     ./services/code-server.nix
     ./services/authelia.nix
-    # ./services/caddy.nix
-    # ./services/easytier.nix
-    # ./services/vaultwarden.nix
   ];
 
   sops = {
@@ -24,6 +21,7 @@
         sopsFile = ./secrets.yaml;
         neededForUsers = true;
       };
+      komari_token.sopsFile = ./secrets.yaml;
       ipv4_address.sopsFile = ./secrets.yaml;
       ipv4_gateway.sopsFile = ./secrets.yaml;
       ipv6_address.sopsFile = ./secrets.yaml;

@@ -17,6 +17,7 @@
         sopsFile = ./secrets.yaml;
         neededForUsers = true;
       };
+      komari_token.sopsFile = ./secrets.yaml;
       ipv4_address.sopsFile = ./secrets.yaml;
       ipv4_gateway.sopsFile = ./secrets.yaml;
     };

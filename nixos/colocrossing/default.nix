@@ -8,6 +8,8 @@
 {
   imports = [
     ./boot.nix
+
+    ./services/komari-monitor.nix
   ];
 
   sops = {
@@ -17,6 +19,7 @@
         sopsFile = ./secrets.yaml;
         neededForUsers = true;
       };
+      komari_token.sopsFile = ./secrets.yaml;
     };
   };
   networking = {
@@ -24,9 +27,13 @@
     useNetworkd = true;
     networkmanager.enable = false;
   };
-  systemd.network.wait-online.enable = false;
 
-  virtualisation.podman.enable = false;
+  my.services.sing-box = {
+    enable = true;
+    firewallPorts = [ 8443 ];
+    configSopsFile = ./services/sing-box.json;
+  };
+  systemd.network.wait-online.enable = false;
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "colocrossing";

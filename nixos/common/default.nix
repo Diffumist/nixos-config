@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 {
   imports = [
     ./nixconfig.nix
@@ -8,6 +13,7 @@
     ./services/caddy.nix
     ./services/sing-box.nix
     ./services/postgresql.nix
+    ./services/komari.nix
   ];
 
   environment.systemPackages = with pkgs; [
@@ -50,5 +56,12 @@
       defaultNetwork.settings.dns_enabled = true;
     };
     oci-containers.backend = "podman";
+  };
+  # Enable podman auto update
+  systemd.timers.podman-auto-update = lib.mkIf config.virtualisation.podman.enable {
+    wantedBy = [ "timers.target" ];
+  };
+  systemd.services.podman-auto-update = lib.mkIf config.virtualisation.podman.enable {
+    serviceConfig.ExecStartPost = lib.mkIf config.services.caddy.enable "${pkgs.systemd}/bin/systemctl try-restart caddy.service";
   };
 }

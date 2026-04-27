@@ -16,9 +16,12 @@
 
   sops = {
     age.keyFile = "/var/lib/age/key.txt";
-    secrets.user_passwd_hash = {
-      sopsFile = ./secrets.yaml;
-      neededForUsers = true;
+    secrets = {
+      user_passwd_hash = {
+        sopsFile = ./secrets.yaml;
+        neededForUsers = true;
+      };
+      komari_token.sopsFile = ./secrets.yaml;
     };
   };
   networking = {

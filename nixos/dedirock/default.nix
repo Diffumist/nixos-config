@@ -17,6 +17,7 @@
         sopsFile = ./secrets.yaml;
         neededForUsers = true;
       };
+      komari_token.sopsFile = ./secrets.yaml;
       ipv4_address.sopsFile = ./secrets.yaml;
       ipv4_gateway.sopsFile = ./secrets.yaml;
       ipv6_address.sopsFile = ./secrets.yaml;
@@ -50,6 +51,7 @@
 
   my.services.sing-box = {
     enable = true;
+    firewallPorts = [ 8443 ];
     configSopsFile = ./services/sing-box.json;
   };
   my.services.postgresql.totalRamMB = 2 * 1024;

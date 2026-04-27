@@ -17,6 +17,7 @@
         sopsFile = ./secrets.yaml;
         neededForUsers = true;
       };
+      komari_token.sopsFile = ./secrets.yaml;
       ipv4_address.sopsFile = ./secrets.yaml;
       ipv4_gateway.sopsFile = ./secrets.yaml;
       ipv6_address.sopsFile = ./secrets.yaml;
@@ -52,7 +53,7 @@
 
   my.services.sing-box = {
     enable = true;
-    configSopsFile = ./sing-box.json;
+    configSopsFile = ./services/sing-box.json;
   };
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;

@@ -8,10 +8,6 @@
 {
   imports = [
     ./boot.nix
-
-    # ./services/caddy.nix
-    # ./services/easytier.nix
-    # ./services/vaultwarden.nix
   ];
 
   sops = {
@@ -21,6 +17,7 @@
         sopsFile = ./secrets.yaml;
         neededForUsers = true;
       };
+      komari_token.sopsFile = ./secrets.yaml;
       ipv4_address.sopsFile = ./secrets.yaml;
       ipv4_gateway.sopsFile = ./secrets.yaml;
       ipv6_address.sopsFile = ./secrets.yaml;
@@ -52,6 +49,11 @@
   };
   systemd.network.wait-online.enable = false;
 
+  my.services.sing-box = {
+    enable = true;
+    firewallPorts = [ 8443 ];
+    configSopsFile = ./services/sing-box.json;
+  };
   my.services.postgresql.totalRamMB = 3 * 1024;
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
