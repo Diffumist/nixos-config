@@ -9,8 +9,8 @@
   imports = [
     ./boot.nix
 
-    # ./services/forgejo.nix
-    # ./services/code-server.nix
+    ./services/forgejo.nix
+    ./services/code-server.nix
   ];
 
   sops = {

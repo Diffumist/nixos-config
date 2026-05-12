@@ -6,9 +6,8 @@
 }:
 {
   sops.secrets = {
-    cloudflare_api_token.sopsFile = ../secrets.yaml;
+    cloudflare_api_token = { };
     forgejo_client_secret = {
-      sopsFile = ./authelia.yaml;
       owner = config.services.forgejo.user;
       group = config.services.forgejo.group;
     };

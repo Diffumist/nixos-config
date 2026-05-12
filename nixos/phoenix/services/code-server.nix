@@ -27,7 +27,7 @@
     '';
   };
 
-  sops.secrets.cloudflare_api_token.sopsFile = ../secrets.yaml;
+  sops.secrets.cloudflare_api_token = { };
 
   security.acme.certs."code.diffumist.me" = {
     dnsProvider = "cloudflare";

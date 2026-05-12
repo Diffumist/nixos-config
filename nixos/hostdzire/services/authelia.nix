@@ -32,7 +32,7 @@
       group = config.services.authelia.instances.main.group;
       restartUnits = [ "authelia-main.service" ];
     };
-    "authelia/lldap_bind_passwd" = {
+    "authelia/lldap_passwd" = {
       owner = config.services.authelia.instances.main.user;
       group = config.services.authelia.instances.main.group;
       restartUnits = [ "authelia-main.service" ];
@@ -47,8 +47,10 @@
       oidcIssuerPrivateKeyFile = config.sops.secrets."authelia/oidc_issuer_private_key".path;
       oidcHmacSecretFile = config.sops.secrets."authelia/oidc_hmac_secret".path;
     };
-    AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE =
-      config.sops.secrets."authelia/lldap_passwd".path;
+    environmentVariables = {
+      AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE =
+        config.sops.secrets."authelia/lldap_passwd".path;
+    };
     settings = {
       theme = "dark";
       server = {
@@ -104,7 +106,6 @@
           }
           {
             domain = [ "git.diffumist.me" ];
-            subject = [ "group:admin" ];
             policy = "two_factor";
           }
         ];
@@ -150,8 +151,14 @@
   };
 
   systemd.services.authelia-main = {
-    requires = [ "postgresql.service" ];
-    after = [ "postgresql.service" ];
+    requires = [
+      "lldap.service"
+      "postgresql.service"
+    ];
+    after = [
+      "lldap.service"
+      "postgresql.service"
+    ];
   };
 
   # Caddy reverse proxy for Authelia portal

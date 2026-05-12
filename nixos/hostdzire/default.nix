@@ -11,6 +11,8 @@
 
     ./services/lldap.nix
     ./services/nanobot.nix
+    ./services/tgtldr.nix
+    ./services/authelia.nix
     ./services/vaultwarden.nix
   ];
   sops.defaultSopsFile = ./secrets.yaml;
