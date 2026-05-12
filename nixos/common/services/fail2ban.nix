@@ -47,17 +47,6 @@ _: {
           bantime = "1h";
         };
       };
-
-      memos-caddy = {
-        settings = {
-          enabled = true;
-          filter = "memos-caddy";
-          backend = "systemd";
-          journalmatch = "_SYSTEMD_UNIT=caddy.service";
-          maxretry = 5;
-          bantime = "1h";
-        };
-      };
     };
   };
 
@@ -77,12 +66,6 @@ _: {
     "fail2ban/filter.d/immich-caddy.local".text = ''
       [Definition]
       failregex = ^.*"client_ip":"<HOST>".*"method":"POST".*"uri":"/api/auth/login".*"status":(401|403).*$
-      ignoreregex =
-    '';
-
-    "fail2ban/filter.d/memos-caddy.local".text = ''
-      [Definition]
-      failregex = ^.*"client_ip":"<HOST>".*"method":"POST".*"uri":"(?:/api/v1/auth/signin|/api/v1/auth/login)".*"status":(401|403).*$
       ignoreregex =
     '';
   };

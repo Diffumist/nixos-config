@@ -40,7 +40,6 @@
     "kernel.yama.ptrace_scope" = 2;
     "kernel.dmesg_restrict" = 1;
     "kernel.kptr_restrict" = 2;
-    "kernel.kexec_load_disabled" = 1;
     "kernel.panic" = 10;
     "fs.suid_dumpable" = 0;
     "fs.protected_hardlinks" = 1;

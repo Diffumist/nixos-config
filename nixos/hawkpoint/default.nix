@@ -14,19 +14,25 @@
   ];
 
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  sops.secrets = {
-    user_passwd_hash = {
-      sopsFile = ./secrets.yaml;
-      neededForUsers = true;
-    };
-    github_access_token = {
-      sopsFile = ./secrets.yaml;
-      neededForUsers = true;
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    secrets = {
+      user_passwd_hash = {
+        neededForUsers = true;
+      };
+      github_access_token = {
+        neededForUsers = true;
+      };
     };
   };
-  nix.extraOptions = ''
-    !include ${config.sops.secrets.github_access_token.path}
-  '';
+  nix = {
+    settings.substituters = lib.mkAfter [
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
+    ];
+    extraOptions = ''
+      !include ${config.sops.secrets.github_access_token.path}
+    '';
+  };
   nix.channel.enable = false;
 
   networking = {
@@ -80,13 +86,13 @@
   fonts = {
     packages = with pkgs; [
       sarasa-gothic
-      nerd-fonts.fira-code
+      maple-mono.NF-CN-unhinted
       apple-emoji-font
     ];
     fontDir.enable = true;
     fontconfig = {
       defaultFonts = rec {
-        monospace = [ "Fira Code Nerd Font" ];
+        monospace = [ "Maple Mono NF CN" ];
         sansSerif = [ "Sarasa Gothic SC" ];
         serif = sansSerif;
         emoji = [ "Apple Color Emoji" ];

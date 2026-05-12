@@ -9,21 +9,11 @@
   imports = [
     ./boot.nix
 
+    ./services/lldap.nix
     ./services/nanobot.nix
-    ./services/memos.nix
     ./services/vaultwarden.nix
   ];
-
-  sops = {
-    age.keyFile = "/var/lib/age/key.txt";
-    secrets = {
-      user_passwd_hash = {
-        sopsFile = ./secrets.yaml;
-        neededForUsers = true;
-      };
-      komari_token.sopsFile = ./secrets.yaml;
-    };
-  };
+  sops.defaultSopsFile = ./secrets.yaml;
   networking = {
     nftables.enable = true;
     useNetworkd = true;
@@ -32,6 +22,7 @@
   systemd.network.wait-online.enable = false;
 
   my.services.postgresql.totalRamMB = 6 * 1024;
+  systemd.services.komari-agent.environment.AGENT_MONTH_ROTATE = "20";
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "hostdzire";

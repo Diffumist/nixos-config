@@ -51,7 +51,11 @@
       url = "github:Kirottu/system76-scheduler-niri";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    codex-cli-nix.url = "github:sadjow/codex-cli-nix";
+    quickshell = {
+      url = "github:quickshell-mirror/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs =

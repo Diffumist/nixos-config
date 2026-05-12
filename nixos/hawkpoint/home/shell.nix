@@ -110,7 +110,7 @@ _: {
       enable = true;
       settings = {
         theme = "dankcolors";
-        font-family = "FiraCode Nerd Font Mono";
+        font-family = "Maple Mono NF CN";
       };
     };
     direnv = {

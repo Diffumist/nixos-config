@@ -11,15 +11,10 @@
   ];
 
   sops = {
-    age.keyFile = "/var/lib/age/key.txt";
+    defaultSopsFile = ./secrets.yaml;
     secrets = {
-      user_passwd_hash = {
-        sopsFile = ./secrets.yaml;
-        neededForUsers = true;
-      };
-      komari_token.sopsFile = ./secrets.yaml;
-      ipv4_address.sopsFile = ./secrets.yaml;
-      ipv4_gateway.sopsFile = ./secrets.yaml;
+      ipv4_address = { };
+      ipv4_gateway = { };
     };
     templates."10-lan.network" = {
       path = "/etc/systemd/network/10-lan.network";

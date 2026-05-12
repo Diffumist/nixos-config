@@ -23,7 +23,7 @@
       owner = "systemd-network";
       content = ''
         [Match]
-        Name=ens3
+        Name=ens17
 
         [Network]
         Address=${config.sops.placeholder.ipv4_address}/25
@@ -49,8 +49,8 @@
     firewallPorts = [ 8443 ];
     configSopsFile = ./services/sing-box.json;
   };
-  my.services.postgresql.totalRamMB = 3 * 1024;
+  my.services.postgresql.totalRamMB = 2 * 1024;
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "solidvps";
+  networking.hostName = "geelinx";
 }

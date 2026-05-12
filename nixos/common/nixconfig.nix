@@ -10,11 +10,14 @@ _: {
         "auto-allocate-uids"
         "cgroups"
       ];
-      substituters = [
-        "https://mirrors.ustc.edu.cn/nix-channels/store"
+      extra-substituters = [
+        "https://cache.numtide.com"
         "https://cache.garnix.io"
       ];
-      trusted-public-keys = [ "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=" ];
+      extra-trusted-public-keys = [
+        "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+        "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+      ];
       auto-allocate-uids = true;
       download-buffer-size = 536870912; # 512 MiB
       warn-dirty = false;

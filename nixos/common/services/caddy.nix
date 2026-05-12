@@ -50,12 +50,27 @@ in
 
     services.caddy = {
       enable = true;
+      package = pkgs.caddy-cloudflare;
       globalConfig = ''
+        acme_dns cloudflare {env.CF_API_TOKEN}
         servers {
           import /var/lib/caddy/cloudflare-trusted-proxies.caddy
         }
       '';
     };
+
+    systemd.services.caddy.serviceConfig.EnvironmentFile =
+      config.sops.templates."caddy-cloudflare.env".path;
+    sops.secrets.cloudflare_api_token = { };
+    sops.templates."caddy-cloudflare.env" = {
+      owner = "caddy";
+      group = "caddy";
+      mode = "0400";
+      content = ''
+        CF_API_TOKEN=${config.sops.placeholder.cloudflare_api_token}
+      '';
+    };
+
     systemd.tmpfiles.rules = [
       "f /var/lib/caddy/cloudflare-trusted-proxies.caddy 0644 caddy caddy -"
     ];

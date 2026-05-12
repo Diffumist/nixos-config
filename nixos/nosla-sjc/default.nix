@@ -11,17 +11,12 @@
   ];
 
   sops = {
-    age.keyFile = "/var/lib/age/key.txt";
+    defaultSopsFile = ./secrets.yaml;
     secrets = {
-      user_passwd_hash = {
-        sopsFile = ./secrets.yaml;
-        neededForUsers = true;
-      };
-      komari_token.sopsFile = ./secrets.yaml;
-      ipv4_address.sopsFile = ./secrets.yaml;
-      ipv4_gateway.sopsFile = ./secrets.yaml;
-      ipv6_address.sopsFile = ./secrets.yaml;
-      ipv6_gateway.sopsFile = ./secrets.yaml;
+      ipv4_address = { };
+      ipv4_gateway = { };
+      ipv6_address = { };
+      ipv6_gateway = { };
     };
     templates."10-lan.network" = {
       path = "/etc/systemd/network/10-lan.network";
@@ -55,6 +50,7 @@
     enable = true;
     configSopsFile = ./services/sing-box.json;
   };
+  systemd.services.komari-agent.environment.AGENT_MONTH_ROTATE = "13";
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "nosla-sjc";

@@ -21,7 +21,7 @@ let
       profiles.system.path = inputs.deploy-rs.lib.${system}.activate.nixos cfg;
       user = "root";
       sshUser = "root";
-      fastConnection = true;
+      fastConnection = false;
       # DEBUG
       autoRollback = false;
       magicRollback = false;

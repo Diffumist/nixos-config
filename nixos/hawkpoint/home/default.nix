@@ -19,7 +19,7 @@
     };
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.cli-proxy-api}/bin/cli-proxy-api --config %h/.local/share/cli-proxy-api/config.yaml";
+      ExecStart = "${pkgs.llm-agents.cli-proxy-api}/bin/cli-proxy-api --config %h/.local/share/cli-proxy-api/config.yaml";
       Restart = "on-failure";
       RestartSec = 5;
     };
@@ -29,7 +29,7 @@
   };
   systemd.user.services.aria2 = {
     Unit = {
-      Description = "aria2 daemon";
+      Description = "Aria2 daemon";
       After = [ "network-online.target" ];
       Wants = [ "network-online.target" ];
     };
@@ -89,7 +89,7 @@
     steam-run
     android-tools
     # TUI
-    codex-cli
+    llm-agents.codex
     # opencode
     # claude-code
     # GUI

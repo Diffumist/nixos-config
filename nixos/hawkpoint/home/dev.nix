@@ -67,9 +67,8 @@
       settings.default-key = "8BA330B49A5694A6";
       scdaemonSettings.deny-admin = true;
     };
-    vscode = {
+    vscodium = {
       enable = true;
-      package = pkgs.vscodium;
       profiles.default.extensions = with pkgs.vscode-marketplace; [
         golang.go
         mkhl.direnv
@@ -78,6 +77,7 @@
         jinxcappa.sopsie
         jnoortheen.nix-ide
         antfu.file-nesting
+        oscarotero.vento-syntax
         thegeeklab.yamlfmt-ng
         tamasfe.even-better-toml
         rust-lang.rust-analyzer
@@ -100,15 +100,19 @@
     nixfmt
     taplo
     yamlfmt
+    yaml-language-server
     gdb
     gcc
     cmake
     gnumake
     ninja
+    gopls
     deno
     oxfmt
     oxlint
     tsgolint
+    typescript-language-server
+    yarn
     typescript
     nodejs
     rustup

@@ -28,6 +28,9 @@ in
         AGENT_INTERVAL = "3";
         AGENT_MEMORY_REPORT_RAW_USED = "true";
       };
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         DynamicUser = true;
         # ICMPing
@@ -38,10 +41,6 @@ in
         WorkingDirectory = "/var/lib/komari-agent";
         ExecStart = "${lib.getExe pkgs.komari-agent} --include-mountpoint /nix";
         EnvironmentFile = config.sops.templates."komari-agent.env".path;
-
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
       };
     };
   };

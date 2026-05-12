@@ -11,17 +11,7 @@
 
     ./services/komari-monitor.nix
   ];
-
-  sops = {
-    age.keyFile = "/var/lib/age/key.txt";
-    secrets = {
-      user_passwd_hash = {
-        sopsFile = ./secrets.yaml;
-        neededForUsers = true;
-      };
-      komari_token.sopsFile = ./secrets.yaml;
-    };
-  };
+  sops.defaultSopsFile = ./secrets.yaml;
   networking = {
     nftables.enable = true;
     useNetworkd = true;

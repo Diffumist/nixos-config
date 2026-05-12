@@ -1,16 +1,27 @@
+# ssh hostname 'ssh-keygen -y -f /etc/ssh/ssh_host_ed25519_key' | nix run nixpkgs#ssh-to-age
 keys:
   - &diffumist age1mgw2q0ytdsnyxh40me6fu5pvcvcf7nug3dm05s8wu0v9ay20eenqatudqj
-  - &bitsflow age1zz3wjh6j4nmcsh6l89prs4npeghxh9qcnph963g2u90z4ktujyyqrlkr89
-  - &liteserver age1stxzjpql49a6u6yl603r44g4t682606d99paxevhrl2ve3t9gugswxjfg8
-  - &dedirock age19s2tuyn05d5ruppvhc2rdk3pwekf4uy2dz8mz2nj0339nqsw7qas9qs3hz
-  - &hostdzire age1399u28ycws4cq367wteqlt9lmjd55cn0julf6uexwuhnd43vxayskzhr22
-  - &nosla-lax age1sngsh924drssawk9jthlguqz5f8dx6chrky24flf77p52drypets4q95ms
-  - &nosla-sjc age1lnjfhcaz05u4u93j3jfn8mwhssph8vd0zh60fn5357ef5ls5acrq6upfep
-  - &phoenix age192l4kxls84864ruzynms33ysy3tzsrv96dkw9em3pq0hd9u47sjqx7vr73
-  - &solidvps age1npey8allr4v2re5scd4kphy5chn5mvssys9uqrvmdny7eh8rqstq55qjzz
-  - &colocrossing age1994hdy3fx47zscjvk0xjne0t3xpw7gqujqdklnjqclya7cdpg40sxkmate
-  - &vmiss age1r77gqf8weqj4p4tl3h8ft5f9n9kls86qkumfmpn9y2qstsacl43s8qlnk9
-  - &vmrack age127uvvs4mpgurr6xwmv9wtfmg3c5feup8j5ez04nneylpplz6gc0qldjgas
+  - &bitsflow age1nrgzhh3tz7sd4xat7xhacp9mgy03s6f8kgksj4ylx89apl0twupsc3tes3
+  - &liteserver age14euf85fkar532dkxc4p3mstz92nfjlwl4vdgvf5wfm89v4tpgeeqgw5780
+  - &dedirock age1kyfqu2ccdj68lspn85735ph76chsnlaff2pdmfmx3ru5dx8dfanqm8pjxe
+  - &hostdzire age1rkshe6y7r5gz2tpsxtrvnc7a8j5v3puvak04maat7xkssqmggs5qfwkvv5
+  - &nosla-lax age1k23gfljuskjjs2y69a3cexuvywyk3fl4x9gptqy53cs4d2888g0swcxw4u
+  - &nosla-sjc age1eyhlzx98v69r433ytksn0ry2ph83wjp9nps35scvuqt9fzdj7p7sdcljla
+  - &phoenix age192s80znrftygj6673sp6af7lpjzxtrvh9gztcp2unn2vy7hdyevq4ddd07
+  - &solidvps age135tv74d20v9qc772l63tjgczw4tq3pj86rd6qet69vhe5cf5g3hsq8ucs3
+  - &colocrossing age1u4r8qrpmh6p8amxsyumn6htpps2lw5ntpfq4rdtzzzk4gqs22gjslpafyz
+  - &vmrack age1pawz4g2qw2awk5mpdgwzzc95p23x0wm04awufrsfy2pvy4zv0g5sc2f3n4
+  - &geelinx age1dxeeh73zgq0r329wc6rssxs3tzm47mykfl6htah6czfc9aullaesvy883h
+  - &bitsflow_old age1zz3wjh6j4nmcsh6l89prs4npeghxh9qcnph963g2u90z4ktujyyqrlkr89
+  - &liteserver_old age1stxzjpql49a6u6yl603r44g4t682606d99paxevhrl2ve3t9gugswxjfg8
+  - &dedirock_old age19s2tuyn05d5ruppvhc2rdk3pwekf4uy2dz8mz2nj0339nqsw7qas9qs3hz
+  - &hostdzire_old age1399u28ycws4cq367wteqlt9lmjd55cn0julf6uexwuhnd43vxayskzhr22
+  - &nosla-lax_old age1sngsh924drssawk9jthlguqz5f8dx6chrky24flf77p52drypets4q95ms
+  - &nosla-sjc_old age1lnjfhcaz05u4u93j3jfn8mwhssph8vd0zh60fn5357ef5ls5acrq6upfep
+  - &phoenix_old age192l4kxls84864ruzynms33ysy3tzsrv96dkw9em3pq0hd9u47sjqx7vr73
+  - &solidvps_old age1npey8allr4v2re5scd4kphy5chn5mvssys9uqrvmdny7eh8rqstq55qjzz
+  - &colocrossing_old age1994hdy3fx47zscjvk0xjne0t3xpw7gqujqdklnjqclya7cdpg40sxkmate
+  - &vmrack_old age127uvvs4mpgurr6xwmv9wtfmg3c5feup8j5ez04nneylpplz6gc0qldjgas
 creation_rules:
   - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
     key_groups:
@@ -19,55 +30,65 @@ creation_rules:
   - path_regex: ^nixos/liteserver/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *liteserver_old
           - *liteserver
           - *diffumist
   - path_regex: ^nixos/dedirock/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *dedirock_old
           - *dedirock
           - *diffumist
   - path_regex: ^nixos/hostdzire/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *hostdzire_old
           - *hostdzire
           - *diffumist
   - path_regex: ^nixos/phoenix/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *phoenix_old
           - *phoenix
           - *diffumist
   - path_regex: ^nixos/solidvps/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *solidvps_old
           - *solidvps
           - *diffumist
   - path_regex: ^nixos/colocrossing/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *colocrossing_old
           - *colocrossing
           - *diffumist
   - path_regex: ^nixos/bitsflow/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *bitsflow_old
           - *bitsflow
           - *diffumist
   - path_regex: ^nixos/nosla-lax/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *nosla-lax_old
           - *nosla-lax
           - *diffumist
   - path_regex: ^nixos/nosla-sjc/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *nosla-sjc_old
           - *nosla-sjc
-          - *diffumist
-  - path_regex: ^nixos/vmiss/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *vmiss
           - *diffumist
   - path_regex: ^nixos/vmrack/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
+          - *vmrack_old
           - *vmrack
+          - *diffumist
+  - path_regex: ^nixos/geelinx/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *geelinx
           - *diffumist

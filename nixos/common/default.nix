@@ -16,6 +16,16 @@
     ./services/komari.nix
   ];
 
+  sops = {
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    secrets = {
+      user_passwd_hash = {
+        neededForUsers = true;
+      };
+      komari_token = { };
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     fd
     bat
@@ -31,9 +41,10 @@
     man-pages
     fastfetch
     libarchive
+    ssh-to-age
   ];
 
-  time.timeZone = "Asia/Shanghai";
+  time.timeZone = lib.mkDefault "Asia/Shanghai";
 
   i18n = {
     defaultLocale = "zh_CN.UTF-8";
