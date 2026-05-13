@@ -81,11 +81,6 @@ let
       path = ./hostdzire;
       deploy = true;
     };
-    bitsflow = {
-      system = "x86_64-linux";
-      path = ./bitsflow;
-      deploy = true;
-    };
     colocrossing = {
       system = "x86_64-linux";
       path = ./colocrossing;
