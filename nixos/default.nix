@@ -10,7 +10,7 @@ let
     self.overlays.default
     inputs.llm-agents.overlays.default
     inputs.quickshell.overlays.default
-    inputs.nix-cachyos-kernel.overlays.pinned
+    inputs.nix-cachyos-kernel.overlays.default
     inputs.nix-vscode-extensions.overlays.default
   ];
   mkPkgs =
@@ -26,7 +26,6 @@ let
       inputs.sops-nix.nixosModules.sops
       inputs.impermanence.nixosModules.impermanence
       inputs.nur-xddxdd.nixosModules.setupOverlay
-      inputs.nur-xddxdd.nixosModules.nix-cache-attic
     ];
   };
 
