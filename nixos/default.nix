@@ -90,11 +90,26 @@ let
       path = ./solidvps;
       deploy = true;
     };
+    texas = {
+      system = "x86_64-linux";
+      path = ./texas;
+      deploy = false;
+    };
     nixiso = {
       system = "x86_64-linux";
       path = ./nixiso;
       deploy = false;
       useCommon = false;
+    };
+    bootstrap = {
+      system = "x86_64-linux";
+      path = ./bootstrap;
+      deploy = false;
+      useCommon = false;
+      extra = [
+        inputs.disko.nixosModules.disko
+        inputs.impermanence.nixosModules.impermanence
+      ];
     };
   };
 

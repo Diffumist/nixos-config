@@ -10,7 +10,7 @@
     ./boot.nix
 
     ./services/lldap.nix
-    ./services/nanobot.nix
+    # ./services/agent.nix
     ./services/tgtldr.nix
     ./services/authelia.nix
     ./services/vaultwarden.nix

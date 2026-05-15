@@ -8,6 +8,8 @@
 {
   imports = [
     ./boot.nix
+
+    ./services/sillytavern.nix
   ];
 
   sops = {

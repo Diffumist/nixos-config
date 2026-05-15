@@ -92,6 +92,7 @@
               ];
             };
           formatter = pkgs.nixfmt;
+          packages.bootstrap-image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
           checks = inputs.deploy-rs.lib.${system}.deployChecks self.deploy;
         }
       )

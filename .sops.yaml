@@ -12,6 +12,7 @@ keys:
   - &colocrossing age1u4r8qrpmh6p8amxsyumn6htpps2lw5ntpfq4rdtzzzk4gqs22gjslpafyz
   - &vmrack age1pawz4g2qw2awk5mpdgwzzc95p23x0wm04awufrsfy2pvy4zv0g5sc2f3n4
   - &geelinx age1dxeeh73zgq0r329wc6rssxs3tzm47mykfl6htah6czfc9aullaesvy883h
+  - &texas age1kewlmdu3tf4hckf0mxnjnyxakm0r03vlqqza5te89var4rjx24vqnk44zz
 creation_rules:
   - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
     key_groups:
@@ -71,4 +72,9 @@ creation_rules:
     key_groups:
       - age:
           - *geelinx
+          - *diffumist
+  - path_regex: ^nixos/texas/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *texas
           - *diffumist

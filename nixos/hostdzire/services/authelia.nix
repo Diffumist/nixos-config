@@ -81,6 +81,10 @@
             domain = "diffumist.me";
             authelia_url = "https://auth.diffumist.me";
           }
+          {
+            domain = "503418.xyz";
+            authelia_url = "https://auth.503418.xyz";
+          }
         ];
       };
       webauthn = {
@@ -103,6 +107,14 @@
           {
             domain = "auth.diffumist.me";
             policy = "bypass";
+          }
+          {
+            domain = "auth.503418.xyz";
+            policy = "bypass";
+          }
+          {
+            domain = "tavern.503418.xyz";
+            policy = "two_factor";
           }
           {
             domain = [ "git.diffumist.me" ];
