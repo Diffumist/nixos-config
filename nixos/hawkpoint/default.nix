@@ -23,18 +23,46 @@
       github_access_token = {
         neededForUsers = true;
       };
+      sshosts = {
+        sopsFile = ./home/sshosts.keytab;
+        format = "binary";
+        owner = "root";
+        group = "wheel";
+        mode = "0440";
+      };
     };
   };
+  programs.ssh.extraConfig = ''
+    Include ${config.sops.secrets.sshosts.path}
+  '';
   nix = {
+    channel.enable = false;
     settings.substituters = lib.mkAfter [
       "https://mirrors.ustc.edu.cn/nix-channels/store"
     ];
+    settings.builders-use-substitutes = true;
     extraOptions = ''
       !include ${config.sops.secrets.github_access_token.path}
     '';
+    distributedBuilds = true;
+    buildMachines = [
+      {
+        hostName = "phoenix";
+        sshUser = "root";
+        sshKey = "/home/diffumist/.ssh/private";
+        system = "x86_64-linux";
+        protocol = "ssh-ng";
+        maxJobs = 8;
+        speedFactor = 2;
+        supportedFeatures = [
+          "nixos-test"
+          "benchmark"
+          "big-parallel"
+          "kvm"
+        ];
+      }
+    ];
   };
-  nix.channel.enable = false;
-
   networking = {
     nftables.enable = true;
     firewall.enable = false;

@@ -1,6 +1,15 @@
 {
   description = "diffumist's NixOS configuration";
-
+  nixConfig = {
+    extra-substituters = [
+      "https://cache.numtide.com"
+      "https://cache.garnix.io"
+    ];
+    extra-trusted-public-keys = [
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+    ];
+  };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";

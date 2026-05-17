@@ -50,6 +50,20 @@
     enable = true;
     configSopsFile = ./services/sing-box.json;
   };
+  systemd.services.sing-box.serviceConfig = {
+    CPUQuota = "30%";
+    CPUWeight = 50;
+    Nice = 10;
+    Restart = "on-failure";
+    RestartSec = "10s";
+  };
+  systemd.services.komari-agent.serviceConfig = {
+    CPUQuota = "10%";
+    CPUWeight = 10;
+    Nice = 15;
+    Restart = "on-failure";
+    RestartSec = "30s";
+  };
   systemd.services.komari-agent.environment.AGENT_MONTH_ROTATE = "13";
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
