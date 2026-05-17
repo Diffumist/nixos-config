@@ -17,7 +17,7 @@
       "audit=0"
       "net.ifnames=0"
     ];
-    kernelPackages = lib.mkDefault pkgs.cachyosKernels.linuxPackages-cachyos-server-lto;
+    kernelPackages = pkgs.linuxPackages_xanmod_latest;
     initrd = {
       compressor = "zstd";
       compressorArgs = [

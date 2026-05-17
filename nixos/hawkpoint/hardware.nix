@@ -1,10 +1,5 @@
 { pkgs, ... }:
 {
-  zramSwap = {
-    enable = true;
-    algorithm = "lz4";
-    priority = 50;
-  };
   hardware = {
     bluetooth.enable = true;
     amdgpu.initrd.enable = true;

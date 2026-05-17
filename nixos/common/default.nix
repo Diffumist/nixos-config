@@ -39,7 +39,7 @@
     pciutils
     tealdeer
     man-pages
-    fastfetch
+    fastfetchMinimal
     libarchive
     ssh-to-age
   ];

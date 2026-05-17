@@ -4,6 +4,10 @@
   ...
 }:
 {
+  sops.secrets.sshosts = {
+    sopsFile = ./sshosts.keytab;
+    format = "binary";
+  };
   services.gpg-agent = {
     enable = true;
     enableScDaemon = true;

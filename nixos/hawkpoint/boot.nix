@@ -20,12 +20,12 @@
         "sd_mod"
       ];
     };
-    # extraModulePackages = [
-    #   config.boot.kernelPackages.yt6801
-    # ]; # break
+    extraModulePackages = [
+      config.boot.kernelPackages.yt6801
+    ];
     kernelModules = [
       "kvm-amd"
-      # "yt6801"
+      "yt6801"
     ];
     kernelParams = lib.mkAfter [
       # hardware

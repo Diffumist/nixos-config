@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 {
-  boot.kernelPackages = lib.mkDefault pkgs.cachyosKernels.linuxPackages-cachyos-server-lto;
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_xanmod_latest;
   boot.kernelParams = [
     "vdso32=0"
     "vsyscall=none"
@@ -80,7 +80,6 @@
     "net.ipv4.conf.default.accept_redirects" = 0;
     "net.ipv4.conf.all.rp_filter" = 1;
     "net.ipv4.conf.default.rp_filter" = 1;
-
     # --- Network Security / Anti-Spoofing (IPv6) ---
     # ignore IPv6 ICMP redirect messages
     "net.ipv6.conf.default.accept_redirects" = 0;
@@ -89,5 +88,10 @@
     "net.ipv6.conf.default.accept_source_route" = 0;
     "net.ipv6.conf.all.accept_source_route" = 0;
   };
-
+  zramSwap = {
+    enable = true;
+    algorithm = "lz4";
+    priority = 100;
+    memoryPercent = 50;
+  };
 }
