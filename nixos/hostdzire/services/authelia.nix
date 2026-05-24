@@ -109,15 +109,11 @@
             policy = "bypass";
           }
           {
-            domain = "auth.503418.xyz";
-            policy = "bypass";
-          }
-          {
-            domain = "tavern.503418.xyz";
-            policy = "two_factor";
-          }
-          {
-            domain = [ "git.diffumist.me" ];
+            domain = [
+              "git.diffumist.me"
+              "hermes.diffumist.me"
+              "tavern.diffumist.me"
+            ];
             policy = "two_factor";
           }
         ];

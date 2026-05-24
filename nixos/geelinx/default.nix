@@ -8,6 +8,7 @@
 {
   imports = [
     ./boot.nix
+    ./services/hermes.nix
   ];
 
   sops = {

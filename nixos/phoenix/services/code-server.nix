@@ -18,7 +18,7 @@
   services.caddy.virtualHosts."code.diffumist.me" = {
     useACMEHost = "code.diffumist.me";
     extraConfig = ''
-      forward_auth 127.0.0.1:9091 {
+      forward_auth https://auth.diffumist.me {
         uri /api/authz/forward-auth
         copy_headers Remote-User Remote-Groups Remote-Email Remote-Name
       }

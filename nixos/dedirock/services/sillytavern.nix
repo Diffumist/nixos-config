@@ -21,6 +21,9 @@
     '';
   };
 
+  sops.secrets.cloudflare_api_token = {
+    sopsFile = ../secrets.yaml;
+  };
   security.acme.certs."tavern.diffumist.me" = {
     dnsProvider = "cloudflare";
     credentialFiles = {

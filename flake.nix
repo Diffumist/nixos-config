@@ -64,6 +64,7 @@
       url = "github:quickshell-mirror/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent.url = "github:NousResearch/hermes-agent";
     llm-agents.url = "github:numtide/llm-agents.nix";
   };
 

@@ -90,6 +90,7 @@
     android-tools
     # TUI
     llm-agents.codex
+    llm-agents.claude-code
     # opencode
     # claude-code
     # GUI

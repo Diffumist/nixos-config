@@ -25,7 +25,7 @@ in
         AGENT_DISABLE_AUTO_UPDATE = "true";
         AGENT_DISABLE_WEB_SSH = "true";
         AGENT_MONTH_ROTATE = lib.mkDefault "1";
-        AGENT_INTERVAL = "3";
+        AGENT_INTERVAL = "5";
         AGENT_MEMORY_REPORT_RAW_USED = "true";
       };
       wants = [ "network-online.target" ];
