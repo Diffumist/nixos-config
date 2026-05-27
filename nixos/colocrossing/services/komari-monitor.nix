@@ -13,7 +13,7 @@
     ];
   };
   systemd.tmpfiles.rules = [
-    "d /var/lib/komari-monitor 0755 root root -"
+    "d /var/lib/komari-monitor 0750 root root -"
   ];
 
   systemd.services.podman-komari-monitor = {

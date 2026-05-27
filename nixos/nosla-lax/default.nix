@@ -45,7 +45,7 @@
   systemd.network.wait-online.enable = false;
 
   virtualisation.podman.enable = false;
-
+  services.fail2ban.enable = false;
   my.services.sing-box = {
     enable = true;
     configSopsFile = ./services/sing-box.json;

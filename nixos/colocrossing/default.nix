@@ -10,6 +10,7 @@
     ./boot.nix
 
     ./services/komari-monitor.nix
+    ./services/snac.nix
   ];
   sops.defaultSopsFile = ./secrets.yaml;
   networking = {

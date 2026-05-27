@@ -1,6 +1,7 @@
-_: {
+{ lib, ... }:
+{
   services.fail2ban = {
-    enable = true;
+    enable = lib.mkDefault true;
     ignoreIP = [
       "127.0.0.0/8"
       "10.0.0.0/8"
@@ -10,42 +11,45 @@ _: {
     ];
     bantime-increment = {
       enable = true;
-      maxtime = "168h";
+      maxtime = "1w";
       factor = "4";
       overalljails = true;
     };
     jails = {
-      vaultwarden = {
-        settings = {
-          enabled = true;
-          filter = "vaultwarden";
-          backend = "systemd";
-          journalmatch = "_SYSTEMD_UNIT=vaultwarden.service";
-          maxretry = 3;
-          bantime = "1h";
-        };
+      sshd.settings = {
+        enabled = true;
+        backend = "systemd";
+        journalmatch = "_SYSTEMD_UNIT=sshd.service";
+        mode = "normal";
+        maxretry = 3;
+        bantime = "24h";
       };
 
-      forgejo = {
-        settings = {
-          enabled = true;
-          filter = "forgejo";
-          backend = "systemd";
-          journalmatch = "_SYSTEMD_UNIT=forgejo.service";
-          maxretry = 5;
-          bantime = "1h";
-        };
+      vaultwarden.settings = {
+        enabled = true;
+        filter = "vaultwarden";
+        backend = "systemd";
+        journalmatch = "_SYSTEMD_UNIT=vaultwarden.service";
+        maxretry = 3;
+        bantime = "24h";
       };
 
-      immich-caddy = {
-        settings = {
-          enabled = true;
-          filter = "immich-caddy";
-          backend = "systemd";
-          journalmatch = "_SYSTEMD_UNIT=caddy.service";
-          maxretry = 5;
-          bantime = "1h";
-        };
+      forgejo.settings = {
+        enabled = true;
+        filter = "forgejo";
+        backend = "systemd";
+        journalmatch = "_SYSTEMD_UNIT=forgejo.service";
+        maxretry = 5;
+        bantime = "24h";
+      };
+
+      immich-caddy.settings = {
+        enabled = true;
+        filter = "immich-caddy";
+        backend = "systemd";
+        journalmatch = "_SYSTEMD_UNIT=caddy.service";
+        maxretry = 5;
+        bantime = "24h";
       };
     };
   };
