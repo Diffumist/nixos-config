@@ -14,12 +14,21 @@
       sha256 = "sha256-bKP82lRDdnXo6lXNwa0G1MM7SFsE6t0OdHY/BAv5wCE=";
     };
   };
-  cli-proxy-api = {
-    pname = "cli-proxy-api";
-    version = "7.1.20";
-    src = fetchurl {
-      url = "https://github.com/router-for-me/CLIProxyAPI/releases/download/v7.1.20/CLIProxyAPI_7.1.20_linux_amd64.tar.gz";
-      sha256 = "sha256-wpsKsop1FoCBD/kfLp8Q7iyLfJ2/8myfbkYw2byh8BU=";
+  xsz = {
+    pname = "xsz";
+    version = "v0.3.4";
+    src = fetchFromGitHub {
+      owner = "SaltyKitkat";
+      repo = "xsz";
+      rev = "v0.3.4";
+      fetchSubmodules = false;
+      sha256 = "sha256-EN5KoGJEe3vAiUqP7AEqGdKd1DOkF7KpQyPgmsF864I=";
+    };
+    cargoLock."Cargo.lock" = {
+      lockFile = ./. + "/sha256-EN5KoGJEe3vAiUqP7AEqGdKd1DOkF7KpQyPgmsF864I=/Cargo.lock";
+      outputHashes = {
+        
+      };
     };
   };
 }

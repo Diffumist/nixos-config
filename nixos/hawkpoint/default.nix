@@ -175,6 +175,7 @@
   environment.systemPackages = with pkgs; [
     # CLI
     duf
+    xsz
     dua
     lstr
     tokei

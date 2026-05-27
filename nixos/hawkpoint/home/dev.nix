@@ -22,11 +22,11 @@
       extraConfig = ''
         Include ${config.sops.secrets.sshosts.path}
       '';
-      matchBlocks."*" = {
-        compression = true;
-      };
       extraOptionOverrides = {
-        SetEnv = "TERM=xterm-256color";
+        SetEnv = {
+          TERM = "xterm-256color";
+        };
+        Compression = true;
         UpdateHostKeys = "no";
         StrictHostKeyChecking = "no";
         ControlMaster = "auto";

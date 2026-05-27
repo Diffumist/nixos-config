@@ -23,7 +23,6 @@ jobs:
             substituters = https://mirrors.cernet.edu.cn/nix-channels/store https://cache.garnix.io ${{ vars.NIX_EXTRA_SUBSTITUTERS }}
             trusted-public-keys = cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= ${{ vars.NIX_EXTRA_TRUSTED_PUBLIC_KEYS }}
       - uses: DeterminateSystems/magic-nix-cache-action@main
-
       - name: Configure SSH
         env:
           SSH_USER: ${{ secrets.STAGING_SSH_USER }}

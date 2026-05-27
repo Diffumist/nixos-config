@@ -28,6 +28,7 @@
 
   environment.systemPackages = with pkgs; [
     fd
+    xsz
     bat
     eza
     duf
