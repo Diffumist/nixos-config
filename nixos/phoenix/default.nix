@@ -11,6 +11,7 @@
 
     ./services/forgejo.nix
     ./services/code-server.nix
+    ./services/attic.nix
   ];
 
   sops = {

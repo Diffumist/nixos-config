@@ -1,0 +1,89 @@
+name: Push Nix cache
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: attic-cache-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ATTIC_SERVER: diffumist
+  ATTIC_ENDPOINT: https://attic.diffumist.me
+  ATTIC_CACHE: nixos-config
+
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@main
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+            trusted-users = root runner
+            substituters = https://cache.nixos.org https://cache.numtide.com https://attic.xuyh0120.win/lantian
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g= lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=
+
+      - name: Configure Attic
+        env:
+          ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
+          SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+        run: |
+          if [ -z "$ATTIC_TOKEN" ]; then
+            echo "::warning::ATTIC_TOKEN is not set; builds will run without pushing to Attic."
+            exit 0
+          fi
+
+          nix shell nixpkgs#attic-client -c attic login \
+            --set-default \
+            "$ATTIC_SERVER" \
+            "$ATTIC_ENDPOINT" \
+            "$ATTIC_TOKEN"
+          nix shell nixpkgs#attic-client -c attic use "$ATTIC_SERVER:$ATTIC_CACHE"
+
+      - name: Build deployable systems
+        run: |
+          set -euo pipefail
+
+          paths_file="$RUNNER_TEMP/nix-cache-paths"
+          : > "$paths_file"
+
+          nix eval --json .#deploy.nodes --apply builtins.attrNames \
+            | jq -r '.[]' \
+            | while IFS= read -r host; do
+                echo "::group::Build $host"
+                nix build --no-link --print-out-paths -L \
+                  ".#deploy.nodes.${host}.profiles.system.path" \
+                  | tee -a "$paths_file"
+                echo "::endgroup::"
+              done
+
+          sort -u "$paths_file" -o "$paths_file"
+          cat "$paths_file"
+
+      - name: Push closures to Attic
+        env:
+          ATTIC_TOKEN: ${{ secrets.ATTIC_TOKEN }}
+          SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+        run: |
+          set -euo pipefail
+
+          if [ -z "$ATTIC_TOKEN" ]; then
+            echo "::warning::ATTIC_TOKEN is not set; skipping Attic push."
+            exit 0
+          fi
+
+          nix shell nixpkgs#attic-client -c attic push \
+            --stdin \
+            "$ATTIC_SERVER:$ATTIC_CACHE" \
+            < "$RUNNER_TEMP/nix-cache-paths"
