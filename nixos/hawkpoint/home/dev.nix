@@ -19,9 +19,7 @@
     ssh = {
       enable = true;
       enableDefaultConfig = false;
-      extraConfig = ''
-        Include ${config.sops.secrets.sshosts.path}
-      '';
+      includes = [ config.sops.secrets.sshosts.path ];
       extraOptionOverrides = {
         SetEnv = {
           TERM = "xterm-256color";
@@ -69,7 +67,7 @@
     };
     vscodium = {
       enable = true;
-      profiles.default.extensions = with pkgs.vscode-marketplace; [
+      profiles.default.extensions = with pkgs.open-vsx-release; [
         golang.go
         mkhl.direnv
         docker.docker

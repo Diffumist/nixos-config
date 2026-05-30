@@ -10,8 +10,8 @@
     firewall = {
       enable = true;
       extraInputRules = ''
-        tcp dport 22 ct state new meter ssh_meter { ip saddr limit rate 5/minute burst 10 packets } accept
-        tcp dport 22 ct state new meter ssh_v6_meter { ip6 saddr limit rate 5/minute burst 10 packets } counter accept
+        tcp dport 22 ct state new meter ssh_meter { ip saddr limit rate 5/minute burst 8 packets } accept
+        tcp dport 22 ct state new meter ssh_v6_meter { ip6 saddr limit rate 5/minute burst 8 packets } counter accept
         tcp dport 22 ct state new drop
       '';
     };

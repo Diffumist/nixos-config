@@ -14,6 +14,23 @@
       sha256 = "sha256-bKP82lRDdnXo6lXNwa0G1MM7SFsE6t0OdHY/BAv5wCE=";
     };
   };
+  repak = {
+    pname = "repak";
+    version = "v0.2.3";
+    src = fetchFromGitHub {
+      owner = "trumank";
+      repo = "repak";
+      rev = "v0.2.3";
+      fetchSubmodules = false;
+      sha256 = "sha256-fvB8Loukfy35+hqt3fhAubHhSCAd1TFE6TuBZ0xUkxE=";
+    };
+    cargoLock."Cargo.lock" = {
+      lockFile = ./. + "/sha256-fvB8Loukfy35+hqt3fhAubHhSCAd1TFE6TuBZ0xUkxE=/Cargo.lock";
+      outputHashes = {
+        
+      };
+    };
+  };
   xsz = {
     pname = "xsz";
     version = "v0.3.4";
