@@ -68,6 +68,12 @@ jobs:
                 echo "::endgroup::"
               done
 
+          echo "::group::Build hawkpoint"
+          nix build --no-link --print-out-paths -L \
+            .#nixosConfigurations.hawkpoint.config.system.build.toplevel \
+            | tee -a "$paths_file"
+          echo "::endgroup::"
+
           sort -u "$paths_file" -o "$paths_file"
           cat "$paths_file"
 
