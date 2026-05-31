@@ -87,6 +87,7 @@
     sing-box
     bubblewrap
     steam-run
+    rustypaste-cli
     android-tools
     # TUI
     llm-agents.codex

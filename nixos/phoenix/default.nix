@@ -10,6 +10,7 @@
     ./boot.nix
 
     ./services/forgejo.nix
+    ./services/cyber.nix
     ./services/code-server.nix
     ./services/attic.nix
   ];

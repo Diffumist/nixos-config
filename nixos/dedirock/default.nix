@@ -10,6 +10,7 @@
     ./boot.nix
 
     ./services/sillytavern.nix
+    ./services/rustypaste.nix
   ];
 
   sops = {

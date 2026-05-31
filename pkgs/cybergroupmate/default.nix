@@ -5,6 +5,7 @@
   makeWrapper,
   autoPatchelfHook,
   nodejs_22,
+  bashInteractive,
   python3,
   pkg-config,
   ffmpeg,
@@ -82,6 +83,10 @@ buildNpmPackage' {
       --replace-fail 'const sandboxPool = new SandboxPool({' 'const sandboxPool = new SandboxPool({
         workDir: process.cwd(),'
     grep -q 'workDir: process.cwd(),' src/main.ts
+
+    substituteInPlace src/sandbox/sandbox.ts \
+      --replace-fail 'pty.spawn("/bin/bash", ["--rcfile", this.bashrcPath], {' 'pty.spawn(process.env.CYBERGROUPMATE_SHELL ?? "/bin/bash", ["--rcfile", this.bashrcPath], {'
+    grep -q 'CYBERGROUPMATE_SHELL' src/sandbox/sandbox.ts
   '';
 
   nativeBuildInputs = [
@@ -122,6 +127,7 @@ buildNpmPackage' {
     makeWrapper ${lib.getExe nodejs_22} $out/bin/cybergroupmate \
       --prefix PATH : ${lib.makeBinPath runtimePackages} \
       --set-default CYBERGROUPMATE_APPDIR "$appDir" \
+      --set-default CYBERGROUPMATE_SHELL ${lib.getExe bashInteractive} \
       --run 'runtimeDir="''${CYBERGROUPMATE_HOME:-''${XDG_STATE_HOME:-$HOME/.local/state}/cybergroupmate}"' \
       --run 'mkdir -p "$runtimeDir"' \
       --run 'for path in src system-prompts node_modules package.json config.example.yaml; do if [ ! -e "$runtimeDir/$path" ]; then ln -s "$CYBERGROUPMATE_APPDIR/$path" "$runtimeDir/$path"; fi; done' \

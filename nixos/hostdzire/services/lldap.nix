@@ -50,6 +50,7 @@
   systemd.services.lldap.serviceConfig.SupplementaryGroups = [ "lldap-secrets" ];
 
   services.caddy.virtualHosts."ldap.diffumist.me".extraConfig = ''
+    encode zstd gzip
     reverse_proxy 127.0.0.1:${toString config.services.lldap.settings.http_port}
   '';
 }

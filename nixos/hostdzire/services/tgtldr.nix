@@ -38,6 +38,7 @@ _: {
     };
   };
   services.caddy.virtualHosts."tg.503418.xyz".extraConfig = ''
+    encode zstd gzip
     reverse_proxy 127.0.0.1:13000
   '';
 }

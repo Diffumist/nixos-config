@@ -44,24 +44,6 @@
     extraOptions = ''
       !include ${config.sops.secrets.github_access_token.path}
     '';
-    distributedBuilds = true;
-    buildMachines = [
-      {
-        hostName = "phoenix";
-        sshUser = "root";
-        sshKey = "/home/diffumist/.ssh/private";
-        system = "x86_64-linux";
-        protocol = "ssh-ng";
-        maxJobs = 8;
-        speedFactor = 2;
-        supportedFeatures = [
-          "nixos-test"
-          "benchmark"
-          "big-parallel"
-          "kvm"
-        ];
-      }
-    ];
   };
   networking = {
     nftables.enable = true;

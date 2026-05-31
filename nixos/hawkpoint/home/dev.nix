@@ -79,6 +79,7 @@
         thegeeklab.yamlfmt-ng
         tamasfe.even-better-toml
         rust-lang.rust-analyzer
+        astro-build.astro-vscode
         piousdeer.adwaita-theme
         pkief.material-icon-theme
         pkief.material-product-icons
@@ -106,11 +107,13 @@
     ninja
     gopls
     deno
+    typst
     oxfmt
     oxlint
     tsgolint
     typescript-language-server
-    yarn
+    yarn-berry
+    pnpm
     typescript
     nodejs
     rustup

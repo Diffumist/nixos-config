@@ -60,6 +60,10 @@ in
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         NoNewPrivileges = false;
+        ExecStartPre = [
+          ""
+          "${lib.getExe pkgs.sing-box} -D \${STATE_DIRECTORY} -c ${config.sops.secrets.singbox_config.path} check"
+        ];
         ExecStart = [
           ""
           "${lib.getExe pkgs.sing-box} -D \${STATE_DIRECTORY} -c ${config.sops.secrets.singbox_config.path} run"
