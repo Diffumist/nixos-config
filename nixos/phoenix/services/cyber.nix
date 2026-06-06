@@ -5,121 +5,57 @@
   ...
 }:
 let
-  configSecret = config.sops.secrets.cybergroupmate-config;
-  stateDir = "/var/lib/cybergroupmate";
+  configPath = "/var/lib/cyber.yaml";
+  imageName = "localhost/cybergroupmate-agent";
+  imageTag = "latest";
+  dockerfile = pkgs.writeText "cybergroupmate-agent.Dockerfile" ''
+    FROM ghcr.io/archeb/cybergroupmate:agentic
 
-  imageName = "localhost/cybergroupmate-nixos";
-  imageTag = "nix";
+    RUN apt-get update; \
+      apt-get install -y --no-install-recommends \
+        libasound2 \
+        libatk-bridge2.0-0 \
+        libatk1.0-0 \
+        libcups2 \
+        libdrm2 \
+        libgbm1 \
+        libxcomposite1 \
+        libxdamage1 \
+        libxfixes3 \
+        libxkbcommon0 \
+        libxrandr2 \
+        sudo; \
+      rm -rf /var/lib/apt/lists/*
 
-  containerPath = lib.makeBinPath (
-    with pkgs;
-    [
-      cybergroupmate
-      nix
-      bashInteractive
-      coreutils
-      findutils
-      gnugrep
-      gnused
-      gawk
-      gnutar
-      gzip
-      xz
-      bzip2
-      git
-      curl
-      cacert
-    ]
-  );
+    RUN set -eux; \
+      groupadd -g 10001 agent; \
+      useradd -u 10001 -g 10001 -m -s /bin/bash agent; \
+      mkdir -p /app/workspace /app/agent-data /home/agent/.claude; \
+      chown -R agent:agent /app/workspace /app/agent-data /home/agent; \
+      printf '%s\n' \
+        'agent ALL=(root) NOPASSWD: /usr/bin/apt-get, /usr/bin/apt, /usr/bin/dpkg' \
+        > /etc/sudoers.d/agent-apt; \
+      chmod 0440 /etc/sudoers.d/agent-apt
 
-  entrypoint = pkgs.writeShellApplication {
-    name = "cybergroupmate-container-entrypoint";
-    runtimeInputs = [
-      pkgs.coreutils
-      pkgs.cybergroupmate
-    ];
-    text = ''
-      set -euo pipefail
+    RUN printf '%s\n' \
+      '#!/bin/sh' \
+      'set -eu' \
+      'mkdir -p /app/workspace /app/agent-data /home/agent/.claude' \
+      '[ ! -e /app/config.yaml ] || chown agent:agent /app/config.yaml' \
+      '[ ! -e /app/config.yaml ] || chmod 0600 /app/config.yaml' \
+      'chown -R agent:agent /app/workspace /app/agent-data /home/agent' \
+      'exec runuser -u agent -- "$@"' \
+      > /usr/local/bin/cybergroupmate-entrypoint; \
+      chmod 0755 /usr/local/bin/cybergroupmate-entrypoint
 
-      install -d -m 0700 ${stateDir}
-      install -m 0400 /run/secrets/cybergroupmate-config.yaml ${stateDir}/config.yaml
-
-      exec ${lib.getExe pkgs.cybergroupmate} "$@"
-    '';
-  };
-
-  image = pkgs.dockerTools.buildLayeredImage {
-    name = imageName;
-    tag = imageTag;
-
-    contents = with pkgs; [
-      entrypoint
-      cybergroupmate
-      nix
-      bashInteractive
-      coreutils
-      findutils
-      gnugrep
-      gnused
-      gawk
-      gnutar
-      gzip
-      xz
-      bzip2
-      git
-      curl
-      cacert
-      iana-etc
-      dockerTools.fakeNss
-    ];
-
-    extraCommands = ''
-      mkdir -p bin etc/nix tmp var/lib/cybergroupmate
-      ln -sf ${lib.getExe pkgs.bashInteractive} bin/bash
-      ln -sf ${lib.getExe pkgs.bashInteractive} bin/sh
-      chmod 1777 tmp
-
-      cat > etc/nix/nix.conf <<'EOF'
-      experimental-features = nix-command flakes auto-allocate-uids
-      accept-flake-config = true
-      auto-allocate-uids = true
-      sandbox = false
-      build-users-group =
-      EOF
-    '';
-
-    config = {
-      Entrypoint = [ "${lib.getExe entrypoint}" ];
-      WorkingDir = stateDir;
-      Env = [
-        "CYBERGROUPMATE_HOME=${stateDir}"
-        "HOME=${stateDir}"
-        "NODE_ENV=production"
-        "LOG_LEVEL=info"
-        "PATH=${containerPath}"
-        "SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
-        "NIX_SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
-        "NIX_PATH=nixpkgs=flake:nixpkgs"
-        "SHELL=${lib.getExe pkgs.bashInteractive}"
-      ];
-      ExposedPorts = {
-        "6767/tcp" = { };
-        "9092/tcp" = { };
-      };
-    };
-  };
+    ENV HOME=/home/agent
+    ENTRYPOINT ["/usr/local/bin/cybergroupmate-entrypoint"]
+    CMD ["npx", "tsx", "src/main.ts"]
+  '';
 in
 {
-  sops.secrets.cybergroupmate-config = {
-    sopsFile = ./cyber.yaml;
-    key = "";
-    mode = "0400";
-    restartUnits = [ "podman-cybergroupmate.service" ];
-  };
-
   virtualisation.oci-containers.containers.cybergroupmate = {
     image = "${imageName}:${imageTag}";
-    imageFile = image;
     autoStart = true;
     pull = "never";
     ports = [
@@ -127,23 +63,50 @@ in
       "127.0.0.1:9092:9092"
     ];
     volumes = [
-      "${configSecret.path}:/run/secrets/cybergroupmate-config.yaml:ro"
-      "cybergroupmate-state:${stateDir}"
+      "${configPath}:/app/config.yaml"
+      "cybergroupmate-workspace:/app/workspace"
+      "cybergroupmate-agent-data:/app/agent-data"
     ];
+    environment = {
+      TZ = config.time.timeZone;
+      HOME = "/home/agent";
+      PATH = "/app/workspace/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
+      XDG_CONFIG_HOME = "/app/workspace/.config";
+      XDG_CACHE_HOME = "/app/workspace/.cache";
+      XDG_DATA_HOME = "/app/workspace/.local/share";
+      XDG_STATE_HOME = "/app/workspace/.local/state";
+      PLAYWRIGHT_BROWSERS_PATH = "/app/workspace/.cache/ms-playwright";
+    };
     extraOptions = [
       "--cap-drop=ALL"
-      "--security-opt=no-new-privileges"
-      "--tmpfs=/tmp:rw,nosuid,nodev,size=512m"
+      "--cap-add=CHOWN"
+      "--cap-add=DAC_OVERRIDE"
+      "--cap-add=FOWNER"
+      "--cap-add=SETGID"
+      "--cap-add=SETUID"
+      "--tmpfs=/tmp:rw,nosuid,nodev,size=768m"
     ];
   };
 
   systemd.services.podman-cybergroupmate = {
-    after = [
-      "sops-nix.service"
-      "network-online.target"
-    ];
-    requires = [ "sops-nix.service" ];
+    after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
+    unitConfig.AssertPathExists = configPath;
+    environment.TMPDIR = "/var/lib/cybergroupmate-build-tmp";
+    preStart = lib.mkBefore ''
+      ${pkgs.coreutils}/bin/chown 10001:10001 ${configPath}
+      ${pkgs.coreutils}/bin/chmod 0600 ${configPath}
+
+      ${lib.getExe pkgs.podman} build \
+        --pull=newer \
+        --tag ${imageName}:${imageTag} \
+        --file ${dockerfile} \
+        /tmp
+    '';
+    serviceConfig = {
+      StateDirectory = "cybergroupmate-build-tmp";
+      StateDirectoryMode = "0700";
+    };
   };
 
   my.services.caddy.enable = true;

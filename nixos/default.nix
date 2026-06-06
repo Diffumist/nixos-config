@@ -12,6 +12,7 @@ let
     inputs.quickshell.overlays.default
     inputs.nix-cachyos-kernel.overlays.default
     inputs.nix-vscode-extensions.overlays.default
+    inputs.nix-dn42.overlays.default
   ];
   mkPkgs =
     system:
@@ -27,6 +28,7 @@ let
       inputs.hermes-agent.nixosModules.default
       inputs.impermanence.nixosModules.impermanence
       inputs.nur-xddxdd.nixosModules.setupOverlay
+      inputs.nix-dn42.nixosModules.default
     ];
   };
 
@@ -51,9 +53,14 @@ let
       path = ./liteserver;
       deploy = true;
     };
-    geelinx = {
+    geelinx-jp = {
       system = "x86_64-linux";
-      path = ./geelinx;
+      path = ./geelinx-jp;
+      deploy = true;
+    };
+    geelinx-mys = {
+      system = "x86_64-linux";
+      path = ./geelinx-mys;
       deploy = true;
     };
     nosla-lax = {

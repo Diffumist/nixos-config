@@ -9,22 +9,34 @@ let
   updateCloudflareTrustedProxies = pkgs.writeShellScript "update-cloudflare-trusted-proxies" ''
     set -euo pipefail
 
-    target=/var/lib/caddy/cloudflare-trusted-proxies.caddy
+    target_dir=/var/lib/caddy
+    target=$target_dir/cloudflare-trusted-proxies.caddy
     tmpdir="$(mktemp -d)"
     trap 'rm -rf "$tmpdir"' EXIT
+
+    ${pkgs.coreutils}/bin/install -o caddy -g caddy -m 0700 -d "$target_dir"
+    if [ ! -e "$target" ]; then
+      ${pkgs.coreutils}/bin/install -o caddy -g caddy -m 0644 /dev/null "$target"
+    fi
 
     json="$tmpdir/cloudflare-ips.json"
     new="$tmpdir/cloudflare-trusted-proxies.caddy"
 
-    ${pkgs.curl}/bin/curl -fsSL \
+    if ! ${pkgs.curl}/bin/curl -fsSL \
       https://api.cloudflare.com/client/v4/ips \
-      -o "$json"
+      -o "$json"; then
+      echo "failed to fetch Cloudflare IP ranges; keeping existing trusted proxy config"
+      exit 0
+    fi
 
-    ranges="$(
+    if ! ranges="$(
       ${pkgs.jq}/bin/jq -er '
         .result.ipv4_cidrs + .result.ipv6_cidrs | join(" ")
       ' "$json"
-    )"
+    )"; then
+      echo "failed to parse Cloudflare IP ranges; keeping existing trusted proxy config"
+      exit 0
+    fi
 
     cat > "$new" <<EOF
     trusted_proxies static $ranges
@@ -34,7 +46,9 @@ let
 
     if ! ${pkgs.diffutils}/bin/cmp -s "$new" "$target"; then
       ${pkgs.coreutils}/bin/install -o caddy -g caddy -m 0644 "$new" "$target"
-      ${pkgs.systemd}/bin/systemctl reload caddy.service
+      if ${pkgs.systemd}/bin/systemctl -q is-active caddy.service; then
+        ${pkgs.systemd}/bin/systemctl reload caddy.service
+      fi
     fi
   '';
 in
@@ -59,8 +73,11 @@ in
       '';
     };
 
-    systemd.services.caddy.serviceConfig.EnvironmentFile =
-      config.sops.templates."caddy-cloudflare.env".path;
+    systemd.services.caddy = {
+      requires = [ "caddy-cloudflare-trusted-proxies.service" ];
+      after = [ "caddy-cloudflare-trusted-proxies.service" ];
+      serviceConfig.EnvironmentFile = config.sops.templates."caddy-cloudflare.env".path;
+    };
     sops.secrets.cloudflare_api_token = { };
     sops.templates."caddy-cloudflare.env" = {
       owner = "caddy";
@@ -72,6 +89,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
+      "d /var/lib/caddy 0700 caddy caddy -"
       "f /var/lib/caddy/cloudflare-trusted-proxies.caddy 0644 caddy caddy -"
     ];
 

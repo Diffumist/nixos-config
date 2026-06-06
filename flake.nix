@@ -68,6 +68,14 @@
     };
     hermes-agent.url = "github:NousResearch/hermes-agent";
     llm-agents.url = "github:numtide/llm-agents.nix";
+    nix-dn42 = {
+      url = "git+https://git.sr.ht/~prince213/nix-dn42";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    dn42-registry = {
+      url = "git+https://git.origami.pub/Bingxin/dn42-registry.git";
+      flake = false;
+    };
   };
 
   outputs =

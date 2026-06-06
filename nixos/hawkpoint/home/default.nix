@@ -93,7 +93,7 @@
     llm-agents.codex
     llm-agents.claude-code
     llm-agents.opencode
-    # llm-agents.crush
+    llm-agents.crush
     # GUI
     qq
     wemeet

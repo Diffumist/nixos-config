@@ -11,6 +11,7 @@
     ./services/sshd.nix
     ./services/fail2ban.nix
     ./services/caddy.nix
+    ./services/dn42.nix
     ./services/sing-box.nix
     ./services/postgresql.nix
     ./services/komari.nix

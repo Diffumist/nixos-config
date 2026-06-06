@@ -11,7 +11,8 @@ keys:
   - &solidvps age135tv74d20v9qc772l63tjgczw4tq3pj86rd6qet69vhe5cf5g3hsq8ucs3
   - &colocrossing age1u4r8qrpmh6p8amxsyumn6htpps2lw5ntpfq4rdtzzzk4gqs22gjslpafyz
   - &vmrack age1pawz4g2qw2awk5mpdgwzzc95p23x0wm04awufrsfy2pvy4zv0g5sc2f3n4
-  - &geelinx age1dxeeh73zgq0r329wc6rssxs3tzm47mykfl6htah6czfc9aullaesvy883h
+  - &geelinx-jp age1dxeeh73zgq0r329wc6rssxs3tzm47mykfl6htah6czfc9aullaesvy883h
+  - &geelinx-mys age1j0gjqjx6lnca8ftg67xjpqgwunk6cd3nt4jkrqtpl5p6n7a9yegqklzj2x
   - &texas age1kewlmdu3tf4hckf0mxnjnyxakm0r03vlqqza5te89var4rjx24vqnk44zz
 creation_rules:
   - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
@@ -68,10 +69,15 @@ creation_rules:
       - age:
           - *vmrack
           - *diffumist
-  - path_regex: ^nixos/geelinx/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^nixos/geelinx-jp/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *geelinx
+          - *geelinx-jp
+          - *diffumist
+  - path_regex: ^nixos/geelinx-mys/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *geelinx-mys
           - *diffumist
   - path_regex: ^nixos/texas/.*\.(json|ya?ml|keytab)$
     key_groups:

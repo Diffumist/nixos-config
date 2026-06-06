@@ -81,7 +81,6 @@ in
     wants = [ "network-online.target" ];
     after = [
       "network-online.target"
-      "sops-nix.service"
     ];
 
     environment = {

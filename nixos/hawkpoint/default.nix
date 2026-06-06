@@ -194,11 +194,6 @@
       enable = true;
       useBabelfish = true;
     };
-    clash-verge = {
-      enable = true;
-      tunMode = true;
-      serviceMode = true;
-    };
     nautilus-open-any-terminal = {
       enable = true;
       terminal = "ghostty";
@@ -217,6 +212,13 @@
       ];
       gamescopeSession.enable = true;
     };
+  };
+  services.mihomo = {
+    enable = true;
+    tunMode = true;
+    processesInfo = true;
+    webui = pkgs.metacubexd;
+    configFile = "/var/lib/mihomo.yaml";
   };
   security.pam.services.login.enableGnomeKeyring = true;
   services.system76-scheduler.enable = true;

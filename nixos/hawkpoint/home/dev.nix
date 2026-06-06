@@ -106,17 +106,15 @@
     gnumake
     ninja
     gopls
-    deno
     typst
     oxfmt
     oxlint
     tsgolint
     typescript-language-server
     yarn-berry
-    pnpm
     typescript
     nodejs
-    rustup
+    rustc
     python3
     pyright
     nix-init
