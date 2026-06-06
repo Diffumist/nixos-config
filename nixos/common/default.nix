@@ -12,6 +12,7 @@
     ./services/fail2ban.nix
     ./services/caddy.nix
     ./services/dn42.nix
+    ./services/dn42-peer.nix
     ./services/sing-box.nix
     ./services/postgresql.nix
     ./services/komari.nix
@@ -44,6 +45,7 @@
     fastfetch.minimal
     libarchive
     ssh-to-age
+    wireguard-tools
   ];
 
   time.timeZone = lib.mkDefault "Asia/Shanghai";

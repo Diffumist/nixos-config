@@ -19,22 +19,16 @@ let
       ipv6 = "fd22:1056:95a4:2::1";
       publicKey = "byljo5bFvup+YtQbae/m3ReiWFwCHFN+CAWinzirvQo=";
     };
-    vmrack = {
+    dedirock = {
       endpoint = "lax-0.diffumist.me";
       ipv4 = "172.22.64.67";
       ipv6 = "fd22:1056:95a4:3::1";
-      publicKey = "GR4fsWfrkgNaYK+szxwbQfhCA2jI5BRu/BGOIAuzrF4=";
-    };
-    dedirock = {
-      endpoint = "lax-1.diffumist.me";
-      ipv4 = "172.22.64.68";
-      ipv6 = "fd22:1056:95a4:4::1";
       publicKey = "viwkjXKilMxRupylyaqMHrZylzhW80+NypBNvVf/0G8=";
     };
     geelinx-jp = {
       endpoint = "tyo-0.diffumist.me";
-      ipv4 = "172.22.64.69";
-      ipv6 = "fd22:1056:95a4:5::1";
+      ipv4 = "172.22.64.68";
+      ipv6 = "fd22:1056:95a4:4::1";
       publicKey = "KD/4v/fKXWXzvt2z3rxJN31QJIfw/cRSBq0nJppbYG4=";
     };
   };
@@ -52,98 +46,103 @@ let
     }
     {
       name = "wg-ams0-lax0";
-      port = 42421;
+      port = 42422;
       a = "liteserver";
-      b = "vmrack";
+      b = "dedirock";
       a6 = "fd22:1056:95a4:ffff::4";
       b6 = "fd22:1056:95a4:ffff::5";
       aLinkLocal = "fe80::642:4";
       bLinkLocal = "fe80::642:5";
     }
     {
-      name = "wg-ams0-lax1";
-      port = 42422;
+      name = "wg-ams0-tyo0";
+      port = 42423;
       a = "liteserver";
-      b = "dedirock";
+      b = "geelinx-jp";
       a6 = "fd22:1056:95a4:ffff::6";
       b6 = "fd22:1056:95a4:ffff::7";
       aLinkLocal = "fe80::642:6";
       bLinkLocal = "fe80::642:7";
     }
     {
-      name = "wg-ams0-tyo0";
-      port = 42423;
-      a = "liteserver";
-      b = "geelinx-jp";
+      name = "wg-sjc0-lax0";
+      port = 42425;
+      a = "hostdzire";
+      b = "dedirock";
       a6 = "fd22:1056:95a4:ffff::8";
       b6 = "fd22:1056:95a4:ffff::9";
       aLinkLocal = "fe80::642:8";
       bLinkLocal = "fe80::642:9";
     }
     {
-      name = "wg-sjc0-lax0";
-      port = 42424;
+      name = "wg-sjc0-tyo0";
+      port = 42426;
       a = "hostdzire";
-      b = "vmrack";
-      a6 = "fd22:1056:95a4:ffff::a";
-      b6 = "fd22:1056:95a4:ffff::b";
-      aLinkLocal = "fe80::642:a";
-      bLinkLocal = "fe80::642:b";
-    }
-    {
-      name = "wg-sjc0-lax1";
-      port = 42425;
-      a = "hostdzire";
-      b = "dedirock";
+      b = "geelinx-jp";
       a6 = "fd22:1056:95a4:ffff::c";
       b6 = "fd22:1056:95a4:ffff::d";
       aLinkLocal = "fe80::642:c";
       bLinkLocal = "fe80::642:d";
     }
     {
-      name = "wg-sjc0-tyo0";
-      port = 42426;
-      a = "hostdzire";
+      name = "wg-lax0-tyo0";
+      port = 42429;
+      a = "dedirock";
       b = "geelinx-jp";
       a6 = "fd22:1056:95a4:ffff::e";
       b6 = "fd22:1056:95a4:ffff::f";
       aLinkLocal = "fe80::642:e";
       bLinkLocal = "fe80::642:f";
     }
-    {
-      name = "wg-lax0-lax1";
-      port = 42427;
-      a = "vmrack";
-      b = "dedirock";
-      a6 = "fd22:1056:95a4:ffff::10";
-      b6 = "fd22:1056:95a4:ffff::11";
-      aLinkLocal = "fe80::642:10";
-      bLinkLocal = "fe80::642:11";
-    }
-    {
-      name = "wg-lax0-tyo0";
-      port = 42428;
-      a = "vmrack";
-      b = "geelinx-jp";
-      a6 = "fd22:1056:95a4:ffff::12";
-      b6 = "fd22:1056:95a4:ffff::13";
-      aLinkLocal = "fe80::642:12";
-      bLinkLocal = "fe80::642:13";
-    }
-    {
-      name = "wg-lax1-tyo0";
-      port = 42429;
-      a = "dedirock";
-      b = "geelinx-jp";
-      a6 = "fd22:1056:95a4:ffff::14";
-      b6 = "fd22:1056:95a4:ffff::15";
-      aLinkLocal = "fe80::642:14";
-      bLinkLocal = "fe80::642:15";
-    }
   ];
 
   enabled = builtins.hasAttr hostName nodes;
   localLinks = lib.filter (link: link.a == hostName || link.b == hostName) links;
+
+  assertions =
+    let
+      nodeList = builtins.attrValues nodes;
+      nodeIPv4s = map (node: node.ipv4) nodeList;
+      nodeIPv6s = map (node: node.ipv6) nodeList;
+      linkNames = map (link: link.name) links;
+      ports = map (link: link.port) links;
+      v6s = lib.concatMap (link: [
+        link.a6
+        link.b6
+      ]) links;
+      lls = lib.concatMap (link: [
+        link.aLinkLocal
+        link.bLinkLocal
+      ]) links;
+
+      unique = xs: builtins.length xs == builtins.length (lib.unique xs);
+    in
+    [
+      {
+        assertion = unique nodeIPv4s;
+        message = "dn42 mesh node IPv4 addresses must be unique.";
+      }
+      {
+        assertion = unique nodeIPv6s;
+        message = "dn42 mesh node IPv6 addresses must be unique.";
+      }
+      {
+        assertion = unique linkNames;
+        message = "dn42 mesh link names must be unique.";
+      }
+      {
+        assertion = unique ports;
+        message = "dn42 mesh WireGuard listen ports must be unique.";
+      }
+      {
+        assertion = unique v6s;
+        message = "dn42 mesh IPv6 addresses must be unique.";
+      }
+      {
+        assertion = unique lls;
+        message = "dn42 mesh link-local addresses must be unique.";
+      }
+    ];
 
   linkSide =
     link:
@@ -212,6 +211,8 @@ in
       node = nodes.${hostName};
     in
     {
+      inherit assertions;
+
       sops.secrets.dn42_wg_private_key = {
         owner = "systemd-network";
         mode = "0400";

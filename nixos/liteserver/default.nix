@@ -54,6 +54,37 @@
   };
   my.services.postgresql.totalRamMB = 2 * 1024;
 
+  # AS4242423377 (leziblog) DE1 (NUE)
+  my.services.dn42-peers.lezi-de = {
+    asn = 4242423377;
+    listenPort = 23377;
+    endpoint = "v6.de1.peer.dn42.leziblog.com";
+    peerPort = 20642;
+    publicKey = "Kd5+CvZW3NRvUXpbdqGFt85VzMyReBtnVeDVXae06Qg=";
+    peerLinkLocal = "fe80::3377";
+    mtu = 1370;
+  };
+
+  # AS4242420253 (moe233) ams (Amsterdam)
+  my.services.dn42-peers.moe233-ams = {
+    asn = 4242420253;
+    listenPort = 20253;
+    endpoint = "ams.dn42.moe233.net";
+    peerPort = 20642;
+    publicKey = "vRRfNnGL7jpKGBJjLZg612vHQulDOtICkgXCC++1+2g=";
+    peerLinkLocal = "fe80::253";
+  };
+
+  # AS4242422466 (SessNetwork) Netzilla (Frankfurt) - IPv6-only endpoint
+  my.services.dn42-peers.sess-de = {
+    asn = 4242422466;
+    listenPort = 22466;
+    endpoint = "netzilla.xhustudio.eu.org";
+    peerPort = 20642;
+    publicKey = "NneXyO6ANmBoREGcDQh/KCi2MtkAGU4xS/HIkNB8wQg=";
+    peerLinkLocal = "fe80::2466";
+  };
+
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "liteserver";
 }

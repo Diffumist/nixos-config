@@ -54,6 +54,27 @@
   };
   my.services.postgresql.totalRamMB = 2 * 1024;
 
+  # AS4242423377 (leziblog) US1 (LAX)
+  my.services.dn42-peers.lezi-lax = {
+    asn = 4242423377;
+    listenPort = 23377;
+    endpoint = "v6.los1-us.peer.dn42.leziblog.com";
+    peerPort = 20642;
+    publicKey = "Xzt9UrH2moj84QSH0jsw8Zj+jwXwdBLpApe4hHyfnAw=";
+    peerLinkLocal = "fe80::3377";
+    mtu = 1420;
+  };
+
+  # AS4242420253 (moe233) lv (Las Vegas)
+  my.services.dn42-peers.moe233-lv = {
+    asn = 4242420253;
+    listenPort = 20253;
+    endpoint = "lv.dn42.moe233.net";
+    peerPort = 20642;
+    publicKey = "C3SneO68SmagisYQ3wi5tYI2R9g5xedKkB56Y7rtPUo=";
+    peerLinkLocal = "fe80::253";
+  };
+
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "dedirock";
 }
