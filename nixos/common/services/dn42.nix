@@ -8,25 +8,25 @@
 let
   nodes = {
     liteserver = {
-      endpoint = "ams-0.diffumist.me";
+      endpoint = "v4.ams-0.diffumist.me";
       ipv4 = "172.22.64.65";
       ipv6 = "fd22:1056:95a4:1::1";
       publicKey = "25KV0x3WcKCCg7HcTVAB+27LrMpIfrZl05hgX5QGnzU=";
     };
     hostdzire = {
-      endpoint = "sjc-0.diffumist.me";
+      endpoint = "v4.sjc-0.diffumist.me";
       ipv4 = "172.22.64.66";
       ipv6 = "fd22:1056:95a4:2::1";
       publicKey = "byljo5bFvup+YtQbae/m3ReiWFwCHFN+CAWinzirvQo=";
     };
     dedirock = {
-      endpoint = "lax-0.diffumist.me";
+      endpoint = "v4.lax-0.diffumist.me";
       ipv4 = "172.22.64.67";
       ipv6 = "fd22:1056:95a4:3::1";
       publicKey = "viwkjXKilMxRupylyaqMHrZylzhW80+NypBNvVf/0G8=";
     };
     geelinx-jp = {
-      endpoint = "tyo-0.diffumist.me";
+      endpoint = "v4.tyo-0.diffumist.me";
       ipv4 = "172.22.64.68";
       ipv6 = "fd22:1056:95a4:4::1";
       publicKey = "KD/4v/fKXWXzvt2z3rxJN31QJIfw/cRSBq0nJppbYG4=";
@@ -98,6 +98,7 @@ let
 
   enabled = builtins.hasAttr hostName nodes;
   localLinks = lib.filter (link: link.a == hostName || link.b == hostName) links;
+  lookingGlassProxyPort = 8000;
 
   assertions =
     let
@@ -213,12 +214,25 @@ in
     {
       inherit assertions;
 
+      boot.kernel.sysctl = {
+        "net.ipv4.ip_forward" = 1;
+        "net.ipv6.conf.all.forwarding" = 1;
+      };
+
       sops.secrets.dn42_wg_private_key = {
         owner = "systemd-network";
         mode = "0400";
       };
 
-      networking.firewall.allowedUDPPorts = map (link: link.port) localLinks;
+      my.services.dn42.rejectASNs = [ 4242420903 ];
+
+      networking.firewall = {
+        allowedUDPPorts = map (link: link.port) localLinks;
+        checkReversePath = "loose";
+        interfaces = lib.listToAttrs (
+          map (link: lib.nameValuePair link.name { allowedTCPPorts = [ lookingGlassProxyPort ]; }) localLinks
+        );
+      };
 
       networking.dn42 = {
         enable = true;
@@ -250,6 +264,18 @@ in
       services.bird = {
         enable = true;
         autoReload = true;
+      };
+
+      services.bird-lg.proxy = {
+        enable = true;
+        allowedIPs = [
+          "127.0.0.1"
+          nodes.dedirock.ipv4
+        ];
+        listenAddresses = [
+          "127.0.0.1:${toString lookingGlassProxyPort}"
+          "${node.ipv4}:${toString lookingGlassProxyPort}"
+        ];
       };
 
       systemd.services.frr.enable = lib.mkForce false;

@@ -36,14 +36,14 @@
     peerLinkLocal = "fe80::2466";
   };
 
-  # AS4242423999 (CowGL) slc (Salt Lake City)
-  my.services.dn42-peers.cowgl-slc = {
-    asn = 4242423999;
-    listenPort = 23999;
-    endpoint = "slc.node.cowgl.tech";
-    peerPort = 30642;
-    publicKey = "rxicmyDFnBh33mW/EfG0VGXE/yxB5YmBcuWfyntg9Xk=";
-    peerLinkLocal = "fe80::6:3999";
+  # AS4242420298 (HExpNetwork) sjc
+  my.services.dn42-peers.hexp-sjc = {
+    asn = 4242420298;
+    listenPort = 20298;
+    endpoint = "sjc.dn42.hexpnet.work";
+    peerPort = 20642;
+    publicKey = "fKuqaW7QYOfC9UXWrgjgqVicQUn6XglCemH7Efd/XlM=";
+    peerLinkLocal = "fe80::298";
   };
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;

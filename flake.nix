@@ -73,7 +73,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dn42-registry = {
-      url = "git+https://git.origami.pub/Bingxin/dn42-registry.git";
+      url = "git+https://git.lantian.pub/backup/dn42-registry.git";
       flake = false;
     };
   };

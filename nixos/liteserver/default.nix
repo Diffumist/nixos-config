@@ -85,6 +85,74 @@
     peerLinkLocal = "fe80::2466";
   };
 
+  # AS4242423374 (baka.pub) nl01
+  my.services.dn42-peers.baka-nl01 = {
+    asn = 4242423374;
+    listenPort = 23374;
+    endpoint = "nl01.dn42.baka.pub";
+    peerPort = 20642;
+    publicKey = "xFZ0S57R5ykjq5lThYEvLLWHhv2+De5D26p4bX5wdSo=";
+    peerLinkLocal = "fe80::2999:232";
+  };
+
+  # AS4242420298 (HExpNetwork) ams
+  my.services.dn42-peers.hexp-ams = {
+    asn = 4242420298;
+    listenPort = 20298;
+    endpoint = "ams.dn42.hexpnet.work";
+    peerPort = 20642;
+    publicKey = "ORoz9sxUr1TRfF9nx0Mqz1SPUARWZcD+upBvAm8pjw0=";
+    peerLinkLocal = "fe80::298";
+  };
+
+  # AS4242423914 (Kioubit.dn42) DE
+  my.services.dn42-peers.kioubit-de = {
+    asn = 4242423914;
+    listenPort = 23914;
+    endpoint = "de2.g-load.eu";
+    peerPort = 20077;
+    publicKey = "B1xSG/XTJRLd+GrWDsB06BqnIq8Xud93YVh/LYYYtUY=";
+    peerLinkLocal = "fe80::ade0";
+  };
+
+  # AS4242420454 (nedifinita) fr
+  my.services.dn42-peers.nedi-fr = {
+    asn = 4242420454;
+    listenPort = 20454;
+    endpoint = "dn42c.nedifinita.com";
+    peerPort = 55130;
+    publicKey = "pCTgngczpFgIDbZzfxtz6tiaiFo59b2GbeJEEc21mA0=";
+    peerLinkLocal = "fe80::454:102";
+  };
+
+  # AS4242422189 (IEDON) ams
+  my.services.dn42-peers.iedon-ams = {
+    asn = 4242422189;
+    listenPort = 22189;
+    endpoint = "nl-ams.dn42.iedon.net";
+    peerPort = 34302;
+    publicKey = "08dzv758I5APqJizgw/W6O+FceyHSCbx/L/GZ3TL5TQ=";
+    peerLinkLocal = "fe80::2189:177";
+  };
+
+  # AS4242423999 (CowGL) brn (Bern) - closest published node for AMS
+  my.services.dn42-peers.cowgl-brn = {
+    asn = 4242423999;
+    listenPort = 23999;
+    endpoint = "brn.node.cowgl.tech";
+    peerPort = 30642;
+    publicKey = "sHPUV74X+hqUK5wFj3m5kCga0rlPCxImUBwZ/oLiEn4=";
+    peerLinkLocal = "fe80::3:3999";
+  };
+
+  # AS4242420925 (LU-LUX) - behind NAT, passive WireGuard endpoint
+  my.services.dn42-peers.lu-lux = {
+    asn = 4242420925;
+    listenPort = 20925;
+    publicKey = "JmjoF9DosETYg6++oO82eC3VvysK08ym7DTc/Z2RjB8=";
+    peerLinkLocal = "fe80::925";
+  };
+
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "liteserver";
 }

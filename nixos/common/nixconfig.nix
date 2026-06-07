@@ -33,7 +33,6 @@ _: {
       options = "--delete-older-than 7d";
     };
   };
-
   documentation.doc.enable = false;
 
   system.stateVersion = "25.11";

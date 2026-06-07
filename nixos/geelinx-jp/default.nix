@@ -83,6 +83,36 @@
     peerLinkLocal = "fe80::1:3999";
   };
 
+  # AS4242423374 (baka.pub) jp01
+  my.services.dn42-peers.baka-jp01 = {
+    asn = 4242423374;
+    listenPort = 23374;
+    endpoint = "jp01.dn42.baka.pub";
+    peerPort = 20642;
+    publicKey = "N7iQzqWLPb6lpRlf7grQG6rEzQOvDZWkmsRDkRnniH0=";
+    peerLinkLocal = "fe80::2999:226";
+  };
+
+  # AS4242420298 (HExpNetwork) tyo
+  my.services.dn42-peers.hexp-tyo = {
+    asn = 4242420298;
+    listenPort = 20298;
+    endpoint = "tyo.dn42.hexpnet.work";
+    peerPort = 20642;
+    publicKey = "2gXTILCzuWks2JfCu+k/429blyBcOGVteXJuI6odqBA=";
+    peerLinkLocal = "fe80::298";
+  };
+
+  # AS4242421857 (luocynet) tyo
+  my.services.dn42-peers.luocynet-tyo = {
+    asn = 4242421857;
+    listenPort = 21857;
+    endpoint = "jp1.dn42.luocynet.com";
+    peerPort = 20642;
+    publicKey = "4mrkVld0RCE5Tkn0v0xkiyMiT+cDQSRfL6AoMb3rzQg=";
+    peerLinkLocal = "fe80::1857:239";
+  };
+
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "geelinx-jp";
 }

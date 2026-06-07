@@ -98,7 +98,6 @@
     qq
     wemeet
     kazumi
-    splayer
     vesktop
     gapless
     clapper

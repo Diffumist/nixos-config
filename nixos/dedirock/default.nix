@@ -11,6 +11,7 @@
 
     ./services/sillytavern.nix
     ./services/rustypaste.nix
+    ./services/looking-glass.nix
   ];
 
   sops = {
@@ -73,6 +74,46 @@
     peerPort = 20642;
     publicKey = "C3SneO68SmagisYQ3wi5tYI2R9g5xedKkB56Y7rtPUo=";
     peerLinkLocal = "fe80::253";
+  };
+
+  # AS4242423999 (CowGL) lax
+  my.services.dn42-peers.cowgl-lax = {
+    asn = 4242423999;
+    listenPort = 23999;
+    endpoint = "lax.node.cowgl.tech";
+    peerPort = 30642;
+    publicKey = "jhOukGNAKHI8Ivn8uI1TS25n5ho/rVlKFfenGmwCVlg=";
+    peerLinkLocal = "fe80::2:3999";
+  };
+
+  # AS4242423310 (peer42.tmpfs.dev) US1 (LAX)
+  my.services.dn42-peers.tmpfs-lax = {
+    asn = 4242423310;
+    listenPort = 23310;
+    endpoint = "lax01.edge.r1.tmpfs.dev";
+    peerPort = 20642;
+    publicKey = "qEffOA35Oe2IFUFXv7KTGGZ5SV3XmrM+IxTdzHEDmCg=";
+    peerLinkLocal = "fe80::0642:3310";
+  };
+
+  # AS4242423914 (Kioubit.dn42) US3 (LAX)
+  my.services.dn42-peers.kioubit-lax = {
+    asn = 4242423914;
+    listenPort = 23914;
+    endpoint = "us3.g-load.eu";
+    peerPort = 20034;
+    publicKey = "sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=";
+    peerLinkLocal = "fe80::ade0";
+  };
+
+  # AS4242421816 (Potat0) lv (Las Vegas)
+  my.services.dn42-peers.potat0-lax = {
+    asn = 4242421816;
+    listenPort = 21816;
+    endpoint = "las.node.potat0.cc";
+    peerPort = 20642;
+    publicKey = "LUwqKS6QrCPv510Pwt1eAIiHACYDsbMjrkrbGTJfviU=";
+    peerLinkLocal = "fe80::1816";
   };
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;

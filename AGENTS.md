@@ -113,7 +113,7 @@ Provided by the `nix-dn42` input (`networking.dn42.*`). Two layers:
 - Internal mesh — `common/services/dn42.nix`. A WireGuard full-mesh between the
   DN42 member nodes, with **babel** as the IGP (not OSPF — babel suits tunnel
   meshes). Members and PoP labels:
-  `liteserver=ams-0`, `hostdzire=sjc-0`, `vmrack=lax-0`, `dedirock=lax-1`,
+  `liteserver=ams-0`, `hostdzire=sjc-0`, `dedirock=lax-0`,
   `geelinx-jp=tyo-0`. ASN `4242420642`, IPv4 `172.22.64.64/27`, IPv6
   `fd22:1056:95a4::/48`. ROA enabled via `dn42-registry` input. Each node has a
   single WireGuard keypair shared across all its tunnels (`dn42_wg_private_key`);
@@ -124,8 +124,7 @@ Provided by the `nix-dn42` input (`networking.dn42.*`). Two layers:
   (link-local + extended-next-hop). Defaults: `interface = wg-<name>`,
   `localLinkLocal = fe80::642`, `mtu = 1420`, shared `dn42_wg_private_key`.
   Hosts declare peers in their own `default.nix`. Currently configured:
-  `dedirock` (lezi-lax, moe233-lv), `liteserver` (lezi-de, moe233-ams, sess-de),
-  `geelinx-jp` (lezi-tyo, moe233-tyo), `hostdzire` (sess-sjc).
+  `dedirock`,`liteserver`,`geelinx-jp`,`hostdzire`.
 
 Adding a peer = add a `my.services.dn42-peers.<name>` block to the host; no
 changes to the module. eBGP needs TCP/179 on the peer interface and the peer's
