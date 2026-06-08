@@ -87,12 +87,6 @@
     oci-containers.backend = "podman";
   };
 
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
   fonts = {
     packages = with pkgs; [
       sarasa-gothic

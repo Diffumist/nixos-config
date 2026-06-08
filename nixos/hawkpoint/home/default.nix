@@ -27,6 +27,18 @@
       WantedBy = [ "default.target" ];
     };
   };
+  systemd.user.services.bluetooth-mpris-proxy = {
+    Unit = {
+      Description = "MPRIS controlling proxy for bluetooth connections";
+      After = [ "sound.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
   systemd.user.services.aria2 = {
     Unit = {
       Description = "Aria2 daemon";
@@ -89,6 +101,12 @@
     steam-run
     rustypaste-cli
     android-tools
+    playwright
+    # mcp
+    mcp-nixos
+    context7-mcp
+    playwright-mcp
+    github-mcp-server
     # TUI
     llm-agents.codex
     llm-agents.claude-code
