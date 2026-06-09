@@ -57,27 +57,27 @@ let
     };
 
   mkBird = peer: ''
-    protocol bgp dn42_${lib.replaceStrings [ "-" ] [ "_" ] peer.interface} from dn42_peer {
-      ipv4 {
-        preference 200;
-        import filter {
-${rejectASNFilter}
-          if roa_check(dn42_roa4) != ROA_VALID then reject;
+        protocol bgp dn42_${lib.replaceStrings [ "-" ] [ "_" ] peer.interface} from dn42_peer {
+          ipv4 {
+            preference 200;
+            import filter {
+    ${rejectASNFilter}
+              if roa_check(dn42_roa4) != ROA_VALID then reject;
 
-          accept;
-        };
-      };
-      ipv6 {
-        preference 200;
-        import filter {
-${rejectASNFilter}
-          if roa_check(dn42_roa6) != ROA_VALID then reject;
+              accept;
+            };
+          };
+          ipv6 {
+            preference 200;
+            import filter {
+    ${rejectASNFilter}
+              if roa_check(dn42_roa6) != ROA_VALID then reject;
 
-          accept;
-        };
-      };
-      neighbor ${peer.peerLinkLocal}%'${peer.interface}' as ${toString peer.asn};
-    }
+              accept;
+            };
+          };
+          neighbor ${peer.peerLinkLocal}%'${peer.interface}' as ${toString peer.asn};
+        }
   '';
 in
 {

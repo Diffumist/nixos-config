@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  lib,
   inputs,
   self,
   ...
@@ -118,4 +119,37 @@
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "dedirock";
+
+  # Yukisino IX VM mesh (WG only, no BGP — Alpine doesn't run our stack)
+  systemd.network.netdevs."20-wg-ix" = {
+    netdevConfig = {
+      Name = "wg-ix";
+      Kind = "wireguard";
+      MTUBytes = "8920";
+    };
+    wireguardConfig = {
+      ListenPort = 42430;
+      PrivateKeyFile = config.sops.secrets.dn42_wg_private_key.path;
+    };
+    wireguardPeers = [{
+      PublicKey = "xa5t/tHR840xN+lGTt53jcbmvwU8RU8qC0m+iz2D20c=";
+      Endpoint = "[2a14:ae00:55:2466:1266:6aff:fe4a:9efc]:42430";
+      AllowedIPs = [ "0.0.0.0/0" "::/0" ];
+      PersistentKeepalive = 25;
+    }];
+  };
+  systemd.network.networks."20-wg-ix" = {
+    matchConfig.Name = "wg-ix";
+    address = [ "10.99.0.2/30" "fd22:dead:1::2/127" ];
+    routes = [{ Destination = "242.99.55.190/32"; }];
+    linkConfig.RequiredForOnline = "no";
+  };
+  networking.firewall.interfaces.wg-ix.allowedTCPPorts = [ 179 ];
+
+  services.bird.config = lib.mkAfter ''
+    protocol static {
+      ipv4;
+      route 242.99.55.190/32 via 10.99.0.1;
+    }
+  '';
 }
