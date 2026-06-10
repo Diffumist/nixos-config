@@ -5,7 +5,7 @@
   ...
 }:
 {
-  # parted -s /dev/vda -- resizepart 2 100%
+  # printf "Yes\n" | parted ---pretend-input-tty /dev/vda resizepart 2 100%
   # btrfs filesystem resize max /nix
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -65,7 +65,7 @@
     matchConfig.Name = "eth0";
     address = [
       "192.168.202.121/24"
-      "2602:f9f3:1:7a::8964/64"
+      "2602:f9f3:1:0:297:dfff:fe1f:383f/64"
     ];
     routes = [
       {

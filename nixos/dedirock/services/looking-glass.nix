@@ -14,7 +14,7 @@ in
       "SJC-0<sjc-0.lg>"
       "LAX-0<lax-0.lg>"
       "TYO-0<tyo-0.lg>"
-      "IX-VM-2465<ix-vm.lg>"
+      "HKG-0<hkg-0.lg>"
     ];
     domain = "";
     netSpecificMode = "dn42";
@@ -28,7 +28,7 @@ in
     "172.22.64.66" = [ "sjc-0.lg" ];
     "172.22.64.67" = [ "lax-0.lg" ];
     "172.22.64.68" = [ "tyo-0.lg" ];
-    "242.99.55.190" = [ "ix-vm.lg" ];
+    "172.22.64.69" = [ "hkg-0.lg" ];
   };
 
   my.services.caddy.enable = true;

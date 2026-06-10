@@ -61,6 +61,16 @@ let
     geelinx-mys = {
       system = "x86_64-linux";
       path = ./geelinx-mys;
+      deploy = false;
+    };
+    noboard = {
+      system = "x86_64-linux";
+      path = ./noboard;
+      deploy = true;
+    };
+    wawo = {
+      system = "x86_64-linux";
+      path = ./wawo;
       deploy = true;
     };
     nosla-lax = {

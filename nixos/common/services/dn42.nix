@@ -31,6 +31,12 @@ let
       ipv6 = "fd22:1056:95a4:4::1";
       publicKey = "KD/4v/fKXWXzvt2z3rxJN31QJIfw/cRSBq0nJppbYG4=";
     };
+    wawo = {
+      endpoint = "v4.hkg-0.diffumist.me";
+      ipv4 = "172.22.64.69";
+      ipv6 = "fd22:1056:95a4:5::1";
+      publicKey = "3anHMuAw/sDlRCN7xoRUf1l4SdAu0Rfl2pqpeJtJn3Y=";
+    };
   };
 
   links = [
@@ -53,16 +59,6 @@ let
       b6 = "fd22:1056:95a4:ffff::5";
       aLinkLocal = "fe80::642:4";
       bLinkLocal = "fe80::642:5";
-    }
-    {
-      name = "wg-ams0-tyo0";
-      port = 42423;
-      a = "liteserver";
-      b = "geelinx-jp";
-      a6 = "fd22:1056:95a4:ffff::6";
-      b6 = "fd22:1056:95a4:ffff::7";
-      aLinkLocal = "fe80::642:6";
-      bLinkLocal = "fe80::642:7";
     }
     {
       name = "wg-sjc0-lax0";
@@ -93,6 +89,36 @@ let
       b6 = "fd22:1056:95a4:ffff::f";
       aLinkLocal = "fe80::642:e";
       bLinkLocal = "fe80::642:f";
+    }
+    {
+      name = "wg-ams0-hkg0";
+      port = 42430;
+      a = "liteserver";
+      b = "wawo";
+      a6 = "fd22:1056:95a4:ffff::10";
+      b6 = "fd22:1056:95a4:ffff::11";
+      aLinkLocal = "fe80::642:10";
+      bLinkLocal = "fe80::642:11";
+    }
+    {
+      name = "wg-lax0-hkg0";
+      port = 42431;
+      a = "dedirock";
+      b = "wawo";
+      a6 = "fd22:1056:95a4:ffff::12";
+      b6 = "fd22:1056:95a4:ffff::13";
+      aLinkLocal = "fe80::642:12";
+      bLinkLocal = "fe80::642:13";
+    }
+    {
+      name = "wg-tyo0-hkg0";
+      port = 42432;
+      a = "geelinx-jp";
+      b = "wawo";
+      a6 = "fd22:1056:95a4:ffff::14";
+      b6 = "fd22:1056:95a4:ffff::15";
+      aLinkLocal = "fe80::642:14";
+      bLinkLocal = "fe80::642:15";
     }
   ];
 
@@ -169,7 +195,7 @@ let
       netdevConfig = {
         Name = link.name;
         Kind = "wireguard";
-        MTUBytes = "1420";
+        MTUBytes = "1280";
       };
       wireguardConfig = {
         ListenPort = link.port;

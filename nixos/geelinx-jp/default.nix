@@ -52,6 +52,9 @@
   };
   my.services.postgresql.totalRamMB = 2 * 1024;
 
+  users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
+  networking.hostName = "geelinx-jp";
+
   # AS4242423377 (leziblog) JP1 (TYO)
   my.services.dn42-peers.lezi-tyo = {
     asn = 4242423377;
@@ -113,6 +116,14 @@
     peerLinkLocal = "fe80::1857:239";
   };
 
-  users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "geelinx-jp";
+  # AS4242421023 (owo.li) tyo
+  my.services.dn42-peers.owo-tyo = {
+    asn = 4242421023;
+    listenPort = 21023;
+    endpoint = "tyo-01.node.svc.moe";
+    peerPort = 20642;
+    publicKey = "pv0bwaUm/ppI7Yaoi7w0qrXX5EW7Qo2njTSNG19AHgM=";
+    peerLinkLocal = "fe80::1023:2";
+  };
+
 }

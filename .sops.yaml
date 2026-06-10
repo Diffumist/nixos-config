@@ -13,6 +13,8 @@ keys:
   - &vmrack age1pawz4g2qw2awk5mpdgwzzc95p23x0wm04awufrsfy2pvy4zv0g5sc2f3n4
   - &geelinx-jp age1dxeeh73zgq0r329wc6rssxs3tzm47mykfl6htah6czfc9aullaesvy883h
   - &geelinx-mys age1j0gjqjx6lnca8ftg67xjpqgwunk6cd3nt4jkrqtpl5p6n7a9yegqklzj2x
+  - &noboard age1vctyp0l4v0wtgjc6n0n3lw2nzffddhzpvtmhklq5wgh3v4d43vdsjl7szc
+  - &wawo age1laq2l7pnax405ua70grkefguk4m4zalfjkvj0ky7dzsu2h5sdc6s034jtt
   - &texas age1kewlmdu3tf4hckf0mxnjnyxakm0r03vlqqza5te89var4rjx24vqnk44zz
 creation_rules:
   - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
@@ -78,6 +80,16 @@ creation_rules:
     key_groups:
       - age:
           - *geelinx-mys
+          - *diffumist
+  - path_regex: ^nixos/noboard/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *noboard
+          - *diffumist
+  - path_regex: ^nixos/wawo/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *wawo
           - *diffumist
   - path_regex: ^nixos/texas/.*\.(json|ya?ml|keytab)$
     key_groups:

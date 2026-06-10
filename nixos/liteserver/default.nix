@@ -54,10 +54,39 @@
   };
   my.services.postgresql.totalRamMB = 2 * 1024;
 
-  # Moved to Yukisino IX VM
-  # my.services.dn42-peers.lezi-de = { asn = 4242423377; listenPort = 23377; endpoint = "v6.de1.peer.dn42.leziblog.com"; peerPort = 20642; publicKey = "Kd5+CvZW3NRvUXpbdqGFt85VzMyReBtnVeDVXae06Qg="; peerLinkLocal = "fe80::3377"; mtu = 1370; };
-  # my.services.dn42-peers.moe233-ams = { asn = 4242420253; listenPort = 20253; endpoint = "ams.dn42.moe233.net"; peerPort = 20642; publicKey = "vRRfNnGL7jpKGBJjLZg612vHQulDOtICkgXCC++1+2g="; peerLinkLocal = "fe80::253"; };
-  # my.services.dn42-peers.sess-de = { asn = 4242422466; listenPort = 22466; endpoint = "netzilla.xhustudio.eu.org"; peerPort = 20642; publicKey = "NneXyO6ANmBoREGcDQh/KCi2MtkAGU4xS/HIkNB8wQg="; peerLinkLocal = "fe80::2466"; };
+  users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
+  networking.hostName = "liteserver";
+
+  # AS4242423377 (leziblog) DE1 (NUE)
+  my.services.dn42-peers.lezi-de = {
+    asn = 4242423377;
+    listenPort = 23377;
+    endpoint = "v6.de1.peer.dn42.leziblog.com";
+    peerPort = 20642;
+    publicKey = "Kd5+CvZW3NRvUXpbdqGFt85VzMyReBtnVeDVXae06Qg=";
+    peerLinkLocal = "fe80::3377";
+    mtu = 1370;
+  };
+
+  # AS4242420253 (moe233) ams (Amsterdam)
+  my.services.dn42-peers.moe233-ams = {
+    asn = 4242420253;
+    listenPort = 20253;
+    endpoint = "ams.dn42.moe233.net";
+    peerPort = 20642;
+    publicKey = "vRRfNnGL7jpKGBJjLZg612vHQulDOtICkgXCC++1+2g=";
+    peerLinkLocal = "fe80::253";
+  };
+
+  # AS4242422466 (SessNetwork) Netzilla (Frankfurt)
+  my.services.dn42-peers.sess-de = {
+    asn = 4242422466;
+    listenPort = 22466;
+    endpoint = "netzilla.xhustudio.eu.org";
+    peerPort = 20642;
+    publicKey = "NneXyO6ANmBoREGcDQh/KCi2MtkAGU4xS/HIkNB8wQg=";
+    peerLinkLocal = "fe80::2466";
+  };
 
   # AS4242423374 (baka.pub) nl01
   my.services.dn42-peers.baka-nl01 = {
@@ -69,9 +98,15 @@
     peerLinkLocal = "fe80::2999:232";
   };
 
-  # Moved to Yukisino IX VM
-  # my.services.dn42-peers.hexp-ams = { asn = 4242420298; listenPort = 20298; endpoint = "ams.dn42.hexpnet.work"; peerPort = 20642; publicKey = "ORoz9sxUr1TRfF9nx0Mqz1SPUARWZcD+upBvAm8pjw0="; peerLinkLocal = "fe80::298"; };
-  # my.services.dn42-peers.iedon-ams = { asn = 4242422189; listenPort = 22189; endpoint = "nl-ams.dn42.iedon.net"; peerPort = 34302; publicKey = "08dzv758I5APqJizgw/W6O+FceyHSCbx/L/GZ3TL5TQ="; peerLinkLocal = "fe80::2189:177"; };
+  # AS4242420298 (HExpNetwork) ams
+  my.services.dn42-peers.hexp-ams = {
+    asn = 4242420298;
+    listenPort = 20298;
+    endpoint = "ams.dn42.hexpnet.work";
+    peerPort = 20642;
+    publicKey = "ORoz9sxUr1TRfF9nx0Mqz1SPUARWZcD+upBvAm8pjw0=";
+    peerLinkLocal = "fe80::298";
+  };
 
   # AS4242423914 (Kioubit.dn42) DE
   my.services.dn42-peers.kioubit-de = {
@@ -81,6 +116,16 @@
     peerPort = 20077;
     publicKey = "B1xSG/XTJRLd+GrWDsB06BqnIq8Xud93YVh/LYYYtUY=";
     peerLinkLocal = "fe80::ade0";
+  };
+
+  # AS4242422189 (IEDON) ams
+  my.services.dn42-peers.iedon-ams = {
+    asn = 4242422189;
+    listenPort = 22189;
+    endpoint = "nl-ams.dn42.iedon.net";
+    peerPort = 34302;
+    publicKey = "08dzv758I5APqJizgw/W6O+FceyHSCbx/L/GZ3TL5TQ=";
+    peerLinkLocal = "fe80::2189:177";
   };
 
   # AS4242423999 (CowGL) brn (Bern) - closest published node for AMS
@@ -109,21 +154,5 @@
     listenPort = 20925;
     publicKey = "JmjoF9DosETYg6++oO82eC3VvysK08ym7DTc/Z2RjB8=";
     peerLinkLocal = "fe80::925";
-  };
-
-  users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "liteserver";
-
-  systemd.services.route-ix-vm = {
-    description = "Route to Yukisino IX VM via dedirock mesh";
-    after = [ "systemd-networkd.service" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    script = ''
-      ${pkgs.iproute2}/bin/ip route replace 242.99.55.190/32 dev wg-ams0-lax0 src 172.22.64.65 || true
-    '';
   };
 }

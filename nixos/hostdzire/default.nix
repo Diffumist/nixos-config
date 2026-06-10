@@ -75,16 +75,4 @@
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "hostdzire";
 
-  systemd.services.dn42-dns-route = {
-    description = "Route DN42 DNS via mesh to dedirock";
-    after = [ "systemd-networkd.service" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    script = ''
-      ${pkgs.iproute2}/bin/ip route replace 172.20.0.53/32 via inet6 fe80::642:9 dev wg-sjc0-lax0 src 172.22.64.66 || true
-    '';
-  };
 }
