@@ -1,4 +1,5 @@
-_: {
+{ pkgs, ... }:
+{
   programs = {
     fd.enable = true;
     fzf.enable = true;
@@ -17,6 +18,10 @@ _: {
         pager = "less -FR";
         style = "changes,header";
       };
+    };
+    gh = {
+      enable = true;
+      extensions = [ pkgs.gh-eco ];
     };
     yazi = {
       enable = true;

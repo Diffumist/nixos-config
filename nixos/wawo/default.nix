@@ -51,4 +51,44 @@
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "wowa";
+
+  # AS213605 (Akaere Networks) hkg
+  my.services.dn42-peers.akaere-hkg = {
+    asn = 213605;
+    listenPort = 23605;
+    endpoint = "hk-dn42.akae.re";
+    peerPort = 50642;
+    publicKey = "tByhSmo8XuGZ5yplfdDYQRXUAjEzJzeY1Y4uF0xA0kk=";
+    peerLinkLocal = "fe80::616b:6979";
+  };
+
+  # AS4242422189 (IEDON) hkg
+  my.services.dn42-peers.iedon-hkg = {
+    asn = 4242422189;
+    listenPort = 22189;
+    endpoint = "hk-hkg.dn42.iedon.net";
+    peerPort = 33999;
+    publicKey = "OlUDuWkUI9pKNsNo7Vjf/GKKVSBslh9kmqjbeYA4+34=";
+    peerLinkLocal = "fe80::2189:120";
+  };
+
+  # AS4242423914 (Kioubit.dn42) hkg
+  my.services.dn42-peers.kioubit-hkg = {
+    asn = 4242423914;
+    listenPort = 23914;
+    endpoint = "hk1.g-load.eu";
+    peerPort = 20057;
+    publicKey = "sLbzTRr2gfLFb24NPzDOpy8j09Y6zI+a7NkeVMdVSR8=";
+    peerLinkLocal = "fe80::ade0";
+  };
+
+  # AS4242423088 (sunnet.dn42) hkg
+  my.services.dn42-peers.sunnet-hkg = {
+    asn = 4242423088;
+    listenPort = 20;
+    endpoint = "hk1.g-load.eu";
+    peerPort = 20057;
+    publicKey = "rBTH+JyZB0X/DkwHByrCjCojxBKr/kEOm1dTAFGHR1w=";
+    peerLinkLocal = "fe80::ade0";
+  };
 }

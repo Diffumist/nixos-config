@@ -138,21 +138,21 @@
     peerLinkLocal = "fe80::3:3999";
   };
 
-  # AS4242423658 (xaven) ams
-  my.services.dn42-peers.xaren-ams = {
-    asn = 4242423658;
-    listenPort = 23658;
-    endpoint = "92.112.126.10";
-    peerPort = 20642;
-    publicKey = "B6sXndGfQi480PmxF9+0kpMv1ZsqGlZpZiG1WL5Chm0=";
-    peerLinkLocal = "fe80::3658";
-  };
-
   # AS4242420925 (LU-LUX) - behind NAT, passive WireGuard endpoint
   my.services.dn42-peers.lu-lux = {
     asn = 4242420925;
     listenPort = 20925;
     publicKey = "JmjoF9DosETYg6++oO82eC3VvysK08ym7DTc/Z2RjB8=";
     peerLinkLocal = "fe80::925";
+  };
+
+  # AS213605 (Akaere Networks) ams
+  my.services.dn42-peers.akaere-ams = {
+    asn = 213605;
+    listenPort = 23605;
+    endpoint = "ams-dn42.akae.re";
+    peerPort = 50642;
+    publicKey = "noJ/5iddGjySp3hNI6yR+7QESJsUEzn6uspfk8Gs0io=";
+    peerLinkLocal = "fe80::616b:6979";
   };
 }

@@ -110,8 +110,10 @@
     # TUI
     llm-agents.codex
     llm-agents.claude-code
-    llm-agents.opencode
     llm-agents.crush
+    llm-agents.pi
+    llm-agents.opencode
+    llm-agents.rtk
     # GUI
     qq
     wemeet

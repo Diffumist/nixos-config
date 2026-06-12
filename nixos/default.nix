@@ -111,7 +111,7 @@ let
     texas = {
       system = "x86_64-linux";
       path = ./texas;
-      deploy = false;
+      deploy = true;
     };
     nixiso = {
       system = "x86_64-linux";

@@ -32,6 +32,8 @@
   my.services.postgresql.totalRamMB = 6 * 1024;
   systemd.services.komari-agent.environment.AGENT_MONTH_ROTATE = "20";
 
+  users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
+  networking.hostName = "hostdzire";
   # AS4242422466 (SessNetwork) Chronnection (San Jose)
   my.services.dn42-peers.sess-sjc = {
     asn = 4242422466;
@@ -72,7 +74,14 @@
     peerLinkLocal = "fe80::3658";
   };
 
-  users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "hostdzire";
+  # AS4242422189 (IEDON) sjc
+  my.services.dn42-peers.iedon-sjc = {
+    asn = 4242422189;
+    listenPort = 22189;
+    endpoint = "us-sjc.dn42.iedon.net";
+    peerPort = 59878;
+    publicKey = "Sz0UhewjDk2yRKI0QL9rB+5daWpXFVlbbz9cLfVVLn4=";
+    peerLinkLocal = "fe80::2189:e8";
+  };
 
 }

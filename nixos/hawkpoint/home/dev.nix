@@ -114,6 +114,7 @@
     yarn-berry
     typescript
     nodejs
+    pnpm
     rustc
     python3
     pyright

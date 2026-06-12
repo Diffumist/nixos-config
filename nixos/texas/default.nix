@@ -38,6 +38,7 @@
   };
 
   virtualisation.podman.enable = false;
+  services.fail2ban.enable = false;
 
   # my.services.sing-box = {
   #   enable = true;

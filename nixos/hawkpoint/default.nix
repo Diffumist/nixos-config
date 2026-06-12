@@ -133,7 +133,7 @@
       "podman"
       "networkmanager"
     ];
-    initialHashedPassword = config.sops.secrets.user_passwd_hash.path;
+    hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
     shell = pkgs.fish;
   };
   # niri
