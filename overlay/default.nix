@@ -33,7 +33,7 @@ importedPkgs
       "github.com/caddy-dns/cloudflare@v0.2.4"
 
     ];
-    hash = "sha256-bzMqxWTqrJ1skZmRTXyEMCKStXpljbqe5r0Ve2cnBfM=";
+    hash = "sha256-8yZDrejNKsaUnUaTUFYbarWNmxafqp2z2rWo+XRsxV8=";
   };
   code-nautilus = prev.code-nautilus.overrideAttrs (oldAttrs: {
     postInstall = (oldAttrs.postInstall or "") + ''

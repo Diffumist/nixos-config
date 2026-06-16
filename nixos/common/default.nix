@@ -15,7 +15,7 @@
     ./services/dn42-peer.nix
     ./services/sing-box.nix
     ./services/postgresql.nix
-    ./services/komari.nix # TODO: REPLACE sema and vnstat + webhook
+    # ./services/komari.nix # TODO: REPLACE sema and vnstat + webhook
   ];
 
   sops = {

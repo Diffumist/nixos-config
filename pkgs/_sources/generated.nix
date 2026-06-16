@@ -8,10 +8,10 @@
 {
   apple-emoji-font = {
     pname = "apple-emoji-font";
-    version = "macos-26-20260219-2aa12422";
+    version = "macos-26-20260613-f1fc560b";
     src = fetchurl {
-      url = "https://github.com/samuelngs/apple-emoji-ttf/releases/download/macos-26-20260219-2aa12422/ttf-apple-emoji.pkg.tar.zst";
-      sha256 = "sha256-bKP82lRDdnXo6lXNwa0G1MM7SFsE6t0OdHY/BAv5wCE=";
+      url = "https://github.com/samuelngs/apple-emoji-ttf/releases/download/macos-26-20260613-f1fc560b/ttf-apple-emoji.pkg.tar.zst";
+      sha256 = "sha256-BHpZhmZ9AYEyOXnU2W5XOw9Kp5CcvG9g3dQmfxrnRhs=";
     };
   };
   repak = {
@@ -33,16 +33,16 @@
   };
   xsz = {
     pname = "xsz";
-    version = "v0.3.4";
+    version = "v0.4.2";
     src = fetchFromGitHub {
       owner = "SaltyKitkat";
       repo = "xsz";
-      rev = "v0.3.4";
+      rev = "v0.4.2";
       fetchSubmodules = false;
-      sha256 = "sha256-EN5KoGJEe3vAiUqP7AEqGdKd1DOkF7KpQyPgmsF864I=";
+      sha256 = "sha256-CZ4ngwrtTHnAVAu9kalIuodwGB/qNQ/3e0n3/qh5kRs=";
     };
     cargoLock."Cargo.lock" = {
-      lockFile = ./. + "/sha256-EN5KoGJEe3vAiUqP7AEqGdKd1DOkF7KpQyPgmsF864I=/Cargo.lock";
+      lockFile = ./. + "/sha256-CZ4ngwrtTHnAVAu9kalIuodwGB_qNQ_3e0n3_qh5kRs=/Cargo.lock";
       outputHashes = {
         
       };

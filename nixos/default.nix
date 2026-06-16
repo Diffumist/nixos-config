@@ -40,7 +40,6 @@ let
       useCommon = false;
       extra = defaults.extra ++ [
         inputs.home-manager.nixosModules.home-manager
-        inputs.dms-plugin-registry.modules.default
       ];
     };
     phoenix = {
