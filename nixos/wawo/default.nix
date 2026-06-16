@@ -47,7 +47,9 @@
   virtualisation.podman.enable = false;
   services.fail2ban.enable = false;
 
-  systemd.services.komari-agent.environment.AGENT_MONTH_ROTATE = "9";
+  environment.etc."vnstat.conf".text = ''
+    MonthRotate 9
+  '';
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "wowa";

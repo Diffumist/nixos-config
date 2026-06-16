@@ -1,9 +1,14 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  buildNpmPackage,
+  fetchPnpmDeps,
   makeWrapper,
+  node-gyp,
+  nodejs-slim_22,
   nodejs_22,
+  pnpm_11,
+  pnpmConfigHook,
   curl,
   dnsutils,
   ffmpeg,
@@ -23,11 +28,15 @@
 }:
 
 let
+  rev = "0c00f780683b686d950666c4b935eac09a0e7b84";
+  version = "0.1.0-unstable-2026-06-16";
+  pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
+
   src = fetchFromGitHub {
-    owner = "Diffumist";
+    owner = "Archeb";
     repo = "CyberGroupmate";
-    rev = "bcdeecf31513a6dba12e98378ff1599dcd83a674";
-    hash = "sha256-VesVuukBEGVOKl3QVXWdhzw3TxoUqCSJ+PSkS0KQYaU=";
+    inherit rev;
+    hash = "sha256-4RZ1xIzoJ5Te3ShFkkCe1t3uiwEAtZ4z8HSMlQ+dd7I=";
   };
 
   runtimePath = lib.makeBinPath [
@@ -49,48 +58,102 @@ let
     zip
   ];
 
-  dashboard = buildNpmPackage {
+  dashboard = stdenv.mkDerivation (finalAttrs: {
     pname = "cybergroupmate-dashboard";
-    version = "0.1.0-unstable-2026-06-12";
+    inherit version src;
 
-    src = "${src}/src/dashboard/ui";
-    npmDepsHash = "sha256-996he9tV8/JTuT03lSL1qxn9eqS9vftv5gfe0/U5mCE=";
+    pnpmRoot = "src/dashboard/ui";
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      sourceRoot = "${finalAttrs.src.name}/src/dashboard/ui";
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-SLBtfDuhSodH8G8nQ9DY2wDYlq4WytqMxDjAbqZ74K8=";
+    };
+
+    nativeBuildInputs = [
+      nodejs_22
+      pnpm
+      pnpmConfigHook
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      pushd "$pnpmRoot"
+      pnpm run build
+      popd
+
+      runHook postBuild
+    '';
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out
-      cp -r ../public/. $out/
+      cp -r src/dashboard/public/. $out/
 
       runHook postInstall
     '';
-  };
+  });
 in
-buildNpmPackage {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cybergroupmate";
-  version = "0.1.0-unstable-2026-06-12";
+  inherit version src;
 
-  inherit src;
-  nodejs = nodejs_22;
-  npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-9O4HqhMlLeORfGEeIIyDtTm3PNv0avPHSYP3buYCcVg=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-2WgD872lsp/c6ITlSuJkWA13KYtyGlgOhGQF2U0DXi0=";
+  };
 
-  dontNpmBuild = true;
-  nativeBuildInputs = [ makeWrapper ];
+  env = {
+    npm_config_nodedir = nodejs_22;
+    npm_config_node_gyp = "${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js";
+  };
+
+  nativeBuildInputs = [
+    nodejs_22
+    node-gyp
+    python3
+    pnpm
+    pnpmConfigHook
+    makeWrapper
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    export npm_config_nodedir=${nodejs_22}
+    export npm_config_node_gyp=${node-gyp}/lib/node_modules/node-gyp/bin/node-gyp.js
+    export pnpm_config_nodedir=${nodejs_22}
+
+    mkdir -p "$HOME/.cache/node-gyp/${nodejs_22.version}" "$HOME/.node-gyp/${nodejs_22.version}"
+    echo 11 > "$HOME/.cache/node-gyp/${nodejs_22.version}/installVersion"
+    echo 11 > "$HOME/.node-gyp/${nodejs_22.version}/installVersion"
+    ln -sf ${nodejs_22}/include "$HOME/.cache/node-gyp/${nodejs_22.version}/include"
+    ln -sf ${nodejs_22}/include "$HOME/.node-gyp/${nodejs_22.version}/include"
+
+    pnpm --reporter append-only rebuild esbuild better-sqlite3 protobufjs
+
+    pushd node_modules/.pnpm/node-pty@1.1.0/node_modules/node-pty
+    node scripts/prebuild.js || node-gyp rebuild --verbose
+    node scripts/post-install.js
+    popd
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
-
-    if ! grep -q 'spoiler: (media.type === "video" || media.type === "photo") && media.spoiler' \
-      node_modules/@mtcute/core/highlevel/methods/files/normalize-input-media.js; then
-      patch -p1 < patches/@mtcute+core+0.29.1.patch
-    fi
 
     appRoot=$out/lib/cybergroupmate
     mkdir -p "$appRoot" "$out/bin"
 
     cp -r src scripts system-prompts patches "$appRoot"/
-    cp package.json package-lock.json config.example.yaml LICENSE README.md "$appRoot"/
+    cp package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json config.example.yaml LICENSE README.md "$appRoot"/
     cp -r node_modules "$appRoot"/
 
     rm -rf "$appRoot/src/dashboard/public"
@@ -100,10 +163,8 @@ buildNpmPackage {
     makeWrapper ${lib.getExe nodejs_22} $out/bin/cybergroupmate \
       --prefix PATH : ${lib.escapeShellArg runtimePath} \
       --run 'app_root=${lib.escapeShellArg "$out/lib/cybergroupmate"}' \
-      --run 'for entry in src system-prompts node_modules package.json package-lock.json config.example.yaml; do if [ ! -e "$entry" ] && [ ! -L "$entry" ]; then ln -s "$app_root/$entry" "$entry"; fi; done' \
+      --run 'for entry in src system-prompts node_modules package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json config.example.yaml; do if [ ! -e "$entry" ] && [ ! -L "$entry" ]; then ln -s "$app_root/$entry" "$entry"; fi; done' \
       --run 'mkdir -p workspace' \
-      --run 'case " ''${NODE_OPTIONS-} " in *" --preserve-symlinks "*) ;; *) export NODE_OPTIONS="''${NODE_OPTIONS:+$NODE_OPTIONS }--preserve-symlinks" ;; esac' \
-      --run 'case " ''${NODE_OPTIONS-} " in *" --preserve-symlinks-main "*) ;; *) export NODE_OPTIONS="''${NODE_OPTIONS:+$NODE_OPTIONS }--preserve-symlinks-main" ;; esac' \
       --add-flags "node_modules/tsx/dist/cli.mjs" \
       --add-flags "src/main.ts"
 
@@ -112,9 +173,17 @@ buildNpmPackage {
 
   meta = {
     description = "Code-driven group chat social agent";
-    homepage = "https://github.com/Diffumist/CyberGroupmate";
+    homepage = "https://github.com/Archeb/CyberGroupmate";
     license = lib.licenses.mit;
     mainProgram = "cybergroupmate";
     platforms = lib.platforms.linux;
   };
-}
+
+  passthru = {
+    inherit rev src;
+    dockerContext = src;
+    dockerfile = "${src}/Dockerfile";
+    dockerImageName = "localhost/cybergroupmate-agentic";
+    dockerImageTag = lib.substring 0 12 rev;
+  };
+})

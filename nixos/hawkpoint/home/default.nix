@@ -111,9 +111,11 @@
     llm-agents.codex
     llm-agents.claude-code
     llm-agents.crush
-    llm-agents.pi
+    llm-agents.omp
+    llm-agents.antigravity-cli
     llm-agents.opencode
     llm-agents.rtk
+    llm-agents.codex-auth
     # GUI
     qq
     wemeet

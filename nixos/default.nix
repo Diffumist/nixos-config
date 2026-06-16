@@ -108,11 +108,6 @@ let
       path = ./solidvps;
       deploy = true;
     };
-    texas = {
-      system = "x86_64-linux";
-      path = ./texas;
-      deploy = true;
-    };
     nixiso = {
       system = "x86_64-linux";
       path = ./nixiso;

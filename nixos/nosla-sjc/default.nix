@@ -50,7 +50,10 @@
     enable = true;
     configSopsFile = ./services/sing-box.json;
   };
-  systemd.services.komari-agent.environment.AGENT_MONTH_ROTATE = "13";
+
+  environment.etc."vnstat.conf".text = ''
+    MonthRotate 13
+  '';
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "nosla-sjc";

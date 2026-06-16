@@ -15,7 +15,7 @@
     ./services/dn42-peer.nix
     ./services/sing-box.nix
     ./services/postgresql.nix
-    ./services/komari.nix
+    ./services/komari.nix # TODO: REPLACE sema and vnstat + webhook
   ];
 
   sops = {
@@ -62,6 +62,14 @@
   users.defaultUserShell = pkgs.fish;
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;
+
+  services.vnstat.enable = true;
+  environment.etc."vnstat.conf".text = lib.mkDefault ''
+    MonthRotate 1
+  '';
+  systemd.services.vnstat.restartTriggers = [
+    config.environment.etc."vnstat.conf".source
+  ];
 
   virtualisation = {
     podman = {

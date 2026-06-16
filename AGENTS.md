@@ -191,6 +191,22 @@ Rules for refactor:
    small. Each node still shares one WireGuard key across all peers — if a peer
    portal requires unique keys, use the per-peer `privateKeyFile` override.
 
+## 11.1 Local package notes
+
+- `pkgs/cybergroupmate` packages `Archeb/CyberGroupmate` branch `agentic`,
+  pinned to commit `0c00f780683b686d950666c4b935eac09a0e7b84`.
+  Upstream now uses pnpm lockfiles, so the local package uses
+  `fetchPnpmDeps`/`pnpmConfigHook` instead of `buildNpmPackage`.
+- `pkgs.cybergroupmate` exposes Docker passthru values used by
+  `nixos/phoenix/services/cyber.nix` if the service is switched to local image
+  builds: `dockerContext`, `dockerfile`, `dockerImageName`, and
+  `dockerImageTag`.
+- `pkgs/sema` is a small Rust dead man's switch webhook server. Notification
+  delivery is stateful: down/reminder/recovery events enter a persisted outbox,
+  and `last_*_notified_at` is updated only after every webhook target for that
+  event is delivered. Keep tokens out of URL paths; pings use the
+  `x-sema-token` header.
+
 ## 12. Safe change checklist
 
 Before merging infrastructure changes:

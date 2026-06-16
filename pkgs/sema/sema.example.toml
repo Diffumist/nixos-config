@@ -1,0 +1,18 @@
+bind_addr = "0.0.0.0:8080"
+scan_interval_seconds = 30
+state_path = "sema-state.json"
+webhook_timeout_seconds = 5
+webhook_retry_attempts = 3
+
+[[checks]]
+id = "backup"
+token = "replace-with-a-long-random-token"
+period_seconds = 60
+grace_seconds = 180
+remind_every_seconds = 14400
+
+[[checks.webhooks]]
+url = "https://example.com/hooks/sema"
+
+[checks.webhooks.headers]
+authorization = "Bearer replace-me"
