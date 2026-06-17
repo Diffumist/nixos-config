@@ -208,26 +208,6 @@
         "type": "github"
       }
     },
-    "dms-plugin-registry": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1781578295,
-        "narHash": "sha256-9GYAvOxvB4QQq1Ma6WMc6wPqJTlUZqLyz1NotBPUVGc=",
-        "owner": "AvengeMedia",
-        "repo": "dms-plugin-registry",
-        "rev": "3e0401f01c6b6562448e0b80d7518e4dca22aff1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "AvengeMedia",
-        "repo": "dms-plugin-registry",
-        "type": "github"
-      }
-    },
     "dn42-registry": {
       "flake": false,
       "locked": {
@@ -999,7 +979,6 @@
         "deploy-rs": "deploy-rs",
         "devshell": "devshell",
         "disko": "disko",
-        "dms-plugin-registry": "dms-plugin-registry",
         "dn42-registry": "dn42-registry",
         "flake-utils": "flake-utils",
         "hermes-agent": "hermes-agent",

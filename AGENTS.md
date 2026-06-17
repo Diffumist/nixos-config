@@ -206,6 +206,11 @@ Rules for refactor:
   and `last_*_notified_at` is updated only after every webhook target for that
   event is delivered. Keep tokens out of URL paths; pings use the
   `x-sema-token` header.
+- `nixos/geelinx-jp/services/notifications.nix` exposes Bark and ntfy behind
+  Caddy as `bark.diffumist.me` and `ntfy.diffumist.me`. Bark is a custom
+  systemd service from `pkgs.bark-server`; ntfy uses `services.ntfy-sh` with
+  anonymous access denied by default. Do not put Cloudflare or ntfy credentials
+  in Nix code; use SOPS/runtime CLI state.
 
 ## 12. Safe change checklist
 

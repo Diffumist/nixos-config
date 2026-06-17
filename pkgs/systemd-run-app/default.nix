@@ -1,5 +1,5 @@
 # From https://github.com/NickCao/flakes/blob/67fac11e53d6ee0ff27a90fcaf9cab2e59a935a6/pkgs/systemd-run-app/default.nix
-{ writeShellApplication, coreutils, ...}:
+{ writeShellApplication, coreutils, ... }:
 writeShellApplication {
   name = "systemd-run-app";
   text = ''

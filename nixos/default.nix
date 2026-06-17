@@ -10,7 +10,7 @@ let
     self.overlays.default
     inputs.llm-agents.overlays.default
     inputs.quickshell.overlays.default
-    inputs.nix-cachyos-kernel.overlays.default
+    inputs.nix-cachyos-kernel.overlays.pinned
     inputs.nix-vscode-extensions.overlays.default
     inputs.nix-dn42.overlays.default
   ];
