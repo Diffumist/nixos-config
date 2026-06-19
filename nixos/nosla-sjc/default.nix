@@ -29,6 +29,7 @@
         [Network]
         Address=${config.sops.placeholder.ipv4_address}/24
         Address=${config.sops.placeholder.ipv6_address}/64
+        IPv6AcceptRA=no
         Gateway=${config.sops.placeholder.ipv4_gateway}
         Gateway=${config.sops.placeholder.ipv6_gateway}
         DNS=1.0.0.1

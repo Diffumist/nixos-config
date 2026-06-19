@@ -32,9 +32,13 @@
 
         [Network]
         Address=${config.sops.placeholder.ipv4_address}/24
+        Address=${config.sops.placeholder.ipv6_address}/64
         Gateway=${config.sops.placeholder.ipv4_gateway}
+        Gateway=${config.sops.placeholder.ipv6_gateway}
         DNS=1.0.0.1
         DNS=8.8.4.4
+        DNS=2606:4700:4700::1001
+        DNS=2001:4860:4860::8844
       '';
     };
   };
