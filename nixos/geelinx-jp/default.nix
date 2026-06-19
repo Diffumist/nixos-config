@@ -24,7 +24,7 @@
       owner = "systemd-network";
       content = ''
         [Match]
-        Name=ens17
+        Name=ens17 enp0s17
 
         [Network]
         Address=${config.sops.placeholder.ipv4_address}/25

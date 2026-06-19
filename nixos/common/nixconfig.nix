@@ -21,7 +21,6 @@ _: {
         "nixos-config:zM4D3PAPLRe0q415xXHbluX6X0Zc9kuAlsArsEuuvqA="
       ];
       auto-allocate-uids = true;
-      download-buffer-size = 536870912; # 512 MiB
       warn-dirty = false;
       use-xdg-base-directories = true;
       auto-optimise-store = true;

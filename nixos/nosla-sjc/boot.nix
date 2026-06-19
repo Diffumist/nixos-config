@@ -3,7 +3,6 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
-  boot.kernelModules = [ "kvm-amd" ];
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
 

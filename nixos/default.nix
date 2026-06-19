@@ -62,6 +62,11 @@ let
       path = ./geelinx-mys;
       deploy = false;
     };
+    geelinx-us = {
+      system = "x86_64-linux";
+      path = ./geelinx-us;
+      deploy = true;
+    };
     noboard = {
       system = "x86_64-linux";
       path = ./noboard;

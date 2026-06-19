@@ -3,6 +3,7 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
+
   disko.devices.disk.main = {
     type = "disk";
     device = "/dev/vda";
@@ -40,7 +41,7 @@
               "@swap" = {
                 mountpoint = "/.swap";
                 swap = {
-                  swapfile.size = "2048M";
+                  swapfile.size = "6144MB";
                   swapfile.path = "real-path";
                 };
               };

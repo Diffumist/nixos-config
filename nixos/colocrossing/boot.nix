@@ -3,7 +3,6 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
-  boot.kernelModules = [ ];
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda";
 

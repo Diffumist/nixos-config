@@ -3,8 +3,6 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
-  boot.kernelModules = [ "kvm-amd" ];
-
   disko.devices.disk.main = {
     type = "disk";
     device = "/dev/sda";

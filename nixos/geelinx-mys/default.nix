@@ -21,7 +21,7 @@
       owner = "systemd-network";
       content = ''
         [Match]
-        Name=ens17
+        Name=ens17 enp0s17
 
         [Network]
         Address=${config.sops.placeholder.ipv4_address}/24
@@ -41,5 +41,5 @@
   my.services.postgresql.totalRamMB = 2 * 1024;
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "geelinx";
+  networking.hostName = "geelinx-mys";
 }

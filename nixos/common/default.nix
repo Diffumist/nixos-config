@@ -19,12 +19,11 @@
   ];
 
   sops = {
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+    age.sshKeyPaths = lib.mkDefault [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
     secrets = {
       user_passwd_hash = {
         neededForUsers = true;
       };
-      komari_token = { };
     };
   };
 

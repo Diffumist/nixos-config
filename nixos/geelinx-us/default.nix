@@ -11,7 +11,6 @@
   ];
 
   sops = {
-    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
     defaultSopsFile = ./secrets.yaml;
     secrets = {
       ipv4_address = { };
@@ -24,10 +23,10 @@
       owner = "systemd-network";
       content = ''
         [Match]
-        Name=enp3s0
+        Name=ens17 enp0s17
 
         [Network]
-        Address=${config.sops.placeholder.ipv4_address}/24
+        Address=${config.sops.placeholder.ipv4_address}/26
         Address=${config.sops.placeholder.ipv6_address}/64
         Gateway=${config.sops.placeholder.ipv4_gateway}
         Gateway=${config.sops.placeholder.ipv6_gateway}
@@ -45,17 +44,8 @@
   };
   systemd.network.wait-online.enable = false;
 
-  virtualisation.podman.enable = false;
-  services.fail2ban.enable = false;
-  my.services.sing-box = {
-    enable = true;
-    configSopsFile = ./services/sing-box.json;
-  };
-
-  environment.etc."vnstat.conf".text = ''
-    MonthRotate 13
-  '';
+  my.services.postgresql.totalRamMB = 2 * 1024;
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "nosla-sjc";
+  networking.hostName = "geelinx-us";
 }

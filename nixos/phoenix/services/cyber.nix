@@ -48,7 +48,7 @@ let
       > /usr/local/bin/cybergroupmate-entrypoint; \
       chmod 0755 /usr/local/bin/cybergroupmate-entrypoint
 
-    ENV HOME=/home/agent
+    ENV HOME=/app/workspace
     ENTRYPOINT ["/usr/local/bin/cybergroupmate-entrypoint"]
     CMD ["npx", "tsx", "src/main.ts"]
   '';
@@ -69,7 +69,7 @@ in
     ];
     environment = {
       TZ = config.time.timeZone;
-      HOME = "/home/agent";
+      HOME = "/app/workspace";
       PATH = "/app/workspace/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
       XDG_CONFIG_HOME = "/app/workspace/.config";
       XDG_CACHE_HOME = "/app/workspace/.cache";

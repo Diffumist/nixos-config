@@ -1,6 +1,7 @@
 { pkgs, lib, ... }:
 {
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_xanmod_latest;
+  boot.kernelModules = lib.mkDefault [ ];
   boot.kernelParams = [
     "vdso32=0"
     "vsyscall=none"
