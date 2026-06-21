@@ -14,6 +14,7 @@
     ./services/dn42.nix
     ./services/dn42-peer.nix
     ./services/sing-box.nix
+    ./services/sema.nix
     ./services/postgresql.nix
     # ./services/komari.nix # TODO: REPLACE sema and vnstat + webhook
   ];

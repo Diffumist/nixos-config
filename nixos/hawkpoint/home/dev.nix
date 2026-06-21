@@ -48,6 +48,7 @@
       ignores = [
         ".vscode"
         ".DS_store"
+        "docs/ai/"
       ];
       settings = {
         user.name = "Diffumist";

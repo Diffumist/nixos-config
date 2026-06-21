@@ -2,5 +2,4 @@ result*
 result-*
 .direnv/
 .deploy-gc
-docs/ai
 pkgs/_sources/generated.json
