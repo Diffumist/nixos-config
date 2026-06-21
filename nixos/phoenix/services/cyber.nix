@@ -11,7 +11,7 @@ let
   dockerfile = pkgs.writeText "cybergroupmate-agent.Dockerfile" ''
     FROM ghcr.io/archeb/cybergroupmate:agentic
 
-    RUN apt-get update; \
+    RUN apt-get update && \
       apt-get install -y --no-install-recommends \
         libasound2 \
         libatk-bridge2.0-0 \
@@ -24,33 +24,21 @@ let
         libxfixes3 \
         libxkbcommon0 \
         libxrandr2 \
-        sudo; \
+        sudo && \
       rm -rf /var/lib/apt/lists/*
 
     RUN set -eux; \
       groupadd -g 10001 agent; \
       useradd -u 10001 -g 10001 -m -s /bin/bash agent; \
-      mkdir -p /app/workspace /app/agent-data; \
-      chown -R agent:agent /app/workspace /app/agent-data; \
+      install -d -o agent -g agent /app/workspace /app/agent-data; \
       printf '%s\n' \
         'agent ALL=(root) NOPASSWD: /usr/bin/apt-get, /usr/bin/apt, /usr/bin/dpkg' \
         > /etc/sudoers.d/agent-apt; \
       chmod 0440 /etc/sudoers.d/agent-apt
 
-    RUN printf '%s\n' \
-      '#!/bin/sh' \
-      'set -eu' \
-      'mkdir -p /app/workspace /app/agent-data' \
-      '[ ! -e /app/config.yaml ] || chown agent:agent /app/config.yaml' \
-      '[ ! -e /app/config.yaml ] || chmod 0600 /app/config.yaml' \
-      'chown -R agent:agent /app/workspace /app/agent-data' \
-      'exec runuser --preserve-environment -u agent -- "$@"' \
-      > /usr/local/bin/cybergroupmate-entrypoint; \
-      chmod 0755 /usr/local/bin/cybergroupmate-entrypoint
-
     ENV HOME=/app/workspace
-    ENTRYPOINT ["/usr/local/bin/cybergroupmate-entrypoint"]
-    CMD ["npx", "tsx", "src/main.ts"]
+    USER agent
+    ENTRYPOINT ["npx", "tsx", "src/main.ts"]
   '';
 in
 {
@@ -64,8 +52,8 @@ in
     ];
     volumes = [
       "${configPath}:/app/config.yaml"
-      "cybergroupmate-workspace:/app/workspace"
-      "cybergroupmate-agent-data:/app/agent-data"
+      "cybergroupmate-workspace:/app/workspace:U"
+      "cybergroupmate-agent-data:/app/agent-data:U"
     ];
     environment = {
       TZ = config.time.timeZone;
