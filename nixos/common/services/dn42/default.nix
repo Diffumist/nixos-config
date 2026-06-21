@@ -243,6 +243,9 @@ in
       boot.kernel.sysctl = {
         "net.ipv4.ip_forward" = 1;
         "net.ipv6.conf.all.forwarding" = 1;
+        "net.ipv4.conf.all.rp_filter" = lib.mkForce 0;
+        "net.ipv4.conf.default.rp_filter" = lib.mkForce 0;
+        "net.ipv4.conf.*.rp_filter" = lib.mkForce 0;
       };
 
       sops.secrets.dn42_wg_private_key = {
@@ -259,7 +262,7 @@ in
 
       networking.firewall = {
         allowedUDPPorts = map (link: link.port) localLinks;
-        checkReversePath = "loose";
+        checkReversePath = false;
         interfaces = lib.listToAttrs (
           map (link: lib.nameValuePair link.name { allowedTCPPorts = [ lookingGlassProxyPort ]; }) localLinks
         );

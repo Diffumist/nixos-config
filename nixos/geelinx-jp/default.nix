@@ -9,6 +9,7 @@
   imports = [
     ./boot.nix
     ./services/flap-damping.nix
+    ./services/knot.nix
   ];
 
   sops = {

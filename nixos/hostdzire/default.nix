@@ -11,6 +11,7 @@
 
     ./services/lldap.nix
     # ./services/bub.nix
+    ./services/knot.nix
     ./services/tgtldr.nix
     ./services/authelia.nix
     ./services/vaultwarden.nix
