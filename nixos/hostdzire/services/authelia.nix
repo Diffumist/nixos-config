@@ -81,10 +81,6 @@
             domain = "diffumist.me";
             authelia_url = "https://auth.diffumist.me";
           }
-          {
-            domain = "503418.xyz";
-            authelia_url = "https://auth.503418.xyz";
-          }
         ];
       };
       webauthn = {
@@ -112,6 +108,7 @@
             domain = [
               "git.diffumist.me"
               "hermes.diffumist.me"
+              "music.diffumist.me"
               "tavern.diffumist.me"
             ];
             policy = "two_factor";

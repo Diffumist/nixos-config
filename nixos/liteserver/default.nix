@@ -9,6 +9,7 @@
   imports = [
     ./boot.nix
 
+    ./services/gonic.nix
     ./services/immich.nix
     ./services/rqbit.nix
   ];
