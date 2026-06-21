@@ -30,8 +30,8 @@ let
     RUN set -eux; \
       groupadd -g 10001 agent; \
       useradd -u 10001 -g 10001 -m -s /bin/bash agent; \
-      mkdir -p /app/workspace /app/agent-data /home/agent/.claude; \
-      chown -R agent:agent /app/workspace /app/agent-data /home/agent; \
+      mkdir -p /app/workspace /app/agent-data; \
+      chown -R agent:agent /app/workspace /app/agent-data; \
       printf '%s\n' \
         'agent ALL=(root) NOPASSWD: /usr/bin/apt-get, /usr/bin/apt, /usr/bin/dpkg' \
         > /etc/sudoers.d/agent-apt; \
@@ -40,11 +40,11 @@ let
     RUN printf '%s\n' \
       '#!/bin/sh' \
       'set -eu' \
-      'mkdir -p /app/workspace /app/agent-data /home/agent/.claude' \
+      'mkdir -p /app/workspace /app/agent-data' \
       '[ ! -e /app/config.yaml ] || chown agent:agent /app/config.yaml' \
       '[ ! -e /app/config.yaml ] || chmod 0600 /app/config.yaml' \
-      'chown -R agent:agent /app/workspace /app/agent-data /home/agent' \
-      'exec runuser -u agent -- "$@"' \
+      'chown -R agent:agent /app/workspace /app/agent-data' \
+      'exec runuser --preserve-environment -u agent -- "$@"' \
       > /usr/local/bin/cybergroupmate-entrypoint; \
       chmod 0755 /usr/local/bin/cybergroupmate-entrypoint
 
