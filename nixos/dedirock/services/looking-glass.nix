@@ -8,7 +8,7 @@ in
   services.bird-lg.frontend = {
     enable = true;
     listenAddresses = "127.0.0.1:${toString frontendPort}";
-    proxyPort = proxyPort;
+    inherit proxyPort;
     servers = [
       "AMS-0<ams-0.lg>"
       "SJC-0<sjc-0.lg>"

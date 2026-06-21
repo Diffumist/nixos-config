@@ -1,6 +1,6 @@
 inputs: final: prev:
 let
-  lib = prev.lib;
+  inherit (prev) lib;
   pkgsDir = ../pkgs;
   sources = import (pkgsDir + "/_sources/generated.nix") {
     inherit (prev)

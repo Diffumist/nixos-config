@@ -251,6 +251,11 @@ in
       };
 
       my.services.dn42.rejectASNs = [ 4242420903 ];
+      my.services.dn42.flapDamping = {
+        enable = true;
+        runServer = lib.mkDefault false;
+        serverAddress = nodes.geelinx-jp.ipv6;
+      };
 
       networking.firewall = {
         allowedUDPPorts = map (link: link.port) localLinks;

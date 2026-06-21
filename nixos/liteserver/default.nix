@@ -58,7 +58,7 @@
   networking.hostName = "liteserver";
 
   # AS4242423377 (leziblog) DE1 (NUE)
-  my.services.dn42-peers.lezi-de = {
+  my.services.dn42.peers.lezi-de = {
     asn = 4242423377;
     listenPort = 23377;
     endpoint = "v6.de1.peer.dn42.leziblog.com";
@@ -69,7 +69,7 @@
   };
 
   # AS4242420253 (moe233) ams (Amsterdam)
-  my.services.dn42-peers.moe233-ams = {
+  my.services.dn42.peers.moe233-ams = {
     asn = 4242420253;
     listenPort = 20253;
     endpoint = "ams.dn42.moe233.net";
@@ -79,7 +79,7 @@
   };
 
   # AS4242422466 (SessNetwork) Netzilla (Frankfurt)
-  my.services.dn42-peers.sess-de = {
+  my.services.dn42.peers.sess-de = {
     asn = 4242422466;
     listenPort = 22466;
     endpoint = "netzilla.xhustudio.eu.org";
@@ -89,7 +89,7 @@
   };
 
   # AS4242423374 (baka.pub) nl01
-  my.services.dn42-peers.baka-nl01 = {
+  my.services.dn42.peers.baka-nl01 = {
     asn = 4242423374;
     listenPort = 23374;
     endpoint = "nl01.dn42.baka.pub";
@@ -99,7 +99,7 @@
   };
 
   # AS4242420298 (HExpNetwork) ams
-  my.services.dn42-peers.hexp-ams = {
+  my.services.dn42.peers.hexp-ams = {
     asn = 4242420298;
     listenPort = 20298;
     endpoint = "ams.dn42.hexpnet.work";
@@ -109,7 +109,7 @@
   };
 
   # AS4242423914 (Kioubit.dn42) DE
-  my.services.dn42-peers.kioubit-de = {
+  my.services.dn42.peers.kioubit-de = {
     asn = 4242423914;
     listenPort = 23914;
     endpoint = "de2.g-load.eu";
@@ -119,7 +119,7 @@
   };
 
   # AS4242422189 (IEDON) ams
-  my.services.dn42-peers.iedon-ams = {
+  my.services.dn42.peers.iedon-ams = {
     asn = 4242422189;
     listenPort = 22189;
     endpoint = "nl-ams.dn42.iedon.net";
@@ -129,7 +129,7 @@
   };
 
   # AS4242423999 (CowGL) brn (Bern) - closest published node for AMS
-  my.services.dn42-peers.cowgl-brn = {
+  my.services.dn42.peers.cowgl-brn = {
     asn = 4242423999;
     listenPort = 23999;
     endpoint = "brn.node.cowgl.tech";
@@ -139,7 +139,7 @@
   };
 
   # AS4242420925 (LU-LUX) - behind NAT, passive WireGuard endpoint
-  my.services.dn42-peers.lu-lux = {
+  my.services.dn42.peers.lu-lux = {
     asn = 4242420925;
     listenPort = 20925;
     publicKey = "JmjoF9DosETYg6++oO82eC3VvysK08ym7DTc/Z2RjB8=";
@@ -147,7 +147,7 @@
   };
 
   # AS213605 (Akaere Networks) ams
-  my.services.dn42-peers.akaere-ams = {
+  my.services.dn42.peers.akaere-ams = {
     asn = 213605;
     listenPort = 23605;
     endpoint = "ams-dn42.akae.re";

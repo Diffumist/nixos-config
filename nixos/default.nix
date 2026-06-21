@@ -133,7 +133,7 @@ let
   mkHost =
     name: h:
     let
-      system = h.system;
+      inherit (h) system;
       pkgs = mkPkgs system;
       extra = h.extra or defaults.extra;
       useCommon = h.useCommon or true;

@@ -55,7 +55,7 @@
   networking.hostName = "wowa";
 
   # AS213605 (Akaere Networks) hkg
-  my.services.dn42-peers.akaere-hkg = {
+  my.services.dn42.peers.akaere-hkg = {
     asn = 213605;
     listenPort = 23605;
     endpoint = "hk-dn42.akae.re";
@@ -65,7 +65,7 @@
   };
 
   # AS4242422189 (IEDON) hkg
-  my.services.dn42-peers.iedon-hkg = {
+  my.services.dn42.peers.iedon-hkg = {
     asn = 4242422189;
     listenPort = 22189;
     endpoint = "hk-hkg.dn42.iedon.net";
@@ -75,7 +75,7 @@
   };
 
   # AS4242423914 (Kioubit.dn42) hkg
-  my.services.dn42-peers.kioubit-hkg = {
+  my.services.dn42.peers.kioubit-hkg = {
     asn = 4242423914;
     listenPort = 23914;
     endpoint = "hk1.g-load.eu";
@@ -85,7 +85,7 @@
   };
 
   # AS4242423088 (sunnet.dn42) hkg
-  my.services.dn42-peers.sunnet-hkg = {
+  my.services.dn42.peers.sunnet-hkg = {
     asn = 4242423088;
     listenPort = 20;
     endpoint = "hk1.g-load.eu";

@@ -11,12 +11,13 @@
     ./services/sshd.nix
     ./services/fail2ban.nix
     ./services/caddy.nix
-    ./services/dn42.nix
-    ./services/dn42-peer.nix
     ./services/sing-box.nix
     ./services/sema.nix
     ./services/postgresql.nix
     # ./services/komari.nix # TODO: REPLACE sema and vnstat + webhook
+    ./services/dn42/default.nix
+    ./services/dn42/peer.nix
+    ./services/dn42/flap-damping.nix
   ];
 
   sops = {

@@ -8,7 +8,7 @@
 {
   imports = [
     ./boot.nix
-    ./services/notifications.nix
+    ./services/flap-damping.nix
   ];
 
   sops = {
@@ -56,7 +56,7 @@
   networking.hostName = "geelinx-jp";
 
   # AS4242423377 (leziblog) JP1 (TYO)
-  my.services.dn42-peers.lezi-tyo = {
+  my.services.dn42.peers.lezi-tyo = {
     asn = 4242423377;
     listenPort = 23377;
     endpoint = "v6.jp1-tyo.peer.dn42.leziblog.com";
@@ -67,7 +67,7 @@
   };
 
   # AS4242420253 (moe233) tyo (Tokyo)
-  my.services.dn42-peers.moe233-tyo = {
+  my.services.dn42.peers.moe233-tyo = {
     asn = 4242420253;
     listenPort = 20253;
     endpoint = "tyo.dn42.moe233.net";
@@ -77,7 +77,7 @@
   };
 
   # AS4242423999 (CowGL) tyo (Tokyo)
-  my.services.dn42-peers.cowgl-tyo = {
+  my.services.dn42.peers.cowgl-tyo = {
     asn = 4242423999;
     listenPort = 23999;
     endpoint = "tyo.node.cowgl.tech";
@@ -87,7 +87,7 @@
   };
 
   # AS4242423374 (baka.pub) jp01
-  my.services.dn42-peers.baka-jp01 = {
+  my.services.dn42.peers.baka-jp01 = {
     asn = 4242423374;
     listenPort = 23374;
     endpoint = "jp01.dn42.baka.pub";
@@ -97,7 +97,7 @@
   };
 
   # AS4242420298 (HExpNetwork) tyo
-  my.services.dn42-peers.hexp-tyo = {
+  my.services.dn42.peers.hexp-tyo = {
     asn = 4242420298;
     listenPort = 20298;
     endpoint = "tyo.dn42.hexpnet.work";
@@ -107,7 +107,7 @@
   };
 
   # AS4242421857 (luocynet) tyo
-  my.services.dn42-peers.luocynet-tyo = {
+  my.services.dn42.peers.luocynet-tyo = {
     asn = 4242421857;
     listenPort = 21857;
     endpoint = "jp1.dn42.luocynet.com";
@@ -117,7 +117,7 @@
   };
 
   # AS4242421023 (owo.li) tyo
-  my.services.dn42-peers.owo-tyo = {
+  my.services.dn42.peers.owo-tyo = {
     asn = 4242421023;
     listenPort = 21023;
     endpoint = "tyo-01.node.svc.moe";
@@ -127,7 +127,7 @@
   };
 
   # AS4242422189 (IEDON) tyo
-  my.services.dn42-peers.iedon-tyo = {
+  my.services.dn42.peers.iedon-tyo = {
     asn = 4242422189;
     listenPort = 22189;
     endpoint = "jp-ty2.dn42.iedon.net";

@@ -35,7 +35,7 @@
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "hostdzire";
   # AS4242422466 (SessNetwork) Chronnection (San Jose)
-  my.services.dn42-peers.sess-sjc = {
+  my.services.dn42.peers.sess-sjc = {
     asn = 4242422466;
     listenPort = 22466;
     endpoint = "chron-nection.xhustudio.eu.org";
@@ -45,7 +45,7 @@
   };
 
   # AS4242420454 (nedifinita) Chronnection (Seattle)
-  my.services.dn42-peers.nedi-sea = {
+  my.services.dn42.peers.nedi-sea = {
     asn = 4242420454;
     listenPort = 20454;
     endpoint = "dn42a.nedifinita.com";
@@ -55,7 +55,7 @@
   };
 
   # AS4242420298 (HExpNetwork) sjc
-  my.services.dn42-peers.hexp-sjc = {
+  my.services.dn42.peers.hexp-sjc = {
     asn = 4242420298;
     listenPort = 20298;
     endpoint = "sjc.dn42.hexpnet.work";
@@ -65,7 +65,7 @@
   };
 
   # AS4242423658 (xaven) sjc
-  my.services.dn42-peers.xaven-sjc = {
+  my.services.dn42.peers.xaven-sjc = {
     asn = 4242423658;
     listenPort = 23658;
     endpoint = "107.148.41.99";
@@ -75,7 +75,7 @@
   };
 
   # AS4242422189 (IEDON) sjc
-  my.services.dn42-peers.iedon-sjc = {
+  my.services.dn42.peers.iedon-sjc = {
     asn = 4242422189;
     listenPort = 22189;
     endpoint = "us-sjc.dn42.iedon.net";

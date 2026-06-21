@@ -8,6 +8,7 @@
 {
   imports = [
     ./boot.nix
+    ./services/notifications.nix
   ];
 
   sops = {

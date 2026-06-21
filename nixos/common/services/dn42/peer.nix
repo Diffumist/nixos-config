@@ -4,12 +4,22 @@
   ...
 }:
 let
-  cfg = config.my.services.dn42-peers;
+  cfg = config.my.services.dn42.peers;
   policy = config.my.services.dn42;
+  flapDamping = config.my.services.dn42.flapDamping;
   peers = lib.attrValues cfg;
   rejectASNFilter = lib.concatMapStringsSep "\n" (
     asn: "          if bgp_path ~ [= * ${toString asn} * =] then reject;"
   ) policy.rejectASNs;
+  mkFlapExportFilter = roaTable: ''
+    if source = RTS_STATIC then accept;
+    if source = RTS_BGP then {
+      if roa_check(${roaTable}, net, bgp_path.last) = ROA_INVALID then reject;
+      accept;
+    }
+
+    reject;
+  '';
 
   # eBGP peers run over WireGuard, with the BGP session on IPv6 link-local
   # (multiprotocol / extended-next-hop). Relies on dn42.nix for the dn42_peer
@@ -66,6 +76,11 @@ let
 
               accept;
             };
+    ${lib.optionalString flapDamping.enable ''
+              export filter {
+      ${mkFlapExportFilter "roa_flap_v4"}
+              };
+    ''}
           };
           ipv6 {
             preference 200;
@@ -75,6 +90,11 @@ let
 
               accept;
             };
+    ${lib.optionalString flapDamping.enable ''
+              export filter {
+      ${mkFlapExportFilter "roa_flap_v6"}
+              };
+    ''}
           };
           neighbor ${peer.peerLinkLocal}%'${peer.interface}' as ${toString peer.asn};
         }
@@ -92,7 +112,7 @@ in
       '';
     };
 
-    my.services.dn42-peers = lib.mkOption {
+    my.services.dn42.peers = lib.mkOption {
       default = { };
       description = ''
         External dn42 eBGP peers (other ASes), each over its own WireGuard tunnel.

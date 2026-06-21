@@ -101,7 +101,7 @@
   '';
 
   # AS4242423377 (leziblog) US1 (LAX)
-  my.services.dn42-peers.lezi-lax = {
+  my.services.dn42.peers.lezi-lax = {
     asn = 4242423377;
     listenPort = 23377;
     endpoint = "v6.los1-us.peer.dn42.leziblog.com";
@@ -112,7 +112,7 @@
   };
 
   # AS4242420253 (moe233) lv (Las Vegas)
-  my.services.dn42-peers.moe233-lv = {
+  my.services.dn42.peers.moe233-lv = {
     asn = 4242420253;
     listenPort = 20253;
     endpoint = "lv.dn42.moe233.net";
@@ -122,7 +122,7 @@
   };
 
   # AS4242423999 (CowGL) lax
-  my.services.dn42-peers.cowgl-lax = {
+  my.services.dn42.peers.cowgl-lax = {
     asn = 4242423999;
     listenPort = 23999;
     endpoint = "lax.node.cowgl.tech";
@@ -132,7 +132,7 @@
   };
 
   # AS4242423310 (peer42.tmpfs.dev) US1 (LAX)
-  my.services.dn42-peers.tmpfs-lax = {
+  my.services.dn42.peers.tmpfs-lax = {
     asn = 4242423310;
     listenPort = 23310;
     endpoint = "lax01.edge.r1.tmpfs.dev";
@@ -142,7 +142,7 @@
   };
 
   # AS4242423914 (Kioubit.dn42) US3 (LAX)
-  my.services.dn42-peers.kioubit-lax = {
+  my.services.dn42.peers.kioubit-lax = {
     asn = 4242423914;
     listenPort = 23914;
     endpoint = "us3.g-load.eu";
@@ -152,7 +152,7 @@
   };
 
   # AS4242421816 (Potat0) lv (Las Vegas)
-  my.services.dn42-peers.potat0-lax = {
+  my.services.dn42.peers.potat0-lax = {
     asn = 4242421816;
     listenPort = 21816;
     endpoint = "las.node.potat0.cc";
@@ -162,7 +162,7 @@
   };
 
   # AS4242421023 (owo.li) lax
-  my.services.dn42-peers.owo-lax = {
+  my.services.dn42.peers.owo-lax = {
     asn = 4242421023;
     listenPort = 21023;
     endpoint = "lax-01.node.svc.moe";
@@ -172,7 +172,7 @@
   };
 
   # AS4242422189 (IEDON) lax
-  my.services.dn42-peers.iedon-lax = {
+  my.services.dn42.peers.iedon-lax = {
     asn = 4242422189;
     listenPort = 22189;
     endpoint = "us-lax.dn42.iedon.net";

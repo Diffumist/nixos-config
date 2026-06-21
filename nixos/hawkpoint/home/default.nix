@@ -84,7 +84,7 @@
     chromium = {
       enable = true;
       commandLineArgs = [
-        "--ozone-platform=wayland"
+        "--ozone-platform-hint=auto"
         "--enable-features=VaapiVideoDecodeLinuxGL"
         "--ignore-gpu-blocklist"
         "--enable-gpu-rasterization"
