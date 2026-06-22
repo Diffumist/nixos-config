@@ -251,6 +251,9 @@
       };
     };
   };
+  security.pki.certificateFiles = [
+    "${pkgs.dn42-cacert}/etc/ssl/certs/dn42-ca.crt"
+  ];
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;

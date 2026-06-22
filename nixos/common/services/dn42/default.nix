@@ -3,6 +3,7 @@
   inputs,
   hostName,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -313,6 +314,10 @@ in
       };
 
       systemd.services.frr.enable = lib.mkForce false;
+
+      security.pki.certificateFiles = [
+        "${pkgs.dn42-cacert}/etc/ssl/certs/dn42-ca.crt"
+      ];
 
       systemd.network.netdevs = lib.listToAttrs (map mkNetdev localLinks);
       systemd.network.networks = lib.listToAttrs (map mkNetwork localLinks);
