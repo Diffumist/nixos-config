@@ -9,7 +9,7 @@
   imports = [
     ./boot.nix
 
-    ./services/komari-monitor.nix
+    # ./services/komari-monitor.nix
     ./services/snac.nix
   ];
   sops.defaultSopsFile = ./secrets.yaml;

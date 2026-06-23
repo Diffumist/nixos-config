@@ -62,7 +62,7 @@
       url = "github:quickshell-mirror/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hermes-agent.url = "github:NousResearch/hermes-agent";
+    preservation.url = "github:nix-community/preservation/main";
     llm-agents.url = "github:numtide/llm-agents.nix";
     nix-dn42 = {
       url = "git+https://git.sr.ht/~prince213/nix-dn42";

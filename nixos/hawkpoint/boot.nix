@@ -90,17 +90,28 @@
         ];
       };
     };
-  environment.persistence."/persist" = {
-    directories = [
-      "/var/log"
-      "/var/lib"
-      "/var/db"
-    ];
-    files = [
-      "/etc/machine-id"
-      "/etc/ssh/ssh_host_ed25519_key"
-    ];
+  preservation = {
+    enable = true;
+    preserveAt."/persist" = {
+      directories = [
+        "/var/log"
+        "/var/lib"
+        "/var/db"
+      ];
+      files = [
+        {
+          file = "/etc/machine-id";
+          inInitrd = true;
+        }
+        {
+          file = "/etc/ssh/ssh_host_ed25519_key";
+          how = "symlink";
+          configureParent = true;
+        }
+      ];
+    };
   };
+  systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
   swapDevices = [
     {
       device = "/.swap/real-path";

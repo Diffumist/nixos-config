@@ -1,5 +1,6 @@
 { pkgs, lib, ... }:
 {
+  boot.initrd.systemd.enable = true;
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_xanmod_latest;
   boot.kernelModules = lib.mkDefault [ ];
   boot.kernelParams = [

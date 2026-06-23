@@ -25,7 +25,7 @@ let
     extra = [
       inputs.disko.nixosModules.disko
       inputs.sops-nix.nixosModules.sops
-      inputs.hermes-agent.nixosModules.default
+      inputs.preservation.nixosModules.preservation
       inputs.impermanence.nixosModules.impermanence
       inputs.nur-xddxdd.nixosModules.setupOverlay
       inputs.nix-dn42.nixosModules.default
