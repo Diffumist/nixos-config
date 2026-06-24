@@ -1,5 +1,4 @@
-_:
-{
+_: {
   # init: disko --mode destroy,format,mount /tmp/disk-config.nix
   disko.devices.disk.main = {
     type = "disk";
