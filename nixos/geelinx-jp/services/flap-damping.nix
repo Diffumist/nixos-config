@@ -2,7 +2,6 @@
 let
   domain = "flapalerted.diffumist.me";
   flapalertedAddress = "fd22:1056:95a4:4::1";
-  barkPort = 8090;
   frontendPort = 11791;
 in
 {
@@ -13,8 +12,8 @@ in
   };
 
   sops.templates."flapalerted-webhook.env".content = ''
-    FA_webhookUrlStart=http://127.0.0.1:${toString barkPort}/${config.sops.placeholder.bark_device_key}/FlapAlerted/DN42%20route%20flap%20started
-    FA_webhookUrlEnd=http://127.0.0.1:${toString barkPort}/${config.sops.placeholder.bark_device_key}/FlapAlerted/DN42%20route%20flap%20ended
+    FA_webhookUrlStart=http://bark.diffumist.me/${config.sops.placeholder.bark_device_key}/FlapAlerted/DN42%20route%20flap%20started
+    FA_webhookUrlEnd=http://bark.diffumist.me/${config.sops.placeholder.bark_device_key}/FlapAlerted/DN42%20route%20flap%20ended
     FA_webhookInstanceName=geelinx-jp
   '';
 

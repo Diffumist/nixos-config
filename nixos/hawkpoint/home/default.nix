@@ -118,6 +118,7 @@
     llm-agents.codex-auth
     # GUI
     qq
+    baresip
     wemeet
     kazumi
     vesktop
@@ -130,6 +131,7 @@
     ayugram-desktop
     qbittorrent-enhanced
     netease-cloud-music-gtk
+    linphonePackages.linphone-desktop
     # uncategorized.dingtalk
   ];
   home.shell.enableFishIntegration = true;

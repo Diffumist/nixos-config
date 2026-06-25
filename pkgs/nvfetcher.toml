@@ -13,3 +13,8 @@ src.github_tag = "SaltyKitkat/xsz"
 src.include_regex = "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
 fetch.github = "SaltyKitkat/xsz"
 cargo_lock = [ "Cargo.lock" ]
+
+[tel42verifier]
+src.github_tag = "strexp/tel42verifier"
+src.include_regex = "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+fetch.github = "strexp/tel42verifier"

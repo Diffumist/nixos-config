@@ -48,4 +48,15 @@
       };
     };
   };
+  tel42verifier = {
+    pname = "tel42verifier";
+    version = "v0.0.2";
+    src = fetchFromGitHub {
+      owner = "strexp";
+      repo = "tel42verifier";
+      rev = "v0.0.2";
+      fetchSubmodules = false;
+      sha256 = "sha256-eQKgCPnfU0+erwaTVThnhL5Zp3AEYEx2Bk5bx9PNDPY=";
+    };
+  };
 }

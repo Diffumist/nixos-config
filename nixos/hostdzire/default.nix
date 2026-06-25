@@ -9,6 +9,7 @@
   imports = [
     ./boot.nix
 
+    ./services/asterisk.nix
     ./services/lldap.nix
     # ./services/bub.nix
     ./services/powerdns.nix
