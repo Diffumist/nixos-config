@@ -1,6 +1,6 @@
 { lib, config, ... }:
 let
-  domain = "flapalerted.diffumist.me";
+  domain = "flap-dn42.diffumist.me";
   flapalertedAddress = "fd22:1056:95a4:4::1";
   frontendPort = 11791;
 in

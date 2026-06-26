@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  domain = "lg.diffumist.me";
+  domain = "lg-dn42.diffumist.me";
   frontendPort = 5000;
   proxyPort = 8000;
 in

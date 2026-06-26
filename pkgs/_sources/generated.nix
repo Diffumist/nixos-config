@@ -27,8 +27,19 @@
     cargoLock."Cargo.lock" = {
       lockFile = ./. + "/sha256-fvB8Loukfy35+hqt3fhAubHhSCAd1TFE6TuBZ0xUkxE=/Cargo.lock";
       outputHashes = {
-
+        
       };
+    };
+  };
+  tel42verifier = {
+    pname = "tel42verifier";
+    version = "v0.0.3";
+    src = fetchFromGitHub {
+      owner = "strexp";
+      repo = "tel42verifier";
+      rev = "v0.0.3";
+      fetchSubmodules = false;
+      sha256 = "sha256-WfJxlE6Xg1MoLIQdhznuh96T0Yi3N/AuFWjrYAe3fQA=";
     };
   };
   xsz = {
@@ -44,19 +55,8 @@
     cargoLock."Cargo.lock" = {
       lockFile = ./. + "/sha256-CZ4ngwrtTHnAVAu9kalIuodwGB_qNQ_3e0n3_qh5kRs=/Cargo.lock";
       outputHashes = {
-
+        
       };
-    };
-  };
-  tel42verifier = {
-    pname = "tel42verifier";
-    version = "v0.0.2";
-    src = fetchFromGitHub {
-      owner = "strexp";
-      repo = "tel42verifier";
-      rev = "v0.0.2";
-      fetchSubmodules = false;
-      sha256 = "sha256-eQKgCPnfU0+erwaTVThnhL5Zp3AEYEx2Bk5bx9PNDPY=";
     };
   };
 }
