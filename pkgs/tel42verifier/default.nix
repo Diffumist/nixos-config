@@ -1,15 +1,20 @@
 {
+  fetchFromGitHub,
   lib,
   buildGoModule,
-  sources,
   ...
 }:
 
 buildGoModule rec {
   pname = "tel42verifier";
-  version = lib.removePrefix "v" sources.tel42verifier.version;
+  version = "0.0.3";
 
-  inherit (sources.tel42verifier) src;
+  src = fetchFromGitHub {
+    owner = "strexp";
+    repo = "tel42verifier";
+    rev = "v${version}";
+    hash = "sha256-WfJxlE6Xg1MoLIQdhznuh96T0Yi3N/AuFWjrYAe3fQA=";
+  };
 
   subPackages = [ "cmd/tel42verifier" ];
 

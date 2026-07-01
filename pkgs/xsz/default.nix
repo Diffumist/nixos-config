@@ -1,17 +1,22 @@
 {
+  fetchFromGitHub,
   lib,
   rustPlatform,
-  sources,
   ...
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xsz";
-  version = lib.removePrefix "v" sources.xsz.version;
+  version = "0.5.1";
 
-  inherit (sources.xsz) src;
+  src = fetchFromGitHub {
+    owner = "SaltyKitkat";
+    repo = "xsz";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ujAwKK9yZI+jHtqoavir0pluuKWD6TCG/t1KzF7H9P0=";
+  };
 
-  cargoLock = sources.xsz.cargoLock."Cargo.lock";
+  cargoLock.lockFile = ./Cargo.lock;
 
   meta = {
     description = "Multi-threaded Btrfs compression analysis tool";
