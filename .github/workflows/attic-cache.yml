@@ -60,12 +60,12 @@ jobs:
           paths_file="$RUNNER_TEMP/nix-cache-paths"
           : > "$paths_file"
 
-          nix eval --impure --json .#deploy.nodes --apply builtins.attrNames \
+          nix eval --impure --json .#colmenaHive.nodes --apply builtins.attrNames \
             | jq -r '.[]' \
             | while IFS= read -r host; do
                 echo "::group::Build $host"
                 nix build --impure --no-link --print-out-paths -L \
-                  ".#deploy.nodes.${host}.profiles.system.path" \
+                  ".#colmenaHive.nodes.${host}.config.system.build.toplevel" \
                   | tee -a "$paths_file"
                 echo "::endgroup::"
               done
