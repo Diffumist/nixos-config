@@ -30,6 +30,29 @@
     firewallPorts = [ 8443 ];
     configSopsFile = ./services/sing-box.json;
   };
+  my.services.wg-mgmt = {
+    enable = true;
+    ipv4 = "10.203.0.1";
+    ipv6 = "fd42:203::1";
+    links = {
+      noboard = {
+        endpoint = "tyo-1.diffumist.me";
+        publicKey = "Z4z3lGBTNWqB2sy1h7SydBKrFtki8Rl27cB0xkrdTFU=";
+        allowedIPs = [
+          "10.203.0.2/32"
+          "fd42:203::2/128"
+        ];
+      };
+      liteserver = {
+        endpoint = "ams-0.diffumist.me";
+        publicKey = "D98b1mSOWpTz49IgzFgZ0htuux3HUn0BxylnKgr77H8=";
+        allowedIPs = [
+          "10.203.0.3/32"
+          "fd42:203::3/128"
+        ];
+      };
+    };
+  };
 
   my.services.postgresql.totalRamMB = 6 * 1024;
   systemd.services.komari-agent.environment.AGENT_MONTH_ROTATE = "20";

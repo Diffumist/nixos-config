@@ -127,6 +127,7 @@
       enable = true;
       settings = {
         battery.disabled = true;
+        gcloud.disabled = true;
         directory = {
           read_only_style = "green";
           truncation_length = 3;

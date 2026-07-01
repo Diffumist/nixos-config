@@ -5,6 +5,8 @@
   boot.kernelModules = lib.mkDefault [ ];
   boot.kernelParams = [
     "vdso32=0"
+    "console=ttyS0,115200n8"
+    "console=tty0"
     "vsyscall=none"
     "cfi=kcfi"
     "hardened_usercopy=1"

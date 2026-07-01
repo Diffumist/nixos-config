@@ -118,9 +118,9 @@
     llm-agents.codex-auth
     # GUI
     qq
-    baresip
     wemeet
     kazumi
+    splayer
     vesktop
     gapless
     clapper

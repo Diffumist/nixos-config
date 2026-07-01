@@ -23,18 +23,22 @@
       owner = "systemd-network";
       content = ''
         [Match]
-        Name=enp0s18
+        Name=enp3s0
 
         [Network]
         Address=${config.sops.placeholder.ipv4_address}/24
         Address=${config.sops.placeholder.ipv6_address}/64
         IPv6AcceptRA=no
         Gateway=${config.sops.placeholder.ipv4_gateway}
-        Gateway=${config.sops.placeholder.ipv6_gateway}
         DNS=1.0.0.1
         DNS=8.8.4.4
         DNS=2606:4700:4700::1001
         DNS=2001:4860:4860::8844
+
+        [Route]
+        Destination=::/0
+        Gateway=${config.sops.placeholder.ipv6_gateway}
+        GatewayOnLink=yes
       '';
     };
   };
@@ -47,41 +51,15 @@
 
   virtualisation.podman.enable = false;
   services.fail2ban.enable = false;
-
   my.services.sing-box = {
     enable = true;
-    firewallPorts = [ 8443 ];
     configSopsFile = ./services/sing-box.json;
   };
 
   environment.etc."vnstat.conf".text = ''
-    MonthRotate 8
+    MonthRotate 25
   '';
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "noboard";
-
-  my.services.wg-mgmt = {
-    enable = true;
-    ipv4 = "10.203.0.2";
-    ipv6 = "fd42:203::2";
-    links = {
-      hostdzire = {
-        endpoint = "sjc-0.diffumist.me";
-        publicKey = "6x/Qcn7yghNo7AD6ckKFvTpqW9EhuzzhC0qVXpup3HI=";
-        allowedIPs = [
-          "10.203.0.1/32"
-          "fd42:203::1/128"
-        ];
-      };
-      liteserver = {
-        endpoint = "ams-0.diffumist.me";
-        publicKey = "D98b1mSOWpTz49IgzFgZ0htuux3HUn0BxylnKgr77H8=";
-        allowedIPs = [
-          "10.203.0.3/32"
-          "fd42:203::3/128"
-        ];
-      };
-    };
-  };
+  networking.hostName = "sla-sjc";
 }

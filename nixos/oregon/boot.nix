@@ -3,16 +3,29 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  };
   disko.devices.disk.main = {
     type = "disk";
-    device = "/dev/sdb";
+    device = "/dev/sda";
     content = {
       type = "gpt";
       partitions = {
-        boot = {
-          size = "1M";
-          type = "EF02"; # for grub MBR
+        esp = {
+          size = "512M";
+          type = "EF00";
           priority = 1;
+          content = {
+            type = "filesystem";
+            format = "vfat";
+            mountpoint = "/boot";
+            mountOptions = [
+              "fmask=0077"
+              "dmask=0077"
+            ];
+          };
         };
         nixos = {
           size = "100%";
@@ -21,16 +34,16 @@
             type = "btrfs";
             extraArgs = [ "-f" ];
             subvolumes = {
-              "@boot" = {
-                mountpoint = "/boot";
+              "@nix" = {
+                mountpoint = "/nix";
                 mountOptions = [
                   "noatime"
                   "compress-force=zstd:-5"
                   "space_cache=v2"
                 ];
               };
-              "@nix" = {
-                mountpoint = "/nix";
+              "@persist" = {
+                mountpoint = "/persist";
                 mountOptions = [
                   "noatime"
                   "compress-force=zstd:-5"
@@ -44,16 +57,7 @@
                   swapfile.path = "real-path";
                 };
               };
-              "@persist" = {
-                mountpoint = "/persist";
-                mountOptions = [
-                  "noatime"
-                  "compress-force=zstd:-5"
-                  "space_cache=v2"
-                ];
-              };
             };
-            mountpoint = "/.subvols";
           };
         };
       };
@@ -93,4 +97,8 @@
     };
   };
   systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
+
+  systemd.tmpfiles.rules = [
+    "d /persist/var/storage 0755 root root -"
+  ];
 }

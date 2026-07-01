@@ -73,7 +73,10 @@
     preserveAt."/persist" = {
       directories = [
         "/var/log"
-        "/var/lib"
+        {
+          directory = "/var/lib";
+          inInitrd = true;
+        }
         "/var/db"
       ];
       files = [

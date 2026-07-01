@@ -10,37 +10,20 @@
     ./boot.nix
   ];
 
-  sops = {
-    defaultSopsFile = ./secrets.yaml;
-    secrets = {
-      ipv4_address = { };
-      ipv4_gateway = { };
-      ipv6_address = { };
-      ipv6_gateway = { };
-    };
-    templates."10-lan.network" = {
-      path = "/etc/systemd/network/10-lan.network";
-      owner = "systemd-network";
-      content = ''
-        [Match]
-        Name=ens3
-
-        [Network]
-        Address=${config.sops.placeholder.ipv4_address}/25
-        Address=${config.sops.placeholder.ipv6_address}/64
-        Gateway=${config.sops.placeholder.ipv4_gateway}
-        Gateway=${config.sops.placeholder.ipv6_gateway}
-        DNS=1.0.0.1
-        DNS=8.8.4.4
-        DNS=2606:4700:4700::1001
-        DNS=2001:4860:4860::8844
-      '';
-    };
-  };
+  sops.defaultSopsFile = ./secrets.yaml;
   networking = {
+    useDHCP = true;
     nftables.enable = true;
     useNetworkd = true;
     networkmanager.enable = false;
+  };
+
+  services.resolved.enable = true;
+  systemd.network.networks."10-eth0" = {
+    matchConfig.MACAddress = "00:16:3e:51:54:12";
+    networkConfig = {
+      DHCP = "ipv4";
+    };
   };
   systemd.network.wait-online.enable = false;
 

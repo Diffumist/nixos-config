@@ -11,6 +11,8 @@
     ./services/sshd.nix
     ./services/fail2ban.nix
     ./services/caddy.nix
+    ./services/prometheus-node.nix
+    ./services/wg-mgmt.nix
     ./services/sing-box.nix
     ./services/sema.nix
     ./services/postgresql.nix
@@ -43,7 +45,7 @@
     pciutils
     tealdeer
     man-pages
-    fastfetch.minimal
+    fastfetch-unwrapped
     libarchive
     ssh-to-age
     wireguard-tools

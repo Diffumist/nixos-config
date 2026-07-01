@@ -30,7 +30,14 @@
         "virtio_pci"
         "virtio_mmio"
         "virtio_blk"
+        # gcp
         "virtio_scsi"
+        "sd_mod"
+        "ahci"
+        "ata_piix"
+        "virtio_pci"
+        "xen_blkfront"
+        "vmw_pvscsi"
       ];
       kernelModules = [
         "virtio_balloon"
@@ -49,7 +56,7 @@
 
   networking = {
     hostName = "bootstrap";
-    useDHCP = false;
+    useDHCP = true;
     useNetworkd = true;
     nftables.enable = true;
     firewall.enable = false;
@@ -61,21 +68,12 @@
     ];
   };
 
+  services.resolved.enable = true;
   systemd.network.networks."10-eth0" = {
-    matchConfig.Name = "eth0";
-    address = [
-      "192.168.202.121/24"
-      "2602:f9f3:1:0:297:dfff:fe1f:383f/64"
-    ];
-    routes = [
-      {
-        Gateway = "192.168.202.1";
-      }
-      {
-        Gateway = "2602:f9f3:1::2";
-        GatewayOnLink = true;
-      }
-    ];
+    matchConfig.MACAddress = "42:01:0a:80:00:02";
+    networkConfig = {
+      DHCP = "ipv4";
+    };
   };
 
   users = {
@@ -94,19 +92,32 @@
       PermitRootLogin = lib.mkForce "prohibit-password";
     };
   };
-
-  environment = {
-    persistence."/persist" = {
+  fileSystems."/persist".neededForBoot = true;
+  preservation = {
+    enable = true;
+    preserveAt."/persist" = {
       directories = [
         "/var/log"
-        "/var/lib"
+        {
+          directory = "/var/lib";
+          inInitrd = true;
+        }
         "/var/db"
       ];
       files = [
-        "/etc/machine-id"
-        "/etc/ssh/ssh_host_ed25519_key"
+        {
+          file = "/etc/machine-id";
+          inInitrd = true;
+        }
+        {
+          file = "/etc/ssh/ssh_host_ed25519_key";
+          how = "symlink";
+          configureParent = true;
+        }
       ];
     };
+  };
+  environment = {
     systemPackages = with pkgs; [
       btrfs-progs
       btop

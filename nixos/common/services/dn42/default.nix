@@ -9,31 +9,31 @@
 let
   nodes = {
     liteserver = {
-      endpoint = "v4.ams-0.diffumist.me";
+      endpoint = "ams-0.diffumist.me";
       ipv4 = "172.22.64.65";
       ipv6 = "fd22:1056:95a4:1::1";
       publicKey = "25KV0x3WcKCCg7HcTVAB+27LrMpIfrZl05hgX5QGnzU=";
     };
     hostdzire = {
-      endpoint = "v4.sjc-0.diffumist.me";
+      endpoint = "sjc-0.diffumist.me";
       ipv4 = "172.22.64.66";
       ipv6 = "fd22:1056:95a4:2::1";
       publicKey = "byljo5bFvup+YtQbae/m3ReiWFwCHFN+CAWinzirvQo=";
     };
     dedirock = {
-      endpoint = "v4.lax-0.diffumist.me";
+      endpoint = "lax-0.diffumist.me";
       ipv4 = "172.22.64.67";
       ipv6 = "fd22:1056:95a4:3::1";
       publicKey = "viwkjXKilMxRupylyaqMHrZylzhW80+NypBNvVf/0G8=";
     };
     geelinx-jp = {
-      endpoint = "v4.tyo-0.diffumist.me";
+      endpoint = "tyo-0.diffumist.me";
       ipv4 = "172.22.64.68";
       ipv6 = "fd22:1056:95a4:4::1";
       publicKey = "KD/4v/fKXWXzvt2z3rxJN31QJIfw/cRSBq0nJppbYG4=";
     };
     wawo = {
-      endpoint = "v4.hkg-0.diffumist.me";
+      endpoint = "hkg-0.diffumist.me";
       ipv4 = "172.22.64.69";
       ipv6 = "fd22:1056:95a4:5::1";
       publicKey = "3anHMuAw/sDlRCN7xoRUf1l4SdAu0Rfl2pqpeJtJn3Y=";
@@ -254,7 +254,7 @@ in
         mode = "0400";
       };
 
-      my.services.dn42.rejectASNs = [ 4242420903 ];
+      my.services.dn42.rejectASNs = [ ];
       my.services.dn42.flapDamping = {
         enable = true;
         runServer = lib.mkDefault false;

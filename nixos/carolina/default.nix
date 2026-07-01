@@ -8,11 +8,6 @@
 {
   imports = [
     ./boot.nix
-
-    ./services/forgejo.nix
-    ./services/cyber.nix
-    ./services/code-server.nix
-    ./services/attic.nix
   ];
 
   sops.defaultSopsFile = ./secrets.yaml;
@@ -25,15 +20,13 @@
 
   services.resolved.enable = true;
   systemd.network.networks."10-eth0" = {
-    matchConfig.MACAddress = "00:16:3e:03:9a:2f";
+    matchConfig.MACAddress = "42:01:0a:80:00:02";
     networkConfig = {
       DHCP = "ipv4";
     };
   };
   systemd.network.wait-online.enable = false;
 
-  my.services.postgresql.totalRamMB = 16 * 1024;
-
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "phoenix";
+  networking.hostName = "carolina";
 }

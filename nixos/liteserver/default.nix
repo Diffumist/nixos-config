@@ -53,6 +53,29 @@
     firewallPorts = [ 8443 ];
     configSopsFile = ./services/sing-box.json;
   };
+  my.services.wg-mgmt = {
+    enable = true;
+    ipv4 = "10.203.0.3";
+    ipv6 = "fd42:203::3";
+    links = {
+      hostdzire = {
+        endpoint = "sjc-0.diffumist.me";
+        publicKey = "6x/Qcn7yghNo7AD6ckKFvTpqW9EhuzzhC0qVXpup3HI=";
+        allowedIPs = [
+          "10.203.0.1/32"
+          "fd42:203::1/128"
+        ];
+      };
+      noboard = {
+        endpoint = "tyo-1.diffumist.me";
+        publicKey = "Z4z3lGBTNWqB2sy1h7SydBKrFtki8Rl27cB0xkrdTFU=";
+        allowedIPs = [
+          "10.203.0.2/32"
+          "fd42:203::2/128"
+        ];
+      };
+    };
+  };
   my.services.postgresql.totalRamMB = 2 * 1024;
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;

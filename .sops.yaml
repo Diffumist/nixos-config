@@ -7,6 +7,7 @@ keys:
   - &hostdzire age1rkshe6y7r5gz2tpsxtrvnc7a8j5v3puvak04maat7xkssqmggs5qfwkvv5
   - &nosla-lax age1afmdepa6ya8h8cymxn39mjzr6wx5suem75ley8kghjqx0xt3g47q66t2nj
   - &nosla-sjc age1scl30w074ghz9qlh8lkk8zwnwu9jxezllt04hs7ynudkt7dta4aq9sapp7
+  - &sla-sjc age1vaal4d53wt0he0u0ppsr654cmgmap9vfxwk8plvvd25z5r26y4es5584pl
   - &phoenix age192s80znrftygj6673sp6af7lpjzxtrvh9gztcp2unn2vy7hdyevq4ddd07
   - &solidvps age135tv74d20v9qc772l63tjgczw4tq3pj86rd6qet69vhe5cf5g3hsq8ucs3
   - &colocrossing age1u4r8qrpmh6p8amxsyumn6htpps2lw5ntpfq4rdtzzzk4gqs22gjslpafyz
@@ -14,9 +15,10 @@ keys:
   - &geelinx-jp age1dxeeh73zgq0r329wc6rssxs3tzm47mykfl6htah6czfc9aullaesvy883h
   - &geelinx-mys age1j0gjqjx6lnca8ftg67xjpqgwunk6cd3nt4jkrqtpl5p6n7a9yegqklzj2x
   - &geelinx-us age19hzt079n4sa6gdel6ll4xzq2mfmwf4z7r0rsksf6489nqjrta4fqjm6687
-  - &noboard age1vctyp0l4v0wtgjc6n0n3lw2nzffddhzpvtmhklq5wgh3v4d43vdsjl7szc
+  - &noboard age1q45uswz7nwam23dn6v8g6hpyfyl53wsey23hc7z5n99wr97p7erqpw064a
+  - &carolina age1anp54rlzvjc4hagkwvh8qy8usfvlgq9vlsaz62kh59qye5rh5g4qj027t8
+  - &oregon age1evl9930wl07fw9wdy2pw5k8aaeacf9dgtkvntrr8ygx3ny3xagqsvqnzt5
   - &wawo age1laq2l7pnax405ua70grkefguk4m4zalfjkvj0ky7dzsu2h5sdc6s034jtt
-  - &texas age1kewlmdu3tf4hckf0mxnjnyxakm0r03vlqqza5te89var4rjx24vqnk44zz
 creation_rules:
   - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
     key_groups:
@@ -67,6 +69,11 @@ creation_rules:
       - age:
           - *nosla-sjc
           - *diffumist
+  - path_regex: ^nixos/sla-sjc/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *sla-sjc
+          - *diffumist
   - path_regex: ^nixos/vmrack/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
@@ -97,8 +104,13 @@ creation_rules:
       - age:
           - *wawo
           - *diffumist
-  - path_regex: ^nixos/texas/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^nixos/carolina/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *texas
+          - *carolina
+          - *diffumist
+  - path_regex: ^nixos/oregon/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *oregon
           - *diffumist
