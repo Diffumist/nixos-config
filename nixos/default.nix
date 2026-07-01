@@ -2,6 +2,7 @@
   inputs,
   self,
   hostFilter ? (_: _: true),
+  outputMode ? "systems",
   ...
 }:
 let
@@ -19,132 +20,181 @@ let
     import inputs.nixpkgs {
       inherit system overlays;
       config.allowUnfree = true;
+      config.permittedInsecurePackages = [
+        "pnpm-10.29.2"
+      ];
     };
 
   defaults = {
+    system = "x86_64-linux";
     extra = [
       inputs.disko.nixosModules.disko
       inputs.sops-nix.nixosModules.sops
       inputs.preservation.nixosModules.preservation
-      inputs.impermanence.nixosModules.impermanence
       inputs.nur-xddxdd.nixosModules.setupOverlay
       inputs.nix-dn42.nixosModules.default
     ];
   };
 
-  hosts = {
+  hostNames = [
+    "bootstrap"
+    "carolina"
+    "colocrossing"
+    "dedirock"
+    "geelinx-jp"
+    "geelinx-mys"
+    "geelinx-us"
+    "hawkpoint"
+    "hostdzire"
+    "liteserver"
+    "nixiso"
+    "noboard"
+    "nosla-lax"
+    "nosla-sjc"
+    "oregon"
+    "phoenix"
+    "sla-sjc"
+    "solidvps"
+    "vmrack"
+    "wawo"
+  ];
+
+  hostTags = {
+    asia = [
+      "geelinx-jp"
+      "geelinx-mys"
+      "noboard"
+      "wawo"
+    ];
+    dn42 = [
+      "hostdzire"
+      "liteserver"
+      "dedirock"
+      "geelinx-jp"
+      "wawo"
+    ];
+    eu = [ "liteserver" ];
+    gcp = [
+      "carolina"
+      "oregon"
+    ];
+    sing-box = [
+      "noboard"
+      "nosla-lax"
+      "nosla-sjc"
+      "sla-sjc"
+      "vmrack"
+    ];
+    us = [
+      "carolina"
+      "colocrossing"
+      "dedirock"
+      "geelinx-us"
+      "hostdzire"
+      "nosla-lax"
+      "nosla-sjc"
+      "oregon"
+      "phoenix"
+      "sla-sjc"
+      "solidvps"
+      "vmrack"
+    ];
+    web-server = [
+      "colocrossing"
+      "dedirock"
+      "geelinx-us"
+      "hostdzire"
+      "liteserver"
+      "phoenix"
+      "solidvps"
+    ];
+  };
+
+  hosts = lib.genAttrs hostNames (_: { }) // {
     hawkpoint = {
-      system = "x86_64-linux";
-      path = ./hawkpoint;
       deploy = false;
       useCommon = false;
       extra = defaults.extra ++ [
         inputs.home-manager.nixosModules.home-manager
       ];
     };
-    phoenix = {
-      system = "x86_64-linux";
-      path = ./phoenix;
-      deploy = true;
-    };
-    liteserver = {
-      system = "x86_64-linux";
-      path = ./liteserver;
-      deploy = true;
-    };
-    geelinx-jp = {
-      system = "x86_64-linux";
-      path = ./geelinx-jp;
-      deploy = true;
-    };
-    geelinx-mys = {
-      system = "x86_64-linux";
-      path = ./geelinx-mys;
-      deploy = false;
-    };
-    geelinx-us = {
-      system = "x86_64-linux";
-      path = ./geelinx-us;
-      deploy = true;
-    };
-    noboard = {
-      system = "x86_64-linux";
-      path = ./noboard;
-      deploy = true;
-    };
-    wawo = {
-      system = "x86_64-linux";
-      path = ./wawo;
-      deploy = true;
-    };
-    nosla-lax = {
-      system = "x86_64-linux";
-      path = ./nosla-lax;
-      deploy = true;
-    };
-    nosla-sjc = {
-      system = "x86_64-linux";
-      path = ./nosla-sjc;
-      deploy = true;
-    };
-    vmrack = {
-      system = "x86_64-linux";
-      path = ./vmrack;
-      deploy = true;
-    };
-    dedirock = {
-      system = "x86_64-linux";
-      path = ./dedirock;
-      deploy = true;
-    };
-    hostdzire = {
-      system = "x86_64-linux";
-      path = ./hostdzire;
-      deploy = true;
-    };
-    colocrossing = {
-      system = "x86_64-linux";
-      path = ./colocrossing;
-      deploy = true;
-    };
-    solidvps = {
-      system = "x86_64-linux";
-      path = ./solidvps;
-      deploy = true;
-    };
+    geelinx-mys.deploy = false;
     nixiso = {
-      system = "x86_64-linux";
-      path = ./nixiso;
       deploy = false;
       useCommon = false;
     };
     bootstrap = {
-      system = "x86_64-linux";
-      path = ./bootstrap;
       deploy = false;
       useCommon = false;
       extra = [
         inputs.disko.nixosModules.disko
-        inputs.impermanence.nixosModules.impermanence
+        inputs.preservation.nixosModules.preservation
       ];
     };
   };
 
+  systemOf = h: h.system or defaults.system;
+  tagsOf = name: lib.filter (tag: lib.elem name hostTags.${tag}) (lib.attrNames hostTags);
+
   mkHost =
     name: h:
     let
-      inherit (h) system;
+      system = systemOf h;
       pkgs = mkPkgs system;
-      extra = h.extra or defaults.extra;
-      useCommon = h.useCommon or true;
     in
     lib.nixosSystem {
       inherit system pkgs;
-      modules = (lib.optional useCommon ./common) ++ [ h.path ] ++ extra;
+      modules = mkHostModules name h;
       specialArgs = {
         inherit inputs overlays;
         hostName = name;
       };
     };
+
+  mkHostModules =
+    name: h:
+    let
+      extra = h.extra or defaults.extra;
+      path = h.path or (./. + "/${name}");
+      useCommon = h.useCommon or true;
+    in
+    (lib.optional useCommon ./common) ++ [ path ] ++ extra;
+
+  mkColmenaNode = name: h: {
+    imports = mkHostModules name h;
+    deployment = {
+      targetHost = h.targetHost or name;
+      targetUser = h.targetUser or "root";
+      tags = tagsOf name;
+      buildOnTarget = h.buildOnTarget or false;
+    }
+    // lib.optionalAttrs (h ? targetPort) {
+      inherit (h) targetPort;
+    };
+  };
+
+  mkColmenaHive =
+    hosts:
+    {
+      meta = {
+        name = "nixos-config";
+        allowApplyAll = false;
+        nixpkgs = mkPkgs "x86_64-linux";
+        nodeNixpkgs = lib.mapAttrs (_name: h: mkPkgs (systemOf h)) hosts;
+        specialArgs = {
+          inherit inputs overlays;
+        };
+        nodeSpecialArgs = lib.mapAttrs (name: _h: { hostName = name; }) hosts;
+      };
+    }
+    // lib.mapAttrs mkColmenaNode hosts;
 in
-lib.mapAttrs mkHost (lib.filterAttrs hostFilter hosts)
+let
+  filteredHosts = lib.filterAttrs hostFilter hosts;
+in
+if outputMode == "hosts" then
+  filteredHosts
+else if outputMode == "colmena" then
+  mkColmenaHive filteredHosts
+else
+  lib.mapAttrs mkHost filteredHosts

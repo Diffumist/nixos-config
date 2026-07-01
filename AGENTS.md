@@ -1,259 +1,219 @@
 # AGENTS.md
 
-Last verified: 2026-06-07
+Last verified: 2026-07-01
 Audience: future coding agents / LLMs
-Goal: understand this repo quickly and refactor safely.
+Goal: understand this repo quickly and change it safely.
 
 ## 1. What this repo is
 
-This is a flake-based, declarative multi-host NixOS repository.
+Flake-based, declarative multi-host NixOS repository.
 
-- Local primary machine: `hawkpoint` (desktop, Niri + Home Manager).
-- A fleet of remote VPS/server hosts (most are also DN42 nodes).
-- Installer/bootstrap hosts: `nixiso` (custom ISO) and `bootstrap`.
+- `hawkpoint`: local desktop, Niri + Home Manager.
+- Remote VPS/server fleet: most hosts use the shared server baseline; some are DN42 nodes.
+- `nixiso` and `bootstrap`: installer/bootstrap targets.
 
-## 2. Entry points and build graph
+## 2. Entry points
 
-Primary entry point:
-- `flake.nix`
+- `flake.nix`: wires inputs and outputs.
+- `nixos/default.nix`: host table, `nixosConfigurations`, and Colmena hive generation.
+- `overlay/default.nix`: imports local packages from `pkgs/*`.
+- `pkgs/default.nix`: local package enumeration and nix-update batch list.
 
-Outputs:
-- `nixosConfigurations` -> from `./nixos/default.nix`
-- `deploy` -> from `./nixos/deploy.nix`
-- `overlays.default` -> from `./overlay/default.nix`
+Important flake outputs:
 
-Build flow:
-1. `flake.nix` wires inputs and outputs.
-2. `nixos/default.nix` defines all hosts in `hosts` and builds them via `lib.nixosSystem`.
-3. `overlay/default.nix` auto-imports every package under `pkgs/*`.
-4. `nixos/deploy.nix` generates deploy-rs nodes from hosts where `deploy = true`.
+- `nixosConfigurations`: all hosts as normal NixOS systems.
+- `colmena`: deployable hosts only (`deploy = true`) in Colmena hive shape.
+- `colmenaHive`: `inputs.colmena.lib.makeHive self.outputs.colmena`.
+- `packages`: all local packages under `pkgs/*`.
+- `overlays.default`: local overlay.
 
-## 3. Repository structure (high signal)
+## 3. Repository layout
 
-```text
-.
-├── flake.nix
-├── overlay/default.nix
-├── pkgs/                          # auto-imported into overlays.default
-└── nixos/
-    ├── default.nix                # host table + mkHost
-    ├── deploy.nix                 # deploy-rs nodes (deploy == true)
-    ├── common/
-    │   ├── default.nix            # shared module set (imported by useCommon hosts)
-    │   ├── nixconfig.nix
-    │   ├── kernel.nix
-    │   ├── secrets.yaml
-    │   └── services/
-    │       ├── sshd.nix  fail2ban.nix  caddy.nix
-    │       ├── dn42.nix           # DN42 identity + internal babel mesh
-    │       ├── dn42-peer.nix      # external eBGP peers (my.services.dn42-peers)
-    │       ├── sing-box.nix  postgresql.nix  komari.nix
-    ├── hawkpoint/                 # desktop (useCommon = false)
-    ├── nixiso/  bootstrap/        # installer / bootstrap (useCommon = false)
-    └── <remote hosts>/            # default.nix [+ boot.nix] [+ services/] [+ secrets.yaml]
+Stable locations:
+
+- `flake.nix`: flake inputs, dev shell, packages, Colmena outputs.
+- `nixos/default.nix`: host inventory and system/hive builders.
+- `nixos/common`: modules shared by hosts with `useCommon = true`.
+- `nixos/<host>`: per-host NixOS modules and secrets.
+- `overlay/default.nix`: local overlay entry point.
+- `pkgs`: local packages.
+
+Do not duplicate the full host or service directory tree here; `nixos/default.nix`
+and the filesystem are the source of truth.
+
+## 4. Host table rules
+
+All host inventory lives in `nixos/default.nix`: add normal hosts to
+`hostNames`, put only exceptions in `hosts`, and assign Colmena selectors in
+`hostTags`.
+
+Per-host fields:
+
+- `system`: optional target system; defaults to `x86_64-linux`.
+- `path`: optional host module directory; defaults to `./${hostName}`.
+- `deploy`: optional; defaults to true for Colmena, set false to exclude.
+- `useCommon`: defaults to true; false skips `nixos/common`.
+- `extra`: extra NixOS modules; defaults to `defaults.extra`.
+- `targetHost`: Colmena SSH host; defaults to host attr name.
+- `targetUser`: Colmena SSH user; defaults to `root`.
+- `targetPort`: optional Colmena SSH port.
+- `tags`: do not set per host; add hosts under `hostTags.<tag>` instead.
+- `buildOnTarget`: optional Colmena remote-build flag; defaults to true.
+
+`specialArgs` for every host:
+
+- `inputs`
+- `overlays`
+- `hostName`
+
+Do not assume changes under `nixos/common` affect `useCommon = false` hosts.
+
+## 5. Deployment
+
+Deployment uses Colmena, not deploy-rs.
+
+Common commands:
+
+```bash
+# deploy one host; local build, then push closure
+colmena apply --on liteserver -p 8
+
+# deploy selected hosts in parallel
+colmena apply --on nosla-sjc,nosla-lax -p 8
+
+# build locally only
+colmena build --on liteserver
+
+# push closure only, no activation
+colmena apply push --on liteserver
+
+# activation variants
+colmena apply test --on liteserver
+colmena apply dry-activate --on liteserver
+colmena apply boot --on liteserver
 ```
 
-## 4. Host inventory and status
+Colmena defaults to local build + push closure. Use `buildOnTarget = true;` in
+the host table, or CLI `--build-on-target`, only when the target should build
+its own system profile.
 
-`deploy` column reflects `nixos/default.nix`. Region names in parens are the
-host's DN42 PoP label (see §6).
+There is no deploy-rs `fastConnection`, `magicRollback`, or `autoRollback`.
+Treat SSH, firewall, networkd, bootloader, kernel, and disko changes as high
+risk; a broken remote deploy may require provider console access.
 
-| Host | deploy | Role / notes |
-|---|---|---|
-| `hawkpoint` | no | Local desktop. Niri + Home Manager, CachyOS kernel. `useCommon = false`. |
-| `liteserver` (ams-0) | yes | Service node + DN42. Immich, rqbit, sing-box. |
-| `hostdzire` (sjc-0) | yes | Service node + DN42. authelia, lldap, vaultwarden, tgtldr, bub. |
-| `vmrack` (lax-0) | yes | DN42 node + sing-box (IPv4-only uplink). |
-| `dedirock` (lax-1) | yes | Service node + DN42. sillytavern, rustypaste, sing-box. |
-| `geelinx-jp` (tyo-0) | yes | DN42 node + sing-box. |
-| `phoenix` | yes | Service node. attic, forgejo, code-server, cyber. Not a DN42 node. |
-| `geelinx-mys` | yes | Minimal node (no services dir yet). |
-| `nosla-lax` | yes | sing-box node. |
-| `nosla-sjc` | yes | sing-box node. |
-| `colocrossing` | yes | sing-box, snac, komari-monitor. |
-| `solidvps` | yes | sing-box node. |
-| `texas` | no | Configured but not deployed. |
-| `nixiso` | no | Custom installer ISO. `useCommon = false`. |
-| `bootstrap` | no | Bootstrap/install host. `useCommon = false`. |
+## 6. Shared modules and options
 
-Note: `nixos/common/` is a shared module dir, not a host.
+Repo-local service options live under `my.services.*`, usually implemented in
+`nixos/common/services/*`.
 
-## 5. Core module rules (important invariants)
+Current important options:
 
-From `nixos/default.nix`:
+- `my.services.caddy`
+- `my.services.dn42`
+- `my.services.dn42.peers`
+- `my.services.komari-agent`
+- `my.services.postgresql`
+- `my.services.prometheus-node`
+- `my.services.sema`
+- `my.services.sing-box`
+- `my.services.wg-mgmt`
 
-- Overlays applied to every host's `pkgs`:
-  - `self.overlays.default`, `llm-agents`, `quickshell`, `nix-cachyos-kernel`,
-    `nix-vscode-extensions`, `nix-dn42`.
-- Global default extra modules (`defaults.extra`):
-  - `disko`, `sops-nix`, `hermes-agent`, `impermanence`,
-    `nur-xddxdd` (`setupOverlay`), `nix-dn42`.
-- `specialArgs` passed to every host: `inputs`, `overlays`, `hostName`.
-- Per-host knobs in the `hosts` table: `system`, `path`, `deploy`,
-  `useCommon` (default true), `extra` (default `defaults.extra`).
-- Special hosts (`useCommon = false`): `hawkpoint`, `nixiso`, `bootstrap`.
-  - `hawkpoint` adds `home-manager` + `dms-plugin-registry` and imports
-    `../common/nixconfig.nix` manually.
+Prefer adding a small reusable module under `nixos/common/services` when at
+least two hosts need the same behavior. For one host, keep it in that host.
 
-Consequence:
-- Changes in `nixos/common/default.nix` do not affect `useCommon = false` hosts.
-- Shared behavior should be explicit reusable modules, not assumed inheritance.
+## 7. DN42
 
-### Option convention
+DN42 is provided by `nix-dn42` plus repo modules under `nixos/common/services/dn42`.
 
-Repo-local options live under `my.services.*` (see `common/services/*.nix`),
-e.g. `my.services.sing-box`, `my.services.postgresql`, `my.services.caddy`,
-`my.services.komari-agent`, `my.services.dn42-peers`. Hosts enable/configure
-these in their own `default.nix` — keep the same style when adding services.
+- Internal mesh: `my.services.dn42` + `networking.dn42`.
+- External peers: `my.services.dn42.peers.<name>`.
+- Bird config is assembled by the DN42 modules; parse-check bird config after changes.
+- WireGuard keys come from SOPS secrets; never commit plaintext keys.
 
-## 6. DN42 (current, significant)
+Adding an external peer should usually only touch the target host's `default.nix`.
 
-Provided by the `nix-dn42` input (`networking.dn42.*`). Two layers:
+## 8. Local packages
 
-- Internal mesh — `common/services/dn42.nix`. A WireGuard full-mesh between the
-  DN42 member nodes, with **babel** as the IGP (not OSPF — babel suits tunnel
-  meshes). Members and PoP labels:
-  `liteserver=ams-0`, `hostdzire=sjc-0`, `dedirock=lax-0`,
-  `geelinx-jp=tyo-0`. ASN `4242420642`, IPv4 `172.22.64.64/27`, IPv6
-  `fd22:1056:95a4::/48`. ROA enabled via `dn42-registry` input. Each node has a
-  single WireGuard keypair shared across all its tunnels (`dn42_wg_private_key`);
-  tunnels are distinguished by port/interface.
-- External eBGP peers — `common/services/dn42-peer.nix` defines the
-  `my.services.dn42-peers.<name>` option (typed submodule). Each peer creates a
-  WireGuard interface + a bird BGP protocol from the `dn42_peer` template
-  (link-local + extended-next-hop). Defaults: `interface = wg-<name>`,
-  `localLinkLocal = fe80::642`, `mtu = 1420`, shared `dn42_wg_private_key`.
-  Hosts declare peers in their own `default.nix`. Currently configured:
-  `dedirock`,`liteserver`,`geelinx-jp`,`hostdzire`.
+Local packages are auto-imported from subdirectories under `pkgs/*` by
+`pkgs/default.nix` and `overlay/default.nix`.
 
-Adding a peer = add a `my.services.dn42-peers.<name>` block to the host; no
-changes to the module. eBGP needs TCP/179 on the peer interface and the peer's
-WireGuard listen port open (the module handles both).
+`nix-update-hashes` updates the explicit list in
+`pkgs/default.nix:updateablePackageNames`:
 
-## 7. Remote-server pattern (current)
+```bash
+nix develop -c nix-update-hashes
+nix develop -c nix-update-hashes --commit
+```
 
-Observed on the DN42/service hosts:
-- `systemd-networkd` static networking (often via a sops `10-lan.network` template)
-- `disko` declarative disk layout
-- `impermanence` persistence under `/persist`, tmpfs root
-- `nftables` firewall, `useNetworkd = true`
+Keep the updateable list explicit. Do not infer updateability from random src
+attributes; packages without a normal upstream version can stay out.
 
-Treat this as the intended server baseline, not yet fully normalized into a
-single shared server module.
+Notable packages:
 
-## 8. External inputs and why they exist
+- `caddy-cloudflare`: custom Caddy build with Cloudflare DNS plugin.
+- `caddy-dns-cloudflare`: source-only plugin package.
+- `cybergroupmate`: pnpm-based upstream package.
+- `sema`: Rust dead man's switch webhook server.
+- `xsz`: Rust package with checked-in `Cargo.lock`.
 
-- `Mic92/sops-nix`: declarative secret decryption/permissions.
-- `nix-community/disko`: declarative partition/filesystem config.
-- `nix-community/impermanence`: persist allowlisted paths, rest ephemeral.
-- `serokell/deploy-rs`: remote NixOS deployment.
-- `nix-dn42` (`~prince213/nix-dn42`): `networking.dn42` module (babel/ospf/bgp).
-- `dn42-registry`: DN42 registry checkout for ROA generation.
-- `xddxdd/nur-packages`: extra packages/modules (`setupOverlay`).
-- `xddxdd/nix-cachyos-kernel`: CachyOS kernel overlay.
-- `nix-community/nix-vscode-extensions`: VSCode/VSCodium extensions overlay.
-- `home-manager`, `dms-plugin-registry`, `llm-agents`, `quickshell`,
-  `hermes-agent`: desktop / agent / app modules and overlays.
+## 9. Secrets
 
-## 9. Secrets model
+- SOPS policy: `.sops.yaml`.
+- Per-host secrets: `nixos/<host>/secrets.yaml`.
+- Shared secrets: `nixos/common/secrets.yaml`.
+- Local management key: `diffumist` age key is included in rules.
 
-- SOPS policy: `./.sops.yaml` (per-host age recipients; `diffumist` key is in
-  every rule for local management).
-- Rule pattern: per-host `nixos/<host>/{*.json,*.yaml,*.keytab}` encrypted to
-  that host's age key + `diffumist`.
-- Per-host `secrets.yaml` files exist for most deployed hosts; `common/secrets.yaml`
-  holds shared secrets.
+Edit encrypted files with:
 
-Rules for refactor:
-- Never commit plaintext credentials.
-- Keep per-host secret files at `nixos/<host>/secrets.yaml`.
-- To edit an encrypted file: `SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt sops <file>`
-  (the `diffumist` key can decrypt all of them).
-- After secrets changes, run at least one host-specific build/check.
+```bash
+SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt sops nixos/<host>/secrets.yaml
+```
 
-## 10. Deployment model
+Never commit plaintext credentials. After changing secrets, build or evaluate
+at least the affected host.
 
-- File: `nixos/deploy.nix` (deploy-rs nodes from hosts with `deploy = true`).
-- Connection defaults: `user = "root"`, `sshUser = "root"`, `fastConnection = false`.
-- **`autoRollback = false` and `magicRollback = false`** (marked DEBUG) — there is
-  currently NO automatic rollback safety net. A bad deploy that drops SSH must be
-  fixed via the provider console. Touch SSH / firewall / networkd carefully.
-
-## 11. Known debt and refactor opportunities
-
-1. Repeated server `boot.nix` / networking logic across hosts — good candidate
-   for a shared `common/server` base module.
-2. Minimal/placeholder hosts: `geelinx-mys`, `texas` (and varying completeness
-   across the sing-box-only nodes).
-3. deploy-rs rollback is disabled — re-enable `magicRollback` once link config is
-   trusted, or toggle per risky deploy.
-4. `nix-dn42` external peering is hand-declared per host; fine while peer count is
-   small. Each node still shares one WireGuard key across all peers — if a peer
-   portal requires unique keys, use the per-peer `privateKeyFile` override.
-
-## 11.1 Local package notes
-
-- `pkgs/cybergroupmate` packages `Archeb/CyberGroupmate` branch `agentic`,
-  pinned to commit `0c00f780683b686d950666c4b935eac09a0e7b84`.
-  Upstream now uses pnpm lockfiles, so the local package uses
-  `fetchPnpmDeps`/`pnpmConfigHook` instead of `buildNpmPackage`.
-- `pkgs.cybergroupmate` exposes Docker passthru values used by
-  `nixos/phoenix/services/cyber.nix` if the service is switched to local image
-  builds: `dockerContext`, `dockerfile`, `dockerImageName`, and
-  `dockerImageTag`.
-- `pkgs/sema` is a small Rust dead man's switch webhook server. Notification
-  delivery is stateful: down/reminder/recovery events enter a persisted outbox,
-  and `last_*_notified_at` is updated only after every webhook target for that
-  event is delivered. Keep tokens out of URL paths; pings use the
-  `x-sema-token` header.
-- `nixos/geelinx-jp/services/notifications.nix` exposes Bark and ntfy behind
-  Caddy as `bark.diffumist.me` and `ntfy.diffumist.me`. Bark is a custom
-  systemd service from `pkgs.bark-server`; ntfy uses `services.ntfy-sh` with
-  anonymous access denied by default. Do not put Cloudflare or ntfy credentials
-  in Nix code; use SOPS/runtime CLI state.
-
-## 12. Safe change checklist
+## 10. Safe change checklist
 
 Before merging infrastructure changes:
-1. Confirm impact scope (desktop / installer / which remote hosts).
-2. Keep diff minimal; avoid unrelated cleanup.
-3. Build the touched hosts (see §14).
-4. For DN42/bird changes, parse-check bird (`bird -p -c <generated bird.conf>`).
-5. For sing-box changes, validate (`sing-box check -c <decrypted config>`).
-6. Explicitly call out untested parts.
 
-High-risk areas (flag in PR notes):
+1. Identify affected hosts.
+2. Keep the diff scoped; avoid unrelated cleanup.
+3. Build or eval touched hosts.
+4. For DN42/Bird changes, parse-check generated Bird config.
+5. For sing-box changes, validate decrypted config with `sing-box check`.
+6. Call out anything not tested.
+
+High-risk areas:
+
 - SSH
 - firewall / nftables / networkd
 - bootloader / kernel / disko
-- deploy-rs node generation (no rollback)
+- secrets paths and permissions
+- Colmena hive generation
 
-## 13. Documentation lookup priority
+## 11. Documentation lookup
 
-When consulting documentation during implementation or refactors:
-1. Prefer `mcp-nixos` first (NixOS/Home Manager/flake/Nix ecosystem references).
-2. Use `context7` second when `mcp-nixos` is insufficient or the topic is outside
-   Nix scope (e.g. sing-box, bird, dn42 tooling).
+For Nix/NixOS questions, prefer `mcp-nixos` first. Use upstream docs or
+`context7` only when `mcp-nixos` is insufficient or the topic is outside Nix.
 
-Do not skip `mcp-nixos` for Nix-related questions unless it is unavailable.
-
-## 14. Useful commands
+## 12. Useful commands
 
 ```bash
 # global checks
 nix flake check
 
-# build local desktop system closure
+# build local desktop
 nix build .#nixosConfigurations.hawkpoint.config.system.build.toplevel
 
-# build custom ISO
-nix build .#nixosConfigurations.nixiso.config.system.build.isoImage
-
-# build a remote host closure (example)
+# build one remote host
 nix build .#nixosConfigurations.liteserver.config.system.build.toplevel
 
-# deploy a single host (no auto-rollback — verify connectivity after)
-deploy -s '.#liteserver'
-```
+# build installer ISO
+nix build .#nixosConfigurations.nixiso.config.system.build.isoImage
 
-Use phased deploys; avoid all-host rollout, especially while rollback is disabled.
+# inspect Colmena nodes
+nix eval --json .#colmenaHive.nodes --apply builtins.attrNames
+
+# deploy one host
+colmena apply --on liteserver -p 8
+```

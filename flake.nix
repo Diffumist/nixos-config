@@ -32,15 +32,9 @@
       url = "github:nix-community/disko/latest";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    impermanence = {
-      url = "github:nix-community/impermanence";
+    colmena = {
+      url = "github:nix-community/colmena";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-    };
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.utils.follows = "flake-utils";
     };
     nur-xddxdd = {
       url = "github:xddxdd/nur-packages";
@@ -93,6 +87,18 @@
             config.allowUnfree = true;
             overlays = [ self.overlays.default ];
           };
+          localPackages = import ./pkgs { lib = nixpkgs.lib; };
+          localPackageSet = localPackages.fromPkgs pkgs inputs;
+          updatePackageHashes = pkgs.writeShellApplication {
+            name = "nix-update-hashes";
+            runtimeInputs = [ pkgs.nix-update ];
+            text = ''
+              for package in ${nixpkgs.lib.escapeShellArgs localPackages.updateablePackageNames}; do
+                echo "==> $package"
+                nix-update --flake --version=skip "$@" "$package"
+              done
+            '';
+          };
         in
         {
           devShells.default =
@@ -102,19 +108,26 @@
                 age
                 sops
                 ninja
-                deploy-rs
-                nvfetcher
+                inputs.colmena.packages.${system}.colmena
+                nix-update
+                updatePackageHashes
                 ssh-to-age
               ];
             };
           formatter = pkgs.nixfmt;
-          packages.bootstrap-image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
-          checks = inputs.deploy-rs.lib.${system}.deployChecks self.deploy;
+          packages = localPackageSet // {
+            bootstrap-image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
+          };
         }
       )
     // {
       overlays.default = import ./overlay inputs;
-      deploy = import ./nixos/deploy.nix { inherit inputs self; };
+      colmena = import ./nixos {
+        inherit inputs self;
+        hostFilter = _: h: h.deploy or true;
+        outputMode = "colmena";
+      };
+      colmenaHive = inputs.colmena.lib.makeHive self.outputs.colmena;
       nixosConfigurations = import ./nixos { inherit inputs self; };
     };
 }
