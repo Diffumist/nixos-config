@@ -1,7 +1,7 @@
 { lib, config, ... }:
 let
   domain = "flap-dn42.diffumist.me";
-  flapalertedAddress = "fd22:1056:95a4:4::1";
+  flapalertedAddress = config.my.services.dn42.flapDamping.serverAddress;
   frontendPort = 11791;
 in
 {

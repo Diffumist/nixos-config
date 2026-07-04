@@ -46,6 +46,10 @@ in
       httpPort
     ];
 
+    systemd.network.networks."10-dn42-dummy".address = lib.mkIf cfg.runServer [
+      "${cfg.serverAddress}/128"
+    ];
+
     services.bird.config = lib.mkBefore ''
       roa4 table roa_flap_v4;
       roa6 table roa_flap_v6;
@@ -59,20 +63,21 @@ in
       }
 
       protocol bgp flapalerted {
-        hostname "${config.networking.hostName}";
-        advertise hostname on;
         local as ${toString config.networking.dn42.asn};
         neighbor ${cfg.serverAddress} as ${toString config.networking.dn42.asn} port ${toString bgpPort};
+        enable extended messages on;
         multihop;
 
         ipv4 {
           add paths on;
           export all;
+          export table on;
           import none;
         };
         ipv6 {
           add paths on;
           export all;
+          export table on;
           import none;
         };
       }

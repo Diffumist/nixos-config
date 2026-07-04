@@ -60,28 +60,4 @@
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
   networking.hostName = "noboard";
-
-  my.services.wg-mgmt = {
-    enable = true;
-    ipv4 = "10.203.0.2";
-    ipv6 = "fd42:203::2";
-    links = {
-      hostdzire = {
-        endpoint = "sjc-0.diffumist.me";
-        publicKey = "6x/Qcn7yghNo7AD6ckKFvTpqW9EhuzzhC0qVXpup3HI=";
-        allowedIPs = [
-          "10.203.0.1/32"
-          "fd42:203::1/128"
-        ];
-      };
-      liteserver = {
-        endpoint = "ams-0.diffumist.me";
-        publicKey = "D98b1mSOWpTz49IgzFgZ0htuux3HUn0BxylnKgr77H8=";
-        allowedIPs = [
-          "10.203.0.3/32"
-          "fd42:203::3/128"
-        ];
-      };
-    };
-  };
 }

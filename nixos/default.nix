@@ -178,7 +178,6 @@ let
     {
       meta = {
         name = "nixos-config";
-        allowApplyAll = false;
         nixpkgs = mkPkgs "x86_64-linux";
         nodeNixpkgs = lib.mapAttrs (_name: h: mkPkgs (systemOf h)) hosts;
         specialArgs = {

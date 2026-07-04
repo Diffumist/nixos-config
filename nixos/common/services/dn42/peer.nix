@@ -4,22 +4,75 @@
   ...
 }:
 let
-  cfg = config.my.services.dn42.peers;
-  policy = config.my.services.dn42;
-  flapDamping = config.my.services.dn42.flapDamping;
-  peers = lib.attrValues cfg;
-  rejectASNFilter = lib.concatMapStringsSep "\n" (
-    asn: "          if bgp_path ~ [= * ${toString asn} * =] then reject;"
-  ) policy.rejectASNs;
-  mkFlapExportFilter = roaTable: ''
-    if source = RTS_STATIC then accept;
-    if source = RTS_BGP then {
-      if roa_check(${roaTable}, net, bgp_path.last) = ROA_INVALID then reject;
-      accept;
-    }
-
-    reject;
-  '';
+  cfg = config.my.services.dn42;
+  dn42 = config.networking.dn42;
+  peers = lib.attrValues cfg.peers;
+  lines = lib.concatStringsSep "\n";
+  mkImportFilter =
+    {
+      name,
+      pool,
+      roaTable,
+      flapRoaTable,
+    }:
+    lines (
+      [
+        "filter ${name} {"
+        "  if net ~ [ ${pool}+ ] then reject;"
+        "  if roa_check(${roaTable}) != ROA_VALID then reject;"
+      ]
+      ++ lib.optionals cfg.flapDamping.enable [
+        "  if roa_check(${flapRoaTable}, net, bgp_path.last) = ROA_INVALID then {"
+        "    bgp_community.add(COMM_FLAPPING);"
+        "    bgp_local_pref = 0;"
+        "  }"
+      ]
+      ++ [
+        "  accept;"
+        "}"
+      ]
+    );
+  mkExportFilter =
+    name:
+    lines (
+      [
+        "filter ${name} {"
+        "  if source = RTS_STATIC then accept;"
+        "  if source = RTS_BGP then {"
+      ]
+      ++ lib.optional cfg.flapDamping.enable "    if COMM_FLAPPING ~ bgp_community then reject;"
+      ++ [
+        "    accept;"
+        "  }"
+        ""
+        "  reject;"
+        "}"
+      ]
+    );
+  flapDefinitions = lib.optionals cfg.flapDamping.enable [
+    "define COMM_FLAPPING = (64511, 65282);"
+    ""
+  ];
+  filterBlocks = [
+    (mkImportFilter {
+      name = "dn42_ebgp4_import";
+      pool = dn42.ipv4.pool;
+      roaTable = "dn42_roa4";
+      flapRoaTable = "roa_flap_v4";
+    })
+    ""
+    (mkImportFilter {
+      name = "dn42_ebgp6_import";
+      pool = dn42.ipv6.pool;
+      roaTable = "dn42_roa6";
+      flapRoaTable = "roa_flap_v6";
+    })
+    ""
+    (mkExportFilter "dn42_ebgp4_export")
+    ""
+    (mkExportFilter "dn42_ebgp6_export")
+  ];
+  birdFilters = lines (flapDefinitions ++ filterBlocks);
 
   # eBGP peers run over WireGuard, with the BGP session on IPv6 link-local
   # (multiprotocol / extended-next-hop). Relies on dn42.nix for the dn42_peer
@@ -67,51 +120,30 @@ let
     };
 
   mkBird = peer: ''
-        protocol bgp dn42_${lib.replaceStrings [ "-" ] [ "_" ] peer.interface} from dn42_peer {
-          ipv4 {
-            preference 200;
-            import filter {
-    ${rejectASNFilter}
-              if roa_check(dn42_roa4) != ROA_VALID then reject;
+    protocol bgp dn42_${lib.replaceStrings [ "-" ] [ "_" ] peer.interface} from dn42_peer {
+      enable extended messages on;
 
-              accept;
-            };
-    ${lib.optionalString flapDamping.enable ''
-              export filter {
-      ${mkFlapExportFilter "roa_flap_v4"}
-              };
-    ''}
-          };
-          ipv6 {
-            preference 200;
-            import filter {
-    ${rejectASNFilter}
-              if roa_check(dn42_roa6) != ROA_VALID then reject;
-
-              accept;
-            };
-    ${lib.optionalString flapDamping.enable ''
-              export filter {
-      ${mkFlapExportFilter "roa_flap_v6"}
-              };
-    ''}
-          };
-          neighbor ${peer.peerLinkLocal}%'${peer.interface}' as ${toString peer.asn};
-        }
+      ipv4 {
+        preference 200;
+        next hop self ebgp;
+        extended next hop on;
+        import filter dn42_ebgp4_import;
+        export filter dn42_ebgp4_export;
+        export table on;
+      };
+      ipv6 {
+        preference 200;
+        next hop self ebgp;
+        import filter dn42_ebgp6_import;
+        export filter dn42_ebgp6_export;
+        export table on;
+      };
+      neighbor ${peer.peerLinkLocal}%'${peer.interface}' as ${toString peer.asn};
+    }
   '';
 in
 {
   options = {
-    my.services.dn42.rejectASNs = lib.mkOption {
-      type = with lib.types; listOf ints.u32;
-      default = [ ];
-      example = [ 4242420903 ];
-      description = ''
-        ASNs to reject when they appear anywhere in an external dn42 eBGP AS path.
-        This is intended for temporary incident response.
-      '';
-    };
-
     my.services.dn42.peers = lib.mkOption {
       default = { };
       description = ''
@@ -179,7 +211,7 @@ in
     };
   };
 
-  config = lib.mkIf (cfg != { }) {
+  config = lib.mkIf (cfg.peers != { }) {
     networking.firewall.allowedUDPPorts = map (peer: peer.listenPort) peers;
 
     # eBGP runs over TCP/179 inside the WireGuard tunnel; allow it per peer
@@ -188,7 +220,9 @@ in
       map (peer: lib.nameValuePair peer.interface { allowedTCPPorts = [ 179 ]; }) peers
     );
 
-    services.bird.config = lib.mkAfter (lib.concatMapStringsSep "\n" mkBird peers);
+    services.bird.config = lib.mkAfter (
+      lib.concatStringsSep "\n" ([ birdFilters ] ++ map mkBird peers)
+    );
 
     systemd.network.netdevs = lib.listToAttrs (map mkNetdev peers);
     systemd.network.networks = lib.listToAttrs (map mkNetwork peers);

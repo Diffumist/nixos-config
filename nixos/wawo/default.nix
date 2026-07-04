@@ -52,7 +52,7 @@
   '';
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
-  networking.hostName = "wowa";
+  networking.hostName = "wawo";
 
   # AS213605 (Akaere Networks) hkg
   my.services.dn42.peers.akaere-hkg = {
