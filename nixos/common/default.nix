@@ -45,9 +45,8 @@
     pciutils
     tealdeer
     man-pages
-    fastfetch-unwrapped
+    microfetch
     libarchive
-    ssh-to-age
     wireguard-tools
   ];
 

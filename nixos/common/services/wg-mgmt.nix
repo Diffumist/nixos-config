@@ -1,130 +1,266 @@
 {
   config,
+  hostName,
   lib,
   ...
 }:
 let
-  cfg = config.my.services.wg-mgmt;
-  links = lib.attrValues cfg.links;
-  mkPeer =
-    link:
-    {
-      PublicKey = link.publicKey;
-      AllowedIPs = link.allowedIPs;
-      PersistentKeepalive = link.persistentKeepalive;
-    }
-    // lib.optionalAttrs (link.endpoint != null) {
-      Endpoint = "${link.endpoint}:${toString link.port}";
+  baseurl = "diffumist.me";
+  interface = "wg-mgmt";
+  listenPort = 44242;
+  nodes = {
+    geelinx-jp = {
+      endpoint = "tyo-0.${baseurl}";
+      ipv4 = "10.203.0.1";
+      ipv6 = "fd42:203::1";
+      publicKey = "qYALFT5oRCiQoUBBZaWyC2J0TMvOi4744xqmt+1qTSw=";
     };
+    noboard = {
+      endpoint = "tyo-1.${baseurl}";
+      ipv4 = "10.203.0.2";
+      ipv6 = "fd42:203::2";
+      publicKey = "Z4z3lGBTNWqB2sy1h7SydBKrFtki8Rl27cB0xkrdTFU=";
+    };
+    wawo = {
+      endpoint = "hkg-0.${baseurl}";
+      ipv4 = "10.203.0.3";
+      ipv6 = "fd42:203::3";
+      publicKey = "/kMulSNnzMkdoi1WslQuZxuK9SKu7goI+WIGGIJ0Qik=";
+    };
+    liteserver = {
+      endpoint = "ams-0.${baseurl}";
+      ipv4 = "10.203.0.11";
+      ipv6 = "fd42:203::11";
+      publicKey = "D98b1mSOWpTz49IgzFgZ0htuux3HUn0BxylnKgr77H8=";
+    };
+    dedirock = {
+      endpoint = "lax-0.${baseurl}";
+      ipv4 = "10.203.0.21";
+      ipv6 = "fd42:203::21";
+      publicKey = "O9eaz2AHPgSDxTVs+/iaUAno+SmnIDUI4SE1BGD6FiQ=";
+    };
+    vmrack = {
+      endpoint = "lax-1.${baseurl}";
+      ipv4 = "10.203.0.22";
+      ipv6 = "fd42:203::22";
+      publicKey = "rDjdsHMYBbmMx1s/5/DNWQJu4CWBqRZL7IUrGznC0XQ=";
+    };
+    nosla-lax = {
+      endpoint = "lax-2.${baseurl}";
+      ipv4 = "10.203.0.23";
+      ipv6 = "fd42:203::23";
+      publicKey = "2LqNtlD00D6fZ5ChjvGqK9Ztpqi3jt9yFPHVnfBzk1M=";
+    };
+    colocrossing = {
+      endpoint = "lax-3.${baseurl}";
+      ipv4 = "10.203.0.24";
+      ipv6 = "fd42:203::24";
+      publicKey = "nL/tNYad/CsHP/iiqI/tXMdIsoSqDMfozbDudOkspwY=";
+    };
+    solidvps = {
+      endpoint = "lax-4.${baseurl}";
+      ipv4 = "10.203.0.25";
+      ipv6 = "fd42:203::25";
+      publicKey = "cOJznpVWrWQ1NZMMAYebugCKc08lQ9H9Z9giPuT1nEQ=";
+    };
+    oregon = {
+      endpoint = "pdx-0.${baseurl}";
+      ipv4 = "10.203.0.26";
+      ipv6 = "fd42:203::26";
+      publicKey = "Zs43Po/Y10I9cwoy+zOTFcAWAdGgA+Q95YKPOOeRiio=";
+    };
+    hostdzire = {
+      endpoint = "sjc-0.${baseurl}";
+      ipv4 = "10.203.0.31";
+      ipv6 = "fd42:203::31";
+      publicKey = "6x/Qcn7yghNo7AD6ckKFvTpqW9EhuzzhC0qVXpup3HI=";
+    };
+    sla-sjc = {
+      endpoint = "sjc-1.${baseurl}";
+      ipv4 = "10.203.0.32";
+      ipv6 = "fd42:203::32";
+      publicKey = "CsizRoeV1LdnEl8hGg8Dp/1GD1WRuY/8uFz76H/+3TQ=";
+    };
+    nosla-sjc = {
+      endpoint = "sjc-2.${baseurl}";
+      ipv4 = "10.203.0.33";
+      ipv6 = "fd42:203::33";
+      publicKey = "4gjQaYvFcRstEG5SUcokV3ufBpycyQJSiu4uWqEvzVU=";
+    };
+    phoenix = {
+      endpoint = "phx-0.${baseurl}";
+      ipv4 = "10.203.0.34";
+      ipv6 = "fd42:203::34";
+      publicKey = "rno7pHX/j1oOJRpeZU3lE7tGE4jAW+UpFUfvNOXH+yE=";
+    };
+    geelinx-us = {
+      endpoint = "ord-0.${baseurl}";
+      ipv4 = "10.203.0.41";
+      ipv6 = "fd42:203::41";
+      publicKey = "iSa5qFW8m42DIJBhtMqlT2DWdYF/ODauxHQOaKnJXDw=";
+    };
+    carolina = {
+      endpoint = "chs-0.${baseurl}";
+      ipv4 = "10.203.0.42";
+      ipv6 = "fd42:203::42";
+      publicKey = "C9fnOkg9z7rqLBk75W+XQdzdc42DbmfULDCgoZ04BRI=";
+    };
+  };
+
+  coreLinks = [
+    [
+      "hostdzire"
+      "noboard"
+    ]
+    [
+      "hostdzire"
+      "liteserver"
+    ]
+    [
+      "hostdzire"
+      "geelinx-us"
+    ]
+    [
+      "hostdzire"
+      "dedirock"
+    ]
+    [
+      "noboard"
+      "liteserver"
+    ]
+    [
+      "noboard"
+      "geelinx-us"
+    ]
+    [
+      "noboard"
+      "dedirock"
+    ]
+    [
+      "geelinx-us"
+      "liteserver"
+    ]
+    [
+      "geelinx-us"
+      "dedirock"
+    ]
+    [
+      "liteserver"
+      "dedirock"
+    ]
+  ];
+
+  regionalLinks = {
+    hostdzire = [
+      "oregon"
+      "sla-sjc"
+      "nosla-sjc"
+      "phoenix"
+    ];
+    dedirock = [
+      "vmrack"
+      "nosla-lax"
+      "colocrossing"
+      "solidvps"
+    ];
+    noboard = [
+      "wawo"
+      "geelinx-jp"
+    ];
+    geelinx-us = [ "carolina" ];
+  };
+
+  enabled = builtins.hasAttr hostName nodes;
+  unique = xs: builtins.length xs == builtins.length (lib.unique xs);
+  mkPair = pair: {
+    a = builtins.elemAt pair 0;
+    b = builtins.elemAt pair 1;
+  };
+  linkPairs =
+    map mkPair coreLinks
+    ++ lib.concatLists (
+      lib.mapAttrsToList (
+        a:
+        map (b: {
+          inherit a b;
+        })
+      ) regionalLinks
+    );
+  linkKey = link: "${link.a}->${link.b}";
+  localLinks = lib.filter (link: link.a == hostName || link.b == hostName) linkPairs;
+  linkPeer = link: nodes.${if link.a == hostName then link.b else link.a};
 in
 {
-  options.my.services.wg-mgmt = {
-    enable = lib.mkEnableOption "WireGuard management overlay";
-
-    interface = lib.mkOption {
-      type = lib.types.str;
-      default = "wg-mgmt";
-      description = "WireGuard interface name for the management overlay.";
-    };
-
-    listenPort = lib.mkOption {
-      type = lib.types.port;
-      default = 44242;
-      description = "UDP listen port for the management overlay.";
-    };
-
-    ipv4 = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Host IPv4 address on the management overlay.";
-    };
-
-    ipv6 = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Host IPv6 ULA address on the management overlay.";
-    };
-
-    links = lib.mkOption {
-      default = { };
-      description = "Management overlay links from this host to other overlay members.";
-      type = lib.types.attrsOf (
-        lib.types.submodule {
-          options = {
-            endpoint = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
-              default = null;
-              description = "Remote endpoint host or address. Null means passive inbound-only.";
-            };
-
-            port = lib.mkOption {
-              type = lib.types.port;
-              default = 44242;
-              description = "Remote WireGuard UDP port.";
-            };
-
-            publicKey = lib.mkOption {
-              type = lib.types.str;
-              description = "Remote WireGuard public key.";
-            };
-
-            allowedIPs = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
-              description = "Remote management addresses routed through this link.";
-            };
-
-            persistentKeepalive = lib.mkOption {
-              type = lib.types.ints.positive;
-              default = 25;
-              description = "Persistent keepalive interval in seconds.";
-            };
-          };
+  config = lib.mkIf enabled (
+    let
+      node = nodes.${hostName};
+      peers = map linkPeer localLinks;
+    in
+    {
+      assertions = [
+        {
+          assertion = unique (map (n: n.ipv4) (lib.attrValues nodes));
+          message = "wg-mgmt IPv4 addresses must be unique.";
         }
-      );
-    };
-  };
+        {
+          assertion = unique (map (n: n.ipv6) (lib.attrValues nodes));
+          message = "wg-mgmt IPv6 addresses must be unique.";
+        }
+        {
+          assertion = lib.all (
+            link: builtins.hasAttr link.a nodes && builtins.hasAttr link.b nodes
+          ) linkPairs;
+          message = "wg-mgmt links must reference existing nodes.";
+        }
+        {
+          assertion = unique (map linkKey linkPairs);
+          message = "wg-mgmt links must be unique.";
+        }
+        {
+          assertion = localLinks != [ ];
+          message = "wg-mgmt enabled nodes must have at least one link.";
+        }
+      ];
 
-  config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.ipv4 != null || cfg.ipv6 != null;
-        message = "my.services.wg-mgmt requires at least one of ipv4 or ipv6.";
-      }
-      {
-        assertion = cfg.links != { };
-        message = "my.services.wg-mgmt requires at least one configured link.";
-      }
-    ];
-
-    sops.secrets.wg_mgmt_private_key = {
-      owner = "systemd-network";
-      mode = "0400";
-    };
-
-    networking.firewall.allowedUDPPorts = [ cfg.listenPort ];
-
-    systemd.network.netdevs."20-${cfg.interface}" = {
-      netdevConfig = {
-        Name = cfg.interface;
-        Kind = "wireguard";
+      sops.secrets.wg_mgmt_private_key = {
+        owner = "systemd-network";
+        mode = "0400";
       };
-      wireguardConfig = {
-        ListenPort = cfg.listenPort;
-        PrivateKeyFile = config.sops.secrets.wg_mgmt_private_key.path;
-      };
-      wireguardPeers = map mkPeer links;
-    };
 
-    systemd.network.networks."20-${cfg.interface}" = {
-      matchConfig.Name = cfg.interface;
-      address =
-        lib.optional (cfg.ipv4 != null) "${cfg.ipv4}/32"
-        ++ lib.optional (cfg.ipv6 != null) "${cfg.ipv6}/128";
-      linkConfig.RequiredForOnline = "no";
-      networkConfig = {
-        IPv6AcceptRA = false;
-        LinkLocalAddressing = "no";
+      networking.firewall.allowedUDPPorts = [ listenPort ];
+
+      systemd.network.netdevs."20-${interface}" = {
+        netdevConfig = {
+          Name = interface;
+          Kind = "wireguard";
+        };
+        wireguardConfig = {
+          ListenPort = listenPort;
+          PrivateKeyFile = config.sops.secrets.wg_mgmt_private_key.path;
+        };
+        wireguardPeers = map (peer: {
+          PublicKey = peer.publicKey;
+          Endpoint = "${peer.endpoint}:${toString listenPort}";
+          AllowedIPs = [
+            "${peer.ipv4}/32"
+            "${peer.ipv6}/128"
+          ];
+          PersistentKeepalive = 25;
+        }) peers;
       };
-    };
-  };
+
+      systemd.network.networks."20-${interface}" = {
+        matchConfig.Name = interface;
+        address = [
+          "${node.ipv4}/32"
+          "${node.ipv6}/128"
+        ];
+        linkConfig.RequiredForOnline = "no";
+        networkConfig = {
+          IPv6AcceptRA = false;
+          LinkLocalAddressing = "no";
+        };
+      };
+    }
+  );
 }

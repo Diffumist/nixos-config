@@ -116,7 +116,6 @@ Current important options:
 - `my.services.prometheus-node`
 - `my.services.sema`
 - `my.services.sing-box`
-- `my.services.wg-mgmt`
 
 Prefer adding a small reusable module under `nixos/common/services` when at
 least two hosts need the same behavior. For one host, keep it in that host.
