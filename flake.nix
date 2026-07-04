@@ -14,8 +14,13 @@
   };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    git-hooks-nix = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    preservation.url = "github:nix-community/preservation/main";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -36,6 +41,7 @@
       url = "github:nix-community/colmena";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    llm-agents.url = "github:numtide/llm-agents.nix";
     nur-xddxdd = {
       url = "github:xddxdd/nur-packages";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -56,10 +62,12 @@
       url = "github:quickshell-mirror/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    preservation.url = "github:nix-community/preservation/main";
-    llm-agents.url = "github:numtide/llm-agents.nix";
+    codex-desktop-linux = {
+      url = "github:ilysenko/codex-desktop-linux";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-dn42 = {
-      url = "git+https://git.sr.ht/~prince213/nix-dn42";
+      url = "git+https://git.sr.ht/~diffumist/nix-dn42";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dn42-registry = {
@@ -71,16 +79,21 @@
   outputs =
     inputs@{
       self,
+      flake-parts,
       nixpkgs,
-      flake-utils,
       ...
     }:
-    flake-utils.lib.eachSystem
-      [
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [ inputs.git-hooks-nix.flakeModule ];
+
+      systems = [
         "x86_64-linux"
-      ]
-      (
-        system:
+        "aarch64-linux"
+        "aarch64-darwin"
+      ];
+
+      perSystem =
+        { config, system, ... }:
         let
           pkgs = import nixpkgs {
             inherit system;
@@ -101,9 +114,23 @@
           };
         in
         {
+          pre-commit.settings = {
+            package = pkgs.prek;
+            hooks = {
+              detect-private-keys.enable = true;
+              keep-sorted.enable = true;
+              nixfmt.enable = true;
+              pre-commit-hook-ensure-sops = {
+                enable = true;
+                files = "^nixos/nosla-lax/.*\.(json|ya?ml|keytab)$";
+              };
+            };
+          };
+
           devShells.default =
             with pkgs;
             mkShell {
+              shellHook = config.pre-commit.shellHook;
               nativeBuildInputs = [
                 age
                 sops
@@ -112,22 +139,24 @@
                 nix-update
                 updatePackageHashes
                 ssh-to-age
-              ];
+              ]
+              ++ config.pre-commit.settings.enabledPackages;
             };
           formatter = pkgs.nixfmt;
           packages = localPackageSet // {
             bootstrap-image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
           };
-        }
-      )
-    // {
-      overlays.default = import ./overlay inputs;
-      colmena = import ./nixos {
-        inherit inputs self;
-        hostFilter = _: h: h.deploy or true;
-        outputMode = "colmena";
+        };
+
+      flake = {
+        overlays.default = import ./overlay inputs;
+        colmena = import ./nixos {
+          inherit inputs self;
+          hostFilter = _: h: h.deploy or true;
+          outputMode = "colmena";
+        };
+        colmenaHive = inputs.colmena.lib.makeHive self.outputs.colmena;
+        nixosConfigurations = import ./nixos { inherit inputs self; };
       };
-      colmenaHive = inputs.colmena.lib.makeHive self.outputs.colmena;
-      nixosConfigurations = import ./nixos { inherit inputs self; };
     };
 }
