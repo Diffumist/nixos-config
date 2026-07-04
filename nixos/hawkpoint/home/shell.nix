@@ -35,8 +35,14 @@
       enable = true;
       shellInit = ''
         set -g fish_greeting
+        complete -c sops-flake -f -a '(__sops_flake_hosts)'
       '';
       functions = {
+        __sops_flake_hosts = ''
+          for secret in nixos/*/secrets.yaml
+              string replace -r '^nixos/([^/]+)/secrets\.yaml$' '$1' "$secret"
+          end
+        '';
         sops-flake = ''
           set -l args
           set -l i 1
@@ -98,29 +104,6 @@
             curl -s "https://dns.google/resolve?name=$argv[1]" | jq -r '.Answer[].data'
           '';
         };
-        reboot-servers = ''
-          set -l flake "$HOME/Projects/nixos-config"
-          set -l hosts (nix eval --json "$flake#deploy.nodes" --apply builtins.attrNames | jq -r '.[]')
-
-          if test (count $hosts) -eq 0
-              echo "没有找到可重启的 deploy 主机"
-              return 1
-          end
-
-          echo "将重启这些主机："
-          printf '  %s\n' $hosts
-          read --prompt-str "确认重启？输入 yes 继续：" confirm
-
-          if test "$confirm" != yes
-              echo "已取消"
-              return 1
-          end
-
-          for host in $hosts
-              echo "==> $host"
-              ssh $host "systemctl reboot"
-          end
-        '';
       };
     };
     starship = {

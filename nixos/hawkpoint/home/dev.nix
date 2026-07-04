@@ -91,6 +91,13 @@
       enable = true;
       extensions = [ "nix" ];
     };
+    distrobox = {
+      enable = true;
+      settings = {
+        container_manager = "podman";
+        container_image_default = "archlinux:latest";
+      };
+    };
   };
   home.packages = with pkgs; [
     xh

@@ -182,7 +182,6 @@
     dms-shell.enable = true;
     nix-ld.enable = true;
     nexttrace.enable = true;
-    nh.enable = true;
     direnv.enable = true;
     fish = {
       enable = true;
@@ -191,6 +190,12 @@
     nautilus-open-any-terminal = {
       enable = true;
       terminal = "ghostty";
+    };
+    nh = {
+      enable = true;
+      clean.enable = true;
+      clean.extraArgs = "--keep-since 14d --keep 5";
+      flake = "/home/diffumist/Projects/nixos-config";
     };
     steam = {
       enable = true;
@@ -294,6 +299,7 @@
       inputs.system76-scheduler-niri.homeModules.default
       inputs.nix-index-database.homeModules.default
       inputs.sops-nix.homeManagerModules.sops
+      inputs.codex-desktop-linux.homeManagerModules.default
     ];
   };
 }

@@ -92,6 +92,16 @@
         "--wayland-text-input-version=3"
       ];
     };
+    codexDesktopLinux = {
+      enable = true;
+      computerUseUi.enable = true;
+      remoteMobileControl.enable = true;
+      remoteControl = {
+        enable = true;
+        package = pkgs.llm-agents.codex;
+      };
+      cliPackage = pkgs.llm-agents.codex;
+    };
   };
   home.packages = with pkgs; [
     # CLI
@@ -112,6 +122,7 @@
     llm-agents.claude-code
     llm-agents.crush
     llm-agents.omp
+    llm-agents.herdr
     llm-agents.antigravity-cli
     llm-agents.opencode
     llm-agents.rtk
@@ -127,6 +138,7 @@
     piliplus
     localsend
     fluffychat
+    distroshelf
     antigravity-fhs
     ayugram-desktop
     qbittorrent-enhanced
