@@ -1,0 +1,53 @@
+{
+  pkgs,
+  config,
+  inputs,
+  self,
+  ...
+}:
+{
+  imports = [
+    ./boot.nix
+  ];
+
+  sops = {
+    secrets = {
+      ipv4_address = { };
+      ipv4_gateway = { };
+      ipv6_address = { };
+      ipv6_gateway = { };
+    };
+    templates."10-lan.network" = {
+      path = "/etc/systemd/network/10-lan.network";
+      owner = "systemd-network";
+      content = ''
+        [Match]
+        Name=enp0s18
+
+        [Network]
+        Address=${config.sops.placeholder.ipv4_address}/24
+        Address=${config.sops.placeholder.ipv6_address}/64
+        IPv6AcceptRA=no
+        Gateway=${config.sops.placeholder.ipv4_gateway}
+        Gateway=${config.sops.placeholder.ipv6_gateway}
+        DNS=1.0.0.1
+        DNS=8.8.4.4
+        DNS=2606:4700:4700::1001
+        DNS=2001:4860:4860::8844
+      '';
+    };
+  };
+
+  virtualisation.podman.enable = false;
+  services.fail2ban.enable = false;
+
+  my.services.sing-box = {
+    enable = true;
+    firewallPorts = [ 8443 ];
+    configSopsFile = ./services/sing-box.json;
+  };
+
+  environment.etc."vnstat.conf".text = ''
+    MonthRotate 8
+  '';
+}

@@ -15,7 +15,7 @@ Flake-based, declarative multi-host NixOS repository.
 ## 2. Entry points
 
 - `flake.nix`: wires inputs and outputs.
-- `nixos/default.nix`: host table, `nixosConfigurations`, and Colmena hive generation.
+- `hosts/default.nix`: host table, `nixosConfigurations`, and Colmena hive generation.
 - `overlay/default.nix`: imports local packages from `pkgs/*`.
 - `pkgs/default.nix`: local package enumeration and nix-update batch list.
 
@@ -32,18 +32,19 @@ Important flake outputs:
 Stable locations:
 
 - `flake.nix`: flake inputs, dev shell, packages, Colmena outputs.
-- `nixos/default.nix`: host inventory and system/hive builders.
-- `nixos/common`: modules shared by hosts with `useCommon = true`.
-- `nixos/<host>`: per-host NixOS modules and secrets.
+- `hosts/default.nix`: host inventory and system/hive builders.
+- `profiles/common`: shared baseline imported by hosts with `useCommon = true`.
+- `modules`: reusable repo-local NixOS modules, including `my.services.*`.
+- `hosts/<host>`: per-host NixOS modules and secrets.
 - `overlay/default.nix`: local overlay entry point.
 - `pkgs`: local packages.
 
-Do not duplicate the full host or service directory tree here; `nixos/default.nix`
+Do not duplicate the full host or service directory tree here; `hosts/default.nix`
 and the filesystem are the source of truth.
 
 ## 4. Host table rules
 
-All host inventory lives in `nixos/default.nix`: add normal hosts to
+All host inventory lives in `hosts/default.nix`: add normal hosts to
 `hostNames`, put only exceptions in `hosts`, and assign Colmena selectors in
 `hostTags`.
 
@@ -52,7 +53,7 @@ Per-host fields:
 - `system`: optional target system; defaults to `x86_64-linux`.
 - `path`: optional host module directory; defaults to `./${hostName}`.
 - `deploy`: optional; defaults to true for Colmena, set false to exclude.
-- `useCommon`: defaults to true; false skips `nixos/common`.
+- `useCommon`: defaults to true; false skips `profiles/common`.
 - `extra`: extra NixOS modules; defaults to `defaults.extra`.
 - `targetHost`: Colmena SSH host; defaults to host attr name.
 - `targetUser`: Colmena SSH user; defaults to `root`.
@@ -66,7 +67,15 @@ Per-host fields:
 - `overlays`
 - `hostName`
 
-Do not assume changes under `nixos/common` affect `useCommon = false` hosts.
+`modules/system/hostname.nix` sets `networking.hostName` from `hostName` with
+`mkDefault`; keep explicit per-host `networking.hostName` only for deliberate
+overrides.
+`modules/system/sops.nix` sets `sops.defaultSopsFile` from `hostPath`, so normal
+hosts do not need to repeat `./secrets.yaml`.
+`profiles/common` sets the server networking baseline and root password hash
+for `useCommon = true` hosts.
+
+Do not assume changes under `profiles/common` affect `useCommon = false` hosts.
 
 ## 5. Deployment
 
@@ -104,7 +113,7 @@ risk; a broken remote deploy may require provider console access.
 ## 6. Shared modules and options
 
 Repo-local service options live under `my.services.*`, usually implemented in
-`nixos/common/services/*`.
+`modules/services/*`.
 
 Current important options:
 
@@ -117,12 +126,14 @@ Current important options:
 - `my.services.sema`
 - `my.services.sing-box`
 
-Prefer adding a small reusable module under `nixos/common/services` when at
+Prefer adding a small reusable module under `modules/services` when at
 least two hosts need the same behavior. For one host, keep it in that host.
 
 ## 7. DN42
 
-DN42 is provided by `nix-dn42` plus repo modules under `nixos/common/services/dn42`.
+DN42 is provided by `nix-dn42` plus repo modules under `modules/services/dn42`.
+The repo mesh topology lives in `profiles/common/services/dn42.nix`; external
+peer data lives in `profiles/common/services/dn42-peers.nix`.
 
 - Internal mesh: `my.services.dn42` + `networking.dn42`.
 - External peers: `my.services.dn42.peers.<name>`.
@@ -158,14 +169,14 @@ Notable packages:
 ## 9. Secrets
 
 - SOPS policy: `.sops.yaml`.
-- Per-host secrets: `nixos/<host>/secrets.yaml`.
-- Shared secrets: `nixos/common/secrets.yaml`.
+- Per-host secrets: `hosts/<host>/secrets.yaml`.
+- Shared secrets: `profiles/common/secrets.yaml` if a shared SOPS file is added.
 - Local management key: `diffumist` age key is included in rules.
 
 Edit encrypted files with:
 
 ```bash
-SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt sops nixos/<host>/secrets.yaml
+SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt sops hosts/<host>/secrets.yaml
 ```
 
 Never commit plaintext credentials. After changing secrets, build or evaluate

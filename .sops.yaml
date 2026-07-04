@@ -20,96 +20,96 @@ keys:
   - &oregon age1evl9930wl07fw9wdy2pw5k8aaeacf9dgtkvntrr8ygx3ny3xagqsvqnzt5
   - &wawo age1laq2l7pnax405ua70grkefguk4m4zalfjkvj0ky7dzsu2h5sdc6s034jtt
 creation_rules:
-  - path_regex: ^nixos/hawkpoint/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/hawkpoint/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *diffumist
-  - path_regex: ^nixos/liteserver/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/liteserver/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *liteserver
           - *diffumist
-  - path_regex: ^nixos/dedirock/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/dedirock/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *dedirock
           - *diffumist
-  - path_regex: ^nixos/hostdzire/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/hostdzire/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *hostdzire
           - *diffumist
-  - path_regex: ^nixos/phoenix/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/phoenix/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *phoenix
           - *diffumist
-  - path_regex: ^nixos/solidvps/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/solidvps/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *solidvps
           - *diffumist
-  - path_regex: ^nixos/colocrossing/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/colocrossing/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *colocrossing
           - *diffumist
-  - path_regex: ^nixos/bitsflow/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/bitsflow/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *bitsflow
           - *diffumist
-  - path_regex: ^nixos/nosla-lax/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/nosla-lax/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *nosla-lax
           - *diffumist
-  - path_regex: ^nixos/nosla-sjc/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/nosla-sjc/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *nosla-sjc
           - *diffumist
-  - path_regex: ^nixos/sla-sjc/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/sla-sjc/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *sla-sjc
           - *diffumist
-  - path_regex: ^nixos/vmrack/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/vmrack/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *vmrack
           - *diffumist
-  - path_regex: ^nixos/geelinx-jp/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/geelinx-jp/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *geelinx-jp
           - *diffumist
-  - path_regex: ^nixos/geelinx-mys/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/geelinx-mys/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *geelinx-mys
           - *diffumist
-  - path_regex: ^nixos/geelinx-us/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/geelinx-us/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *geelinx-us
           - *diffumist
-  - path_regex: ^nixos/noboard/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/noboard/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *noboard
           - *diffumist
-  - path_regex: ^nixos/wawo/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/wawo/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *wawo
           - *diffumist
-  - path_regex: ^nixos/carolina/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/carolina/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *carolina
           - *diffumist
-  - path_regex: ^nixos/oregon/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/oregon/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *oregon

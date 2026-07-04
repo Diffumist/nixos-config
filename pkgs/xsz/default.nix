@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "SaltyKitkat";
     repo = "xsz";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ujAwKK9yZI+jHtqoavir0pluuKWD6TCG/t1KzF7H9P0=";
+    hash = "sha256-L982iGnkYkqxddqlufOKZE3gyQjYxvqcbhEByEx7lDs=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;

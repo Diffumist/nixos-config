@@ -122,7 +122,7 @@
               nixfmt.enable = true;
               pre-commit-hook-ensure-sops = {
                 enable = true;
-                files = "^nixos/nosla-lax/.*\.(json|ya?ml|keytab)$";
+                files = "^hosts/nosla-lax/.*\.(json|ya?ml|keytab)$";
               };
             };
           };
@@ -150,13 +150,13 @@
 
       flake = {
         overlays.default = import ./overlay inputs;
-        colmena = import ./nixos {
+        colmena = import ./hosts {
           inherit inputs self;
           hostFilter = _: h: h.deploy or true;
           outputMode = "colmena";
         };
         colmenaHive = inputs.colmena.lib.makeHive self.outputs.colmena;
-        nixosConfigurations = import ./nixos { inherit inputs self; };
+        nixosConfigurations = import ./hosts { inherit inputs self; };
       };
     };
 }
