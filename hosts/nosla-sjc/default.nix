@@ -42,7 +42,7 @@
     };
   };
 
-  virtualisation.podman.enable = false;
+  virtualisation.podman.enable = true;
   services.fail2ban.enable = false;
   my.services.sing-box = {
     enable = true;
@@ -50,6 +50,6 @@
   };
 
   environment.etc."vnstat.conf".text = ''
-    MonthRotate 13
+    MonthRotate 25
   '';
 }
