@@ -6,6 +6,9 @@ let
 in
 importedPkgs
 // {
+  microfetch = prev.microfetch.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or [ ]) ++ [ ./microfetch/storage.patch ];
+  });
   wemeet = prev.wemeet.overrideAttrs (oldAttrs: {
     postInstall = (oldAttrs.postInstall or "") + ''
       substituteInPlace $out/share/applications/wemeetapp.desktop \

@@ -1,0 +1,13 @@
+diff --git a/crates/lib/src/system.rs b/crates/lib/src/system.rs
+index 1db8510..8e2dbc8 100644
+--- a/crates/lib/src/system.rs
++++ b/crates/lib/src/system.rs
+@@ -59,7 +59,7 @@ pub fn get_shell() -> String {
+ #[allow(clippy::cast_precision_loss)]
+ pub fn get_root_disk_usage() -> Result<String, Error> {
+   let mut vfs = MaybeUninit::<StatfsBuf>::uninit();
+-  let path = b"/\0";
++  let path = b"/nix\0";
+ 
+   if unsafe { sys_statfs(path.as_ptr(), vfs.as_mut_ptr()) } != 0 {
+     return Err(Error::last_os_error());
