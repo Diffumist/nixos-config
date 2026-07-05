@@ -1,5 +1,8 @@
-_: {
+{ self, ... }:
+{
   nix = {
+    registry.p.flake = self;
+
     settings = {
       trusted-users = [
         "@wheel"
