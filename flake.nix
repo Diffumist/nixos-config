@@ -122,7 +122,7 @@
               nixfmt.enable = true;
               pre-commit-hook-ensure-sops = {
                 enable = true;
-                files = "^hosts/nosla-lax/.*\.(json|ya?ml|keytab)$";
+                files = "^hosts/[^/]+/.*\.(json|ya?ml|keytab)$";
               };
             };
           };
@@ -143,6 +143,7 @@
               ++ config.pre-commit.settings.enabledPackages;
             };
           formatter = pkgs.nixfmt;
+          legacyPackages = pkgs;
           packages = localPackageSet // {
             bootstrap-image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
           };
