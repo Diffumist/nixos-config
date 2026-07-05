@@ -3,17 +3,94 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/vda";
-
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/450a57e8-c222-47c2-8bda-eb68e3668f3d";
-    fsType = "ext4";
+  disko.devices.disk.main = {
+    type = "disk";
+    device = "/dev/vda";
+    content = {
+      type = "gpt";
+      partitions = {
+        boot = {
+          size = "1M";
+          type = "EF02"; # for grub MBR
+          priority = 1;
+        };
+        nixos = {
+          size = "100%";
+          priority = 2;
+          content = {
+            type = "btrfs";
+            extraArgs = [ "-f" ];
+            subvolumes = {
+              "@boot" = {
+                mountpoint = "/boot";
+                mountOptions = [
+                  "noatime"
+                  "compress-force=zstd:-5"
+                  "space_cache=v2"
+                ];
+              };
+              "@nix" = {
+                mountpoint = "/nix";
+                mountOptions = [
+                  "noatime"
+                  "compress-force=zstd:-5"
+                  "space_cache=v2"
+                ];
+              };
+              "@swap" = {
+                mountpoint = "/.swap";
+                swap = {
+                  swapfile.size = "1024M";
+                  swapfile.path = "real-path";
+                };
+              };
+              "@persist" = {
+                mountpoint = "/persist";
+                mountOptions = [
+                  "noatime"
+                  "compress-force=zstd:-5"
+                  "space_cache=v2"
+                ];
+              };
+            };
+            mountpoint = "/.subvols";
+          };
+        };
+      };
+    };
   };
-
-  swapDevices = [
-    {
-      device = "/.swap/real-path";
-    }
-  ];
+  disko.devices.nodev = {
+    "/" = {
+      fsType = "tmpfs";
+      mountOptions = [
+        "mode=755"
+      ];
+    };
+  };
+  fileSystems."/persist".neededForBoot = true;
+  preservation = {
+    enable = true;
+    preserveAt."/persist" = {
+      directories = [
+        "/var/log"
+        {
+          directory = "/var/lib";
+          inInitrd = true;
+        }
+        "/var/db"
+      ];
+      files = [
+        {
+          file = "/etc/machine-id";
+          inInitrd = true;
+        }
+        {
+          file = "/etc/ssh/ssh_host_ed25519_key";
+          how = "symlink";
+          configureParent = true;
+        }
+      ];
+    };
+  };
+  systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 }

@@ -8,14 +8,16 @@
 {
   imports = [
     ./boot.nix
-
-    # ./services/komari-monitor.nix
-    ./services/snac.nix
   ];
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  my.services.sing-box = {
-    enable = true;
-    firewallPorts = [ 8443 ];
-    configSopsFile = ./services/sing-box.json;
+  networking = {
+    useDHCP = true;
+  };
+
+  services.resolved.enable = true;
+  systemd.network.networks."10-eth0" = {
+    matchConfig.MACAddress = "00:16:3e:6b:25:cc";
+    networkConfig = {
+      DHCP = "ipv4";
+    };
   };
 }
