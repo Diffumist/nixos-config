@@ -49,7 +49,7 @@
   networking = {
     nftables.enable = true;
     firewall.enable = false;
-    hostName = "HawkPoint";
+    hostName = "hawkpoint";
     networkmanager = {
       enable = true;
       wifi.backend = "iwd";
@@ -194,8 +194,6 @@
     };
     nh = {
       enable = true;
-      clean.enable = true;
-      clean.extraArgs = "--keep-since 14d --keep 5";
       flake = "/home/diffumist/Projects/nixos-config";
     };
     steam = {
