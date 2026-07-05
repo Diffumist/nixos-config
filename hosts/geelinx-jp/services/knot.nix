@@ -8,7 +8,7 @@ let
   telephonyDomain = "2.4.6.0.4.2.4.0.tel.dn42";
   ipv4ReverseDomain = "64/27.64.22.172.in-addr.arpa";
   ipv6ReverseDomain = "4.a.5.9.6.5.0.1.2.2.d.f.ip6.arpa";
-  tsigKeyName = "hostdzire-geelinx-jp-xfr";
+  tsigKeyName = "hostdzire-sfo-geelinx-jp-xfr";
   tsigKeyAlgorithm = "hmac-sha256";
 in
 {

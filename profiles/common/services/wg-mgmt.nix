@@ -69,7 +69,7 @@ let
       ipv6 = "fd42:203::26";
       publicKey = "Zs43Po/Y10I9cwoy+zOTFcAWAdGgA+Q95YKPOOeRiio=";
     };
-    hostdzire = {
+    hostdzire-sfo = {
       endpoint = "sjc-0.${baseurl}";
       ipv4 = "10.203.0.31";
       ipv6 = "fd42:203::31";
@@ -109,19 +109,19 @@ let
 
   coreLinks = [
     [
-      "hostdzire"
+      "hostdzire-sfo"
       "noboard"
     ]
     [
-      "hostdzire"
+      "hostdzire-sfo"
       "liteserver"
     ]
     [
-      "hostdzire"
+      "hostdzire-sfo"
       "geelinx-us"
     ]
     [
-      "hostdzire"
+      "hostdzire-sfo"
       "dedirock"
     ]
     [
@@ -151,7 +151,7 @@ let
   ];
 
   regionalLinks = {
-    hostdzire = [
+    hostdzire-sfo = [
       "oregon"
       "sla-sjc"
       "nosla-sjc"

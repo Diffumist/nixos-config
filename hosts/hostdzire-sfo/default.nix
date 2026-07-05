@@ -11,7 +11,6 @@
 
     ./services/asterisk.nix
     ./services/lldap.nix
-    # ./services/bub.nix
     ./services/powerdns.nix
     ./services/tgtldr.nix
     ./services/authelia.nix

@@ -22,7 +22,7 @@ in
         publicKey = "25KV0x3WcKCCg7HcTVAB+27LrMpIfrZl05hgX5QGnzU=";
       };
       sjc0 = {
-        hostName = "hostdzire";
+        hostName = "hostdzire-sfo";
         endpoint = "sjc-0.${baseurl}";
         ipv4 = "172.22.64.66";
         ipv6 = "fd22:1056:95a4:2::1";

@@ -4,7 +4,7 @@ keys:
   - &bitsflow age1nrgzhh3tz7sd4xat7xhacp9mgy03s6f8kgksj4ylx89apl0twupsc3tes3
   - &liteserver age14euf85fkar532dkxc4p3mstz92nfjlwl4vdgvf5wfm89v4tpgeeqgw5780
   - &dedirock age1kyfqu2ccdj68lspn85735ph76chsnlaff2pdmfmx3ru5dx8dfanqm8pjxe
-  - &hostdzire age1rkshe6y7r5gz2tpsxtrvnc7a8j5v3puvak04maat7xkssqmggs5qfwkvv5
+  - &hostdzire-sfo age1rkshe6y7r5gz2tpsxtrvnc7a8j5v3puvak04maat7xkssqmggs5qfwkvv5
   - &nosla-lax age1afmdepa6ya8h8cymxn39mjzr6wx5suem75ley8kghjqx0xt3g47q66t2nj
   - &nosla-sjc age1scl30w074ghz9qlh8lkk8zwnwu9jxezllt04hs7ynudkt7dta4aq9sapp7
   - &sla-sjc age1vaal4d53wt0he0u0ppsr654cmgmap9vfxwk8plvvd25z5r26y4es5584pl
@@ -34,10 +34,10 @@ creation_rules:
       - age:
           - *dedirock
           - *diffumist
-  - path_regex: ^hosts/hostdzire/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/hostdzire-sfo/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *hostdzire
+          - *hostdzire-sfo
           - *diffumist
   - path_regex: ^hosts/phoenix/.*\.(json|ya?ml|keytab)$
     key_groups:

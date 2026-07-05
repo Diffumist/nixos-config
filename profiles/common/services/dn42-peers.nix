@@ -102,7 +102,7 @@ let
       };
     };
 
-    hostdzire = {
+    hostdzire-sfo = {
       # AS4242422466 (SessNetwork) Chronnection (San Jose)
       sess-sjc = {
         asn = 4242422466;
