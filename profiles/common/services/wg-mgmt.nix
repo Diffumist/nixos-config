@@ -27,6 +27,12 @@ let
       ipv6 = "fd42:203::3";
       publicKey = "/kMulSNnzMkdoi1WslQuZxuK9SKu7goI+WIGGIJ0Qik=";
     };
+    skyline = {
+      endpoint = "tyo-2.${baseurl}";
+      ipv4 = "10.203.0.4";
+      ipv6 = "fd42:203::4";
+      publicKey = "cmYopEooVzPXVheJRUciRbmMK38dTGR0yvXXMUPBwwY=";
+    };
     liteserver = {
       endpoint = "ams-0.${baseurl}";
       ipv4 = "10.203.0.11";
@@ -165,6 +171,7 @@ let
     ];
     noboard = [
       "wawo"
+      "skyline"
       "geelinx-jp"
     ];
     geelinx-us = [ "carolina" ];

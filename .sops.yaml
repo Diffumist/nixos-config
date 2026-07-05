@@ -16,6 +16,7 @@ keys:
   - &geelinx-mys age1j0gjqjx6lnca8ftg67xjpqgwunk6cd3nt4jkrqtpl5p6n7a9yegqklzj2x
   - &geelinx-us age19hzt079n4sa6gdel6ll4xzq2mfmwf4z7r0rsksf6489nqjrta4fqjm6687
   - &noboard age1q45uswz7nwam23dn6v8g6hpyfyl53wsey23hc7z5n99wr97p7erqpw064a
+  - &skyline age170ajf4wvctstheqf8lza6d3qq70uyvnrz0vglg7gp5uvhg6lydrqnjuu2t
   - &carolina age1anp54rlzvjc4hagkwvh8qy8usfvlgq9vlsaz62kh59qye5rh5g4qj027t8
   - &oregon age1evl9930wl07fw9wdy2pw5k8aaeacf9dgtkvntrr8ygx3ny3xagqsvqnzt5
   - &wawo age1laq2l7pnax405ua70grkefguk4m4zalfjkvj0ky7dzsu2h5sdc6s034jtt
@@ -69,11 +70,6 @@ creation_rules:
       - age:
           - *nosla-sjc
           - *diffumist
-  - path_regex: ^hosts/sla-sjc/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *sla-sjc
-          - *diffumist
   - path_regex: ^hosts/vmrack/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
@@ -98,6 +94,11 @@ creation_rules:
     key_groups:
       - age:
           - *noboard
+          - *diffumist
+  - path_regex: ^hosts/skyline/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *skyline
           - *diffumist
   - path_regex: ^hosts/wawo/.*\.(json|ya?ml|keytab)$
     key_groups:

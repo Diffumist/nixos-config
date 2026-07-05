@@ -49,11 +49,11 @@ let
     "liteserver"
     "nixiso"
     "noboard"
+    "skyline"
     "nosla-lax"
-    "nosla-sjc"
     "oregon"
     "phoenix"
-    "sla-sjc"
+    "nosla-sjc"
     "solidvps"
     "vmrack"
     "wawo"
@@ -65,6 +65,7 @@ let
       "geelinx-mys"
       "noboard"
       "wawo"
+      "skyline"
     ];
     dn42 = [
       "hostdzire-sfo"
@@ -82,7 +83,6 @@ let
       "noboard"
       "nosla-lax"
       "nosla-sjc"
-      "sla-sjc"
       "vmrack"
     ];
     us = [
@@ -92,10 +92,9 @@ let
       "geelinx-us"
       "hostdzire-sfo"
       "nosla-lax"
-      "nosla-sjc"
       "oregon"
       "phoenix"
-      "sla-sjc"
+      "nosla-sjc"
       "solidvps"
       "vmrack"
     ];

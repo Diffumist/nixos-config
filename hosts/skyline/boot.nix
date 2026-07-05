@@ -40,7 +40,7 @@
               "@swap" = {
                 mountpoint = "/.swap";
                 swap = {
-                  swapfile.size = "512M";
+                  swapfile.size = "1024M";
                   swapfile.path = "real-path";
                 };
               };
@@ -93,5 +93,4 @@
     };
   };
   systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
-
 }
