@@ -58,7 +58,6 @@
   # programs
   programs = {
     home-manager.enable = true;
-    fastfetch.enable = true;
     aria2 = {
       enable = true;
       settings = {
@@ -92,21 +91,26 @@
         "--wayland-text-input-version=3"
       ];
     };
-    codexDesktopLinux = {
-      enable = true;
-      computerUseUi.enable = true;
-      remoteMobileControl.enable = true;
-      remoteControl = {
+    codexDesktopLinux =
+      let
+        codex-cli = pkgs.llm-agents.codex;
+      in
+      {
         enable = true;
-        package = pkgs.llm-agents.codex;
+        computerUseUi.enable = true;
+        remoteMobileControl.enable = true;
+        remoteControl = {
+          enable = true;
+          package = codex-cli;
+        };
+        cliPackage = codex-cli;
       };
-      cliPackage = pkgs.llm-agents.codex;
-    };
   };
   home.packages = with pkgs; [
     # CLI
     mosh
     sing-box
+    microfetch
     bubblewrap
     steam-run
     rustypaste-cli
