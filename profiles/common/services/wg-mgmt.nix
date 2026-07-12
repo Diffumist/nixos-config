@@ -51,12 +51,6 @@ let
       ipv6 = "fd42:203::22";
       publicKey = "rDjdsHMYBbmMx1s/5/DNWQJu4CWBqRZL7IUrGznC0XQ=";
     };
-    nosla-lax = {
-      endpoint = "lax-2.${baseurl}";
-      ipv4 = "10.203.0.23";
-      ipv6 = "fd42:203::23";
-      publicKey = "2LqNtlD00D6fZ5ChjvGqK9Ztpqi3jt9yFPHVnfBzk1M=";
-    };
     colocrossing = {
       endpoint = "lax-3.${baseurl}";
       ipv4 = "10.203.0.24";
@@ -81,17 +75,17 @@ let
       ipv6 = "fd42:203::31";
       publicKey = "6x/Qcn7yghNo7AD6ckKFvTpqW9EhuzzhC0qVXpup3HI=";
     };
-    sla-sjc = {
+    nosla-sjc = {
       endpoint = "sjc-1.${baseurl}";
       ipv4 = "10.203.0.32";
       ipv6 = "fd42:203::32";
       publicKey = "CsizRoeV1LdnEl8hGg8Dp/1GD1WRuY/8uFz76H/+3TQ=";
     };
-    nosla-sjc = {
+    raksmart = {
       endpoint = "sjc-2.${baseurl}";
       ipv4 = "10.203.0.33";
       ipv6 = "fd42:203::33";
-      publicKey = "4gjQaYvFcRstEG5SUcokV3ufBpycyQJSiu4uWqEvzVU=";
+      publicKey = "U3+Vwby1YV5mGBndaiOzUl5NZ4ORhIXB6p7nrKP/0nU=";
     };
     phoenix = {
       endpoint = "phx-0.${baseurl}";
@@ -159,13 +153,12 @@ let
   regionalLinks = {
     hostdzire-sfo = [
       "oregon"
-      "sla-sjc"
+      "raksmart"
       "nosla-sjc"
       "phoenix"
     ];
     dedirock = [
       "vmrack"
-      "nosla-lax"
       "colocrossing"
       "solidvps"
     ];

@@ -3,16 +3,29 @@
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
   ];
+  boot.loader = {
+    systemd-boot.enable = true;
+    efi.canTouchEfiVariables = true;
+  };
   disko.devices.disk.main = {
     type = "disk";
-    device = "/dev/sda";
+    device = "/dev/vda";
     content = {
       type = "gpt";
       partitions = {
-        boot = {
-          size = "1M";
-          type = "EF02"; # for grub MBR
+        esp = {
+          size = "512M";
+          type = "EF00";
           priority = 1;
+          content = {
+            type = "filesystem";
+            format = "vfat";
+            mountpoint = "/boot";
+            mountOptions = [
+              "fmask=0077"
+              "dmask=0077"
+            ];
+          };
         };
         nixos = {
           size = "100%";
@@ -21,14 +34,6 @@
             type = "btrfs";
             extraArgs = [ "-f" ];
             subvolumes = {
-              "@boot" = {
-                mountpoint = "/boot";
-                mountOptions = [
-                  "noatime"
-                  "compress-force=zstd:-5"
-                  "space_cache=v2"
-                ];
-              };
               "@nix" = {
                 mountpoint = "/nix";
                 mountOptions = [
@@ -36,13 +41,6 @@
                   "compress-force=zstd:-5"
                   "space_cache=v2"
                 ];
-              };
-              "@swap" = {
-                mountpoint = "/.swap";
-                swap = {
-                  swapfile.size = "512M";
-                  swapfile.path = "real-path";
-                };
               };
               "@persist" = {
                 mountpoint = "/persist";
@@ -52,8 +50,14 @@
                   "space_cache=v2"
                 ];
               };
+              "@swap" = {
+                mountpoint = "/.swap";
+                swap = {
+                  swapfile.size = "1024M";
+                  swapfile.path = "real-path";
+                };
+              };
             };
-            mountpoint = "/.subvols";
           };
         };
       };
@@ -93,5 +97,4 @@
     };
   };
   systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
-
 }

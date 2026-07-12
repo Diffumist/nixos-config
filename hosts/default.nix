@@ -8,12 +8,13 @@
 let
   lib = inputs.nixpkgs.lib;
   overlays = [
-    self.overlays.default
     inputs.llm-agents.overlays.default
-    inputs.quickshell.overlays.default
+    inputs.nur-xddxdd.overlays.default
+    inputs.nix-alien.overlays.default
     inputs.nix-cachyos-kernel.overlays.pinned
     inputs.nix-vscode-extensions.overlays.default
     inputs.nix-dn42.overlays.default
+    self.overlays.default
   ];
   mkPkgs =
     system:
@@ -31,7 +32,6 @@ let
       inputs.disko.nixosModules.disko
       inputs.sops-nix.nixosModules.sops
       inputs.preservation.nixosModules.preservation
-      inputs.nur-xddxdd.nixosModules.setupOverlay
       inputs.nix-dn42.nixosModules.default
     ];
   };
@@ -50,7 +50,7 @@ let
     "nixiso"
     "noboard"
     "skyline"
-    "nosla-lax"
+    "raksmart"
     "oregon"
     "phoenix"
     "nosla-sjc"
@@ -81,7 +81,6 @@ let
     ];
     sing-box = [
       "noboard"
-      "nosla-lax"
       "nosla-sjc"
       "vmrack"
     ];
@@ -91,7 +90,6 @@ let
       "dedirock"
       "geelinx-us"
       "hostdzire-sfo"
-      "nosla-lax"
       "oregon"
       "phoenix"
       "nosla-sjc"
@@ -117,7 +115,7 @@ let
         inputs.home-manager.nixosModules.home-manager
       ];
     };
-    geelinx-mys.deploy = false;
+    # geelinx-mys.deploy = false;
     nixiso = {
       deploy = false;
       useCommon = false;

@@ -19,6 +19,7 @@ keys:
   - &carolina age1anp54rlzvjc4hagkwvh8qy8usfvlgq9vlsaz62kh59qye5rh5g4qj027t8
   - &oregon age1evl9930wl07fw9wdy2pw5k8aaeacf9dgtkvntrr8ygx3ny3xagqsvqnzt5
   - &wawo age1laq2l7pnax405ua70grkefguk4m4zalfjkvj0ky7dzsu2h5sdc6s034jtt
+  - &raksmart age10d2rweultzqlu686dalc2u0fts8zn3ec30a4szk0ppn4djelnd2qtvy9g5
 creation_rules:
   - path_regex: ^hosts/hawkpoint/.*\.(json|ya?ml|keytab)$
     key_groups:
@@ -113,4 +114,9 @@ creation_rules:
     key_groups:
       - age:
           - *oregon
+          - *diffumist
+  - path_regex: ^hosts/raksmart/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *raksmart
           - *diffumist

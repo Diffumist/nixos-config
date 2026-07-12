@@ -12,7 +12,7 @@ in
     devices = {
       disk.main = {
         type = "disk";
-        device = "/dev/sda";
+        device = "/dev/vda";
         imageSize = "4G";
         content = {
           type = "gpt";

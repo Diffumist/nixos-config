@@ -9,7 +9,7 @@
   # btrfs filesystem resize max /nix
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
-    ./disko.nix
+    ./disko-uefi.nix
   ];
 
   boot = {
@@ -69,7 +69,7 @@
 
   services.resolved.enable = true;
   systemd.network.networks."10-eth0" = {
-    matchConfig.MACAddress = "42:01:0a:80:00:02";
+    matchConfig.MACAddress = "52:54:06:5d:0e:6f";
     networkConfig = {
       DHCP = "ipv4";
     };
