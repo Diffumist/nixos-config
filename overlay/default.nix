@@ -23,3 +23,19 @@ importedPkgs
   });
   # stable-package = inputs.nixpkgs-stable.legacyPackages.${prev.system}.some-package;
 }
+// lib.optionalAttrs (prev ? cachyosKernels) {
+  cachyosKernels = prev.cachyosKernels // {
+    linuxPackages-cachyos-latest-lto-zen4 =
+      prev.cachyosKernels.linuxPackages-cachyos-latest-lto-zen4.extend
+        (
+          _: kernelPrev: {
+            yt6801 = kernelPrev.yt6801.overrideAttrs (oldAttrs: {
+              makeFlags = (oldAttrs.makeFlags or [ ]) ++ [
+                "CC=cc"
+                "LLVM=1"
+              ];
+            });
+          }
+        );
+  };
+}

@@ -14,15 +14,20 @@
   };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    preservation.url = "github:nix-community/preservation/main";
     git-hooks-nix = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
-    preservation.url = "github:nix-community/preservation/main";
     home-manager = {
       url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     devshell = {
@@ -42,10 +47,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     llm-agents.url = "github:numtide/llm-agents.nix";
-    nur-xddxdd = {
-      url = "github:xddxdd/nur-packages";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nur-xddxdd.url = "github:xddxdd/nur-packages";
+    nix-alien.url = "github:thiagokokada/nix-alien";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -58,16 +61,8 @@
       url = "github:Kirottu/system76-scheduler-niri";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    quickshell = {
-      url = "github:quickshell-mirror/quickshell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    codex-desktop-linux = {
-      url = "github:ilysenko/codex-desktop-linux";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nix-dn42 = {
-      url = "git+https://git.sr.ht/~diffumist/nix-dn42";
+      url = "git+https://git.sr.ht/~diffumist/nix-dn42?ref=sing-tun";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dn42-registry = {
