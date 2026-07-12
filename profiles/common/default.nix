@@ -9,6 +9,7 @@
   imports = [
     ./nixconfig.nix
     ./kernel.nix
+    "${self}/modules/system/anti-lockout.nix"
     "${self}/modules/system/sops.nix"
     ./services/sshd.nix
     ./services/fail2ban.nix
@@ -18,7 +19,6 @@
     "${self}/modules/services/sing-box.nix"
     "${self}/modules/services/sema.nix"
     "${self}/modules/services/postgresql.nix"
-    # "${self}/modules/services/komari.nix" # TODO: REPLACE sema and vnstat + webhook
     "${self}/modules/services/dn42/mesh.nix"
     ./services/dn42.nix
     ./services/dn42-peers.nix
