@@ -93,7 +93,7 @@ in
           --asn ${toString config.networking.dn42.asn} \
           --bgpListenAddress ${formatHttpHost cfg.serverAddress}:${toString bgpPort} \
           --httpAPIListenAddress ${formatHttpHost cfg.serverAddress}:${toString httpPort} \
-          -routeChangeCounter 120 \
+          -routeChangeCounter 2000 \
           -overThresholdTarget 5 \
           -underThresholdTarget 30
       '';

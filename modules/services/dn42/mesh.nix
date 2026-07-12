@@ -16,6 +16,41 @@ let
   localLinks = lib.filter (link: builtins.elem localNodeName (linkNodes link)) links;
   ibgpPeers = lib.filterAttrs (name: _: name != localNodeName) nodes;
   lookingGlassProxyPort = cfg.lookingGlassProxyPort;
+  dn42KernelRoutingTable = 642;
+  mainRoutingTable = 254;
+  dn42RoutingPolicyRules = [
+    # Keep the management mesh out of the DN42 full-table lookup.
+    {
+      Priority = 9000;
+      To = "10.203.0.0/24";
+      Table = mainRoutingTable;
+    }
+    {
+      Priority = 9001;
+      To = "fd42:203::/64";
+      Table = mainRoutingTable;
+    }
+    {
+      Priority = 10000;
+      To = "10.0.0.0/8";
+      Table = dn42KernelRoutingTable;
+    }
+    {
+      Priority = 10001;
+      To = "172.20.0.0/14";
+      Table = dn42KernelRoutingTable;
+    }
+    {
+      Priority = 10002;
+      To = "172.31.0.0/16";
+      Table = dn42KernelRoutingTable;
+    }
+    {
+      Priority = 10003;
+      To = "fd00::/8";
+      Table = dn42KernelRoutingTable;
+    }
+  ];
 
   assertions =
     let
@@ -269,6 +304,8 @@ in
           registry = cfg.roaRegistry;
         };
 
+        kernel.routingTable = dn42KernelRoutingTable;
+
         ospf = {
           enable = true;
           interfaces = lib.listToAttrs (
@@ -313,7 +350,9 @@ in
       ];
 
       systemd.network.netdevs = lib.listToAttrs (map mkNetdev localLinks);
-      systemd.network.networks = lib.listToAttrs (map mkNetwork localLinks);
+      systemd.network.networks = (lib.listToAttrs (map mkNetwork localLinks)) // {
+        "10-dn42-dummy".routingPolicyRules = dn42RoutingPolicyRules;
+      };
 
     }
   );
