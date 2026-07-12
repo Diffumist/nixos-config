@@ -91,59 +91,59 @@
         "--wayland-text-input-version=3"
       ];
     };
-    codexDesktopLinux =
-      let
-        codex-cli = pkgs.llm-agents.codex;
-      in
-      {
-        enable = true;
-        computerUseUi.enable = true;
-        remoteMobileControl.enable = true;
-        remoteControl = {
-          enable = true;
-          package = codex-cli;
-        };
-        cliPackage = codex-cli;
-      };
   };
   home.packages = with pkgs; [
     # CLI
+    fff
     mosh
     sing-box
+    # nix-alien
     microfetch
     bubblewrap
     steam-run
-    rustypaste-cli
     android-tools
     playwright
+    (pkgs.writeShellApplication {
+      name = "niri-single-monitor-game";
+      runtimeInputs = [ pkgs.niri ];
+      text = ''
+        output="eDP-1"
+        # shellcheck disable=SC2329
+        restore_output() {
+          niri msg output "$output" on >/dev/null 2>&1 || true
+        }
+        trap restore_output EXIT HUP INT TERM
+        niri msg output "$output" off || exit 1
+        "$@"
+        status=$?
+        exit "$status"
+      '';
+    })
     # mcp
     mcp-nixos
     context7-mcp
     playwright-mcp
     github-mcp-server
     # TUI
+    llm-agents.rtk
     llm-agents.codex
-    llm-agents.claude-code
-    llm-agents.crush
     llm-agents.omp
     llm-agents.herdr
-    llm-agents.antigravity-cli
+    llm-agents.crush
     llm-agents.opencode
-    llm-agents.rtk
     llm-agents.codex-auth
+    llm-agents.claude-code
+    llm-agents.agent-browser
+    llm-agents.antigravity-cli
     # GUI
     qq
     wemeet
-    kazumi
-    splayer
     vesktop
     gapless
     clapper
-    piliplus
     localsend
     fluffychat
     distroshelf
-    antigravity-fhs
     ayugram-desktop
     qbittorrent-enhanced
     netease-cloud-music-gtk

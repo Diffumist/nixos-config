@@ -130,8 +130,9 @@
     isNormalUser = true;
     extraGroups = [
       "wheel"
-      "storage"
       "podman"
+      "greeter"
+      "storage"
       "networkmanager"
     ];
     hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
@@ -145,7 +146,7 @@
   security.soteria.enable = true;
   services.displayManager.dms-greeter = {
     enable = true;
-    configHome = "/home/diffumist";
+    configHome = "${config.users.users.diffumist.home}";
     compositor.name = "niri";
   };
   services.envfs.enable = true;
@@ -162,15 +163,17 @@
     pciutils
     dnscontrol
     libarchive
+    ssh-to-age
     # GUI
     loupe
     glib
     adw-gtk3
     nwg-look
     nautilus
-    code-nautilus
-    mission-center
     seahorse
+    code-nautilus
+    cups-pk-helper
+    mission-center
     pinentry-gnome3
     gsettings-desktop-schemas
     papirus-icon-theme
@@ -194,7 +197,7 @@
     };
     nh = {
       enable = true;
-      flake = "/home/diffumist/Projects/nixos-config";
+      flake = "${config.users.users.diffumist.home}/Projects/nixos-config";
     };
     steam = {
       enable = true;
@@ -298,7 +301,6 @@
       inputs.system76-scheduler-niri.homeModules.default
       inputs.nix-index-database.homeModules.default
       inputs.sops-nix.homeManagerModules.sops
-      inputs.codex-desktop-linux.homeManagerModules.default
     ];
   };
 }

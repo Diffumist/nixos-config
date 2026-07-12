@@ -50,8 +50,8 @@
       settings.cue = true;
     };
     services = {
-      login.u2fAuth = true;
-      sudo.u2fAuth = true;
+      login.u2f.enable = true;
+      sudo.u2f.enable = true;
     };
   };
 }
