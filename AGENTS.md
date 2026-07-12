@@ -120,7 +120,6 @@ Current important options:
 - `my.services.caddy`
 - `my.services.dn42`
 - `my.services.dn42.peers`
-- `my.services.komari-agent`
 - `my.services.postgresql`
 - `my.services.prometheus-node`
 - `my.services.sema`

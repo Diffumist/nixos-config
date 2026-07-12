@@ -14,6 +14,9 @@
     ./services/powerdns.nix
     ./services/tgtldr.nix
     ./services/authelia.nix
+    ./services/cli-proxy-api.nix
+    # ./services/snac.nix
+    ./services/uptime-kuma.nix
     ./services/vaultwarden.nix
   ];
 
@@ -24,5 +27,4 @@
   };
 
   my.services.postgresql.totalRamMB = 6 * 1024;
-  systemd.services.komari-agent.environment.AGENT_MONTH_ROTATE = "20";
 }

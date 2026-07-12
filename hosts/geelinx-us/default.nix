@@ -8,6 +8,8 @@
 {
   imports = [
     ./boot.nix
+    ./services/matrix.nix
+    ./services/misskey.nix
     ./services/notifications.nix
   ];
 
@@ -39,5 +41,8 @@
     };
   };
 
-  my.services.postgresql.totalRamMB = 2 * 1024;
+  my.services.postgresql = {
+    enable = true;
+    totalRamMB = 2 * 1024;
+  };
 }

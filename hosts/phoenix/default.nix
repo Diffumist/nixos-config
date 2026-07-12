@@ -9,9 +9,7 @@
   imports = [
     ./boot.nix
 
-    ./services/forgejo.nix
-    ./services/cyber.nix
-    ./services/code-server.nix
+    # ./services/cyber.nix
     ./services/attic.nix
   ];
   networking = {
