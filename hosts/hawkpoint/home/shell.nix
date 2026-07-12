@@ -31,6 +31,12 @@
       enable = true;
       enableAutoUpdates = true;
     };
+    bash = {
+      enable = true;
+      initExtra = ''
+        enable -f ${pkgs.flyline}/lib/bash/libflyline.so flyline
+      '';
+    };
     fish = {
       enable = true;
       shellInit = ''

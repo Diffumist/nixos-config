@@ -14,6 +14,7 @@ let
     "caddy-cloudflare"
     "caddy-dns-cloudflare"
     "cybergroupmate"
+    "flyline"
     "tel42verifier"
     "xsz"
   ];
