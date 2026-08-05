@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Last verified: 2026-07-01
+Last verified: 2026-08-02
 Audience: future coding agents / LLMs
 Goal: understand this repo quickly and change it safely.
 
@@ -8,7 +8,7 @@ Goal: understand this repo quickly and change it safely.
 
 Flake-based, declarative multi-host NixOS repository.
 
-- `hawkpoint`: local desktop, Niri + Home Manager.
+- `hawkpoint-lap`: local desktop, Niri + Home Manager.
 - Remote VPS/server fleet: most hosts use the shared server baseline; some are DN42 nodes.
 - `nixiso` and `bootstrap`: installer/bootstrap targets.
 
@@ -33,8 +33,10 @@ Stable locations:
 
 - `flake.nix`: flake inputs, dev shell, packages, Colmena outputs.
 - `hosts/default.nix`: host inventory and system/hive builders.
-- `profiles/common`: shared baseline imported by hosts with `useCommon = true`.
-- `modules`: reusable repo-local NixOS modules, including `my.services.*`.
+- `profiles/base/server.nix`: shared server policy.
+- `profiles/roles`: explicit opt-in behavior such as containers, DN42, and fail2ban.
+- `profiles/common`: shared profile fragments and DN42 topology data.
+- `modules/default.nix`: registry for reusable repo-local NixOS modules.
 - `hosts/<host>`: per-host NixOS modules and secrets.
 - `overlay/default.nix`: local overlay entry point.
 - `pkgs`: local packages.
@@ -44,38 +46,45 @@ and the filesystem are the source of truth.
 
 ## 4. Host table rules
 
-All host inventory lives in `hosts/default.nix`: add normal hosts to
-`hostNames`, put only exceptions in `hosts`, and assign Colmena selectors in
-`hostTags`.
+All host inventory lives in the single `inventory` attrset in
+`hosts/default.nix`. Host names, NixOS systems, Colmena nodes and tags, and CI
+systems are derived from it.
 
 Per-host fields:
 
+- `stateVersion`: required NixOS state version.
+- `roles`: explicit host capabilities; `server`, `container`, `dn42`, and
+  `fail2ban` compose server behavior, while `desktop` selects desktop overlays.
+- `tags`: Colmena selectors assigned directly to the host.
 - `system`: optional target system; defaults to `x86_64-linux`.
 - `path`: optional host module directory; defaults to `./${hostName}`.
 - `deploy`: optional; defaults to true for Colmena, set false to exclude.
-- `useCommon`: defaults to true; false skips `profiles/common`.
-- `extra`: extra NixOS modules; defaults to `defaults.extra`.
+- `ciBuild`: optional; defaults to `deploy`.
+- `externalModules`: optional replacement for the default external module set.
+- `modules`: optional extra NixOS modules.
 - `targetHost`: Colmena SSH host; defaults to host attr name.
 - `targetUser`: Colmena SSH user; defaults to `root`.
 - `targetPort`: optional Colmena SSH port.
-- `tags`: do not set per host; add hosts under `hostTags.<tag>` instead.
-- `buildOnTarget`: optional Colmena remote-build flag; defaults to true.
+- `buildOnTarget`: optional Colmena remote-build flag; defaults to false.
 
 `specialArgs` for every host:
 
 - `inputs`
 - `overlays`
+- `self`
 - `hostName`
+- `hostPath`
+- `hostRoles`
+- `hostTags`
 
 `modules/system/hostname.nix` sets `networking.hostName` from `hostName` with
 `mkDefault`; keep explicit per-host `networking.hostName` only for deliberate
 overrides.
 `modules/system/sops.nix` sets `sops.defaultSopsFile` from `hostPath`, so normal
 hosts do not need to repeat `./secrets.yaml`.
-`profiles/common` sets the server networking baseline and root password hash
-for `useCommon = true` hosts.
-
-Do not assume changes under `profiles/common` affect `useCommon = false` hosts.
+The `server` role imports `modules/default.nix` and
+`profiles/base/server.nix`. Optional server behavior must remain in explicit
+roles rather than the server baseline.
 
 ## 5. Deployment
 
@@ -85,21 +94,21 @@ Common commands:
 
 ```bash
 # deploy one host; local build, then push closure
-colmena apply --on liteserver -p 8
+colmena apply --on liteserver-ams -p 8
 
 # deploy selected hosts in parallel
-colmena apply --on nosla-sjc,nosla-lax -p 8
+colmena apply --on nosla-sjc,vmiss-lax -p 8
 
 # build locally only
-colmena build --on liteserver
+colmena build --on liteserver-ams
 
 # push closure only, no activation
-colmena apply push --on liteserver
+colmena apply push --on liteserver-ams
 
 # activation variants
-colmena apply test --on liteserver
-colmena apply dry-activate --on liteserver
-colmena apply boot --on liteserver
+colmena apply test --on liteserver-ams
+colmena apply dry-activate --on liteserver-ams
+colmena apply boot --on liteserver-ams
 ```
 
 Colmena defaults to local build + push closure. Use `buildOnTarget = true;` in
@@ -113,7 +122,7 @@ risk; a broken remote deploy may require provider console access.
 ## 6. Shared modules and options
 
 Repo-local service options live under `my.services.*`, usually implemented in
-`modules/services/*`.
+`modules/services/*` and registered by `modules/default.nix`.
 
 Current important options:
 
@@ -169,7 +178,7 @@ Notable packages:
 
 - SOPS policy: `.sops.yaml`.
 - Per-host secrets: `hosts/<host>/secrets.yaml`.
-- Shared secrets: `profiles/common/secrets.yaml` if a shared SOPS file is added.
+- Shared secrets: encrypted files under `profiles/common/secrets/`.
 - Local management key: `diffumist` age key is included in rules.
 
 Edit encrypted files with:
@@ -212,10 +221,10 @@ For Nix/NixOS questions, prefer `mcp-nixos` first. Use upstream docs or
 nix flake check
 
 # build local desktop
-nix build .#nixosConfigurations.hawkpoint.config.system.build.toplevel
+nix build .#nixosConfigurations.hawkpoint-lap.config.system.build.toplevel
 
 # build one remote host
-nix build .#nixosConfigurations.liteserver.config.system.build.toplevel
+nix build .#nixosConfigurations.liteserver-ams.config.system.build.toplevel
 
 # build installer ISO
 nix build .#nixosConfigurations.nixiso.config.system.build.isoImage
@@ -224,5 +233,5 @@ nix build .#nixosConfigurations.nixiso.config.system.build.isoImage
 nix eval --json .#colmenaHive.nodes --apply builtins.attrNames
 
 # deploy one host
-colmena apply --on liteserver -p 8
+colmena apply --on liteserver-ams -p 8
 ```

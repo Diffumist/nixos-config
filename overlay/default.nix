@@ -21,7 +21,8 @@ importedPkgs
         --replace "VSCODE = 'code'" "VSCODE = 'codium'"
     '';
   });
-  # stable-package = inputs.nixpkgs-stable.legacyPackages.${prev.system}.some-package;
+  # niri = inputs.small.legacyPackages.${prev.stdenv.hostPlatform.system}.niri;
+  # stable-package = inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}.some-package;
 }
 // lib.optionalAttrs (prev ? cachyosKernels) {
   cachyosKernels = prev.cachyosKernels // {

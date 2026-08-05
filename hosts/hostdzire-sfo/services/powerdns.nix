@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 let
+  authoritativeDns = config.my.services.dn42.authoritativeDns;
   ipv4 = "172.22.64.66";
   ipv6 = "fd22:1056:95a4:2::1";
   secondaryIpv4 = "172.22.64.68";
@@ -10,7 +11,7 @@ let
   ipv6ReverseDomain = "4.a.5.9.6.5.0.1.2.2.d.f.ip6.arpa";
   dbName = "pdns";
   apiPort = 8081;
-  tsigKeyAlgorithm = "hmac-sha256";
+  inherit (authoritativeDns) tsigKeyAlgorithm tsigKeyName;
   postgresqlUnits = [
     "postgresql.service"
     "postgresql-setup.service"
@@ -122,13 +123,16 @@ let
       ${pdnsutil} load-zone '${zone}' '${file}'
     fi
   '';
-  activateZoneTsig = zone: ''
-    ${pdnsutil} tsigkey activate '${zone}' "$PDNS_TSIG_KEY_NAME" primary
+  setPrimaryZone = zone: ''
+    ${pdnsutil} zone set-kind '${zone}' primary
+  '';
+  authorizeZoneTransfer = zone: ''
+    ${pdnsutil} metadata set '${zone}' TSIG-ALLOW-AXFR '${tsigKeyName}'
   '';
 in
 {
   sops.secrets.powerdns_env = {
-    sopsFile = ../secrets.yaml;
+    sopsFile = ./powerdns.yaml;
     owner = "pdns";
     group = "pdns";
     mode = "0440";
@@ -162,7 +166,6 @@ in
       . ${config.sops.secrets.powerdns_env.path}
       set +a
 
-      : "''${PDNS_TSIG_KEY_NAME:?missing PDNS_TSIG_KEY_NAME}"
       : "''${PDNS_TSIG_KEY_SECRET:?missing PDNS_TSIG_KEY_SECRET}"
 
       if ! ${psql} -d ${dbName} -Atqc "select 1 from pg_tables where schemaname = 'public' and tablename = 'domains'" | grep -qx 1; then
@@ -175,12 +178,18 @@ in
       ${mkZoneBootstrap ipv4ReverseDomain ipv4ReverseZoneFile}
       ${mkZoneBootstrap ipv6ReverseDomain ipv6ReverseZoneFile}
 
-      # Keep TSIG bootstrap idempotent so key rotation follows Nix state.
-      ${pdnsutil} tsigkey import "$PDNS_TSIG_KEY_NAME" ${tsigKeyAlgorithm} "$PDNS_TSIG_KEY_SECRET"
-      ${activateZoneTsig domain}
-      ${activateZoneTsig telephonyDomain}
-      ${activateZoneTsig ipv4ReverseDomain}
-      ${activateZoneTsig ipv6ReverseDomain}
+      # Existing SQL zones must follow the declared primary role after bootstrap.
+      ${setPrimaryZone domain}
+      ${setPrimaryZone telephonyDomain}
+      ${setPrimaryZone ipv4ReverseDomain}
+      ${setPrimaryZone ipv6ReverseDomain}
+
+      # Replace zone authorization so retired key names cannot retain AXFR access.
+      ${pdnsutil} tsigkey import '${tsigKeyName}' ${tsigKeyAlgorithm} "$PDNS_TSIG_KEY_SECRET"
+      ${authorizeZoneTransfer domain}
+      ${authorizeZoneTransfer telephonyDomain}
+      ${authorizeZoneTransfer ipv4ReverseDomain}
+      ${authorizeZoneTransfer ipv6ReverseDomain}
     '';
   };
 
@@ -195,21 +204,31 @@ in
     extraConfig = powerdnsConfig;
   };
 
-  my.services.caddy.enable = true;
+  my.services.caddy = {
+    enable = true;
+    virtualHosts."zones.diffumist.me".useCloudflareACME = true;
+  };
   services.caddy.virtualHosts."zones.diffumist.me" = {
-    useACMEHost = "zones.diffumist.me";
     extraConfig = ''
       encode zstd gzip
-      reverse_proxy 127.0.0.1:${toString apiPort}
-    '';
-  };
 
-  security.acme.certs."zones.diffumist.me" = {
-    dnsProvider = "cloudflare";
-    credentialFiles = {
-      CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-      CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-    };
+      @powerdnsApi path /api/v1/*
+      handle @powerdnsApi {
+        reverse_proxy 127.0.0.1:${toString apiPort}
+      }
+
+      handle {
+        forward_auth https://oauth2.diffumist.me {
+          uri /oauth2/auth
+          copy_headers X-Auth-Request-User X-Auth-Request-Groups X-Auth-Request-Email X-Auth-Request-Preferred-Username
+          @error status 401
+          handle_response @error {
+            redir * https://oauth2.diffumist.me/oauth2/start?rd={scheme}://{host}{uri}
+          }
+        }
+        reverse_proxy 127.0.0.1:${toString apiPort}
+      }
+    '';
   };
 
   networking.firewall.allowedTCPPorts = [ 53 ];

@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xsz";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "SaltyKitkat";
     repo = "xsz";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-L982iGnkYkqxddqlufOKZE3gyQjYxvqcbhEByEx7lDs=";
+    hash = "sha256-UdG7OpDmOfp6avJhTspiyqNlyuxw7NKaEjqfHQeAeeA=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;

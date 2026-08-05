@@ -190,6 +190,20 @@ let
     };
 in
 {
+  options.my.services.dn42.authoritativeDns = {
+    tsigKeyName = lib.mkOption {
+      type = lib.types.str;
+      default = "hostdzire-sfo-noboard-xfr";
+      description = "Shared TSIG key name for DN42 authoritative zone transfers.";
+    };
+
+    tsigKeyAlgorithm = lib.mkOption {
+      type = lib.types.enum [ "hmac-sha256" ];
+      default = "hmac-sha256";
+      description = "TSIG algorithm for DN42 authoritative zone transfers.";
+    };
+  };
+
   options.my.services.dn42.mesh = {
     enable = lib.mkEnableOption "DN42 internal mesh";
 

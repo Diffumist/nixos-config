@@ -73,5 +73,4 @@
 
   documentation.doc.enable = false;
 
-  system.stateVersion = "25.11";
 }

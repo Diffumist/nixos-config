@@ -16,12 +16,10 @@
       extra-substituters = [
         "https://cache.numtide.com"
         "https://attic.xuyh0120.win/lantian"
-        "https://attic.diffumist.me/nixos-config"
       ];
       extra-trusted-public-keys = [
         "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
         "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-        "nixos-config:zM4D3PAPLRe0q415xXHbluX6X0Zc9kuAlsArsEuuvqA="
       ];
       auto-allocate-uids = true;
       warn-dirty = false;
@@ -35,7 +33,10 @@
       options = "--delete-older-than 7d";
     };
   };
+
+  documentation.enable = false;
+  documentation.man.enable = false;
+  documentation.info.enable = false;
   documentation.doc.enable = false;
 
-  system.stateVersion = "25.11";
 }

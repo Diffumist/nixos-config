@@ -1,9 +1,13 @@
 {
+  coreutils,
   lib,
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
+  gnugrep,
+  gnused,
   makeWrapper,
+  nix-update,
   node-gyp,
   nodejs-slim_22,
   nodejs_22,
@@ -23,20 +27,82 @@
   unzip,
   uv,
   wget,
+  writeShellApplication,
   zip,
   ...
 }:
 
 let
-  rev = "0c00f780683b686d950666c4b935eac09a0e7b84";
-  version = "0.1.0-unstable-2026-06-16";
+  rev = "6b2cba8f1fc4c8a12a8a872e822be1ebda5acda0";
+  version = "0.1.0-unstable-2026-07-28";
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
 
   src = fetchFromGitHub {
     owner = "Archeb";
     repo = "CyberGroupmate";
     inherit rev;
-    hash = "sha256-4RZ1xIzoJ5Te3ShFkkCe1t3uiwEAtZ4z8HSMlQ+dd7I=";
+    hash = "sha256-Z99gsE5W/IwJocv9KytYJ2+eV4ocxb2AX/MesLJVqvM=";
+  };
+
+  updateScript = writeShellApplication {
+    name = "update-cybergroupmate";
+    runtimeInputs = [
+      coreutils
+      git
+      gnugrep
+      gnused
+      nix-update
+    ];
+    text = ''
+      repo_root="$(git rev-parse --show-toplevel)"
+      tmpdir="$(mktemp -d)"
+      package_file="$repo_root/pkgs/cybergroupmate/default.nix"
+      completed=false
+
+      cleanup() {
+        status=$?
+        if [ "$completed" != true ] && [ -e "$tmpdir/default.nix" ]; then
+          cp "$tmpdir/default.nix" "$package_file"
+        fi
+        rm -rf "$tmpdir"
+        exit "$status"
+      }
+      trap cleanup EXIT
+
+      git -C "$tmpdir" init --quiet
+      git -C "$tmpdir" fetch --depth=1 --quiet \
+        https://github.com/Archeb/CyberGroupmate.git \
+        refs/heads/agentic
+
+      new_rev="$(git -C "$tmpdir" rev-parse FETCH_HEAD)"
+      new_date="$(git -C "$tmpdir" show --no-patch --format=%cs FETCH_HEAD)"
+
+      if [ "$new_rev" = ${lib.escapeShellArg rev} ]; then
+        echo "CyberGroupmate is already at agentic commit $new_rev"
+        completed=true
+        exit 0
+      fi
+
+      if [ "$(grep -Ec '^  rev = "[0-9a-f]{40}";$' "$package_file")" -ne 1 ]; then
+        echo "expected exactly one CyberGroupmate rev assignment" >&2
+        exit 1
+      fi
+      if [ "$(grep -Ec '^  version = "[^"]+";$' "$package_file")" -ne 1 ]; then
+        echo "expected exactly one CyberGroupmate version assignment" >&2
+        exit 1
+      fi
+
+      cp "$package_file" "$tmpdir/default.nix"
+      sed -i \
+        -e "s|^  rev = \"[0-9a-f]\\{40\\}\";|  rev = \"$new_rev\";|" \
+        -e "s|^  version = \"[^\"]*\";|  version = \"0.1.0-unstable-$new_date\";|" \
+        "$package_file"
+
+      cd "$repo_root"
+      nix-update --flake --version=skip cybergroupmate
+      nix-update --flake --version=skip --subpackage=dashboard cybergroupmate
+      completed=true
+    '';
   };
 
   runtimePath = lib.makeBinPath [
@@ -180,7 +246,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
-    inherit rev src;
+    inherit dashboard rev src;
+    nixUpdateUseUpdateScript = true;
+    updateScript = lib.getExe updateScript;
     dockerContext = src;
     dockerfile = "${src}/Dockerfile";
     dockerImageName = "localhost/cybergroupmate-agentic";

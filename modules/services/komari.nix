@@ -11,13 +11,24 @@ in
   options.my.services.komari-agent.enable = lib.mkOption {
     type = lib.types.bool;
     default = true;
+    description = "the Komari monitoring agent";
   };
 
   config = lib.mkIf cfg.enable {
+    sops = {
+      secrets.komari_token = {
+        key = config.networking.hostName;
+        sopsFile = ../../profiles/common/secrets/komari.yaml;
+        restartUnits = [ "komari-agent.service" ];
+      };
 
-    sops.templates."komari-agent.env".content = ''
-      AGENT_TOKEN=${config.sops.placeholder.komari_token}
-    '';
+      templates."komari-agent.env" = {
+        mode = "0400";
+        content = ''
+          AGENT_TOKEN=${config.sops.placeholder.komari_token}
+        '';
+      };
+    };
 
     systemd.services.komari-agent = {
       environment = {

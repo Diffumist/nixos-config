@@ -13,6 +13,7 @@ let
     "bub"
     "caddy-cloudflare"
     "caddy-dns-cloudflare"
+    "cloudflare-ip-ranges"
     "cybergroupmate"
     "flyline"
     "tel42verifier"

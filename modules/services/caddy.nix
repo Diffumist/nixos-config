@@ -6,55 +6,55 @@
 }:
 let
   cfg = config.my.services.caddy;
-  updateCloudflareTrustedProxies = pkgs.writeShellScript "update-cloudflare-trusted-proxies" ''
-    set -euo pipefail
-
-    target_dir=/var/lib/caddy
-    target=$target_dir/cloudflare-trusted-proxies.caddy
-    tmpdir="$(mktemp -d)"
-    trap 'rm -rf "$tmpdir"' EXIT
-
-    ${pkgs.coreutils}/bin/install -o caddy -g caddy -m 0700 -d "$target_dir"
-    if [ ! -e "$target" ]; then
-      ${pkgs.coreutils}/bin/install -o caddy -g caddy -m 0644 /dev/null "$target"
-    fi
-
-    json="$tmpdir/cloudflare-ips.json"
-    new="$tmpdir/cloudflare-trusted-proxies.caddy"
-
-    if ! ${pkgs.curl}/bin/curl -fsSL \
-      https://api.cloudflare.com/client/v4/ips \
-      -o "$json"; then
-      echo "failed to fetch Cloudflare IP ranges; keeping existing trusted proxy config"
-      exit 0
-    fi
-
-    if ! ranges="$(
-      ${pkgs.jq}/bin/jq -er '
-        .result.ipv4_cidrs + .result.ipv6_cidrs | join(" ")
-      ' "$json"
-    )"; then
-      echo "failed to parse Cloudflare IP ranges; keeping existing trusted proxy config"
-      exit 0
-    fi
-
-    cat > "$new" <<EOF
-    trusted_proxies static $ranges
-    trusted_proxies_strict
-    client_ip_headers CF-Connecting-IP X-Forwarded-For
-    EOF
-
-    if ! ${pkgs.diffutils}/bin/cmp -s "$new" "$target"; then
-      ${pkgs.coreutils}/bin/install -o caddy -g caddy -m 0644 "$new" "$target"
-      if ${pkgs.systemd}/bin/systemctl -q is-active caddy.service; then
-        ${pkgs.systemd}/bin/systemctl reload caddy.service
-      fi
-    fi
+  cloudflareAccessFile = "${pkgs.cloudflare-ip-ranges}/share/caddy/cloudflare-only.caddy";
+  cloudflareTrustedProxiesFile = "${pkgs.cloudflare-ip-ranges}/share/caddy/cloudflare-trusted-proxies.caddy";
+  cloudflareACMEHosts = lib.filterAttrs (_: host: host.useCloudflareACME) cfg.virtualHosts;
+  oauth2ForwardAuth = authHost: ''
+    forward_auth https://${authHost} {
+      uri /oauth2/auth
+      copy_headers X-Auth-Request-User X-Auth-Request-Groups X-Auth-Request-Email X-Auth-Request-Preferred-Username
+      @error status 401
+      handle_response @error {
+        redir * https://${authHost}/oauth2/start?rd={scheme}://{host}{uri}
+      }
+    }
   '';
 in
 {
   options = {
-    my.services.caddy.enable = lib.mkEnableOption "The Caddy Service";
+    my.services.caddy = {
+      enable = lib.mkEnableOption "the Caddy service";
+      cloudflareOnlyHosts = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "app.example.com" ];
+        description = ''
+          Caddy virtual hosts that only accept HTTP requests whose immediate
+          peer is in Cloudflare's published IP ranges.
+        '';
+      };
+      virtualHosts = lib.mkOption {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              useCloudflareACME = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Provision and use a Cloudflare DNS-01 certificate for this host.";
+              };
+              oauth2ForwardAuth = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                example = "oauth2.example.com";
+                description = "OAuth2 Proxy host used to protect the entire virtual host.";
+              };
+            };
+          }
+        );
+        default = { };
+        description = "Shared policy layered onto Caddy virtual hosts.";
+      };
+    };
   };
   config = lib.mkIf cfg.enable {
     security.acme = {
@@ -68,17 +68,40 @@ in
       globalConfig = ''
         acme_dns cloudflare {env.CF_API_TOKEN}
         servers {
-          import /var/lib/caddy/cloudflare-trusted-proxies.caddy
+          import ${cloudflareTrustedProxiesFile}
         }
       '';
+      virtualHosts = lib.mkMerge [
+        (lib.genAttrs cfg.cloudflareOnlyHosts (_: {
+          extraConfig = lib.mkBefore ''
+            import ${cloudflareAccessFile}
+          '';
+        }))
+        (lib.mapAttrs (
+          domain: host:
+          lib.optionalAttrs host.useCloudflareACME {
+            useACMEHost = domain;
+          }
+          // lib.optionalAttrs (host.oauth2ForwardAuth != null) {
+            extraConfig = lib.mkBefore (oauth2ForwardAuth host.oauth2ForwardAuth);
+          }
+        ) cfg.virtualHosts)
+      ];
     };
 
-    systemd.services.caddy = {
-      requires = [ "caddy-cloudflare-trusted-proxies.service" ];
-      after = [ "caddy-cloudflare-trusted-proxies.service" ];
-      serviceConfig.EnvironmentFile = config.sops.templates."caddy-cloudflare.env".path;
+    security.acme.certs = lib.mapAttrs (_: _: {
+      dnsProvider = "cloudflare";
+      credentialFiles = {
+        CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
+        CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
+      };
+    }) cloudflareACMEHosts;
+
+    systemd.services.caddy.serviceConfig.EnvironmentFile =
+      config.sops.templates."caddy-cloudflare.env".path;
+    sops.secrets.cloudflare_api_token = {
+      sopsFile = ../../profiles/common/secrets/cloudflare.yaml;
     };
-    sops.secrets.cloudflare_api_token = { };
     sops.templates."caddy-cloudflare.env" = {
       owner = "caddy";
       group = "caddy";
@@ -88,36 +111,6 @@ in
       '';
     };
 
-    systemd.tmpfiles.rules = [
-      "d /var/lib/caddy 0700 caddy caddy -"
-      "f /var/lib/caddy/cloudflare-trusted-proxies.caddy 0644 caddy caddy -"
-    ];
-
-    systemd.services.caddy-cloudflare-trusted-proxies = {
-      description = "Update Cloudflare trusted proxies for Caddy";
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
-      before = [ "caddy.service" ];
-      wantedBy = [ "caddy.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        User = "root";
-      };
-      script = ''
-        ${updateCloudflareTrustedProxies}
-      '';
-    };
-
-    systemd.timers.caddy-cloudflare-trusted-proxies = {
-      description = "Refresh Cloudflare trusted proxies for Caddy";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnBootSec = "5m";
-        OnUnitActiveSec = "12h";
-        RandomizedDelaySec = "30m";
-        Unit = "caddy-cloudflare-trusted-proxies.service";
-      };
-    };
     users.users.caddy.extraGroups = [ "acme" ];
 
     networking.firewall = {

@@ -1,7 +1,7 @@
 { hostName, ... }:
 let
   peers = {
-    liteserver = {
+    liteserver-ams = {
       # AS4242423377 (leziblog) DE1 (NUE)
       lezi-de = {
         asn = 4242423377;
@@ -154,7 +154,7 @@ let
       };
     };
 
-    dedirock = {
+    dedirock-lax = {
       # AS4242423377 (leziblog) US1 (LAX)
       lezi-lax = {
         asn = 4242423377;
@@ -237,7 +237,7 @@ let
       };
     };
 
-    geelinx-jp = {
+    noboard-tyo = {
       # AS4242423377 (leziblog) JP1 (TYO)
       lezi-tyo = {
         asn = 4242423377;
@@ -320,7 +320,7 @@ let
       };
     };
 
-    wawo = {
+    wawo-hkg = {
       # AS213605 (Akaere Networks) hkg
       akaere-hkg = {
         asn = 213605;

@@ -1,122 +1,158 @@
 # ssh hostname 'ssh-keygen -y -f /etc/ssh/ssh_host_ed25519_key' | nix run nixpkgs#ssh-to-age
 keys:
   - &diffumist age1mgw2q0ytdsnyxh40me6fu5pvcvcf7nug3dm05s8wu0v9ay20eenqatudqj
-  - &bitsflow age1nrgzhh3tz7sd4xat7xhacp9mgy03s6f8kgksj4ylx89apl0twupsc3tes3
-  - &liteserver age14euf85fkar532dkxc4p3mstz92nfjlwl4vdgvf5wfm89v4tpgeeqgw5780
-  - &dedirock age1kyfqu2ccdj68lspn85735ph76chsnlaff2pdmfmx3ru5dx8dfanqm8pjxe
+  - &netcup-mnz age1zsfzx8zkcpjzsqtz5462x68lxg3snuczy6pwwcstgxs3d0uj54gs62r8ca
+  - &netcup-nue age12c4ln99v9k3ud8mt0wek3e33serj6ke5uj6v4304c4hl37au7vfqmd6wt4
+  - &akilecloud-fra age1w6tntarnf09xmtfxq5sc4g9e72c6xrev0se03ht3acfa0ylpt4yqujvs06
+  - &liteserver-ams age14euf85fkar532dkxc4p3mstz92nfjlwl4vdgvf5wfm89v4tpgeeqgw5780
+  - &dedirock-lax age1kyfqu2ccdj68lspn85735ph76chsnlaff2pdmfmx3ru5dx8dfanqm8pjxe
   - &hostdzire-sfo age1rkshe6y7r5gz2tpsxtrvnc7a8j5v3puvak04maat7xkssqmggs5qfwkvv5
-  - &nosla-lax age1afmdepa6ya8h8cymxn39mjzr6wx5suem75ley8kghjqx0xt3g47q66t2nj
   - &nosla-sjc age1vaal4d53wt0he0u0ppsr654cmgmap9vfxwk8plvvd25z5r26y4es5584pl
-  - &phoenix age192s80znrftygj6673sp6af7lpjzxtrvh9gztcp2unn2vy7hdyevq4ddd07
-  - &solidvps age135tv74d20v9qc772l63tjgczw4tq3pj86rd6qet69vhe5cf5g3hsq8ucs3
-  - &colocrossing age1us5d8flv9sfwjr98ux0ck9yxtq0e6qck04pgh44qed9hmymvkezqh2y4qk
-  - &vmrack age1pawz4g2qw2awk5mpdgwzzc95p23x0wm04awufrsfy2pvy4zv0g5sc2f3n4
-  - &geelinx-jp age1dxeeh73zgq0r329wc6rssxs3tzm47mykfl6htah6czfc9aullaesvy883h
+  - &moecloud-sjc age1qesk00eh6er5tekhptgyf0736ehgk95ezx6mu5sgvc5aq4tkwcfsudym2l
+  - &raksmart-sjc age10d2rweultzqlu686dalc2u0fts8zn3ec30a4szk0ppn4djelnd2qtvy9g5
+  - &colocrossing-lax age1us5d8flv9sfwjr98ux0ck9yxtq0e6qck04pgh44qed9hmymvkezqh2y4qk
+  - &lycheen-slc age105cf3zd0g6x5jeut8wd2gpz0lse0tneqqg5edc278l4z9c0qu5csqe5cdc
+  - &cloudnium-lax age10fntfvvy8m8yg4wmpdg4y7d8gx3k5l8awuymltsxa830la5eaf8q20mg93
+  - &vmrack-lax age1pawz4g2qw2awk5mpdgwzzc95p23x0wm04awufrsfy2pvy4zv0g5sc2f3n4
+  - &vmiss-lax age13hs5vs8385krruhtgtr44txqpkhxgc3j7ecd37x07t68r40vgyxqzv9vc0
   - &geelinx-mys age1j0gjqjx6lnca8ftg67xjpqgwunk6cd3nt4jkrqtpl5p6n7a9yegqklzj2x
-  - &geelinx-us age19hzt079n4sa6gdel6ll4xzq2mfmwf4z7r0rsksf6489nqjrta4fqjm6687
-  - &noboard age1q45uswz7nwam23dn6v8g6hpyfyl53wsey23hc7z5n99wr97p7erqpw064a
-  - &skyline age170ajf4wvctstheqf8lza6d3qq70uyvnrz0vglg7gp5uvhg6lydrqnjuu2t
-  - &carolina age1anp54rlzvjc4hagkwvh8qy8usfvlgq9vlsaz62kh59qye5rh5g4qj027t8
-  - &oregon age1evl9930wl07fw9wdy2pw5k8aaeacf9dgtkvntrr8ygx3ny3xagqsvqnzt5
-  - &wawo age1laq2l7pnax405ua70grkefguk4m4zalfjkvj0ky7dzsu2h5sdc6s034jtt
-  - &raksmart age10d2rweultzqlu686dalc2u0fts8zn3ec30a4szk0ppn4djelnd2qtvy9g5
+  - &geelinx-ord age19hzt079n4sa6gdel6ll4xzq2mfmwf4z7r0rsksf6489nqjrta4fqjm6687
+  - &noboard-tyo age19unzw0qarujmwjx8qjltdwpxt6p6nkqh9z4x2sg2wsvq8cwaxf7qsucyc0
+  - &google-east age1anp54rlzvjc4hagkwvh8qy8usfvlgq9vlsaz62kh59qye5rh5g4qj027t8
+  - &google-west age1evl9930wl07fw9wdy2pw5k8aaeacf9dgtkvntrr8ygx3ny3xagqsvqnzt5
+  - &wawo-hkg age1laq2l7pnax405ua70grkefguk4m4zalfjkvj0ky7dzsu2h5sdc6s034jtt
 creation_rules:
-  - path_regex: ^hosts/hawkpoint/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/hawkpoint-lap/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *diffumist
-  - path_regex: ^hosts/liteserver/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^profiles/common/secrets/garage\.yaml$
     key_groups:
       - age:
-          - *liteserver
           - *diffumist
-  - path_regex: ^hosts/dedirock/.*\.(json|ya?ml|keytab)$
+          - *liteserver-ams
+          - *netcup-mnz
+  - path_regex: ^profiles/common/secrets/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *dedirock
+          - *diffumist
+          - *netcup-mnz
+          - *netcup-nue
+          - *akilecloud-fra
+          - *liteserver-ams
+          - *dedirock-lax
+          - *hostdzire-sfo
+          - *nosla-sjc
+          - *moecloud-sjc
+          - *raksmart-sjc
+          - *colocrossing-lax
+          - *lycheen-slc
+          - *cloudnium-lax
+          - *vmiss-lax
+          - *vmrack-lax
+          - *geelinx-mys
+          - *geelinx-ord
+          - *noboard-tyo
+          - *google-east
+          - *google-west
+          - *wawo-hkg
+  - path_regex: ^hosts/netcup-mnz/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *netcup-mnz
+          - *diffumist
+  - path_regex: ^hosts/netcup-nue/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *netcup-nue
+          - *diffumist
+  - path_regex: ^hosts/akilecloud-fra/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *akilecloud-fra
+          - *diffumist
+  - path_regex: ^hosts/liteserver-ams/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *liteserver-ams
+          - *diffumist
+  - path_regex: ^hosts/dedirock-lax/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *dedirock-lax
           - *diffumist
   - path_regex: ^hosts/hostdzire-sfo/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *hostdzire-sfo
           - *diffumist
-  - path_regex: ^hosts/phoenix/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/colocrossing-lax/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *phoenix
+          - *colocrossing-lax
           - *diffumist
-  - path_regex: ^hosts/solidvps/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/cloudnium-lax/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *solidvps
+          - *cloudnium-lax
           - *diffumist
-  - path_regex: ^hosts/colocrossing/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/lycheen-slc/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *colocrossing
-          - *diffumist
-  - path_regex: ^hosts/bitsflow/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *bitsflow
-          - *diffumist
-  - path_regex: ^hosts/nosla-lax/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *nosla-lax
+          - *lycheen-slc
           - *diffumist
   - path_regex: ^hosts/nosla-sjc/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *nosla-sjc
           - *diffumist
-  - path_regex: ^hosts/vmrack/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/moecloud-sjc/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *vmrack
+          - *moecloud-sjc
           - *diffumist
-  - path_regex: ^hosts/geelinx-jp/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/vmrack-lax/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *geelinx-jp
+          - *vmrack-lax
+          - *diffumist
+  - path_regex: ^hosts/vmiss-lax/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *vmiss-lax
           - *diffumist
   - path_regex: ^hosts/geelinx-mys/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
           - *geelinx-mys
           - *diffumist
-  - path_regex: ^hosts/geelinx-us/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/geelinx-ord/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *geelinx-us
+          - *geelinx-ord
           - *diffumist
-  - path_regex: ^hosts/noboard/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/noboard-tyo/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *noboard
+          - *noboard-tyo
           - *diffumist
-  - path_regex: ^hosts/skyline/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/wawo-hkg/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *skyline
+          - *wawo-hkg
           - *diffumist
-  - path_regex: ^hosts/wawo/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/google-east/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *wawo
+          - *google-east
           - *diffumist
-  - path_regex: ^hosts/carolina/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/google-west/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *carolina
+          - *google-west
           - *diffumist
-  - path_regex: ^hosts/oregon/.*\.(json|ya?ml|keytab)$
+  - path_regex: ^hosts/raksmart-sjc/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
-          - *oregon
-          - *diffumist
-  - path_regex: ^hosts/raksmart/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *raksmart
+          - *raksmart-sjc
           - *diffumist

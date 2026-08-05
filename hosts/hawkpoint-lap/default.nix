@@ -1,0 +1,305 @@
+{
+  pkgs,
+  lib,
+  config,
+  inputs,
+  self,
+  ...
+}:
+{
+  imports = [
+    "${self}/profiles/common/nixconfig.nix"
+    "${self}/profiles/common/kernel.nix"
+    ./boot.nix
+    ./hardware.nix
+  ];
+
+  sops.age.sshKeyPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    secrets = {
+      user_passwd_hash = {
+        neededForUsers = true;
+      };
+      github_access_token = {
+        neededForUsers = true;
+      };
+      sshosts = {
+        sopsFile = ./home/sshosts.keytab;
+        format = "binary";
+        owner = "root";
+        group = "wheel";
+        mode = "0440";
+      };
+    };
+  };
+  programs.ssh.extraConfig = ''
+    Include ${config.sops.secrets.sshosts.path}
+  '';
+  nix = {
+    channel.enable = false;
+    settings.substituters = lib.mkAfter [
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
+    ];
+    settings.builders-use-substitutes = true;
+    extraOptions = ''
+      !include ${config.sops.secrets.github_access_token.path}
+    '';
+  };
+  networking = {
+    nftables.enable = true;
+    firewall.enable = false;
+    networkmanager = {
+      enable = true;
+      wifi.backend = "iwd";
+    };
+    wireless.iwd.settings = {
+      PowerSaving = {
+        PowerSave = "off";
+      };
+      Settings = {
+        AutoConnect = true;
+      };
+    };
+  };
+
+  time.timeZone = "Asia/Shanghai";
+
+  i18n = {
+    defaultLocale = "zh_CN.UTF-8";
+    supportedLocales = [
+      "zh_CN.UTF-8/UTF-8"
+    ];
+  };
+
+  environment.sessionVariables = {
+    GOOGLE_DEFAULT_CLIENT_ID = "77185425430.apps.googleusercontent.com";
+    GOOGLE_DEFAULT_CLIENT_SECRET = "OTJgUOQcT7lO7GsGZq2G4IlT";
+  };
+
+  virtualisation = {
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      dockerSocket.enable = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+    oci-containers.backend = "podman";
+  };
+
+  fonts = {
+    packages = with pkgs; [
+      sarasa-gothic
+      maple-mono.NF-CN-unhinted
+      apple-emoji-font
+    ];
+    fontDir.enable = true;
+    fontconfig = {
+      defaultFonts = rec {
+        monospace = [ "Maple Mono NF CN" ];
+        sansSerif = [ "Sarasa Gothic SC" ];
+        serif = sansSerif;
+        emoji = [ "Apple Color Emoji" ];
+      };
+    };
+  };
+  # rime
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+    fcitx5 = {
+      addons = with pkgs; [
+        (fcitx5-rime.override {
+          rimeDataPkgs = [
+            rime-data
+            uncategorized.rime-ice
+            uncategorized.rime-moegirl
+            uncategorized.rime-zhwiki
+          ];
+        })
+        libsForQt5.fcitx5-qt
+        kdePackages.fcitx5-qt
+        fcitx5-gtk
+        fcitx5-material-color
+      ];
+      waylandFrontend = true;
+    };
+  };
+  users.users.diffumist = {
+    isNormalUser = true;
+    extraGroups = [
+      "wheel"
+      "podman"
+      "greeter"
+      "storage"
+      "networkmanager"
+    ];
+    hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
+    shell = pkgs.fish;
+  };
+  # niri
+  programs.niri = {
+    enable = true;
+    useNautilus = true;
+  };
+  security.soteria.enable = true;
+  services.displayManager.dms-greeter = {
+    enable = true;
+    configHome = "${config.users.users.diffumist.home}";
+    compositor.name = "niri";
+  };
+  services.envfs.enable = true;
+  environment.systemPackages = with pkgs; [
+    # CLI
+    duf
+    xsz
+    dua
+    lstr
+    tokei
+    rclone
+    binutils
+    dnsutils
+    pciutils
+    dnscontrol
+    libarchive
+    # GUI
+    loupe
+    glib
+    adw-gtk3
+    nwg-look
+    nautilus
+    seahorse
+    resources
+    file-roller
+    code-nautilus
+    cups-pk-helper
+    pinentry-gnome3
+    gsettings-desktop-schemas
+    papirus-icon-theme
+    gnome-text-editor
+    gpu-screen-recorder
+    xwayland-satellite
+  ];
+
+  programs = {
+    dms-shell.enable = true;
+    nix-ld.enable = true;
+    nexttrace.enable = true;
+    direnv.enable = true;
+    fish = {
+      enable = true;
+      useBabelfish = true;
+    };
+    nautilus-open-any-terminal = {
+      enable = true;
+      terminal = "ghostty";
+    };
+    nh = {
+      enable = true;
+      flake = "${config.users.users.diffumist.home}/Projects/nixos-config";
+    };
+    steam = {
+      enable = true;
+      package = pkgs.steam.override {
+        extraEnv = {
+          HOME = "${config.users.users.diffumist.home}/.local/share/steam_home";
+        };
+      };
+      extest.enable = true;
+      protontricks.enable = true;
+      extraCompatPackages = with pkgs; [
+        proton-ge-bin
+      ];
+      gamescopeSession.enable = true;
+    };
+  };
+  services.mihomo = {
+    enable = true;
+    tunMode = true;
+    processesInfo = true;
+    webui = pkgs.metacubexd;
+    configFile = "/var/lib/mihomo.yaml";
+  };
+  security.pam.services.login.enableGnomeKeyring = true;
+  services.system76-scheduler.enable = true;
+  systemd.user.services.niri-flake-polkit.serviceConfig.ExecStart =
+    lib.mkForce "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+  services.angrr = {
+    enable = true;
+    settings = {
+      profile-policies = {
+        system = {
+          keep-booted-system = true;
+          keep-current-system = true;
+          keep-latest-n = 5;
+          keep-since = "14d";
+          profile-paths = [
+            "/nix/var/nix/profiles/system"
+          ];
+        };
+        user = {
+          enable = true;
+          keep-booted-system = false;
+          keep-current-system = false;
+          keep-latest-n = 1;
+          keep-since = "1d";
+          profile-paths = [
+            "~/.local/state/nix/profiles/profile"
+            "/nix/var/nix/profiles/per-user/root/profile"
+          ];
+        };
+      };
+      temporary-root-policies = {
+        direnv = {
+          path-regex = "/\\.direnv/";
+          period = "14d";
+        };
+        result = {
+          path-regex = "/result[^/]*$";
+          period = "3d";
+        };
+      };
+    };
+  };
+  services.samba = {
+    enable = true;
+    settings = {
+      global = {
+        "invalid users" = [
+          "root"
+        ];
+        "passwd program" = "/run/wrappers/bin/passwd %u";
+        security = "user";
+        "hosts allow" = "192.168.0. 127.0.0.1";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+        "workgroup" = "WORKGROUP";
+        "netbios name" = "hawkpoint-smb";
+        "server string" = "NixOS-Samba";
+      };
+      public = {
+        browseable = "yes";
+        path = "/run/media/diffumist";
+        "guest ok" = "no";
+        "read only" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+        "force user" = "diffumist";
+      };
+    };
+  };
+  security.pki.certificateFiles = [
+    "${pkgs.dn42-cacert}/etc/ssl/certs/dn42-ca.crt"
+  ];
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.diffumist = import ./home;
+    extraSpecialArgs = { inherit inputs; };
+    sharedModules = [
+      inputs.system76-scheduler-niri.homeModules.default
+      inputs.nix-index-database.homeModules.default
+      inputs.sops-nix.homeManagerModules.sops
+    ];
+  };
+}

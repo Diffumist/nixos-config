@@ -89,7 +89,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = ''
-        exec ${lib.getExe pkgs.flapalerted} \
+        exec ${lib.getExe pkgs.flap-alerted} \
           --asn ${toString config.networking.dn42.asn} \
           --bgpListenAddress ${formatHttpHost cfg.serverAddress}:${toString bgpPort} \
           --httpAPIListenAddress ${formatHttpHost cfg.serverAddress}:${toString httpPort} \

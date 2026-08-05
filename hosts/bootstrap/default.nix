@@ -30,7 +30,7 @@
         "virtio_pci"
         "virtio_mmio"
         "virtio_blk"
-        # gcp
+        # google
         "virtio_scsi"
         "sd_mod"
         "ahci"
@@ -156,5 +156,4 @@
     memoryPercent = 50;
   };
 
-  system.stateVersion = "25.11";
 }

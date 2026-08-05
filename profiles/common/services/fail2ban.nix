@@ -17,7 +17,7 @@
     };
     jails = {
       sshd.settings = {
-        enabled = true;
+        enabled = false;
         backend = "systemd";
         journalmatch = "_SYSTEMD_UNIT=sshd.service";
         mode = "normal";

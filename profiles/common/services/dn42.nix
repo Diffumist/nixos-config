@@ -15,7 +15,7 @@ in
 
     nodes = {
       ams0 = {
-        hostName = "liteserver";
+        hostName = "liteserver-ams";
         endpoint = "ams-0.${baseurl}";
         ipv4 = "172.22.64.65";
         ipv6 = "fd22:1056:95a4:1::1";
@@ -29,25 +29,32 @@ in
         publicKey = "byljo5bFvup+YtQbae/m3ReiWFwCHFN+CAWinzirvQo=";
       };
       lax0 = {
-        hostName = "dedirock";
+        hostName = "dedirock-lax";
         endpoint = "lax-0.${baseurl}";
         ipv4 = "172.22.64.67";
         ipv6 = "fd22:1056:95a4:3::1";
         publicKey = "viwkjXKilMxRupylyaqMHrZylzhW80+NypBNvVf/0G8=";
       };
       tyo0 = {
-        hostName = "geelinx-jp";
+        hostName = "noboard-tyo";
         endpoint = "tyo-0.${baseurl}";
         ipv4 = "172.22.64.68";
         ipv6 = "fd22:1056:95a4:4::1";
         publicKey = "KD/4v/fKXWXzvt2z3rxJN31QJIfw/cRSBq0nJppbYG4=";
       };
       hkg0 = {
-        hostName = "wawo";
+        hostName = "wawo-hkg";
         endpoint = "hkg-0.${baseurl}";
         ipv4 = "172.22.64.69";
         ipv6 = "fd22:1056:95a4:5::1";
         publicKey = "3anHMuAw/sDlRCN7xoRUf1l4SdAu0Rfl2pqpeJtJn3Y=";
+      };
+      nue0 = {
+        hostName = "netcup-nue";
+        endpoint = "nue-0.${baseurl}";
+        ipv4 = "172.22.64.70";
+        ipv6 = "fd22:1056:95a4:6::1";
+        publicKey = "Ti77y04KRfP/GRLPp87cw/8tcIB4Z6+phjOTQhoqHBQ=";
       };
     };
 
@@ -64,7 +71,7 @@ in
       }
       {
         name = "wg-ams0-lax0";
-        port = 42422;
+        port = 42421;
         a4 = "192.168.242.4";
         b4 = "192.168.242.5";
         a6 = "fd22:1056:95a4:ffff::4";
@@ -74,7 +81,7 @@ in
       }
       {
         name = "wg-sjc0-lax0";
-        port = 42425;
+        port = 42422;
         a4 = "192.168.242.8";
         b4 = "192.168.242.9";
         a6 = "fd22:1056:95a4:ffff::8";
@@ -84,7 +91,7 @@ in
       }
       {
         name = "wg-sjc0-tyo0";
-        port = 42426;
+        port = 42423;
         a4 = "192.168.242.10";
         b4 = "192.168.242.11";
         a6 = "fd22:1056:95a4:ffff::10";
@@ -94,7 +101,7 @@ in
       }
       {
         name = "wg-lax0-tyo0";
-        port = 42429;
+        port = 42424;
         a4 = "192.168.242.12";
         b4 = "192.168.242.13";
         a6 = "fd22:1056:95a4:ffff::12";
@@ -104,7 +111,7 @@ in
       }
       {
         name = "wg-ams0-hkg0";
-        port = 42430;
+        port = 42425;
         a4 = "192.168.242.14";
         b4 = "192.168.242.15";
         a6 = "fd22:1056:95a4:ffff::14";
@@ -114,7 +121,7 @@ in
       }
       {
         name = "wg-lax0-hkg0";
-        port = 42431;
+        port = 42426;
         a4 = "192.168.242.16";
         b4 = "192.168.242.17";
         a6 = "fd22:1056:95a4:ffff::16";
@@ -124,13 +131,23 @@ in
       }
       {
         name = "wg-tyo0-hkg0";
-        port = 42432;
+        port = 42427;
         a4 = "192.168.242.18";
         b4 = "192.168.242.19";
         a6 = "fd22:1056:95a4:ffff::18";
         b6 = "fd22:1056:95a4:ffff::19";
         aLinkLocal = "fe80::642:18";
         bLinkLocal = "fe80::642:19";
+      }
+      {
+        name = "wg-ams0-nue0";
+        port = 42428;
+        a4 = "192.168.242.20";
+        b4 = "192.168.242.21";
+        a6 = "fd22:1056:95a4:ffff::20";
+        b6 = "fd22:1056:95a4:ffff::21";
+        aLinkLocal = "fe80::642:20";
+        bLinkLocal = "fe80::642:21";
       }
     ];
   };

@@ -1,76 +1,165 @@
 {
-  pkgs,
   config,
   lib,
   ...
 }:
 let
   cfg = config.my.services.sing-box;
+  acme = {
+    data_directory = "acme";
+    default_server_name = cfg.domain;
+    disable_http_challenge = true;
+    disable_tls_alpn_challenge = true;
+    dns01_challenge = {
+      provider = "cloudflare";
+      api_token._secret = "/run/secrets/cloudflare_api_token";
+    };
+    domain = [ cfg.domain ];
+    email = "services@diffumist.me";
+    provider = "letsencrypt";
+  };
+  users = [
+    {
+      name = "default";
+      password._secret = "/run/secrets/singbox_passwd";
+    }
+  ];
 in
 {
-  options = {
-    my.services.sing-box = {
-      enable = lib.mkEnableOption "The Sing-box Service";
-      configSopsFile = lib.mkOption {
-        type = lib.types.path;
-      };
-      firewallPorts = lib.mkOption {
-        type = lib.types.listOf lib.types.port;
-        default = [ 443 ];
-      };
-    };
-  };
-  config = lib.mkIf cfg.enable {
-    networking.firewall = {
-      allowedTCPPorts = [ 80 ] ++ cfg.firewallPorts;
-      allowedUDPPorts = cfg.firewallPorts;
+  options.my.services.sing-box = {
+    enable = lib.mkEnableOption "the shared sing-box proxy service";
+
+    domain = lib.mkOption {
+      type = lib.types.str;
+      description = "Domain used for ACME certificate issuance.";
     };
 
-    sops.secrets.singbox_config = {
-      sopsFile = cfg.configSopsFile;
-      format = "json";
-      key = "";
+    port = lib.mkOption {
+      type = lib.types.port;
+      default = 443;
+      description = "Shared TCP and UDP listen port.";
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+
+    sops.secrets.singbox_passwd = {
+      sopsFile = ../../profiles/common/secrets/passwd.yaml;
       owner = "sing-box";
       group = "sing-box";
-      mode = "0400";
       restartUnits = [ "sing-box.service" ];
     };
 
-    users = {
-      users.sing-box = {
-        isSystemUser = true;
-        group = "sing-box";
-        home = "/var/lib/sing-box";
-      };
-      groups.sing-box = { };
-    };
-    systemd.packages = [ pkgs.sing-box ];
-    services.dbus.packages = [ pkgs.sing-box ];
-    environment.systemPackages = [ pkgs.sing-box ];
+    services.sing-box = {
+      enable = true;
+      settings = {
+        experimental.cache_file = {
+          enabled = true;
+          path = "cache.db";
+        };
 
-    systemd.services.sing-box = {
-      serviceConfig = {
-        User = "sing-box";
-        Group = "sing-box";
-        StateDirectory = "sing-box";
-        StateDirectoryMode = "0700";
-        RuntimeDirectory = "sing-box";
-        RuntimeDirectoryMode = "0700";
-        WorkingDirectory = "/var/lib/sing-box";
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-        NoNewPrivileges = false;
-        ExecStartPre = [
-          ""
-          "${lib.getExe pkgs.sing-box} -D \${STATE_DIRECTORY} -c ${config.sops.secrets.singbox_config.path} check"
+        dns = {
+          servers = [
+            {
+              type = "tls";
+              tag = "cloudflare-dns";
+              server = "1.1.1.1";
+              server_port = 853;
+              tls = {
+                enabled = true;
+                server_name = "cloudflare-dns.com";
+              };
+            }
+          ];
+          final = "cloudflare-dns";
+          strategy = "prefer_ipv4";
+        };
+
+        inbounds = [
+          {
+            listen = "::";
+            listen_port = cfg.port;
+            tag = "anytls-tcp-in";
+            tls = {
+              inherit acme;
+              alpn = [
+                "h2"
+                "http/1.1"
+              ];
+              enabled = true;
+            };
+            type = "anytls";
+            inherit users;
+          }
+          {
+            listen = "::";
+            listen_port = cfg.port;
+            masquerade = {
+              rewrite_host = true;
+              type = "proxy";
+              url = "https://macguy.io";
+            };
+            tag = "hysteria-udp-in";
+            tls = {
+              inherit acme;
+              alpn = [ "h3" ];
+              enabled = true;
+            };
+            type = "hysteria2";
+            inherit users;
+          }
         ];
-        ExecStart = [
-          ""
-          "${lib.getExe pkgs.sing-box} -D \${STATE_DIRECTORY} -c ${config.sops.secrets.singbox_config.path} run"
+
+        log = {
+          level = "info";
+          timestamp = true;
+        };
+
+        outbounds = [
+          {
+            tag = "direct";
+            type = "direct";
+          }
         ];
+
+        route = {
+          auto_detect_interface = true;
+          default_domain_resolver = {
+            server = "cloudflare-dns";
+            strategy = "prefer_ipv4";
+          };
+          final = "direct";
+          rules = [
+            {
+              action = "sniff";
+              inbound = [
+                "anytls-tcp-in"
+                "hysteria-udp-in"
+              ];
+              sniffer = [
+                "http"
+                "tls"
+                "quic"
+                "bittorrent"
+              ];
+              timeout = "500ms";
+            }
+            {
+              action = "reject";
+              protocol = [ "bittorrent" ];
+            }
+          ];
+        };
       };
-      requires = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+    };
+
+    systemd.services.sing-box.serviceConfig.ExecStartPre = lib.mkAfter [
+      "${lib.getExe config.services.sing-box.package} -D \${STATE_DIRECTORY} -c \${RUNTIME_DIRECTORY}/config.json check"
+    ];
+
+    networking.firewall = {
+      allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
     };
   };
 }

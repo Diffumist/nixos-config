@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apple-emoji-font";
-  version = "macos-26-20260613-f1fc560b";
+  version = "macos-26-20260722-484daf4e";
 
   src = fetchurl {
     url = "https://github.com/samuelngs/apple-emoji-ttf/releases/download/${finalAttrs.version}/ttf-apple-emoji.pkg.tar.zst";
-    hash = "sha256-BHpZhmZ9AYEyOXnU2W5XOw9Kp5CcvG9g3dQmfxrnRhs=";
+    hash = "sha256-pWh7uwASenyejZlMiD33982/WL0xDpJwkkeieKecx9I=";
   };
 
   nativeBuildInputs = [ zstd ];

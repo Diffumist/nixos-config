@@ -10,21 +10,27 @@
     ./boot.nix
 
     ./services/asterisk.nix
-    ./services/lldap.nix
+    ./services/grafana.nix
+    ./services/pocketid.nix
+    ./services/oauth2.nix
     ./services/powerdns.nix
+    ./services/restic.nix
     ./services/tgtldr.nix
-    ./services/authelia.nix
-    ./services/cli-proxy-api.nix
-    # ./services/snac.nix
-    ./services/uptime-kuma.nix
     ./services/vaultwarden.nix
   ];
 
   my.services.sing-box = {
     enable = true;
-    firewallPorts = [ 8443 ];
-    configSopsFile = ./services/sing-box.json;
+    domain = "generic-radiance-multitude-reversing.503418.xyz";
+    port = 8443;
   };
 
-  my.services.postgresql.totalRamMB = 6 * 1024;
+  my.services.postgresql = {
+    totalRamMB = 6 * 1024;
+    backup = {
+      enable = true;
+      accountId = "1ddb57c7f8266ea8489206984571fb77";
+      bucket = "pgbackrest";
+    };
+  };
 }

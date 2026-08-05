@@ -4,17 +4,14 @@
     extra-substituters = [
       "https://cache.numtide.com"
       "https://attic.xuyh0120.win/lantian"
-      "https://attic.diffumist.me/nixos-config"
     ];
     extra-trusted-public-keys = [
       "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
       "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-      "nixos-config:zM4D3PAPLRe0q415xXHbluX6X0Zc9kuAlsArsEuuvqA="
     ];
   };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     preservation.url = "github:nix-community/preservation/main";
@@ -24,14 +21,6 @@
     };
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    devshell = {
-      url = "github:numtide/devshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     sops-nix = {
@@ -62,7 +51,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-dn42 = {
-      url = "git+https://git.sr.ht/~diffumist/nix-dn42?ref=sing-tun";
+      url = "git+https://git.418.cat/DiffFork/nix-dn42?ref=sing-tun";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dn42-registry = {
@@ -97,27 +86,34 @@
           };
           localPackages = import ./pkgs { lib = nixpkgs.lib; };
           localPackageSet = localPackages.fromPkgs pkgs inputs;
+          availableLocalPackages = nixpkgs.lib.filterAttrs (
+            _: package: nixpkgs.lib.meta.availableOn pkgs.stdenv.hostPlatform package
+          ) localPackageSet;
+          updatePackage =
+            package:
+            let
+              useUpdateScript = localPackageSet.${package}.nixUpdateUseUpdateScript or false;
+              updateScriptFlag = nixpkgs.lib.optionalString useUpdateScript "--use-update-script";
+            in
+            ''
+              echo "==> ${package}"
+              nix-update --flake ${updateScriptFlag} "$@" ${nixpkgs.lib.escapeShellArg package}
+            '';
           updatePackageHashes = pkgs.writeShellApplication {
             name = "nix-update-hashes";
             runtimeInputs = [ pkgs.nix-update ];
-            text = ''
-              for package in ${nixpkgs.lib.escapeShellArgs localPackages.updateablePackageNames}; do
-                echo "==> $package"
-                nix-update --flake --version=skip "$@" "$package"
-              done
-            '';
+            text = nixpkgs.lib.concatMapStrings updatePackage localPackages.updateablePackageNames;
           };
         in
         {
           pre-commit.settings = {
-            package = pkgs.prek;
             hooks = {
               detect-private-keys.enable = true;
               keep-sorted.enable = true;
               nixfmt.enable = true;
               pre-commit-hook-ensure-sops = {
                 enable = true;
-                files = "^hosts/[^/]+/.*\.(json|ya?ml|keytab)$";
+                files = "^(hosts/[^/]+/.*|profiles/common/secrets/.*)\.(json|ya?ml|keytab)$";
               };
             };
           };
@@ -130,29 +126,32 @@
                 age
                 sops
                 ninja
-                inputs.colmena.packages.${system}.colmena
                 nix-update
-                updatePackageHashes
                 ssh-to-age
+                bashInteractive
+                updatePackageHashes
+                inputs.colmena.packages.${system}.colmena
               ]
               ++ config.pre-commit.settings.enabledPackages;
             };
           formatter = pkgs.nixfmt;
           legacyPackages = pkgs;
-          packages = localPackageSet // {
-            bootstrap-image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
-          };
+          packages =
+            availableLocalPackages
+            // nixpkgs.lib.optionalAttrs (system == "x86_64-linux") {
+              bootstrap-image = self.nixosConfigurations.bootstrap.config.system.build.diskoImages;
+            };
         };
 
-      flake = {
-        overlays.default = import ./overlay inputs;
-        colmena = import ./hosts {
-          inherit inputs self;
-          hostFilter = _: h: h.deploy or true;
-          outputMode = "colmena";
+      flake =
+        let
+          hostOutputs = import ./hosts { inherit inputs self; };
+        in
+        {
+          overlays.default = import ./overlay inputs;
+          inherit (hostOutputs) colmena nixosConfigurations;
+          colmenaHive = inputs.colmena.lib.makeHive hostOutputs.colmena;
+          lib.ciHostNames = hostOutputs.ciHostNames;
         };
-        colmenaHive = inputs.colmena.lib.makeHive self.outputs.colmena;
-        nixosConfigurations = import ./hosts { inherit inputs self; };
-      };
     };
 }

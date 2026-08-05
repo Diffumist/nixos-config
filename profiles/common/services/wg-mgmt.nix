@@ -9,61 +9,49 @@ let
   interface = "wg-mgmt";
   listenPort = 44242;
   nodes = {
-    geelinx-jp = {
+    noboard-tyo = {
       endpoint = "tyo-0.${baseurl}";
-      ipv4 = "10.203.0.1";
-      ipv6 = "fd42:203::1";
-      publicKey = "qYALFT5oRCiQoUBBZaWyC2J0TMvOi4744xqmt+1qTSw=";
-    };
-    noboard = {
-      endpoint = "tyo-1.${baseurl}";
       ipv4 = "10.203.0.2";
       ipv6 = "fd42:203::2";
-      publicKey = "Z4z3lGBTNWqB2sy1h7SydBKrFtki8Rl27cB0xkrdTFU=";
+      publicKey = "cmYopEooVzPXVheJRUciRbmMK38dTGR0yvXXMUPBwwY=";
     };
-    wawo = {
+    wawo-hkg = {
       endpoint = "hkg-0.${baseurl}";
       ipv4 = "10.203.0.3";
       ipv6 = "fd42:203::3";
       publicKey = "/kMulSNnzMkdoi1WslQuZxuK9SKu7goI+WIGGIJ0Qik=";
     };
-    skyline = {
-      endpoint = "tyo-2.${baseurl}";
-      ipv4 = "10.203.0.4";
-      ipv6 = "fd42:203::4";
-      publicKey = "cmYopEooVzPXVheJRUciRbmMK38dTGR0yvXXMUPBwwY=";
-    };
-    liteserver = {
+    liteserver-ams = {
       endpoint = "ams-0.${baseurl}";
       ipv4 = "10.203.0.11";
       ipv6 = "fd42:203::11";
       publicKey = "D98b1mSOWpTz49IgzFgZ0htuux3HUn0BxylnKgr77H8=";
     };
-    dedirock = {
+    dedirock-lax = {
       endpoint = "lax-0.${baseurl}";
       ipv4 = "10.203.0.21";
       ipv6 = "fd42:203::21";
       publicKey = "O9eaz2AHPgSDxTVs+/iaUAno+SmnIDUI4SE1BGD6FiQ=";
     };
-    vmrack = {
+    vmiss-lax = {
       endpoint = "lax-1.${baseurl}";
       ipv4 = "10.203.0.22";
       ipv6 = "fd42:203::22";
+      publicKey = "O9eaz2AHPgSDxTVs+/iaUAno+SmnIDUI4SE1BGD6FiQ=";
+    };
+    vmrack-lax = {
+      endpoint = "lax-2.${baseurl}";
+      ipv4 = "10.203.0.23";
+      ipv6 = "fd42:203::23";
       publicKey = "rDjdsHMYBbmMx1s/5/DNWQJu4CWBqRZL7IUrGznC0XQ=";
     };
-    colocrossing = {
+    colocrossing-lax = {
       endpoint = "lax-3.${baseurl}";
       ipv4 = "10.203.0.24";
       ipv6 = "fd42:203::24";
       publicKey = "nL/tNYad/CsHP/iiqI/tXMdIsoSqDMfozbDudOkspwY=";
     };
-    solidvps = {
-      endpoint = "lax-4.${baseurl}";
-      ipv4 = "10.203.0.25";
-      ipv6 = "fd42:203::25";
-      publicKey = "cOJznpVWrWQ1NZMMAYebugCKc08lQ9H9Z9giPuT1nEQ=";
-    };
-    oregon = {
+    google-west = {
       endpoint = "pdx-0.${baseurl}";
       ipv4 = "10.203.0.26";
       ipv6 = "fd42:203::26";
@@ -81,25 +69,19 @@ let
       ipv6 = "fd42:203::32";
       publicKey = "CsizRoeV1LdnEl8hGg8Dp/1GD1WRuY/8uFz76H/+3TQ=";
     };
-    raksmart = {
+    raksmart-sjc = {
       endpoint = "sjc-2.${baseurl}";
       ipv4 = "10.203.0.33";
       ipv6 = "fd42:203::33";
       publicKey = "U3+Vwby1YV5mGBndaiOzUl5NZ4ORhIXB6p7nrKP/0nU=";
     };
-    phoenix = {
-      endpoint = "phx-0.${baseurl}";
-      ipv4 = "10.203.0.34";
-      ipv6 = "fd42:203::34";
-      publicKey = "rno7pHX/j1oOJRpeZU3lE7tGE4jAW+UpFUfvNOXH+yE=";
-    };
-    geelinx-us = {
+    geelinx-ord = {
       endpoint = "ord-0.${baseurl}";
       ipv4 = "10.203.0.41";
       ipv6 = "fd42:203::41";
       publicKey = "iSa5qFW8m42DIJBhtMqlT2DWdYF/ODauxHQOaKnJXDw=";
     };
-    carolina = {
+    google-east = {
       endpoint = "chs-0.${baseurl}";
       ipv4 = "10.203.0.42";
       ipv6 = "fd42:203::42";
@@ -110,64 +92,61 @@ let
   coreLinks = [
     [
       "hostdzire-sfo"
-      "noboard"
+      "noboard-tyo"
     ]
     [
       "hostdzire-sfo"
-      "liteserver"
+      "liteserver-ams"
     ]
     [
       "hostdzire-sfo"
-      "geelinx-us"
+      "geelinx-ord"
     ]
     [
       "hostdzire-sfo"
-      "dedirock"
+      "dedirock-lax"
     ]
     [
-      "noboard"
-      "liteserver"
+      "noboard-tyo"
+      "liteserver-ams"
     ]
     [
-      "noboard"
-      "geelinx-us"
+      "noboard-tyo"
+      "geelinx-ord"
     ]
     [
-      "noboard"
-      "dedirock"
+      "noboard-tyo"
+      "dedirock-lax"
     ]
     [
-      "geelinx-us"
-      "liteserver"
+      "geelinx-ord"
+      "liteserver-ams"
     ]
     [
-      "geelinx-us"
-      "dedirock"
+      "geelinx-ord"
+      "dedirock-lax"
     ]
     [
-      "liteserver"
-      "dedirock"
+      "liteserver-ams"
+      "dedirock-lax"
     ]
   ];
 
   regionalLinks = {
     hostdzire-sfo = [
-      "oregon"
-      "raksmart"
+      "raksmart-sjc"
       "nosla-sjc"
-      "phoenix"
+      "google-west"
     ];
-    dedirock = [
-      "vmrack"
-      "colocrossing"
-      "solidvps"
+    dedirock-lax = [
+      "vmiss-lax"
+      "vmrack-lax"
+      "colocrossing-lax"
     ];
-    noboard = [
-      "wawo"
-      "skyline"
-      "geelinx-jp"
+    noboard-tyo = [
+      "wawo-hkg"
     ];
-    geelinx-us = [ "carolina" ];
+    geelinx-ord = [ "google-east" ];
   };
 
   enabled = builtins.hasAttr hostName nodes;

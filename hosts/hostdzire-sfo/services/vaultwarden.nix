@@ -36,24 +36,12 @@
     after = [ "postgresql.service" ];
   };
 
-  my.services.caddy.enable = true;
-  services.caddy.virtualHosts."vault.diffumist.me" = {
-    useACMEHost = "vault.diffumist.me";
-    extraConfig = ''
-      encode zstd gzip
-      reverse_proxy 127.0.0.1:${toString config.services.vaultwarden.config.ROCKET_PORT}
-    '';
+  my.services.caddy = {
+    enable = true;
+    virtualHosts."vault.diffumist.me".useCloudflareACME = true;
   };
-
-  sops.secrets.cloudflare_api_token = {
-    sopsFile = ../secrets.yaml;
-  };
-
-  security.acme.certs."vault.diffumist.me" = {
-    dnsProvider = "cloudflare";
-    credentialFiles = {
-      CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-      CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-    };
-  };
+  services.caddy.virtualHosts."vault.diffumist.me".extraConfig = ''
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:${toString config.services.vaultwarden.config.ROCKET_PORT}
+  '';
 }
