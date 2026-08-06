@@ -1,16 +1,43 @@
 {
+  config,
   lib,
   pkgs,
-  modulesPath,
   ...
 }:
 {
   # printf "Yes\n" | parted ---pretend-input-tty /dev/vda resizepart 2 100%
   # btrfs filesystem resize max /nix
   imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-    ./disko-uefi.nix
+    (import ../../profiles/hardware/ephemeral-btrfs.nix {
+      device = "/dev/vda";
+      firmware = "uefi";
+      swapSize = "512M";
+    })
   ];
+
+  disko.devices = {
+    disk.main.imageSize = "4G";
+    nodev."/".mountOptions = [
+      "nosuid"
+      "nodev"
+    ];
+  };
+
+  disko.imageBuilder.pkgs = pkgs.extend (
+    _final: prev: {
+      vmTools = prev.vmTools // {
+        override =
+          args:
+          prev.vmTools.override (
+            args
+            // {
+              kernel = config.boot.kernelPackages.kernel;
+              kernelModules = args.kernelModules or args.kernel or config.boot.kernelPackages.kernel;
+            }
+          );
+      };
+    }
+  );
 
   boot = {
     kernelParams = [
@@ -44,12 +71,6 @@
         "virtio_console"
         "virtio_rng"
       ];
-    };
-    loader = {
-      grub = {
-        enable = true;
-        devices = [ "/dev/vda" ];
-      };
     };
     supportedFilesystems.zfs = lib.mkForce false;
   };
@@ -91,31 +112,7 @@
       PermitRootLogin = lib.mkForce "prohibit-password";
     };
   };
-  fileSystems."/persist".neededForBoot = true;
-  preservation = {
-    enable = true;
-    preserveAt."/persist" = {
-      directories = [
-        "/var/log"
-        {
-          directory = "/var/lib";
-          inInitrd = true;
-        }
-        "/var/db"
-      ];
-      files = [
-        {
-          file = "/etc/machine-id";
-          inInitrd = true;
-        }
-        {
-          file = "/etc/ssh/ssh_host_ed25519_key";
-          how = "symlink";
-          configureParent = true;
-        }
-      ];
-    };
-  };
+
   environment = {
     systemPackages = with pkgs; [
       btrfs-progs
