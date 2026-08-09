@@ -17,8 +17,8 @@ in
   config = lib.mkIf cfg.enable {
     sops = {
       secrets.komari_token = {
-        key = config.networking.hostName;
-        sopsFile = ../../profiles/common/secrets/komari.yaml;
+        key = "komari/${config.networking.hostName}";
+        sopsFile = ../../profiles/common/secrets/server.yaml;
         restartUnits = [ "komari-agent.service" ];
       };
 

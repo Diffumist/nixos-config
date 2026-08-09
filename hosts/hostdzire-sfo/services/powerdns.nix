@@ -218,12 +218,12 @@ in
       }
 
       handle {
-        forward_auth https://oauth2.diffumist.me {
+        forward_auth https://oauth.diffumist.me {
           uri /oauth2/auth
           copy_headers X-Auth-Request-User X-Auth-Request-Groups X-Auth-Request-Email X-Auth-Request-Preferred-Username
           @error status 401
           handle_response @error {
-            redir * https://oauth2.diffumist.me/oauth2/start?rd={scheme}://{host}{uri}
+            redir * https://oauth.diffumist.me/oauth2/start?rd={scheme}://{host}{uri}
           }
         }
         reverse_proxy 127.0.0.1:${toString apiPort}

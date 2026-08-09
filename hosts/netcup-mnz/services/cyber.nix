@@ -101,7 +101,7 @@ in
     enable = true;
     virtualHosts."cyber.503418.xyz" = {
       useCloudflareACME = true;
-      oauth2ForwardAuth = "oauth2.503418.xyz";
+      oauth2ForwardAuth = "oauth.503418.xyz";
     };
   };
   services.caddy.virtualHosts."cyber.503418.xyz".extraConfig = ''

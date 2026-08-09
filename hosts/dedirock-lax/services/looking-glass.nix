@@ -15,6 +15,7 @@ in
       "LAX-0<lax-0.lg>"
       "TYO-0<tyo-0.lg>"
       "HKG-0<hkg-0.lg>"
+      "NUE-0<nue-0.lg>"
     ];
     domain = "";
     netSpecificMode = "dn42";
@@ -29,6 +30,7 @@ in
     "172.22.64.67" = [ "lax-0.lg" ];
     "172.22.64.68" = [ "tyo-0.lg" ];
     "172.22.64.69" = [ "hkg-0.lg" ];
+    "172.22.64.70" = [ "nue-0.lg" ];
   };
 
   my.services.caddy.enable = true;

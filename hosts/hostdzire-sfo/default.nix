@@ -15,7 +15,6 @@
     ./services/oauth2.nix
     ./services/powerdns.nix
     ./services/restic.nix
-    ./services/tgtldr.nix
     ./services/vaultwarden.nix
   ];
 

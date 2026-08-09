@@ -38,7 +38,7 @@ let
           "email"
           "groups"
         ];
-        issuer_url = "https://pocketid.diffumist.me";
+        issuer_url = "https://id.418.cat";
         role_attribute_path = "groups";
         admin_role = "diffumist";
         session_max_age = 86400;

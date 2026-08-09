@@ -45,7 +45,7 @@ in
               oauth2ForwardAuth = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
                 default = null;
-                example = "oauth2.example.com";
+                example = "oauth.example.com";
                 description = "OAuth2 Proxy host used to protect the entire virtual host.";
               };
             };
@@ -100,7 +100,7 @@ in
     systemd.services.caddy.serviceConfig.EnvironmentFile =
       config.sops.templates."caddy-cloudflare.env".path;
     sops.secrets.cloudflare_api_token = {
-      sopsFile = ../../profiles/common/secrets/cloudflare.yaml;
+      sopsFile = ../../profiles/common/secrets/server.yaml;
     };
     sops.templates."caddy-cloudflare.env" = {
       owner = "caddy";

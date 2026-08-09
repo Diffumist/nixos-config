@@ -9,6 +9,7 @@
   imports = [
     ./boot.nix
 
+    ./services/gatus.nix
     ./services/komari-monitor.nix
   ];
   networking = {

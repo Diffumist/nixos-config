@@ -5,6 +5,7 @@ keys:
   - &netcup-nue age12c4ln99v9k3ud8mt0wek3e33serj6ke5uj6v4304c4hl37au7vfqmd6wt4
   - &akilecloud-fra age1w6tntarnf09xmtfxq5sc4g9e72c6xrev0se03ht3acfa0ylpt4yqujvs06
   - &liteserver-ams age14euf85fkar532dkxc4p3mstz92nfjlwl4vdgvf5wfm89v4tpgeeqgw5780
+  - &vpstown-hkg age17us2ztp4qm899t5y2tsvtux57605cykl4amenhrqwtxer3s54daqsg4lty
   - &dedirock-lax age1kyfqu2ccdj68lspn85735ph76chsnlaff2pdmfmx3ru5dx8dfanqm8pjxe
   - &hostdzire-sfo age1rkshe6y7r5gz2tpsxtrvnc7a8j5v3puvak04maat7xkssqmggs5qfwkvv5
   - &nosla-sjc age1vaal4d53wt0he0u0ppsr654cmgmap9vfxwk8plvvd25z5r26y4es5584pl
@@ -32,6 +33,8 @@ creation_rules:
           - *diffumist
           - *liteserver-ams
           - *netcup-mnz
+          - *noboard-tyo
+          - *vpstown-hkg
   - path_regex: ^profiles/common/secrets/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
@@ -40,6 +43,7 @@ creation_rules:
           - *netcup-nue
           - *akilecloud-fra
           - *liteserver-ams
+          - *vpstown-hkg
           - *dedirock-lax
           - *hostdzire-sfo
           - *nosla-sjc
@@ -75,6 +79,11 @@ creation_rules:
     key_groups:
       - age:
           - *liteserver-ams
+          - *diffumist
+  - path_regex: ^hosts/vpstown-hkg/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *vpstown-hkg
           - *diffumist
   - path_regex: ^hosts/dedirock-lax/.*\.(json|ya?ml|keytab)$
     key_groups:

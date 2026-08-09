@@ -58,14 +58,30 @@ in
 
         retentionFull = lib.mkOption {
           type = lib.types.ints.positive;
-          default = 4;
+          default = 2;
           description = "Number of full backups and their dependent backups to retain.";
         };
 
         retentionDiff = lib.mkOption {
           type = lib.types.ints.positive;
-          default = 14;
+          default = 7;
           description = "Number of differential backups to retain.";
+        };
+
+        retentionArchive = lib.mkOption {
+          type = lib.types.ints.positive;
+          default = 3;
+          description = "Number of backup points whose WAL history remains available for PITR.";
+        };
+
+        retentionArchiveType = lib.mkOption {
+          type = lib.types.enum [
+            "full"
+            "diff"
+            "incr"
+          ];
+          default = "diff";
+          description = "Backup type used to calculate WAL archive retention.";
         };
 
         fullSchedule = lib.mkOption {
@@ -183,6 +199,8 @@ in
             cipher-type = "aes-256-cbc";
             retention-full = backupCfg.retentionFull;
             retention-diff = backupCfg.retentionDiff;
+            retention-archive = backupCfg.retentionArchive;
+            retention-archive-type = backupCfg.retentionArchiveType;
             s3-bucket = backupCfg.bucket;
             s3-endpoint = "${backupCfg.accountId}.r2.cloudflarestorage.com";
             s3-region = "auto";

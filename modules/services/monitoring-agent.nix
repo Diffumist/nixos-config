@@ -32,7 +32,7 @@ in
 
   config = lib.mkIf cfg.enable {
     sops.secrets."victoriametrics/write_passwd" = {
-      sopsFile = ../../profiles/common/secrets/victoriametrics.yaml;
+      sopsFile = ../../profiles/common/secrets/server.yaml;
       restartUnits = [ "vmagent.service" ];
     };
 

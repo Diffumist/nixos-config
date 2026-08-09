@@ -44,7 +44,7 @@ in
   config = lib.mkIf cfg.enable {
 
     sops.secrets.singbox_passwd = {
-      sopsFile = ../../profiles/common/secrets/passwd.yaml;
+      sopsFile = ../../profiles/common/secrets/server.yaml;
       owner = "sing-box";
       group = "sing-box";
       restartUnits = [ "sing-box.service" ];

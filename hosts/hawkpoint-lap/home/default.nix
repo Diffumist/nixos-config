@@ -128,7 +128,7 @@
     # TUI
     llm-agents.rtk
     llm-agents.codex
-    llm-agents.omp
+    llm-agents.pi
     llm-agents.herdr
     llm-agents.crush
     llm-agents.opencode2
@@ -154,7 +154,6 @@
     thunderbird
     field-monitor
     ayugram-desktop
-    uncategorized.dingtalk
     netease-cloud-music-gtk
   ];
   home.shell.enableFishIntegration = true;

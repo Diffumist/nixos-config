@@ -34,7 +34,7 @@ Stable locations:
 - `flake.nix`: flake inputs, dev shell, packages, Colmena outputs.
 - `hosts/default.nix`: host inventory and system/hive builders.
 - `profiles/base/server.nix`: shared server policy.
-- `profiles/roles`: explicit opt-in behavior such as containers, DN42, and fail2ban.
+- `profiles/roles`: explicit opt-in behavior such as containers and DN42.
 - `profiles/common`: shared profile fragments and DN42 topology data.
 - `modules/default.nix`: registry for reusable repo-local NixOS modules.
 - `hosts/<host>`: per-host NixOS modules and secrets.
@@ -53,8 +53,9 @@ systems are derived from it.
 Per-host fields:
 
 - `stateVersion`: required NixOS state version.
-- `roles`: explicit host capabilities; `server`, `container`, `dn42`, and
-  `fail2ban` compose server behavior, while `desktop` selects desktop overlays.
+- `roles`: explicit host capabilities; `server`, `container`, and `dn42`
+  compose server behavior, while `desktop` selects desktop overlays. The server
+  baseline enables fail2ban by default; a host may explicitly disable it.
 - `tags`: Colmena selectors assigned directly to the host.
 - `system`: optional target system; defaults to `x86_64-linux`.
 - `path`: optional host module directory; defaults to `./${hostName}`.

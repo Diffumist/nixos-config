@@ -1,13 +1,15 @@
 { config, lib, ... }:
 let
-  pocketIdDomain = "pocketid.diffumist.me";
+  pocketIdDomain = "id.418.cat";
   port = 4180;
   authDomains = [
-    "oauth2.diffumist.me"
-    "oauth2.diffumist.dev"
-    "oauth2.diffumist.io"
-    "oauth2.diffumist.moe"
-    "oauth2.503418.xyz"
+    "oauth.diffumist.me"
+    "oauth.diffumist.dev"
+    "oauth.diffumist.io"
+    "oauth.diffumist.moe"
+    "oauth.503418.xyz"
+    "oauth.418.cat"
+    "oauth.mux.im"
   ];
   cookieDomains = [
     ".diffumist.me"
@@ -15,6 +17,8 @@ let
     ".diffumist.io"
     ".diffumist.moe"
     ".503418.xyz"
+    ".418.cat"
+    ".mux.im"
   ];
 in
 {

@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  domain = "pocketid.diffumist.me";
+  domain = "id.418.cat";
   database = config.services.pocket-id.user;
   port = 1411;
 in
@@ -28,7 +28,7 @@ in
     };
     settings = {
       APP_URL = "https://${domain}";
-      APP_NAME = "Diffumist's Lab";
+      APP_NAME = "DiftNet";
       DB_CONNECTION_STRING = "postgresql:///${database}?host=/run/postgresql";
       HOST = "127.0.0.1";
       PORT = port;

@@ -22,12 +22,6 @@
     };
   };
 
-  nixpkgs.flake = {
-    setFlakeRegistry = false;
-    setNixPath = false;
-  };
-  system.disableInstallerTools = true;
-
   my.services.sing-box = {
     enable = true;
     domain = "overload-reshoot-aids-silencer.503418.xyz";

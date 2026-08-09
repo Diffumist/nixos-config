@@ -16,6 +16,19 @@
       enable = true;
       interval = "Sun";
     };
+    gaze = {
+      enable = true;
+      gui.enable = true;
+      mutableConfig = false;
+      settings = {
+        cameras = {
+          rgb = "usb:04f2:b7dd";
+          ir = "usb:04f2:b7dd";
+          emitter_enabled = false;
+        };
+        security.level = "medium";
+      };
+    };
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -56,6 +69,10 @@
     services = {
       login.u2f.enable = true;
       sudo.u2f.enable = true;
+      dankshell.gaze = {
+        enable = true;
+        simultaneous = false;
+      };
     };
   };
 }

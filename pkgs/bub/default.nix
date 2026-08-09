@@ -95,7 +95,7 @@ let
 in
 py.buildPythonApplication rec {
   pname = "bub";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {

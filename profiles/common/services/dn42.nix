@@ -149,6 +149,16 @@ in
         aLinkLocal = "fe80::642:20";
         bLinkLocal = "fe80::642:21";
       }
+      {
+        name = "wg-tyo0-nue0";
+        port = 42429;
+        a4 = "192.168.242.22";
+        b4 = "192.168.242.23";
+        a6 = "fd22:1056:95a4:ffff::22";
+        b6 = "fd22:1056:95a4:ffff::23";
+        aLinkLocal = "fe80::642:22";
+        bLinkLocal = "fe80::642:23";
+      }
     ];
   };
 }

@@ -9,14 +9,14 @@
   imports = [
     ../common/kernel.nix
     ../common/nixconfig.nix
+    ../common/services/fail2ban.nix
     ../common/services/sshd.nix
-    "${self}/modules/system/anti-lockout.nix"
     "${self}/modules/system/sops.nix"
   ];
   sops = {
     age.sshKeyPaths = lib.mkDefault [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
     secrets.user_passwd_hash = {
-      sopsFile = ../common/secrets/passwd.yaml;
+      sopsFile = ../common/secrets/server.yaml;
       neededForUsers = true;
     };
   };

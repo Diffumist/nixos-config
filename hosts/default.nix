@@ -23,7 +23,6 @@ let
   insecurePackagesFor =
     host:
     lib.optionals (hasRole "desktop" host) [
-      "openssl-1.1.1w"
       "electron-40.10.5"
     ];
 
@@ -62,7 +61,6 @@ let
     "container"
     "desktop"
     "dn42"
-    "fail2ban"
     "server"
   ];
   allowedTags = [
@@ -98,7 +96,6 @@ let
       roles = [
         "server"
         "container"
-        "fail2ban"
       ];
       tags = [
         "us"
@@ -110,7 +107,6 @@ let
       roles = [
         "server"
         "container"
-        "fail2ban"
       ];
       tags = [
         "us"
@@ -123,7 +119,6 @@ let
         "server"
         "container"
         "dn42"
-        "fail2ban"
       ];
       tags = [
         "us"
@@ -135,7 +130,6 @@ let
       roles = [
         "server"
         "container"
-        "fail2ban"
       ];
       tags = [
         "google"
@@ -147,7 +141,6 @@ let
       roles = [
         "server"
         "container"
-        "fail2ban"
       ];
       tags = [
         "google"
@@ -159,7 +152,6 @@ let
       roles = [
         "server"
         "container"
-        "fail2ban"
       ];
       tags = [ "asia" ];
     };
@@ -168,7 +160,6 @@ let
       roles = [
         "server"
         "container"
-        "fail2ban"
       ];
       tags = [
         "us"
@@ -183,6 +174,7 @@ let
       ciBuild = true;
       modules = [
         inputs.home-manager.nixosModules.home-manager
+        inputs.gaze.nixosModules.default
       ];
     };
     hostdzire-sfo = {
@@ -191,7 +183,6 @@ let
         "server"
         "container"
         "dn42"
-        "fail2ban"
       ];
       tags = [
         "us"
@@ -204,7 +195,6 @@ let
         "server"
         "container"
         "dn42"
-        "fail2ban"
       ];
       tags = [
         "eu"
@@ -226,7 +216,6 @@ let
       roles = [
         "server"
         "container"
-        "fail2ban"
       ];
       tags = [
         "us"
@@ -238,7 +227,7 @@ let
       roles = [
         "server"
         "container"
-        "fail2ban"
+        "dn42"
       ];
       tags = [ "eu" ];
     };
@@ -255,7 +244,6 @@ let
         "server"
         "container"
         "dn42"
-        "fail2ban"
       ];
       tags = [ "asia" ];
     };
@@ -282,10 +270,7 @@ let
     };
     vmrack-lax = {
       stateVersion = "25.11";
-      roles = [
-        "server"
-        "fail2ban"
-      ];
+      roles = [ "server" ];
       tags = [ "us" ];
     };
     wawo-hkg = {
@@ -295,6 +280,17 @@ let
         "dn42"
       ];
       tags = [ "asia" ];
+    };
+    vpstown-hkg = {
+      stateVersion = "25.11";
+      roles = [
+        "server"
+        "container"
+      ];
+      tags = [
+        "asia"
+        "web"
+      ];
     };
   };
 
@@ -316,7 +312,6 @@ let
       requiresServer = lib.any (role: lib.elem role roles) [
         "container"
         "dn42"
-        "fail2ban"
       ];
     in
     assert lib.assertMsg (host ? stateVersion) "host ${name} must declare stateVersion";
@@ -356,7 +351,7 @@ let
       "deployable host ${name} must have the server role"
     );
     assert lib.assertMsg (!requiresServer || lib.elem "server" roles) (
-      "host ${name} roles container, dn42, and fail2ban require the server role"
+      "host ${name} roles container and dn42 require the server role"
     );
     host
     // {
@@ -382,7 +377,6 @@ let
   roleProfiles = {
     container = "${self}/profiles/roles/container.nix";
     dn42 = "${self}/profiles/roles/dn42.nix";
-    fail2ban = "${self}/profiles/roles/fail2ban.nix";
     server = "${self}/profiles/base/server.nix";
   };
 

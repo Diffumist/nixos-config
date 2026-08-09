@@ -10,6 +10,7 @@
     ./boot.nix
 
     ./services/gonic.nix
+    ./services/http418-cat.nix
     ./services/immich.nix
     ./services/transmission.nix
   ];

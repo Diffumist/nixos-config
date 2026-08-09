@@ -12,7 +12,7 @@
     enable = true;
     virtualHosts."tavern.diffumist.me" = {
       useCloudflareACME = true;
-      oauth2ForwardAuth = "oauth2.diffumist.me";
+      oauth2ForwardAuth = "oauth.diffumist.me";
     };
   };
   services.caddy.virtualHosts."tavern.diffumist.me" = {

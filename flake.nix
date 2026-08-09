@@ -50,6 +50,10 @@
       url = "github:Kirottu/system76-scheduler-niri";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    gaze = {
+      url = "github:GunduLabs/gaze";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-dn42 = {
       url = "git+https://git.418.cat/DiffFork/nix-dn42?ref=sing-tun";
       inputs.nixpkgs.follows = "nixpkgs";

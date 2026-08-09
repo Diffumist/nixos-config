@@ -126,7 +126,7 @@ in
     virtualHosts = {
       ${grafanaDomain} = {
         useCloudflareACME = true;
-        oauth2ForwardAuth = "oauth2.diffumist.dev";
+        oauth2ForwardAuth = "oauth.diffumist.dev";
       };
       ${metricsDomain}.useCloudflareACME = true;
     };
