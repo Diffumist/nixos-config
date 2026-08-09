@@ -2,7 +2,6 @@
   device,
   firmware ? "bios",
   swapSize ? "1024M",
-  persistTmpfiles ? [ ],
 }:
 {
   lib,
@@ -155,6 +154,6 @@ assert lib.assertOneOf "firmware" firmware [
 
   systemd = {
     suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
-    tmpfiles.rules = persistTmpfiles;
+    tmpfiles.rules = [ "d /persist/var/storage 0755 root root -" ];
   };
 }
