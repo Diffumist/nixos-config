@@ -7,7 +7,9 @@
 }:
 {
   imports = [
-    ./boot.nix
+    (import ../../profiles/hardware/ephemeral-btrfs.nix {
+      device = "/dev/sda";
+    })
   ];
 
   my.networking.static = {

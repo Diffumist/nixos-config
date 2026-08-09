@@ -7,7 +7,10 @@
 }:
 {
   imports = [
-    ./boot.nix
+    (import ../../profiles/hardware/ephemeral-btrfs.nix {
+      device = "/dev/vda";
+      swapSize = "4096M";
+    })
 
     ./services/attic.nix
     ./services/forgejo.nix

@@ -7,7 +7,9 @@
 }:
 {
   imports = [
-    ./boot.nix
+    (import ../../profiles/hardware/ephemeral-btrfs.nix {
+      device = "/dev/vda";
+    })
 
     ./services/gatus.nix
     ./services/komari-monitor.nix

@@ -7,7 +7,9 @@
 }:
 {
   imports = [
-    ./boot.nix
+    (import ../../profiles/hardware/ephemeral-btrfs.nix {
+      device = "/dev/vda";
+    })
 
     ./services/gonic.nix
     ./services/http418-cat.nix

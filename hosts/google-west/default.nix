@@ -7,7 +7,10 @@
 }:
 {
   imports = [
-    ./boot.nix
+    (import ../../profiles/hardware/ephemeral-btrfs.nix {
+      device = "/dev/sda";
+      firmware = "uefi";
+    })
   ];
   networking = {
     useDHCP = true;

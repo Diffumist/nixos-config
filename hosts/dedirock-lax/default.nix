@@ -8,7 +8,9 @@
 }:
 {
   imports = [
-    ./boot.nix
+    (import ../../profiles/hardware/ephemeral-btrfs.nix {
+      device = "/dev/vda";
+    })
 
     ./services/sillytavern.nix
     ./services/rustypaste.nix
