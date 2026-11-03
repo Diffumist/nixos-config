@@ -1,4 +1,7 @@
-_: {
+let
+  hostPort = 13000;
+in
+{
   my.services.postgresql.enable = true;
   services.postgresql = {
     authentication = ''
@@ -33,12 +36,14 @@ _: {
         TGTLDR_INTERNAL_API_BASE_URL = "http://tgtldr-app:8080";
       };
       ports = [
-        "127.0.0.1:13000:3000"
+        "127.0.0.1:${toString hostPort}:3000"
       ];
     };
   };
+  my.services.caddy.virtualHosts."tg.503418.xyz" = { };
   services.caddy.virtualHosts."tg.503418.xyz".extraConfig = ''
-    encode zstd gzip
-    reverse_proxy 127.0.0.1:13000
+    reverse_proxy 127.0.0.1:${toString hostPort}
   '';
+
+  my.networking.usedTCPPorts.tgtldr-web = hostPort;
 }

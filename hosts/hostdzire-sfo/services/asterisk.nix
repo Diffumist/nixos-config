@@ -3,6 +3,9 @@ let
   sipDomain = "sip.diffumist.dn42";
   dn42Ipv4 = "172.22.64.66";
   dn42Ipv6 = "fd22:1056:95a4:2::1";
+  sipPort = 5060;
+  rtpStartPort = 10000;
+  rtpEndPort = 10100;
   tel42Resolvers = [
     "172.21.80.224"
     "fdfa:6ded:ae4::1"
@@ -18,10 +21,10 @@ in
   networking.nameservers = lib.mkBefore (tel42Resolvers ++ fallbackResolvers);
 
   networking.firewall.extraInputRules = ''
-    ip saddr 172.20.0.0/14 udp dport 5060 accept
-    ip saddr 172.20.0.0/14 udp dport 10000-10100 accept
-    ip6 saddr fd00::/8 udp dport 5060 accept
-    ip6 saddr fd00::/8 udp dport 10000-10100 accept
+    ip saddr 172.20.0.0/14 udp dport ${toString sipPort} accept
+    ip saddr 172.20.0.0/14 udp dport ${toString rtpStartPort}-${toString rtpEndPort} accept
+    ip6 saddr fd00::/8 udp dport ${toString sipPort} accept
+    ip6 saddr fd00::/8 udp dport ${toString rtpStartPort}-${toString rtpEndPort} accept
   '';
 
   environment.etc."tel42verifier/enum_config.yaml".text = ''
@@ -135,8 +138,8 @@ in
 
       "rtp.conf" = ''
         [general]
-        rtpstart=10000
-        rtpend=10100
+        rtpstart=${toString rtpStartPort}
+        rtpend=${toString rtpEndPort}
         strictrtp=yes
       '';
     };
@@ -150,4 +153,13 @@ in
       ln -sfn ${pkgs.tel42verifier}/bin/tel42verifier /var/lib/asterisk/agi-bin/tel42verifier
     '';
   };
+
+  my.networking.usedUDPPorts = {
+    asterisk-sip = sipPort;
+  }
+  // lib.listToAttrs (
+    map (port: lib.nameValuePair "asterisk-rtp/${toString port}" port) (
+      lib.range rtpStartPort rtpEndPort
+    )
+  );
 }

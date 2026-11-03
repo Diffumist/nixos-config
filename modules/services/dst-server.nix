@@ -114,6 +114,15 @@ let
         masterSettings.STEAM.master_server_port
         cavesSettings.STEAM.master_server_port
       ];
+      usedUDPPorts = {
+        "${baseName}/master-shard" = clusterSettings.SHARD.master_port;
+        "${baseName}/master-server" = masterSettings.NETWORK.server_port;
+        "${baseName}/caves-server" = cavesSettings.NETWORK.server_port;
+        "${baseName}/master-auth" = masterSettings.STEAM.authentication_port;
+        "${baseName}/caves-auth" = cavesSettings.STEAM.authentication_port;
+        "${baseName}/master-steam" = masterSettings.STEAM.master_server_port;
+        "${baseName}/caves-steam" = cavesSettings.STEAM.master_server_port;
+      };
 
       clusterIni = iniFormat.generate "${baseName}-cluster.ini" clusterSettings;
       masterIni = iniFormat.generate "${baseName}-master-server.ini" masterSettings;
@@ -194,7 +203,7 @@ let
         restartUnits = [ targetUnit ];
       };
 
-      inherit publicPorts;
+      inherit publicPorts usedUDPPorts;
 
       targets.${baseName} = {
         description = "Don't Starve Together ${name} dedicated server";
@@ -418,6 +427,7 @@ in
 
     sops.secrets = lib.mergeAttrsList (map (instance: instance.sopsSecrets) instances);
     networking.firewall.allowedUDPPorts = lib.concatMap (instance: instance.publicPorts) instances;
+    my.networking.usedUDPPorts = lib.mergeAttrsList (map (instance: instance.usedUDPPorts) instances);
     systemd.targets = lib.mergeAttrsList (map (instance: instance.targets) instances);
     systemd.services = lib.mergeAttrsList (map (instance: instance.services) instances);
   };

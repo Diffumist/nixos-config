@@ -6,10 +6,17 @@
   self,
   ...
 }:
+let
+  sambaNetbiosNamePort = 137;
+  sambaNetbiosDatagramPort = 138;
+  sambaNetbiosSessionPort = 139;
+  sambaPort = 445;
+in
 {
   imports = [
     "${self}/profiles/common/nixconfig.nix"
     "${self}/profiles/common/kernel.nix"
+    "${self}/modules/system/nixos-init.nix"
     ./boot.nix
     ./hardware.nix
   ];
@@ -90,6 +97,7 @@
   fonts = {
     packages = with pkgs; [
       sarasa-gothic
+      wqy_microhei
       maple-mono.NF-CN-unhinted
       apple-emoji-font
     ];
@@ -143,7 +151,7 @@
     useNautilus = true;
   };
   security.soteria.enable = true;
-  services.displayManager.dms-greeter = {
+  services.displayManager.dux-greeter = {
     enable = true;
     configHome = "${config.users.users.diffumist.home}";
     compositor.name = "niri";
@@ -182,7 +190,7 @@
   ];
 
   programs = {
-    dms-shell.enable = true;
+    dux-shell.enable = true;
     nix-ld.enable = true;
     nexttrace.enable = true;
     direnv.enable = true;
@@ -201,6 +209,15 @@
     steam = {
       enable = true;
       package = pkgs.steam.override {
+        # Waylith searches fixed CJK font paths instead of consulting fontconfig.
+        extraPkgs = pkgs: [
+          (pkgs.linkFarm "steam-cjk-font-path" [
+            {
+              name = "share/fonts/truetype/wqy/wqy-microhei.ttc";
+              path = "${pkgs.wqy_microhei}/share/fonts/truetype/wqy-microhei.ttc";
+            }
+          ])
+        ];
         extraEnv = {
           HOME = "${config.users.users.diffumist.home}/.local/share/steam_home";
         };
@@ -221,7 +238,6 @@
     configFile = "/var/lib/mihomo.yaml";
   };
   security.pam.services.login.enableGnomeKeyring = true;
-  services.system76-scheduler.enable = true;
   systemd.user.services.niri-flake-polkit.serviceConfig.ExecStart =
     lib.mkForce "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
   services.angrr = {
@@ -276,6 +292,7 @@
         "workgroup" = "WORKGROUP";
         "netbios name" = "hawkpoint-smb";
         "server string" = "NixOS-Samba";
+        "smb ports" = "${toString sambaNetbiosSessionPort} ${toString sambaPort}";
       };
       public = {
         browseable = "yes";
@@ -297,9 +314,20 @@
     users.diffumist = import ./home;
     extraSpecialArgs = { inherit inputs; };
     sharedModules = [
-      inputs.system76-scheduler-niri.homeModules.default
       inputs.nix-index-database.homeModules.default
       inputs.sops-nix.homeManagerModules.sops
     ];
+  };
+
+  my.networking = {
+    usedTCPPorts = {
+      aria2-rpc = config.home-manager.users.diffumist.programs.aria2.settings.rpc-listen-port;
+      samba-netbios-session = sambaNetbiosSessionPort;
+      samba-smb = sambaPort;
+    };
+    usedUDPPorts = {
+      samba-netbios-datagram = sambaNetbiosDatagramPort;
+      samba-netbios-name = sambaNetbiosNamePort;
+    };
   };
 }

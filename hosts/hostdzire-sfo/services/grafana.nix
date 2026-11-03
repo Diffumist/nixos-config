@@ -136,7 +136,6 @@ in
     virtualHosts = {
       ${grafanaDomain} = {
         extraConfig = ''
-          encode zstd gzip
           reverse_proxy 127.0.0.1:${toString grafanaPort}
         '';
       };
@@ -160,5 +159,10 @@ in
         '';
       };
     };
+  };
+
+  my.networking.usedTCPPorts = {
+    grafana = grafanaPort;
+    victoriametrics = victoriametricsPort;
   };
 }

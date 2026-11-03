@@ -5,14 +5,24 @@
 }:
 let
   lib = inputs.nixpkgs.lib;
+  helpers = import "${self}/fn/helpers" { inherit lib; };
 
   hasRole = role: host: lib.elem role host.roles;
 
   overlaysFor =
     host:
-    lib.optionals (hasRole "desktop" host) [
-      inputs.llm-agents.overlays.shared-nixpkgs
-      inputs.nur-xddxdd.overlays.default
+    lib.optional (hasRole "server" host || hasRole "desktop" host) (
+      final: _prev: {
+        # Preserve upstream dependency pins so the binary cache matches.
+        llm-agents = inputs.llm-agents.packages.${final.stdenv.hostPlatform.system};
+      }
+    )
+    ++ lib.optionals (hasRole "desktop" host) [
+      (
+        final: prev:
+        # Keep nixpkgs QQ: the NUR override uses an obsolete download URL.
+        builtins.removeAttrs (inputs.nur-xddxdd.overlays.default final prev) [ "qq" ]
+      )
       inputs.nix-alien.overlays.default
       inputs.nix-cachyos-kernel.overlays.pinned
       inputs.nix-vscode-extensions.overlays.default
@@ -50,7 +60,6 @@ let
     "modules"
     "path"
     "roles"
-    "stateVersion"
     "system"
     "tags"
     "targetHost"
@@ -76,12 +85,10 @@ let
   ];
   inventory = {
     akilecloud-fra = {
-      stateVersion = "25.11";
       roles = [ "server" ];
       tags = [ "eu" ];
     };
     bootstrap = {
-      stateVersion = "25.11";
       roles = [ ];
       tags = [ ];
       deploy = false;
@@ -92,7 +99,6 @@ let
       ];
     };
     cloudnium-lax = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -103,7 +109,6 @@ let
       ];
     };
     colocrossing-lax = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -114,7 +119,6 @@ let
       ];
     };
     dedirock-lax = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -126,7 +130,6 @@ let
       ];
     };
     google-east = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -137,7 +140,6 @@ let
       ];
     };
     google-west = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -147,27 +149,7 @@ let
         "us"
       ];
     };
-    geelinx-mys = {
-      stateVersion = "25.11";
-      roles = [
-        "server"
-        "container"
-      ];
-      tags = [ "asia" ];
-    };
-    geelinx-ord = {
-      stateVersion = "25.11";
-      roles = [
-        "server"
-        "container"
-      ];
-      tags = [
-        "us"
-        "web"
-      ];
-    };
     hawkpoint-lap = {
-      stateVersion = "25.11";
       roles = [ "desktop" ];
       tags = [ ];
       deploy = false;
@@ -178,7 +160,6 @@ let
       ];
     };
     hostdzire-sfo = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -190,7 +171,6 @@ let
       ];
     };
     liteserver-ams = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -202,17 +182,14 @@ let
       ];
     };
     lycheen-slc = {
-      stateVersion = "25.11";
       roles = [ "server" ];
       tags = [ "us" ];
     };
     moecloud-sjc = {
-      stateVersion = "25.11";
       roles = [ "server" ];
       tags = [ "us" ];
     };
     netcup-mnz = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -223,7 +200,6 @@ let
       ];
     };
     netcup-nue = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -232,14 +208,12 @@ let
       tags = [ "eu" ];
     };
     nixiso = {
-      stateVersion = "25.11";
       roles = [ ];
       tags = [ ];
       deploy = false;
       ciBuild = false;
     };
     noboard-tyo = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -248,12 +222,10 @@ let
       tags = [ "asia" ];
     };
     nosla-sjc = {
-      stateVersion = "25.11";
       roles = [ "server" ];
       tags = [ "us" ];
     };
     raksmart-sjc = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -261,7 +233,6 @@ let
       tags = [ "us" ];
     };
     vmiss-lax = {
-      stateVersion = "25.11";
       roles = [ "server" ];
       tags = [
         "us"
@@ -269,12 +240,10 @@ let
       ];
     };
     vmrack-lax = {
-      stateVersion = "25.11";
       roles = [ "server" ];
       tags = [ "us" ];
     };
     wawo-hkg = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "dn42"
@@ -282,7 +251,6 @@ let
       tags = [ "asia" ];
     };
     vpstown-hkg = {
-      stateVersion = "25.11";
       roles = [
         "server"
         "container"
@@ -314,11 +282,6 @@ let
         "dn42"
       ];
     in
-    assert lib.assertMsg (host ? stateVersion) "host ${name} must declare stateVersion";
-    assert lib.assertMsg (
-      builtins.isString host.stateVersion
-      && builtins.match "[0-9][0-9]\\.[0-9][0-9]" host.stateVersion != null
-    ) "host ${name} has invalid stateVersion ${toString host.stateVersion}";
     assert lib.assertMsg (unknownFields == [ ]) (
       "host ${name} has unknown fields: ${lib.concatStringsSep ", " unknownFields}"
     );
@@ -384,8 +347,9 @@ let
     name: host:
     [
       "${self}/modules/system/hostname.nix"
+      "${self}/modules/system/used-ports.nix"
       {
-        system.stateVersion = lib.mkForce host.stateVersion;
+        system.stateVersion = "26.05";
       }
     ]
     ++ lib.optional (lib.elem "server" host.roles) "${self}/modules/default.nix"
@@ -397,7 +361,7 @@ let
     ++ host.modules;
 
   specialArgsFor = name: host: {
-    inherit inputs self;
+    inherit helpers inputs self;
     hostName = name;
     hostPath = host.path;
     hostRoles = host.roles;

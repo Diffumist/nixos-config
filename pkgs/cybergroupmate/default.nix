@@ -33,15 +33,15 @@
 }:
 
 let
-  rev = "08d218d8bb5f2aee875fb75b7492d3b0e6d759ff";
-  version = "0.1.0-unstable-2026-08-06";
+  rev = "405278a1d4933068e8b2acbbe6479f72ba8fb3fb";
+  version = "0.1.0-unstable-2026-10-16";
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_22; };
 
   src = fetchFromGitHub {
     owner = "Archeb";
     repo = "CyberGroupmate";
     inherit rev;
-    hash = "sha256-Xo/7/jbiet6jzJNncJW3VpG1YszAy6X6SmFAy1W9Hbs=";
+    hash = "sha256-+dnJikw5tBhyxhmJRgJaGCw8GFozQvFFY9ndTthf8pc=";
   };
 
   updateScript = writeShellApplication {
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-2WgD872lsp/c6ITlSuJkWA13KYtyGlgOhGQF2U0DXi0=";
+    hash = "sha256-Z3pvKi0VxWLwZABicnNl9FI7DPNCh3hc8Phtzq1kTRQ=";
   };
 
   env = {

@@ -20,11 +20,13 @@ in
   systemd.services.flapalerted.serviceConfig.EnvironmentFile =
     config.sops.templates."flapalerted-webhook.env".path;
 
-  my.services.caddy.enable = true;
+  my.services.caddy = {
+    enable = true;
+    virtualHosts.${domain} = { };
+  };
   services.caddy.virtualHosts.${domain} = {
     useACMEHost = domain;
     extraConfig = ''
-      encode zstd gzip
       reverse_proxy [${flapalertedAddress}]:${toString frontendPort}
     '';
   };

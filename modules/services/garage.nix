@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.my.services.garage;
+  adminPort = 3903;
   rpcPort = 3901;
   s3Port = 3900;
 in
@@ -63,7 +64,7 @@ in
           s3_region = "garage";
         };
 
-        admin.api_bind_addr = "127.0.0.1:3903";
+        admin.api_bind_addr = "127.0.0.1:${toString adminPort}";
       };
     };
 
@@ -81,5 +82,11 @@ in
 
     # Garage authenticates Internet-facing RPC with the shared 256-bit secret.
     networking.firewall.allowedTCPPorts = [ rpcPort ];
+
+    my.networking.usedTCPPorts = {
+      "garage-admin" = adminPort;
+      "garage-rpc" = rpcPort;
+      "garage-s3" = s3Port;
+    };
   };
 }

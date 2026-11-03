@@ -14,12 +14,14 @@
         "cgroups"
       ];
       extra-substituters = [
+        "https://attic.diffumist.me/nixos-config"
         "https://cache.numtide.com"
-        "https://attic.xuyh0120.win/lantian"
+        "https://cache.lantian.pub/lantian"
       ];
       extra-trusted-public-keys = [
+        "nixos-config:rU8MVfJPcTuFqpL7Ezl4oVthnMEkH1VGG0ctfM68ue4="
         "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-        "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+        "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ="
       ];
       auto-allocate-uids = true;
       warn-dirty = false;

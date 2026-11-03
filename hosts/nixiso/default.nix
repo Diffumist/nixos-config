@@ -4,6 +4,9 @@
   modulesPath,
   ...
 }:
+let
+  sshPort = 22;
+in
 {
   imports = [
     (modulesPath + "/installer/cd-dvd/installation-cd-base.nix")
@@ -29,7 +32,7 @@
 
   services.openssh = {
     enable = true;
-    ports = [ 22 ];
+    ports = [ sshPort ];
     settings.PasswordAuthentication = false;
   };
 
@@ -72,5 +75,7 @@
   };
 
   documentation.doc.enable = false;
+
+  my.networking.usedTCPPorts.openssh = sshPort;
 
 }

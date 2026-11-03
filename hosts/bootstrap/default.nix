@@ -1,19 +1,27 @@
 {
   config,
   lib,
+  modulesPath,
   pkgs,
   ...
 }:
+let
+  sshPort = 22;
+in
 {
   # printf "Yes\n" | parted ---pretend-input-tty /dev/vda resizepart 2 100%
   # btrfs filesystem resize max /nix
   imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/vda";
-      firmware = "uefi";
-      swapSize = "512M";
-    })
+    (modulesPath + "/profiles/qemu-guest.nix")
+    ../../modules/hardware/ephemeral-btrfs.nix
   ];
+
+  my.hardware.ephemeralBtrfs = {
+    enable = true;
+    device = "/dev/vda";
+    firmware = "uefi";
+    swapSize = "512M";
+  };
 
   disko.devices = {
     disk.main.imageSize = "4G";
@@ -105,7 +113,7 @@
 
   services.openssh = {
     enable = true;
-    ports = [ 22 ];
+    ports = [ sshPort ];
     openFirewall = true;
     settings = {
       PasswordAuthentication = false;
@@ -152,5 +160,7 @@
     enable = true;
     memoryPercent = 50;
   };
+
+  my.networking.usedTCPPorts.openssh = sshPort;
 
 }

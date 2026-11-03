@@ -16,8 +16,6 @@ keys:
   - &cloudnium-lax age10fntfvvy8m8yg4wmpdg4y7d8gx3k5l8awuymltsxa830la5eaf8q20mg93
   - &vmrack-lax age1pawz4g2qw2awk5mpdgwzzc95p23x0wm04awufrsfy2pvy4zv0g5sc2f3n4
   - &vmiss-lax age13hs5vs8385krruhtgtr44txqpkhxgc3j7ecd37x07t68r40vgyxqzv9vc0
-  - &geelinx-mys age1j0gjqjx6lnca8ftg67xjpqgwunk6cd3nt4jkrqtpl5p6n7a9yegqklzj2x
-  - &geelinx-ord age19hzt079n4sa6gdel6ll4xzq2mfmwf4z7r0rsksf6489nqjrta4fqjm6687
   - &noboard-tyo age19unzw0qarujmwjx8qjltdwpxt6p6nkqh9z4x2sg2wsvq8cwaxf7qsucyc0
   - &google-east age1anp54rlzvjc4hagkwvh8qy8usfvlgq9vlsaz62kh59qye5rh5g4qj027t8
   - &google-west age1evl9930wl07fw9wdy2pw5k8aaeacf9dgtkvntrr8ygx3ny3xagqsvqnzt5
@@ -54,8 +52,6 @@ creation_rules:
           - *cloudnium-lax
           - *vmiss-lax
           - *vmrack-lax
-          - *geelinx-mys
-          - *geelinx-ord
           - *noboard-tyo
           - *google-east
           - *google-west
@@ -129,16 +125,6 @@ creation_rules:
     key_groups:
       - age:
           - *vmiss-lax
-          - *diffumist
-  - path_regex: ^hosts/geelinx-mys/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *geelinx-mys
-          - *diffumist
-  - path_regex: ^hosts/geelinx-ord/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *geelinx-ord
           - *diffumist
   - path_regex: ^hosts/noboard-tyo/.*\.(json|ya?ml|keytab)$
     key_groups:

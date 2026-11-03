@@ -1,4 +1,8 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 let
   authoritativeDns = config.my.services.dn42.authoritativeDns;
   ipv4 = "172.22.64.66";
@@ -10,6 +14,7 @@ let
   ipv4ReverseDomain = "64/27.64.22.172.in-addr.arpa";
   ipv6ReverseDomain = "4.a.5.9.6.5.0.1.2.2.d.f.ip6.arpa";
   dbName = "pdns";
+  dnsPort = 53;
   apiPort = 8081;
   inherit (authoritativeDns) tsigKeyAlgorithm tsigKeyName;
   postgresqlUnits = [
@@ -24,6 +29,7 @@ let
     gpgsql-user=${dbName}
     gpgsql-dbname=${dbName}
     local-address=${ipv4},${ipv6}
+    local-port=${toString dnsPort}
     primary=yes
     also-notify=${secondaryIpv4},${secondaryIpv6}
   '';
@@ -210,27 +216,26 @@ in
   };
   services.caddy.virtualHosts."zones.diffumist.me" = {
     extraConfig = ''
-      encode zstd gzip
-
       @powerdnsApi path /api/v1/*
       handle @powerdnsApi {
         reverse_proxy 127.0.0.1:${toString apiPort}
       }
 
       handle {
-        forward_auth https://oauth.diffumist.me {
-          uri /oauth2/auth
-          copy_headers X-Auth-Request-User X-Auth-Request-Groups X-Auth-Request-Email X-Auth-Request-Preferred-Username
-          @error status 401
-          handle_response @error {
-            redir * https://oauth.diffumist.me/oauth2/start?rd={scheme}://{host}{uri}
-          }
-        }
+        import oauth2_forward_auth oauth.diffumist.me
         reverse_proxy 127.0.0.1:${toString apiPort}
       }
     '';
   };
 
-  networking.firewall.allowedTCPPorts = [ 53 ];
-  networking.firewall.allowedUDPPorts = [ 53 ];
+  networking.firewall.allowedTCPPorts = [ dnsPort ];
+  networking.firewall.allowedUDPPorts = [ dnsPort ];
+
+  my.networking = {
+    usedTCPPorts = {
+      powerdns = dnsPort;
+      powerdns-api = apiPort;
+    };
+    usedUDPPorts.powerdns = dnsPort;
+  };
 }

@@ -1,11 +1,14 @@
 {
   config,
+  helpers,
   hostName,
   lib,
   pkgs,
   ...
 }:
 let
+  inherit (helpers.lists) allUnique;
+  inherit (helpers.network) formatHostPort;
   cfg = config.my.services.dn42.mesh;
   nodes = cfg.nodes;
   links = cfg.links;
@@ -73,12 +76,10 @@ let
         link.aLinkLocal
         link.bLinkLocal
       ]) links;
-
-      unique = xs: builtins.length xs == builtins.length (lib.unique xs);
     in
     [
       {
-        assertion = unique nodeHostNames;
+        assertion = allUnique nodeHostNames;
         message = "dn42 mesh node host names must be unique.";
       }
       {
@@ -86,31 +87,31 @@ let
         message = "dn42 mesh links must reference existing node names.";
       }
       {
-        assertion = unique nodeIPv4s;
+        assertion = allUnique nodeIPv4s;
         message = "dn42 mesh node IPv4 addresses must be unique.";
       }
       {
-        assertion = unique nodeIPv6s;
+        assertion = allUnique nodeIPv6s;
         message = "dn42 mesh node IPv6 addresses must be unique.";
       }
       {
-        assertion = unique linkNames;
+        assertion = allUnique linkNames;
         message = "dn42 mesh link names must be unique.";
       }
       {
-        assertion = unique ports;
+        assertion = allUnique ports;
         message = "dn42 mesh WireGuard listen ports must be unique.";
       }
       {
-        assertion = unique v4s;
+        assertion = allUnique v4s;
         message = "dn42 mesh IPv4 addresses must be unique.";
       }
       {
-        assertion = unique v6s;
+        assertion = allUnique v6s;
         message = "dn42 mesh IPv6 addresses must be unique.";
       }
       {
-        assertion = unique lls;
+        assertion = allUnique lls;
         message = "dn42 mesh link-local addresses must be unique.";
       }
       {
@@ -160,7 +161,7 @@ let
       wireguardPeers = [
         {
           PublicKey = side.peer.publicKey;
-          Endpoint = "${side.peer.endpoint}:${toString link.port}";
+          Endpoint = formatHostPort side.peer.endpoint link.port;
           AllowedIPs = [
             "0.0.0.0/0"
             "::/0"
@@ -296,6 +297,16 @@ in
               ];
             }
           ) localLinks
+        );
+      };
+
+      my.networking = {
+        usedTCPPorts = {
+          bird-bgp = 179;
+          bird-lg-proxy = lookingGlassProxyPort;
+        };
+        usedUDPPorts = lib.listToAttrs (
+          map (link: lib.nameValuePair "dn42-mesh/${link.name}" link.port) localLinks
         );
       };
 

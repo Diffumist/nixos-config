@@ -59,7 +59,8 @@ in
     virtualHosts.${domain}.useCloudflareACME = true;
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
-    encode zstd gzip
     reverse_proxy 127.0.0.1:${toString port}
   '';
+
+  my.networking.usedTCPPorts.pocket-id = port;
 }

@@ -9,7 +9,6 @@
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   boot = {
     initrd = {
-      systemd.enable = true;
       availableKernelModules = [
         "nvme"
         "xhci_pci"
@@ -41,6 +40,7 @@
       efi.canTouchEfiVariables = true;
     };
     supportedFilesystems = [ "ntfs" ];
+    # kernelPackages = pkgs.linuxPackages_xanmod_latest;
     kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-lto-zen4;
   };
 
@@ -103,10 +103,6 @@
       ];
       files = [
         {
-          file = "/etc/machine-id";
-          inInitrd = true;
-        }
-        {
           file = "/etc/ssh/ssh_host_ed25519_key";
           how = "symlink";
           configureParent = true;
@@ -114,7 +110,6 @@
       ];
     };
   };
-  systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
   swapDevices = [
     {
       device = "/.swap/real-path";

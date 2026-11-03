@@ -55,5 +55,7 @@ in
         "--collector.diskstats.device-exclude=^(loop|ram|fd|sr|dm-).*"
       ];
     };
+
+    my.networking.usedTCPPorts.prometheus-node-exporter = cfg.port;
   };
 }

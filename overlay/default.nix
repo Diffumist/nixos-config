@@ -6,6 +6,18 @@ let
 in
 importedPkgs
 // {
+  pythonPackagesExtensions = (prev.pythonPackagesExtensions or [ ]) ++ [
+    (_: pythonPrev: {
+      anyio = pythonPrev.anyio.overridePythonAttrs (oldAttrs: {
+        # Python 3.12.15 rejects client-only TLS arguments in server-side tests.
+        patches =
+          (oldAttrs.patches or [ ])
+          ++ lib.optionals (pythonPrev.python.pythonVersion == "3.12" && oldAttrs.version == "4.14.2") [
+            ./anyio/server-hostname.patch
+          ];
+      });
+    })
+  ];
   microfetch = prev.microfetch.overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or [ ]) ++ [ ./microfetch/storage.patch ];
   });
@@ -21,7 +33,7 @@ importedPkgs
         --replace "VSCODE = 'code'" "VSCODE = 'codium'"
     '';
   });
-  # niri = inputs.small.legacyPackages.${prev.stdenv.hostPlatform.system}.niri;
+  rimsort = inputs.rimsort.packages.${prev.stdenv.hostPlatform.system}.rimsort;
   # stable-package = inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}.some-package;
 }
 // lib.optionalAttrs (prev ? cachyosKernels) {

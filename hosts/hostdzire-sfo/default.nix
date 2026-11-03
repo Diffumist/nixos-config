@@ -7,11 +7,6 @@
 }:
 {
   imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/sda";
-      swapSize = "3G";
-    })
-
     ./services/asterisk.nix
     ./services/grafana.nix
     ./services/pocketid.nix
@@ -21,7 +16,12 @@
     ./services/vaultwarden.nix
   ];
 
-  my.services.sing-box = {
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/sda";
+    swapSize = "3G";
+  };
+
+  my.services.mihomo-server = {
     enable = true;
     domain = "generic-radiance-multitude-reversing.503418.xyz";
     port = 8443;

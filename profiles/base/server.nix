@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  modulesPath,
   pkgs,
   self,
   ...
@@ -11,8 +12,13 @@
     ../common/nixconfig.nix
     ../common/services/fail2ban.nix
     ../common/services/sshd.nix
+    (modulesPath + "/profiles/qemu-guest.nix")
+    "${self}/modules/system/nixos-init.nix"
     "${self}/modules/system/sops.nix"
   ];
+
+  my.hardware.ephemeralBtrfs.enable = lib.mkDefault true;
+
   sops = {
     age.sshKeyPaths = lib.mkDefault [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
     secrets.user_passwd_hash = {
@@ -22,9 +28,9 @@
   };
 
   environment.systemPackages = with pkgs; [
-    xsz
     duf
     btop
+    netfit
     binutils
     dnsutils
     man-pages

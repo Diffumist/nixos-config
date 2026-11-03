@@ -22,7 +22,7 @@
     };
   };
 
-  my.services.sing-box = {
+  my.services.mihomo-server = {
     enable = true;
     domain = "overload-reshoot-aids-silencer.503418.xyz";
     port = 8443;

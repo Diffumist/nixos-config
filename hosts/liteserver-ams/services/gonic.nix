@@ -38,18 +38,9 @@ in
   };
   services.caddy.virtualHosts."music.diffumist.me" = {
     extraConfig = ''
-      encode zstd gzip
-
       @admin path /admin /admin/*
       handle @admin {
-        forward_auth https://oauth.diffumist.me {
-          uri /oauth2/auth
-          copy_headers X-Auth-Request-User X-Auth-Request-Groups X-Auth-Request-Email X-Auth-Request-Preferred-Username
-          @error status 401
-          handle_response @error {
-            redir * https://oauth.diffumist.me/oauth2/start?rd={scheme}://{host}{uri}
-          }
-        }
+        import oauth2_forward_auth oauth.diffumist.me
         reverse_proxy 127.0.0.1:${toString port}
       }
 
@@ -58,4 +49,6 @@ in
       }
     '';
   };
+
+  my.networking.usedTCPPorts.gonic = port;
 }

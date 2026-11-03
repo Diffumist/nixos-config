@@ -8,14 +8,14 @@
 }:
 {
   imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/vda";
-    })
-
     ./services/sillytavern.nix
     ./services/rustypaste.nix
     ./services/looking-glass.nix
   ];
+
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/vda";
+  };
 
   my.networking.static = {
     enable = true;
@@ -26,7 +26,7 @@
     };
   };
 
-  my.services.sing-box = {
+  my.services.mihomo-server = {
     enable = true;
     domain = "pastel-riot-defense-stinking-saga.503418.xyz";
     port = 8443;

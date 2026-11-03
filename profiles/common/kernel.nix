@@ -1,8 +1,7 @@
 { pkgs, lib, ... }:
 {
-  boot.initrd.systemd.enable = true;
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_xanmod_latest;
-  boot.kernelModules = lib.mkDefault [ ];
+  boot.kernelModules = lib.mkDefault [ "tcp_bbr" ];
   boot.kernelParams = [
     "vdso32=0"
     "console=ttyS0,115200n8"

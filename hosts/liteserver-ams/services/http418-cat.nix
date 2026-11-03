@@ -9,7 +9,6 @@ in
   };
 
   services.caddy.virtualHosts.${domain}.extraConfig = ''
-    encode zstd gzip
     root * ${pkgs.http418-cat}
     file_server
   '';

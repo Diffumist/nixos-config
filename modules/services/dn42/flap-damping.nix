@@ -1,17 +1,18 @@
 {
   config,
+  helpers,
   lib,
   pkgs,
   ...
 }:
 let
+  inherit (helpers.network) formatHostPort;
   cfg = config.my.services.dn42.flapDamping;
 
   bgpPort = 11790;
   httpPort = 11791;
   rtrPort = 11792;
   metricsPort = 11793;
-  formatHttpHost = address: if lib.hasInfix ":" address then "[${address}]" else address;
 in
 {
   options.my.services.dn42.flapDamping = {
@@ -45,6 +46,15 @@ in
       bgpPort
       httpPort
     ];
+
+    my.networking.usedTCPPorts = {
+      stayrtr = rtrPort;
+      stayrtr-metrics = metricsPort;
+    }
+    // lib.optionalAttrs cfg.runServer {
+      flapalerted-bgp = bgpPort;
+      flapalerted-http = httpPort;
+    };
 
     systemd.network.networks."10-dn42-dummy".address = lib.mkIf cfg.runServer [
       "${cfg.serverAddress}/128"
@@ -83,32 +93,30 @@ in
       }
     '';
 
-    systemd.services.flapalerted = lib.mkIf cfg.runServer {
-      description = "FlapAlerted";
-      before = [ "bird.service" ];
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      script = ''
-        exec ${lib.getExe pkgs.flap-alerted} \
-          --asn ${toString config.networking.dn42.asn} \
-          --bgpListenAddress ${formatHttpHost cfg.serverAddress}:${toString bgpPort} \
-          --httpAPIListenAddress ${formatHttpHost cfg.serverAddress}:${toString httpPort} \
-          -routeChangeCounter 2000 \
-          -overThresholdTarget 5 \
-          -underThresholdTarget 30
-      '';
-      serviceConfig = {
-        DynamicUser = true;
-        Restart = "always";
-        RestartSec = "3s";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectHome = true;
-        ProtectSystem = "strict";
-      };
-    };
+    systemd.services.flapalerted = lib.mkIf cfg.runServer (
+      helpers.systemd.mkService {
+        description = "FlapAlerted";
+        before = [ "bird.service" ];
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        script = ''
+          exec ${lib.getExe pkgs.flap-alerted} \
+            --asn ${toString config.networking.dn42.asn} \
+            --bgpListenAddress ${formatHostPort cfg.serverAddress bgpPort} \
+            --httpAPIListenAddress ${formatHostPort cfg.serverAddress httpPort} \
+            -routeChangeCounter 2000 \
+            -overThresholdTarget 5 \
+            -underThresholdTarget 30
+        '';
+        serviceConfig = {
+          DynamicUser = true;
+          Restart = "always";
+          RestartSec = "3s";
+        };
+      }
+    );
 
-    systemd.services.stayrtr-flapalerted = {
+    systemd.services.stayrtr-flapalerted = helpers.systemd.mkService {
       description = "StayRTR for FlapAlerted";
       before = [ "bird.service" ];
       after = [ "network.target" ] ++ lib.optionals cfg.runServer [ "flapalerted.service" ];
@@ -118,7 +126,7 @@ in
         exec ${lib.getExe pkgs.stayrtr} \
           --bind 127.0.0.1:${toString rtrPort} \
           --metrics.addr 127.0.0.1:${toString metricsPort} \
-          --cache http://${formatHttpHost cfg.serverAddress}:${toString httpPort}/flaps/active/roa \
+          --cache http://${formatHostPort cfg.serverAddress httpPort}/flaps/active/roa \
           --rtr.expire 3600 \
           --rtr.refresh 300 \
           --rtr.retry 300
@@ -127,10 +135,6 @@ in
         DynamicUser = true;
         Restart = "always";
         RestartSec = "3s";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectHome = true;
-        ProtectSystem = "strict";
       };
     };
   };

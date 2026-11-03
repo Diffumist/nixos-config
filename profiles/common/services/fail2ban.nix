@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 {
   services.fail2ban = {
     enable = lib.mkDefault true;
@@ -53,6 +53,10 @@
       };
     };
   };
+
+  environment.systemPackages = [
+    config.services.fail2ban.package
+  ];
 
   environment.etc = {
     "fail2ban/filter.d/vaultwarden.local".text = ''

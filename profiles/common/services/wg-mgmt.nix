@@ -1,10 +1,13 @@
 {
   config,
+  helpers,
   hostName,
   lib,
   ...
 }:
 let
+  inherit (helpers.lists) allUnique;
+  inherit (helpers.network) formatHostPort;
   baseurl = "diffumist.me";
   interface = "wg-mgmt";
   listenPort = 44242;
@@ -75,12 +78,6 @@ let
       ipv6 = "fd42:203::33";
       publicKey = "U3+Vwby1YV5mGBndaiOzUl5NZ4ORhIXB6p7nrKP/0nU=";
     };
-    geelinx-ord = {
-      endpoint = "ord-0.${baseurl}";
-      ipv4 = "10.203.0.41";
-      ipv6 = "fd42:203::41";
-      publicKey = "iSa5qFW8m42DIJBhtMqlT2DWdYF/ODauxHQOaKnJXDw=";
-    };
     google-east = {
       endpoint = "chs-0.${baseurl}";
       ipv4 = "10.203.0.42";
@@ -100,10 +97,6 @@ let
     ]
     [
       "hostdzire-sfo"
-      "geelinx-ord"
-    ]
-    [
-      "hostdzire-sfo"
       "dedirock-lax"
     ]
     [
@@ -112,18 +105,6 @@ let
     ]
     [
       "noboard-tyo"
-      "geelinx-ord"
-    ]
-    [
-      "noboard-tyo"
-      "dedirock-lax"
-    ]
-    [
-      "geelinx-ord"
-      "liteserver-ams"
-    ]
-    [
-      "geelinx-ord"
       "dedirock-lax"
     ]
     [
@@ -146,11 +127,9 @@ let
     noboard-tyo = [
       "wawo-hkg"
     ];
-    geelinx-ord = [ "google-east" ];
   };
 
   enabled = builtins.hasAttr hostName nodes;
-  unique = xs: builtins.length xs == builtins.length (lib.unique xs);
   mkPair = pair: {
     a = builtins.elemAt pair 0;
     b = builtins.elemAt pair 1;
@@ -178,11 +157,11 @@ in
     {
       assertions = [
         {
-          assertion = unique (map (n: n.ipv4) (lib.attrValues nodes));
+          assertion = allUnique (map (n: n.ipv4) (lib.attrValues nodes));
           message = "wg-mgmt IPv4 addresses must be unique.";
         }
         {
-          assertion = unique (map (n: n.ipv6) (lib.attrValues nodes));
+          assertion = allUnique (map (n: n.ipv6) (lib.attrValues nodes));
           message = "wg-mgmt IPv6 addresses must be unique.";
         }
         {
@@ -192,7 +171,7 @@ in
           message = "wg-mgmt links must reference existing nodes.";
         }
         {
-          assertion = unique (map linkKey linkPairs);
+          assertion = allUnique (map linkKey linkPairs);
           message = "wg-mgmt links must be unique.";
         }
         {
@@ -208,6 +187,8 @@ in
 
       networking.firewall.allowedUDPPorts = [ listenPort ];
 
+      my.networking.usedUDPPorts.wireguard-mgmt = listenPort;
+
       systemd.network.netdevs."20-${interface}" = {
         netdevConfig = {
           Name = interface;
@@ -219,7 +200,7 @@ in
         };
         wireguardPeers = map (peer: {
           PublicKey = peer.publicKey;
-          Endpoint = "${peer.endpoint}:${toString listenPort}";
+          Endpoint = formatHostPort peer.endpoint listenPort;
           AllowedIPs = [
             "${peer.ipv4}/32"
             "${peer.ipv6}/128"

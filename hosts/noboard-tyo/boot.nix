@@ -1,15 +1,10 @@
-{ modulesPath, ... }:
+{ config, ... }:
 let
-  btrfsMountOptions = [
-    "noatime"
-    "compress-force=zstd:-5"
-    "space_cache=v2"
-  ];
+  btrfsMountOptions = config.my.hardware.ephemeralBtrfs.mountOptions;
 in
 {
-  imports = [
-    (modulesPath + "/profiles/qemu-guest.nix")
-  ];
+  my.hardware.ephemeralBtrfs.layout = "custom";
+
   disko.devices.disk = {
     main = {
       type = "disk";
@@ -72,38 +67,4 @@ in
       };
     };
   };
-  disko.devices.nodev = {
-    "/" = {
-      fsType = "tmpfs";
-      mountOptions = [
-        "mode=755"
-      ];
-    };
-  };
-  fileSystems."/persist".neededForBoot = true;
-  preservation = {
-    enable = true;
-    preserveAt."/persist" = {
-      directories = [
-        "/var/log"
-        {
-          directory = "/var/lib";
-          inInitrd = true;
-        }
-        "/var/db"
-      ];
-      files = [
-        {
-          file = "/etc/machine-id";
-          inInitrd = true;
-        }
-        {
-          file = "/etc/ssh/ssh_host_ed25519_key";
-          how = "symlink";
-          configureParent = true;
-        }
-      ];
-    };
-  };
-  systemd.suppressedSystemUnits = [ "systemd-machine-id-commit.service" ];
 }

@@ -1,4 +1,7 @@
 { config, ... }:
+let
+  port = 8080;
+in
 {
   sops.secrets = {
     attic_server_token_rs256_secret_base64 = { };
@@ -18,7 +21,7 @@
     mode = "monolithic";
     environmentFile = config.sops.templates."atticd.env".path;
     settings = {
-      listen = "127.0.0.1:8080";
+      listen = "127.0.0.1:${toString port}";
       allowed-hosts = [ "attic.diffumist.me" ];
       api-endpoint = "https://attic.diffumist.me/";
     };
@@ -28,7 +31,7 @@
   services.caddy.virtualHosts."attic.diffumist.me" = {
     useACMEHost = "attic.diffumist.me";
     extraConfig = ''
-      reverse_proxy 127.0.0.1:8080
+      reverse_proxy 127.0.0.1:${toString port}
     '';
   };
 
@@ -39,4 +42,6 @@
       CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
     };
   };
+
+  my.networking.usedTCPPorts.atticd = port;
 }

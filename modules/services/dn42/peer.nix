@@ -1,9 +1,11 @@
 {
   config,
+  helpers,
   lib,
   ...
 }:
 let
+  inherit (helpers.network) formatHostPort;
   cfg = config.my.services.dn42;
   dn42 = config.networking.dn42;
   peers = lib.attrValues cfg.peers;
@@ -101,7 +103,7 @@ let
             PersistentKeepalive = 25;
           }
           // lib.optionalAttrs (peer.endpoint != null) {
-            Endpoint = "${peer.endpoint}:${toString peer.peerPort}";
+            Endpoint = formatHostPort peer.endpoint peer.peerPort;
           }
         )
       ];
@@ -213,6 +215,13 @@ in
 
   config = lib.mkIf (cfg.peers != { }) {
     networking.firewall.allowedUDPPorts = map (peer: peer.listenPort) peers;
+
+    my.networking = {
+      usedTCPPorts.bird-bgp = 179;
+      usedUDPPorts = lib.listToAttrs (
+        map (peer: lib.nameValuePair "dn42-peer/${peer.interface}" peer.listenPort) peers
+      );
+    };
 
     # eBGP runs over TCP/179 inside the WireGuard tunnel; allow it per peer
     # interface only (not the whole host).

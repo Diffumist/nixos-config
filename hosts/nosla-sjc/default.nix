@@ -6,12 +6,10 @@
   ...
 }:
 {
-  imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/sda";
-      swapSize = "512M";
-    })
-  ];
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/sda";
+    swapSize = "512M";
+  };
 
   my.networking.static = {
     enable = true;

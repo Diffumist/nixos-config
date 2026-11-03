@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  helpers,
+  pkgs,
+  ...
+}:
 let
   domain = "nixos.bond";
   port = 8001;
@@ -125,7 +130,7 @@ in
     "d ${uploadPath} 0750 rustypaste rustypaste -"
   ];
 
-  systemd.services.rustypaste = {
+  systemd.services.rustypaste = helpers.systemd.mkService {
     description = "rustypaste file upload service";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
@@ -140,29 +145,17 @@ in
       WorkingDirectory = uploadPath;
       Restart = "on-failure";
       RestartSec = "5s";
-      NoNewPrivileges = true;
-      PrivateTmp = true;
-      ProtectHome = true;
-      ProtectSystem = "strict";
       ReadWritePaths = [ uploadPath ];
-      PrivateDevices = true;
-      ProtectKernelTunables = true;
-      ProtectKernelModules = true;
-      ProtectControlGroups = true;
-      RestrictAddressFamilies = [
-        "AF_INET"
-        "AF_INET6"
-        "AF_UNIX"
-      ];
-      LockPersonality = true;
     };
   };
 
-  my.services.caddy.enable = true;
+  my.services.caddy = {
+    enable = true;
+    virtualHosts.${domain} = { };
+  };
   services.caddy.virtualHosts.${domain} = {
     useACMEHost = domain;
     extraConfig = ''
-      encode zstd gzip
       @badExpire {
         header expire *
         not header_regexp expire ^\s*(?:(?:0|[1-9]|[1-9][0-9]{1,5}|1[0-9]{6}|2[0-4][0-9]{5}|25[0-8][0-9]{4}|259[01][0-9]{3}|2592000)\s*(?:seconds?|secs?|s)|(?:0|[1-9]|[1-9][0-9]{1,3}|[1-3][0-9]{4}|4[0-2][0-9]{3}|43[01][0-9]{2}|43200)\s*(?:minutes?|mins?|m)|(?:0|[1-9]|[1-9][0-9]|[1-6][0-9]{2}|7[01][0-9]|720)\s*(?:hours?|hrs?|h)|(?:0|[1-9]|[12][0-9]|30)\s*(?:days?|d)|(?:0|[1-4])\s*(?:weeks?|w))\s*$
@@ -183,4 +176,6 @@ in
       CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
     };
   };
+
+  my.networking.usedTCPPorts.rustypaste = port;
 }

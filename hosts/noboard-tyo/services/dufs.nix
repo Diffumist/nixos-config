@@ -1,5 +1,6 @@
 {
   config,
+  helpers,
   pkgs,
   ...
 }:
@@ -18,7 +19,7 @@ in
     '';
   };
 
-  systemd.services.dufs = {
+  systemd.services.dufs = helpers.systemd.mkService {
     description = "Dufs file server";
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];
@@ -40,13 +41,6 @@ in
       Restart = "on-failure";
       RestartSec = "5s";
       UMask = "0027";
-      NoNewPrivileges = true;
-      PrivateTmp = true;
-      ProtectHome = true;
-      ProtectSystem = "strict";
-      ProtectKernelTunables = true;
-      ProtectKernelModules = true;
-      ProtectControlGroups = true;
       RestrictAddressFamilies = [
         "AF_UNIX"
         "AF_INET"
@@ -62,7 +56,8 @@ in
     virtualHosts.${domain}.useCloudflareACME = true;
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
-    encode zstd gzip
     reverse_proxy 127.0.0.1:${toString port}
   '';
+
+  my.networking.usedTCPPorts.dufs = port;
 }

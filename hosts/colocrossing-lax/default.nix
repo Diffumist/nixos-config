@@ -7,13 +7,14 @@
 }:
 {
   imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/vda";
-    })
-
     ./services/gatus.nix
     ./services/komari-monitor.nix
   ];
+
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/vda";
+  };
+
   networking = {
     useDHCP = true;
   };

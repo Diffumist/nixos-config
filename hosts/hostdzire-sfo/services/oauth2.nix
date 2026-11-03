@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 let
   pocketIdDomain = "id.418.cat";
   port = 4180;
@@ -66,7 +71,7 @@ in
     };
   };
 
-  systemd.services.oauth2-proxy = {
+  systemd.services.oauth2-proxy = helpers.systemd.mkService {
     requires = [ "pocket-id.service" ];
     after = [ "pocket-id.service" ];
   };
@@ -89,4 +94,6 @@ in
       CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
     };
   });
+
+  my.networking.usedTCPPorts.oauth2-proxy = port;
 }

@@ -1,11 +1,13 @@
 {
   config,
+  helpers,
   lib,
   ...
 }:
 let
   cfg = config.my.services.monitoring-agent;
   nodeExporter = config.my.services.prometheus-node;
+  vmagentPort = 8429;
 in
 {
   options.my.services.monitoring-agent = {
@@ -45,7 +47,7 @@ in
     services.vmagent = {
       enable = true;
       openFirewall = false;
-      extraArgs = [ "-httpListenAddr=127.0.0.1:8429" ];
+      extraArgs = [ "-httpListenAddr=127.0.0.1:${toString vmagentPort}" ];
       remoteWrite = {
         url = "https://metrics.diffumist.dev/api/v1/write";
         basicAuthUsername = "vmagent";
@@ -72,9 +74,11 @@ in
       };
     };
 
-    systemd.services.vmagent = {
+    systemd.services.vmagent = helpers.systemd.mkService {
       wants = [ "prometheus-node-exporter.service" ];
       after = [ "prometheus-node-exporter.service" ];
     };
+
+    my.networking.usedTCPPorts.vmagent = vmagentPort;
   };
 }

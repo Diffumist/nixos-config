@@ -130,7 +130,7 @@
     oxfmt
     oxlint
     tsgolint
-    typescript-language-server
+    # typescript-language-server
     yarn-berry
     typescript
     nodejs

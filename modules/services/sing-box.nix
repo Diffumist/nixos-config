@@ -12,7 +12,7 @@ let
     disable_tls_alpn_challenge = true;
     dns01_challenge = {
       provider = "cloudflare";
-      api_token._secret = "/run/secrets/cloudflare_api_token";
+      api_token._secret = config.sops.secrets.cloudflare_api_token.path;
     };
     domain = [ cfg.domain ];
     email = "services@diffumist.me";
@@ -42,6 +42,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    sops.secrets.cloudflare_api_token = {
+      sopsFile = ../../profiles/common/secrets/server.yaml;
+      owner = "sing-box";
+      group = "sing-box";
+      restartUnits = [ "sing-box.service" ];
+    };
 
     sops.secrets.singbox_passwd = {
       sopsFile = ../../profiles/common/secrets/server.yaml;
@@ -160,6 +167,11 @@ in
     networking.firewall = {
       allowedTCPPorts = [ cfg.port ];
       allowedUDPPorts = [ cfg.port ];
+    };
+
+    my.networking = {
+      usedTCPPorts.sing-box = cfg.port;
+      usedUDPPorts.sing-box = cfg.port;
     };
   };
 }

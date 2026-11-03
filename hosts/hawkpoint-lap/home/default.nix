@@ -54,7 +54,6 @@
       WantedBy = [ "default.target" ];
     };
   };
-  services.system76-scheduler-niri.enable = true;
   # programs
   programs = {
     home-manager.enable = true;
@@ -92,72 +91,109 @@
       ];
     };
   };
-  home.packages = with pkgs; [
-    # CLI
-    fff
-    mosh
-    sing-box
-    # nix-alien
-    microfetch
-    bubblewrap
-    steam-run
-    android-tools
-    (pkgs.writeShellApplication {
-      name = "niri-single-monitor-game";
-      runtimeInputs = [ pkgs.niri ];
-      text = ''
-        output="eDP-1"
-        # shellcheck disable=SC2329
-        restore_output() {
-          niri msg output "$output" on >/dev/null 2>&1 || true
-        }
-        trap restore_output EXIT HUP INT TERM
-        niri msg output "$output" off || exit 1
-        "$@"
-        status=$?
-        exit "$status"
-      '';
-    })
-    # mcp
-    mcp-nixos
-    playwright
-    context7-mcp
-    playwright-mcp
-    github-mcp-server
-    llm-agents.agent-browser
-    # TUI
-    llm-agents.rtk
-    llm-agents.codex
-    llm-agents.pi
-    llm-agents.herdr
-    llm-agents.crush
-    llm-agents.opencode2
-    llm-agents.codex-auth
-    llm-agents.claude-code
-    llm-agents.antigravity-cli
-    # GUI
-    qq
-    pods
-    tuba
-    papers
-    gitte
-    wemeet
-    vesktop
-    gapless
-    clapper
-    fractal
-    localsend
-    fragments
-    apostrophe
-    typesetter
-    distroshelf
-    thunderbird
-    field-monitor
-    ayugram-desktop
-    netease-cloud-music-gtk
-  ];
+  home.packages =
+    with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+    with pkgs;
+    [
+      # CLI
+      fff
+      # mosh
+      sing-box
+      # nix-alien
+      microfetch
+      bubblewrap
+      steam-run
+      android-tools
+      (pkgs.writeShellApplication {
+        name = "niri-single-monitor";
+        runtimeInputs = [ pkgs.niri ];
+        text = ''
+          output="eDP-1"
+          # shellcheck disable=SC2329
+          restore_output() {
+            niri msg output "$output" on >/dev/null 2>&1 || true
+          }
+          trap restore_output EXIT HUP INT TERM
+          niri msg output "$output" off || exit 1
+          "$@"
+          status=$?
+          exit "$status"
+        '';
+      })
+      (pkgs.writeShellApplication {
+        name = "game-force-1440p";
+        runtimeInputs = [
+          pkgs.coreutils
+          pkgs.niri
+        ];
+        text = ''
+          output="HDMI-A-1"
+
+          run_niri() {
+            env -u LD_LIBRARY_PATH -u LD_PRELOAD niri msg "$@"
+          }
+
+          # shellcheck disable=SC2329
+          restore_output() {
+            run_niri output "$output" mode "3840x2160@59.997" >/dev/null 2>&1 || true
+            run_niri output "$output" scale 1.5 >/dev/null 2>&1 || true
+          }
+
+          trap restore_output EXIT HUP INT TERM
+          run_niri output "$output" mode "2560x1440@59.951"
+          run_niri output "$output" scale 1
+
+          if "$@"; then
+            status=0
+          else
+            status=$?
+          fi
+          exit "$status"
+        '';
+      })
+      # mcp
+      # mcp-nixos
+      playwright
+      context7-mcp
+      playwright-mcp
+      github-mcp-server
+      llm-agents.agent-browser
+      # TUI
+      llm-agents.rtk
+      llm-agents.codex
+      llm-agents.pi
+      llm-agents.herdr
+      llm-agents.crush
+      llm-agents.opencode2
+      llm-agents.codex-auth
+      llm-agents.claude-code
+      llm-agents.antigravity-cli
+      # GUI
+      qq
+      pods
+      tuba
+      papers
+      gitte
+      wemeet
+      azahar
+      vesktop
+      gapless
+      clapper
+      fractal
+      rimsort
+      ryubing
+      localsend
+      fragments
+      apostrophe
+      typesetter
+      distroshelf
+      thunderbird
+      field-monitor
+      ayugram-desktop
+      netease-cloud-music-gtk
+    ];
   home.shell.enableFishIntegration = true;
   home.shell.enableBashIntegration = true;
   home.preferXdgDirectories = true;
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
 }

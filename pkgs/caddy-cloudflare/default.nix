@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "2.11.4";
+  version = "2.11.7";
   cloudflarePlugin = "github.com/caddy-dns/cloudflare@v${caddy-dns-cloudflare.version}";
 in
 caddy.overrideAttrs (oldAttrs: {
@@ -51,11 +51,16 @@ caddy.overrideAttrs (oldAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-7GoH8YLCoPmPExQxoga2FHB58zQDoZVf1BBwkVi0SsQ=";
+    outputHash = "sha256-tubXIDCJnO2mvdnPlZclwDhNGaeeYLSt7lnni3+pXDo=";
   };
 
   vendorHash = null;
   subPackages = [ "." ];
+
+  # xcaddy vendors Caddy; keep nixpkgs' system trust-store policy at its actual source path.
+  postConfigure = ''
+    rm vendor/github.com/caddyserver/caddy/v2/cmd/x509rootsfallback.go
+  '';
 
   ldflags = [
     "-s"

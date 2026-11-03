@@ -7,15 +7,15 @@
 }:
 {
   imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/vda";
-      swapSize = "4096M";
-    })
-
     ./services/attic.nix
     ./services/forgejo.nix
     ./services/garage-ui.nix
   ];
+
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/vda";
+    swapSize = "4096M";
+  };
 
   my.networking.static = {
     enable = true;

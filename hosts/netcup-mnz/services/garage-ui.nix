@@ -1,5 +1,6 @@
 {
   config,
+  helpers,
   lib,
   pkgs,
   ...
@@ -85,7 +86,7 @@ in
     };
   };
 
-  systemd.services.garage-ui = {
+  systemd.services.garage-ui = helpers.systemd.mkService {
     description = "Garage web administration interface";
     wantedBy = [ "multi-user.target" ];
     wants = [ "network-online.target" ];
@@ -106,30 +107,6 @@ in
       User = user;
       Group = user;
       UMask = "0077";
-
-      CapabilityBoundingSet = "";
-      LockPersonality = true;
-      NoNewPrivileges = true;
-      PrivateDevices = true;
-      PrivateTmp = true;
-      ProtectClock = true;
-      ProtectControlGroups = true;
-      ProtectHome = true;
-      ProtectHostname = true;
-      ProtectKernelLogs = true;
-      ProtectKernelModules = true;
-      ProtectKernelTunables = true;
-      ProtectSystem = "strict";
-      RemoveIPC = true;
-      RestrictAddressFamilies = [
-        "AF_INET"
-        "AF_INET6"
-        "AF_UNIX"
-      ];
-      RestrictNamespaces = true;
-      RestrictRealtime = true;
-      RestrictSUIDSGID = true;
-      SystemCallArchitectures = "native";
     };
   };
 
@@ -138,7 +115,8 @@ in
     virtualHosts.${domain}.useCloudflareACME = true;
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
-    encode zstd gzip
     reverse_proxy 127.0.0.1:${toString port}
   '';
+
+  my.networking.usedTCPPorts.garage-ui = port;
 }

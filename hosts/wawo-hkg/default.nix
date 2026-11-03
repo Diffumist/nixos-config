@@ -6,12 +6,10 @@
   ...
 }:
 {
-  imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/vda";
-      swapSize = "512M";
-    })
-  ];
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/vda";
+    swapSize = "512M";
+  };
 
   my.networking.static = {
     enable = true;
@@ -22,15 +20,10 @@
     };
   };
 
-  nixpkgs.flake = {
-    setFlakeRegistry = false;
-    setNixPath = false;
-  };
-  system.disableInstallerTools = true;
   virtualisation.podman.enable = false;
   services.fail2ban.enable = false;
 
-  my.services.sing-box = {
+  my.services.mihomo-server = {
     enable = true;
     domain = "earache-pretty-anyway-squealing.503418.xyz";
   };

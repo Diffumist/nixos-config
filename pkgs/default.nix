@@ -16,6 +16,7 @@ let
     "cloudflare-ip-ranges"
     "cybergroupmate"
     "flyline"
+    "komari-monitor"
     "tel42verifier"
     "xsz"
   ];

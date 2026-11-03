@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  helpers,
+  lib,
+  ...
+}:
 let
   domain = "status.diffumist.dev";
   port = 8080;
@@ -199,7 +204,7 @@ in
     ];
   };
 
-  systemd.services.gatus = {
+  systemd.services.gatus = helpers.systemd.mkService {
     after = [
       "postgresql.service"
       "postgresql-setup.service"
@@ -215,7 +220,6 @@ in
     virtualHosts.${domain}.useCloudflareACME = true;
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
-    encode zstd gzip
     reverse_proxy 127.0.0.1:${toString port}
   '';
 
@@ -230,4 +234,6 @@ in
       ];
     }
   ];
+
+  my.networking.usedTCPPorts.gatus = port;
 }

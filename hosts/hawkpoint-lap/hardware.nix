@@ -18,7 +18,7 @@
     };
     gaze = {
       enable = true;
-      gui.enable = true;
+      gui.enable = false;
       mutableConfig = false;
       settings = {
         cameras = {

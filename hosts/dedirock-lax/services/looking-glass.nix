@@ -33,11 +33,13 @@ in
     "172.22.64.70" = [ "nue-0.lg" ];
   };
 
-  my.services.caddy.enable = true;
+  my.services.caddy = {
+    enable = true;
+    virtualHosts.${domain} = { };
+  };
   services.caddy.virtualHosts.${domain} = {
     useACMEHost = domain;
     extraConfig = ''
-      encode zstd gzip
       reverse_proxy 127.0.0.1:${toString frontendPort}
     '';
   };
@@ -49,4 +51,6 @@ in
       CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
     };
   };
+
+  my.networking.usedTCPPorts.bird-lg-frontend = frontendPort;
 }

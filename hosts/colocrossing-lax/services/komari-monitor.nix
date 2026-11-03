@@ -1,18 +1,22 @@
 {
   config,
+  helpers,
   lib,
+  pkgs,
   ...
 }:
+let
+  port = 25774;
+in
 {
-
-  virtualisation.oci-containers.containers.komari-monitor = {
-    image = "ghcr.io/komari-monitor/komari";
-    extraOptions = [ "--network=host" ];
-    volumes = [ "/var/lib/komari-monitor:/app/data" ];
+  users = {
+    groups.komari-monitor = { };
+    users.komari-monitor = {
+      isSystemUser = true;
+      group = "komari-monitor";
+      home = "/var/lib/komari-monitor";
+    };
   };
-  systemd.tmpfiles.rules = [
-    "d /var/lib/komari-monitor 0750 root root -"
-  ];
 
   my.services.postgresql.enable = true;
   services.postgresql = {
@@ -29,28 +33,51 @@
     ];
   };
 
-  systemd.services.podman-komari-monitor = {
+  systemd.services.komari-monitor = helpers.systemd.mkService {
+    description = "Komari monitoring server";
     after = [
+      "network-online.target"
       "postgresql.service"
       "postgresql-setup.service"
-      "systemd-tmpfiles-setup.service"
     ];
+    wants = [ "network-online.target" ];
     requires = [
       "postgresql.service"
       "postgresql-setup.service"
-      "systemd-tmpfiles-setup.service"
     ];
+    wantedBy = [ "multi-user.target" ];
+
+    environment = {
+      GIN_MODE = "release";
+      KOMARI_LISTEN = "127.0.0.1:${toString port}";
+    };
+
+    serviceConfig = {
+      User = "komari-monitor";
+      Group = "komari-monitor";
+      # StateDirectory migrates the root-owned container state before ExecStart.
+      StateDirectory = "komari-monitor";
+      StateDirectoryMode = "0750";
+      RuntimeDirectory = "komari-monitor";
+      WorkingDirectory = "/run/komari-monitor";
+      BindPaths = [ "/var/lib/komari-monitor:/run/komari-monitor/data" ];
+      ExecStart = "${lib.getExe pkgs.komari-monitor} server";
+      Restart = "on-failure";
+      RestartSec = "5s";
+      UMask = "0027";
+      ReadWritePaths = [ "/var/lib/komari-monitor" ];
+    };
   };
 
   my.services.caddy.enable = true;
+  my.services.caddy.virtualHosts."sla.qzz.io" = { };
   services.caddy.virtualHosts."sla.qzz.io" = {
     useACMEHost = "sla.qzz.io";
     extraConfig = ''
-      encode zstd gzip
       request_body {
         max_size 128MB
       }
-      reverse_proxy 127.0.0.1:25774
+      reverse_proxy 127.0.0.1:${toString port}
     '';
   };
 
@@ -61,4 +88,6 @@
       CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
     };
   };
+
+  my.networking.usedTCPPorts.komari-monitor = port;
 }

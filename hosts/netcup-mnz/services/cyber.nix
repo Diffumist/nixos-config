@@ -6,6 +6,8 @@
 }:
 let
   configPath = "/var/lib/cyber.yaml";
+  webPort = 6767;
+  metricsPort = 9092;
   imageName = "localhost/cybergroupmate-agent";
   imageTag = "latest";
   dockerfile = pkgs.writeText "cybergroupmate-agent.Dockerfile" ''
@@ -47,8 +49,8 @@ in
     autoStart = true;
     pull = "never";
     ports = [
-      "127.0.0.1:6767:6767"
-      "127.0.0.1:9092:9092"
+      "127.0.0.1:${toString webPort}:${toString webPort}"
+      "127.0.0.1:${toString metricsPort}:${toString metricsPort}"
     ];
     volumes = [
       "${configPath}:/app/config.yaml"
@@ -105,7 +107,11 @@ in
     };
   };
   services.caddy.virtualHosts."cyber.503418.xyz".extraConfig = ''
-    encode zstd gzip
-    reverse_proxy 127.0.0.1:6767
+    reverse_proxy 127.0.0.1:${toString webPort}
   '';
+
+  my.networking.usedTCPPorts = {
+    cybergroupmate-web = webPort;
+    cybergroupmate-metrics = metricsPort;
+  };
 }

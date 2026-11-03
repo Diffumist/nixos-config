@@ -15,6 +15,12 @@
     oci-containers.backend = "podman";
   };
 
+  # Why: NixOS only opens DNS for podman0, while tools may create dynamic bridges.
+  networking.firewall.extraInputRules = ''
+    iifname "podman*" tcp dport 53 accept
+    iifname "podman*" udp dport 53 accept
+  '';
+
   systemd.timers.podman-auto-update = lib.mkIf config.virtualisation.podman.enable {
     wantedBy = [ "timers.target" ];
   };

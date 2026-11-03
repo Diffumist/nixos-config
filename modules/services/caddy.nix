@@ -6,19 +6,10 @@
 }:
 let
   cfg = config.my.services.caddy;
+  caddyCfg = config.services.caddy;
   cloudflareAccessFile = "${pkgs.cloudflare-ip-ranges}/share/caddy/cloudflare-only.caddy";
   cloudflareTrustedProxiesFile = "${pkgs.cloudflare-ip-ranges}/share/caddy/cloudflare-trusted-proxies.caddy";
   cloudflareACMEHosts = lib.filterAttrs (_: host: host.useCloudflareACME) cfg.virtualHosts;
-  oauth2ForwardAuth = authHost: ''
-    forward_auth https://${authHost} {
-      uri /oauth2/auth
-      copy_headers X-Auth-Request-User X-Auth-Request-Groups X-Auth-Request-Email X-Auth-Request-Preferred-Username
-      @error status 401
-      handle_response @error {
-        redir * https://${authHost}/oauth2/start?rd={scheme}://{host}{uri}
-      }
-    }
-  '';
 in
 {
   options = {
@@ -37,6 +28,11 @@ in
         type = lib.types.attrsOf (
           lib.types.submodule {
             options = {
+              enableCompression = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = "Enable response compression for this virtual host.";
+              };
               useCloudflareACME = lib.mkOption {
                 type = lib.types.bool;
                 default = false;
@@ -65,6 +61,18 @@ in
     services.caddy = {
       enable = true;
       package = pkgs.caddy-cloudflare;
+      extraConfig = ''
+        (oauth2_forward_auth) {
+          forward_auth https://{args[0]} {
+            uri /oauth2/auth
+            copy_headers X-Auth-Request-User X-Auth-Request-Groups X-Auth-Request-Email X-Auth-Request-Preferred-Username
+            @error status 401
+            handle_response @error {
+              redir * https://{args[0]}/oauth2/start?rd={scheme}://{host}{uri}
+            }
+          }
+        }
+      '';
       globalConfig = ''
         acme_dns cloudflare {env.CF_API_TOKEN}
         servers {
@@ -82,8 +90,15 @@ in
           lib.optionalAttrs host.useCloudflareACME {
             useACMEHost = domain;
           }
-          // lib.optionalAttrs (host.oauth2ForwardAuth != null) {
-            extraConfig = lib.mkBefore (oauth2ForwardAuth host.oauth2ForwardAuth);
+          // lib.optionalAttrs (host.enableCompression || host.oauth2ForwardAuth != null) {
+            extraConfig = lib.mkBefore (
+              lib.concatStrings [
+                (lib.optionalString host.enableCompression "encode\n")
+                (lib.optionalString (
+                  host.oauth2ForwardAuth != null
+                ) "import oauth2_forward_auth ${host.oauth2ForwardAuth}\n")
+              ]
+            );
           }
         ) cfg.virtualHosts)
       ];
@@ -114,11 +129,22 @@ in
     users.users.caddy.extraGroups = [ "acme" ];
 
     networking.firewall = {
-      allowedTCPPorts = [
-        80
-        443
+      allowedTCPPorts = lib.filter (port: port != null) [
+        caddyCfg.httpPort
+        caddyCfg.httpsPort
       ];
-      allowedUDPPorts = [ 443 ];
+      allowedUDPPorts = lib.optional (caddyCfg.httpsPort != null) caddyCfg.httpsPort;
+    };
+
+    my.networking = {
+      usedTCPPorts = {
+        "caddy-admin" = 2019;
+      }
+      // lib.optionalAttrs (caddyCfg.httpPort != null) { "caddy-http" = caddyCfg.httpPort; }
+      // lib.optionalAttrs (caddyCfg.httpsPort != null) { "caddy-https" = caddyCfg.httpsPort; };
+      usedUDPPorts = lib.optionalAttrs (caddyCfg.httpsPort != null) {
+        "caddy-http3" = caddyCfg.httpsPort;
+      };
     };
   };
 }

@@ -32,10 +32,12 @@ Important flake outputs:
 Stable locations:
 
 - `flake.nix`: flake inputs, dev shell, packages, Colmena outputs.
+- `fn/helpers`: pure helpers shared through `specialArgs.helpers`.
 - `hosts/default.nix`: host inventory and system/hive builders.
 - `profiles/base/server.nix`: shared server policy.
 - `profiles/roles`: explicit opt-in behavior such as containers and DN42.
 - `profiles/common`: shared profile fragments and DN42 topology data.
+- `modules/hardware`: typed hardware and storage-layout modules.
 - `modules/default.nix`: registry for reusable repo-local NixOS modules.
 - `hosts/<host>`: per-host NixOS modules and secrets.
 - `overlay/default.nix`: local overlay entry point.
@@ -52,10 +54,10 @@ systems are derived from it.
 
 Per-host fields:
 
-- `stateVersion`: required NixOS state version.
 - `roles`: explicit host capabilities; `server`, `container`, and `dn42`
   compose server behavior, while `desktop` selects desktop overlays. The server
-  baseline enables fail2ban by default; a host may explicitly disable it.
+  baseline enables fail2ban, the QEMU guest profile, and ephemeral Btrfs policy
+  by default; a host may explicitly override these defaults.
 - `tags`: Colmena selectors assigned directly to the host.
 - `system`: optional target system; defaults to `x86_64-linux`.
 - `path`: optional host module directory; defaults to `./${hostName}`.
@@ -68,9 +70,13 @@ Per-host fields:
 - `targetPort`: optional Colmena SSH port.
 - `buildOnTarget`: optional Colmena remote-build flag; defaults to false.
 
+`system.stateVersion` is shared by every generated host and currently set to
+`26.05` in `hosts/default.nix`; it is not an inventory field.
+
 `specialArgs` for every host:
 
 - `inputs`
+- `helpers`
 - `overlays`
 - `self`
 - `hostName`
@@ -127,6 +133,7 @@ Repo-local service options live under `my.services.*`, usually implemented in
 
 Current important options:
 
+- `my.hardware.ephemeralBtrfs`
 - `my.services.caddy`
 - `my.services.dn42`
 - `my.services.dn42.peers`
@@ -135,8 +142,9 @@ Current important options:
 - `my.services.sema`
 - `my.services.sing-box`
 
-Prefer adding a small reusable module under `modules/services` when at
-least two hosts need the same behavior. For one host, keep it in that host.
+Prefer adding a small reusable module under `modules/services` or
+`modules/hardware` when at least two hosts need the same behavior. For one host,
+keep it in that host.
 
 ## 7. DN42
 

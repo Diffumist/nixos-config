@@ -6,11 +6,9 @@
   ...
 }:
 {
-  imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/vda";
-    })
-  ];
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/vda";
+  };
 
   my.networking.static = {
     enable = true;

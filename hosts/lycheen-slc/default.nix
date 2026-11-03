@@ -6,11 +6,11 @@
   ...
 }:
 {
-  imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/sda";
-    })
-  ];
+  imports = [ ./services/cli-proxy-api.nix ];
+
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/sda";
+  };
 
   my.networking.static = {
     enable = true;

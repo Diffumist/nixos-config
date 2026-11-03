@@ -39,13 +39,11 @@ in
     restartUnits = [ runnerService ];
   };
 
-  # Why: Forgejo creates per-workflow Podman bridges beyond the default podman0.
-  networking.firewall.extraInputRules = ''
-    iifname "podman*" tcp dport 53 accept
-    iifname "podman*" udp dport 53 accept
-  '';
-
   my.services.postgresql.enable = true;
+
+  # Persistent repositories must retain their owner when the ephemeral root is recreated.
+  users.users.forgejo.uid = 998;
+  users.groups.forgejo.gid = 997;
 
   services.forgejo = {
     enable = true;
@@ -103,7 +101,8 @@ in
     virtualHosts.${domain}.useCloudflareACME = true;
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
-    encode zstd gzip
     reverse_proxy 127.0.0.1:${toString port}
   '';
+
+  my.networking.usedTCPPorts.forgejo-http = port;
 }

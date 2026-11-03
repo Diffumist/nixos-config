@@ -9,6 +9,7 @@ let
   telephonyDomain = "2.4.6.0.4.2.4.0.tel.dn42";
   ipv4ReverseDomain = "64/27.64.22.172.in-addr.arpa";
   ipv6ReverseDomain = "4.a.5.9.6.5.0.1.2.2.d.f.ip6.arpa";
+  dnsPort = 53;
   inherit (authoritativeDns) tsigKeyAlgorithm tsigKeyName;
 in
 {
@@ -31,8 +32,8 @@ in
     settings = {
       server = {
         listen = [
-          "${ipv4}@53"
-          "${ipv6}@53"
+          "${ipv4}@${toString dnsPort}"
+          "${ipv6}@${toString dnsPort}"
         ];
       };
 
@@ -88,6 +89,11 @@ in
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 53 ];
-  networking.firewall.allowedUDPPorts = [ 53 ];
+  networking.firewall.allowedTCPPorts = [ dnsPort ];
+  networking.firewall.allowedUDPPorts = [ dnsPort ];
+
+  my.networking = {
+    usedTCPPorts.knot-dns = dnsPort;
+    usedUDPPorts.knot-dns = dnsPort;
+  };
 }

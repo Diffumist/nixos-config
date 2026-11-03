@@ -6,11 +6,9 @@
   ...
 }:
 {
-  imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/sda";
-    })
-  ];
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/sda";
+  };
 
   my.networking.static = {
     enable = true;
@@ -21,12 +19,6 @@
       "8.8.4.4"
     ];
   };
-
-  nixpkgs.flake = {
-    setFlakeRegistry = false;
-    setNixPath = false;
-  };
-  system.disableInstallerTools = true;
 
   virtualisation.podman.enable = false;
   services.fail2ban.enable = false;

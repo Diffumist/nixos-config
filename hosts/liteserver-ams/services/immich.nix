@@ -31,7 +31,8 @@
     virtualHosts."immich.diffumist.me".useCloudflareACME = true;
   };
   services.caddy.virtualHosts."immich.diffumist.me".extraConfig = ''
-    encode zstd gzip
     reverse_proxy 127.0.0.1:${toString config.services.immich.port}
   '';
+
+  my.networking.usedTCPPorts.immich = config.services.immich.port;
 }

@@ -7,15 +7,15 @@
 }:
 {
   imports = [
-    (import ../../profiles/hardware/ephemeral-btrfs.nix {
-      device = "/dev/vda";
-    })
-
     ./services/gonic.nix
     ./services/http418-cat.nix
     ./services/immich.nix
     ./services/transmission.nix
   ];
+
+  my.hardware.ephemeralBtrfs = {
+    device = "/dev/vda";
+  };
 
   my.networking.static = {
     enable = true;
@@ -26,7 +26,7 @@
     };
   };
 
-  my.services.sing-box = {
+  my.services.mihomo-server = {
     enable = true;
     domain = "reactive-grievous-deface-staining.503418.xyz";
     port = 8443;

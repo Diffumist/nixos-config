@@ -2,6 +2,7 @@
 let
   domain = "bt.503418.xyz";
   downloadDir = "/persist/var/storage/transmission";
+  peerPort = 4240;
   rpcPort = 9091;
 in
 {
@@ -27,7 +28,7 @@ in
       "download-dir" = downloadDir;
       "incomplete-dir" = "${downloadDir}/.incomplete";
       "incomplete-dir-enabled" = true;
-      "peer-port" = 4240;
+      "peer-port" = peerPort;
       "peer-port-random-on-start" = false;
       "rpc-authentication-required" = true;
       "rpc-bind-address" = "127.0.0.1";
@@ -49,9 +50,16 @@ in
     };
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
-    encode zstd gzip
     @root path /
     redir @root /transmission/web/ 302
     reverse_proxy 127.0.0.1:${toString rpcPort}
   '';
+
+  my.networking = {
+    usedTCPPorts = {
+      transmission-peer = peerPort;
+      transmission-rpc = rpcPort;
+    };
+    usedUDPPorts.transmission-peer = peerPort;
+  };
 }

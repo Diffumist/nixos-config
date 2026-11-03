@@ -2,12 +2,14 @@
   description = "diffumist's NixOS configuration";
   nixConfig = {
     extra-substituters = [
+      "https://attic.diffumist.me/nixos-config"
       "https://cache.numtide.com"
-      "https://attic.xuyh0120.win/lantian"
+      "https://cache.lantian.pub/lantian"
     ];
     extra-trusted-public-keys = [
+      "nixos-config:rU8MVfJPcTuFqpL7Ezl4oVthnMEkH1VGG0ctfM68ue4="
       "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
-      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+      "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ="
     ];
   };
   inputs = {
@@ -38,6 +40,7 @@
     llm-agents.url = "github:numtide/llm-agents.nix";
     nur-xddxdd.url = "github:xddxdd/nur-packages";
     nix-alien.url = "github:thiagokokada/nix-alien";
+    rimsort.url = "github:RimSort/RimSort";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -46,20 +49,16 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    system76-scheduler-niri = {
-      url = "github:Kirottu/system76-scheduler-niri";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     gaze = {
       url = "github:GunduLabs/gaze";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-dn42 = {
-      url = "git+https://git.418.cat/DiffFork/nix-dn42?ref=sing-tun";
+      url = "git+https://git.418.cat/DiftFork/nix-dn42?ref=sing-tun";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     dn42-registry = {
-      url = "git+https://git.lantian.pub/backup/dn42-registry.git";
+      url = "git+https://git.418.cat/DiftFork/registry.git";
       flake = false;
     };
   };

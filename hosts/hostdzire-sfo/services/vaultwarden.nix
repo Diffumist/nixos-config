@@ -41,7 +41,8 @@
     virtualHosts."vault.diffumist.me".useCloudflareACME = true;
   };
   services.caddy.virtualHosts."vault.diffumist.me".extraConfig = ''
-    encode zstd gzip
     reverse_proxy 127.0.0.1:${toString config.services.vaultwarden.config.ROCKET_PORT}
   '';
+
+  my.networking.usedTCPPorts.vaultwarden = config.services.vaultwarden.config.ROCKET_PORT;
 }

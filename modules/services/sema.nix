@@ -1,5 +1,6 @@
 {
   config,
+  helpers,
   lib,
   pkgs,
   ...
@@ -79,7 +80,7 @@ in
       groups.sema = { };
     };
 
-    systemd.services.sema = {
+    systemd.services.sema = helpers.systemd.mkService {
       description = "sema dead man's switch webhook server";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
@@ -94,10 +95,6 @@ in
         ExecStart = "${lib.getExe pkgs.sema} --config ${configFile}";
         Restart = "on-failure";
         RestartSec = "5s";
-        NoNewPrivileges = true;
-        PrivateTmp = true;
-        ProtectHome = true;
-        ProtectSystem = "strict";
       };
     };
   };

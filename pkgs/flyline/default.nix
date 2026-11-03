@@ -4,21 +4,22 @@
   lib,
   readline,
   rustPlatform,
+  util-linux,
   ...
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flyline";
-  version = "1.5.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "HalFrgrd";
     repo = "flyline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2apK1e/Hqb8bUj9Ng7cB+pz27Hv14MXMy2JYYI7nxKE=";
+    hash = "sha256-nOCawyqUdOkxaqFS11Tp9IaOm7hevWhnLjpxsr5YWCo=";
   };
 
-  cargoHash = "sha256-Ci1PVqGZ4ttrkUAtePHKKsqI/SVoedlH4Mua7MzFDvo=";
+  cargoHash = "sha256-4ifX9N1OnIxwNRy4rWBZSqE0460G/dx+N8N4ZHInBpk=";
 
   buildInputs = [ readline ];
 
@@ -31,12 +32,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoTestFlags = [ "--lib" ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ bashInteractive ];
+  nativeInstallCheckInputs = [
+    bashInteractive
+    util-linux
+  ];
   installCheckPhase = ''
     runHook preInstallCheck
 
-    bash --noprofile --norc -i -c \
-      'enable -f '"$out"'/lib/bash/libflyline.so flyline; flyline --version'
+    # Version reporting queries terminal capabilities and needs a controlling TTY.
+    script --quiet --return --command \
+      "bash --noprofile --norc -i -c 'enable -f $out/lib/bash/libflyline.so flyline && flyline --version'" \
+      "$TMPDIR/flyline-version.log"
+    grep -F "flyline ${finalAttrs.version}" "$TMPDIR/flyline-version.log"
 
     runHook postInstallCheck
   '';

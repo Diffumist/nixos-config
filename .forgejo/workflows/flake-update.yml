@@ -26,10 +26,10 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Install action runtime and Attic client
+      - name: Install action runtime and cache clients
         run: |
           set -euo pipefail
-          nix profile add nixpkgs#nodejs_24 nixpkgs#attic-client
+          nix profile add nixpkgs#nodejs_24 nixpkgs#attic-client nixpkgs#curl
           # Why: JavaScript actions need the profile's Node runtime in later steps.
           echo "$HOME/.nix-profile/bin" >> "$FORGEJO_PATH"
 
@@ -67,19 +67,44 @@ jobs:
             --apply 'names: builtins.concatStringsSep "\n" (names ++ [ "" ])' \
             | while IFS= read -r host; do
                 [[ -n "$host" ]] || continue
+                system_path="$(
+                  nix eval --raw \
+                    ".#nixosConfigurations.${host}.config.system.build.toplevel"
+                )"
+                store_name="${system_path##*/}"
+                store_hash="${store_name%%-*}"
+
+                # Why: this workflow recursively uploaded any cached system output.
+                if curl --fail --silent --head --output /dev/null \
+                  "$ATTIC_ENDPOINT/$ATTIC_CACHE/$store_hash.narinfo"; then
+                  echo "Cached $host ($system_path); skipping build"
+                  continue
+                fi
+
                 paths_file="$RUNNER_TEMP/nix-cache-$host"
+                build_log="$RUNNER_TEMP/nix-build-$host.log"
+                push_log="$RUNNER_TEMP/attic-push-$host.log"
 
-                echo "::group::Build $host"
-                nix build --no-link --print-out-paths -L \
+                echo "Build $host"
+                # Why: successful builds should not flood the Forgejo log.
+                if ! nix build --no-link --print-out-paths -L \
                   ".#nixosConfigurations.${host}.config.system.build.toplevel" \
-                  | tee "$paths_file"
-                echo "::endgroup::"
+                  > "$paths_file" 2> "$build_log"; then
+                  echo "::error::Build $host failed; showing the last 120 lines."
+                  tail -n 120 "$build_log"
+                  exit 1
+                fi
+                echo "Built $host ($(wc -l < "$paths_file") output path(s))"
 
-                echo "::group::Push $host to Attic"
-                attic push --stdin \
+                echo "Push $host to Attic"
+                if ! attic push --stdin \
                   "$ATTIC_SERVER:$ATTIC_CACHE" \
-                  < "$paths_file"
-                echo "::endgroup::"
+                  < "$paths_file" > "$push_log" 2>&1; then
+                  echo "::error::Attic push for $host failed; showing the last 120 lines."
+                  tail -n 120 "$push_log"
+                  exit 1
+                fi
+                echo "Cached $host"
               done
 
       - name: Commit updated lock file
