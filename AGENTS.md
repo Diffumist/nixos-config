@@ -8,7 +8,7 @@ Goal: understand this repo quickly and change it safely.
 
 Flake-based, declarative multi-host NixOS repository.
 
-- `hawkpoint-lap`: local desktop, Niri + Home Manager.
+- `hawkpoint-lap`: local desktop, Umbriel + Noctalia + Home Manager.
 - Remote VPS/server fleet: most hosts use the shared server baseline; some are DN42 nodes.
 - `nixiso` and `bootstrap`: installer/bootstrap targets.
 

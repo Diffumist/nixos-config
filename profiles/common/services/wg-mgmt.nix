@@ -48,11 +48,11 @@ let
       ipv6 = "fd42:203::23";
       publicKey = "rDjdsHMYBbmMx1s/5/DNWQJu4CWBqRZL7IUrGznC0XQ=";
     };
-    colocrossing-lax = {
+    cloudnium-lax = {
       endpoint = "lax-3.${baseurl}";
       ipv4 = "10.203.0.24";
       ipv6 = "fd42:203::24";
-      publicKey = "nL/tNYad/CsHP/iiqI/tXMdIsoSqDMfozbDudOkspwY=";
+      publicKey = "Z5ljoaJAHQ+If+lHHWccbLHtSmQjMt2DxePqVy2JgQo=";
     };
     google-west = {
       endpoint = "pdx-0.${baseurl}";
@@ -71,12 +71,6 @@ let
       ipv4 = "10.203.0.32";
       ipv6 = "fd42:203::32";
       publicKey = "CsizRoeV1LdnEl8hGg8Dp/1GD1WRuY/8uFz76H/+3TQ=";
-    };
-    raksmart-sjc = {
-      endpoint = "sjc-2.${baseurl}";
-      ipv4 = "10.203.0.33";
-      ipv6 = "fd42:203::33";
-      publicKey = "U3+Vwby1YV5mGBndaiOzUl5NZ4ORhIXB6p7nrKP/0nU=";
     };
     google-east = {
       endpoint = "chs-0.${baseurl}";
@@ -115,14 +109,13 @@ let
 
   regionalLinks = {
     hostdzire-sfo = [
-      "raksmart-sjc"
       "nosla-sjc"
       "google-west"
     ];
     dedirock-lax = [
       "vmiss-lax"
       "vmrack-lax"
-      "colocrossing-lax"
+      "cloudnium-lax"
     ];
     noboard-tyo = [
       "wawo-hkg"

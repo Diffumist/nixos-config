@@ -71,6 +71,9 @@
         gtk-decoration-layout = ":none";
         gtk-application-prefer-dark-theme = 1;
       };
+      extraCss = ''
+        @import url("noctalia.css");
+      '';
     };
     gtk4 = {
       theme = config.gtk.theme;
@@ -78,6 +81,9 @@
         gtk-decoration-layout = ":none";
         gtk-application-prefer-dark-theme = 1;
       };
+      extraCss = ''
+        @import url("noctalia.css");
+      '';
     };
   };
   qt = {

@@ -10,8 +10,6 @@ keys:
   - &hostdzire-sfo age1rkshe6y7r5gz2tpsxtrvnc7a8j5v3puvak04maat7xkssqmggs5qfwkvv5
   - &nosla-sjc age1vaal4d53wt0he0u0ppsr654cmgmap9vfxwk8plvvd25z5r26y4es5584pl
   - &moecloud-sjc age1qesk00eh6er5tekhptgyf0736ehgk95ezx6mu5sgvc5aq4tkwcfsudym2l
-  - &raksmart-sjc age10d2rweultzqlu686dalc2u0fts8zn3ec30a4szk0ppn4djelnd2qtvy9g5
-  - &colocrossing-lax age1us5d8flv9sfwjr98ux0ck9yxtq0e6qck04pgh44qed9hmymvkezqh2y4qk
   - &lycheen-slc age105cf3zd0g6x5jeut8wd2gpz0lse0tneqqg5edc278l4z9c0qu5csqe5cdc
   - &cloudnium-lax age10fntfvvy8m8yg4wmpdg4y7d8gx3k5l8awuymltsxa830la5eaf8q20mg93
   - &vmrack-lax age1pawz4g2qw2awk5mpdgwzzc95p23x0wm04awufrsfy2pvy4zv0g5sc2f3n4
@@ -20,6 +18,7 @@ keys:
   - &google-east age1anp54rlzvjc4hagkwvh8qy8usfvlgq9vlsaz62kh59qye5rh5g4qj027t8
   - &google-west age1evl9930wl07fw9wdy2pw5k8aaeacf9dgtkvntrr8ygx3ny3xagqsvqnzt5
   - &wawo-hkg age1laq2l7pnax405ua70grkefguk4m4zalfjkvj0ky7dzsu2h5sdc6s034jtt
+  - &rabisu-tur age1ty7n6mn8rlmtmflnkclcnhq60yfa5fek66dg89xuvpe2jw8y0ccqfmjxzc
 creation_rules:
   - path_regex: ^hosts/hawkpoint-lap/.*\.(json|ya?ml|keytab)$
     key_groups:
@@ -46,8 +45,6 @@ creation_rules:
           - *hostdzire-sfo
           - *nosla-sjc
           - *moecloud-sjc
-          - *raksmart-sjc
-          - *colocrossing-lax
           - *lycheen-slc
           - *cloudnium-lax
           - *vmiss-lax
@@ -56,6 +53,12 @@ creation_rules:
           - *google-east
           - *google-west
           - *wawo-hkg
+          - *rabisu-tur
+  - path_regex: ^hosts/rabisu-tur/.*\.(json|ya?ml|keytab)$
+    key_groups:
+      - age:
+          - *rabisu-tur
+          - *diffumist
   - path_regex: ^hosts/netcup-mnz/.*\.(json|ya?ml|keytab)$
     key_groups:
       - age:
@@ -90,11 +93,6 @@ creation_rules:
     key_groups:
       - age:
           - *hostdzire-sfo
-          - *diffumist
-  - path_regex: ^hosts/colocrossing-lax/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *colocrossing-lax
           - *diffumist
   - path_regex: ^hosts/cloudnium-lax/.*\.(json|ya?ml|keytab)$
     key_groups:
@@ -145,9 +143,4 @@ creation_rules:
     key_groups:
       - age:
           - *google-west
-          - *diffumist
-  - path_regex: ^hosts/raksmart-sjc/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *raksmart-sjc
           - *diffumist

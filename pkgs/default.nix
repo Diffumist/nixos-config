@@ -18,6 +18,7 @@ let
     "flyline"
     "komari-monitor"
     "tel42verifier"
+    "wu"
     "xsz"
   ];
 in

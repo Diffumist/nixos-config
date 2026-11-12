@@ -69,7 +69,7 @@
     services = {
       login.u2f.enable = true;
       sudo.u2f.enable = true;
-      dankshell.gaze = {
+      login.gaze = {
         enable = true;
         simultaneous = false;
       };

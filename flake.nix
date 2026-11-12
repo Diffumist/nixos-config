@@ -5,11 +5,15 @@
       "https://attic.diffumist.me/nixos-config"
       "https://cache.numtide.com"
       "https://cache.lantian.pub/lantian"
+      "https://umbriel.cachix.org"
+      "https://noctalia.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nixos-config:rU8MVfJPcTuFqpL7Ezl4oVthnMEkH1VGG0ctfM68ue4="
       "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
       "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ="
+      "umbriel.cachix.org-1:JfNq/2yg2S6D6z4Z2dVSZrZlDPQTKtexB6GAVLD98nw="
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
     ];
   };
   inputs = {
@@ -37,6 +41,8 @@
       url = "github:nix-community/colmena";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    umbriel.url = "github:noctalia-dev/umbriel";
+    noctalia.url = "github:noctalia-dev/noctalia";
     llm-agents.url = "github:numtide/llm-agents.nix";
     nur-xddxdd.url = "github:xddxdd/nur-packages";
     nix-alien.url = "github:thiagokokada/nix-alien";

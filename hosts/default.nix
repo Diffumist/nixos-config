@@ -108,16 +108,6 @@ let
         "web"
       ];
     };
-    colocrossing-lax = {
-      roles = [
-        "server"
-        "container"
-      ];
-      tags = [
-        "us"
-        "web"
-      ];
-    };
     dedirock-lax = {
       roles = [
         "server"
@@ -157,6 +147,8 @@ let
       modules = [
         inputs.home-manager.nixosModules.home-manager
         inputs.gaze.nixosModules.default
+        inputs.umbriel.nixosModules.default
+        inputs.noctalia.nixosModules.default
       ];
     };
     hostdzire-sfo = {
@@ -225,12 +217,9 @@ let
       roles = [ "server" ];
       tags = [ "us" ];
     };
-    raksmart-sjc = {
-      roles = [
-        "server"
-        "container"
-      ];
-      tags = [ "us" ];
+    rabisu-tur = {
+      roles = [ "server" ];
+      tags = [ "asia" ];
     };
     vmiss-lax = {
       roles = [ "server" ];

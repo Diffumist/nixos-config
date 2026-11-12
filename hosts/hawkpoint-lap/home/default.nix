@@ -1,5 +1,6 @@
 {
   pkgs,
+  config,
   inputs,
   ...
 }:
@@ -8,25 +9,26 @@
     ./dev.nix
     ./shell.nix
     ./xdgdir.nix
+    ./desktop.nix
   ];
   sops.age.sshKeyPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
   # services
-  systemd.user.services.cli-proxy-api = {
-    Unit = {
-      Description = "CLIProxyAPI Service";
-      After = [ "network-online.target" ];
-      Wants = [ "network-online.target" ];
-    };
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.llm-agents.cli-proxy-api}/bin/cli-proxy-api --config %h/.local/share/cli-proxy-api/config.yaml";
-      Restart = "on-failure";
-      RestartSec = 5;
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-  };
+  # systemd.user.services.cli-proxy-api = {
+  #   Unit = {
+  #     Description = "CLIProxyAPI Service";
+  #     After = [ "network-online.target" ];
+  #     Wants = [ "network-online.target" ];
+  #   };
+  #   Service = {
+  #     Type = "simple";
+  #     ExecStart = "${pkgs.llm-agents.cli-proxy-api}/bin/cli-proxy-api --config %h/.local/share/cli-proxy-api/config.yaml";
+  #     Restart = "on-failure";
+  #     RestartSec = 5;
+  #   };
+  #   Install = {
+  #     WantedBy = [ "default.target" ];
+  #   };
+  # };
   systemd.user.services.bluetooth-mpris-proxy = {
     Unit = {
       Description = "MPRIS controlling proxy for bluetooth connections";
@@ -105,18 +107,21 @@
       steam-run
       android-tools
       (pkgs.writeShellApplication {
-        name = "niri-single-monitor";
-        runtimeInputs = [ pkgs.niri ];
+        name = "umbriel-single-monitor";
+        runtimeInputs = [ config.programs.umbriel.package ];
         text = ''
           output="eDP-1"
           # shellcheck disable=SC2329
           restore_output() {
-            niri msg output "$output" on >/dev/null 2>&1 || true
+            env -u LD_LIBRARY_PATH -u LD_PRELOAD umbriel msg output-enable "$output" >/dev/null 2>&1 || true
           }
           trap restore_output EXIT HUP INT TERM
-          niri msg output "$output" off || exit 1
-          "$@"
-          status=$?
+          env -u LD_LIBRARY_PATH -u LD_PRELOAD umbriel msg output-disable "$output"
+          if "$@"; then
+            status=0
+          else
+            status=$?
+          fi
           exit "$status"
         '';
       })
@@ -124,24 +129,22 @@
         name = "game-force-1440p";
         runtimeInputs = [
           pkgs.coreutils
-          pkgs.niri
+          pkgs.wlr-randr
         ];
         text = ''
           output="HDMI-A-1"
 
-          run_niri() {
-            env -u LD_LIBRARY_PATH -u LD_PRELOAD niri msg "$@"
+          set_output() {
+            env -u LD_LIBRARY_PATH -u LD_PRELOAD wlr-randr --output "$output" "$@"
           }
 
           # shellcheck disable=SC2329
           restore_output() {
-            run_niri output "$output" mode "3840x2160@59.997" >/dev/null 2>&1 || true
-            run_niri output "$output" scale 1.5 >/dev/null 2>&1 || true
+            set_output --mode "3840x2160@59.997Hz" --scale 1.5 >/dev/null 2>&1 || true
           }
 
           trap restore_output EXIT HUP INT TERM
-          run_niri output "$output" mode "2560x1440@59.951"
-          run_niri output "$output" scale 1
+          set_output --mode "2560x1440@59.951Hz" --scale 1
 
           if "$@"; then
             status=0
@@ -170,6 +173,7 @@
       llm-agents.antigravity-cli
       # GUI
       qq
+      wu
       pods
       tuba
       papers

@@ -23,11 +23,11 @@ let
         peerLinkLocal = "fe80::253";
       };
 
-      # AS4242422466 (SessNetwork) Netzilla (Frankfurt)
+      # AS4242422466 (SessNetwork) Amsterdam
       sess-de = {
         asn = 4242422466;
         listenPort = 22466;
-        endpoint = "netzilla.xhustudio.eu.org";
+        endpoint = "leaflet-js.xhustudio.eu.org";
         peerPort = 20642;
         publicKey = "NneXyO6ANmBoREGcDQh/KCi2MtkAGU4xS/HIkNB8wQg=";
         peerLinkLocal = "fe80::2466";

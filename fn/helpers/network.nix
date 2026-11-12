@@ -29,12 +29,13 @@ let
         ++ map (
           secret: "Address=${placeholder secret}/${toString settings.ipv6.prefixLength}"
         ) ipv6AddressSecrets;
-      gatewayLines = [
-        "Gateway=${placeholder settings.ipv4.gatewaySecret}"
-      ]
-      ++ lib.optional (
-        settings.ipv6.enable && !settings.ipv6.gatewayOnLink
-      ) "Gateway=${placeholder settings.ipv6.gatewaySecret}";
+      gatewayLines =
+        lib.optionals (!settings.ipv4.gatewayOnLink) [
+          "Gateway=${placeholder settings.ipv4.gatewaySecret}"
+        ]
+        ++ lib.optional (
+          settings.ipv6.enable && !settings.ipv6.gatewayOnLink
+        ) "Gateway=${placeholder settings.ipv6.gatewaySecret}";
       networkLines = [
         "[Match]"
         "MACAddress=${settings.macAddress}"
@@ -47,6 +48,13 @@ let
           "IPv6AcceptRA=${if settings.ipv6.acceptRA then "yes" else "no"}"
       ++ gatewayLines
       ++ map (server: "DNS=${server}") settings.dns
+      ++ lib.optionals settings.ipv4.gatewayOnLink [
+        ""
+        "[Route]"
+        "Destination=0.0.0.0/0"
+        "Gateway=${placeholder settings.ipv4.gatewaySecret}"
+        "GatewayOnLink=yes"
+      ]
       ++ lib.optionals settings.ipv6.gatewayOnLink [
         ""
         "[Route]"

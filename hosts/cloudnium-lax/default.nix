@@ -6,6 +6,14 @@
   ...
 }:
 {
+  imports = [
+    ./services/gatus.nix
+    ./services/komari-monitor.nix
+  ];
+
+  # The system resolver caches negative DNS-01 answers beyond the ACME timeout.
+  security.acme.defaults.dnsResolver = "1.1.1.1:53";
+
   my.hardware.ephemeralBtrfs = {
     device = "/dev/vda";
   };
@@ -19,5 +27,15 @@
     };
   };
 
-  my.services.postgresql.totalRamMB = 2 * 1024;
+  # sudo -u postgres pgbackrest --stanza=default stanza-create
+  # systemctl start pgbackrest-default-full.service
+  # sudo -u postgres pgbackrest --stanza=default info
+  my.services.postgresql = {
+    totalRamMB = 2 * 1024;
+    backup = {
+      enable = true;
+      accountId = "1ddb57c7f8266ea8489206984571fb77";
+      bucket = "pgbackrest";
+    };
+  };
 }

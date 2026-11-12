@@ -38,6 +38,10 @@ in
       prefixLength = mkOption {
         type = types.ints.between 0 32;
       };
+      gatewayOnLink = mkOption {
+        type = types.bool;
+        default = false;
+      };
     };
 
     ipv6 = {

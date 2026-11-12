@@ -54,7 +54,7 @@
     };
   };
 
-  environment.systemPackages = [
+  environment.systemPackages = lib.optionals config.services.fail2ban.enable [
     config.services.fail2ban.package
   ];
 

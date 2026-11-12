@@ -127,7 +127,7 @@
     ghostty = {
       enable = true;
       settings = {
-        theme = "dankcolors";
+        theme = "noctalia";
         font-family = "Maple Mono NF CN";
       };
     };

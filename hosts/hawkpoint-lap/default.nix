@@ -49,6 +49,14 @@ in
       "https://mirrors.ustc.edu.cn/nix-channels/store"
     ];
     settings.builders-use-substitutes = true;
+    settings.extra-substituters = [
+      "https://umbriel.cachix.org"
+      "https://noctalia.cachix.org"
+    ];
+    settings.extra-trusted-public-keys = [
+      "umbriel.cachix.org-1:JfNq/2yg2S6D6z4Z2dVSZrZlDPQTKtexB6GAVLD98nw="
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+    ];
     extraOptions = ''
       !include ${config.sops.secrets.github_access_token.path}
     '';
@@ -145,24 +153,33 @@ in
     hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
     shell = pkgs.fish;
   };
-  # niri
-  programs.niri = {
+  programs.umbriel.enable = true;
+  programs.noctalia = {
     enable = true;
-    useNautilus = true;
+    recommendedServices.enable = true;
+    systemd = {
+      enable = true;
+      target = "umbriel-session.target";
+    };
   };
-  security.soteria.enable = true;
-  services.displayManager.dux-greeter = {
+  security.polkit.enable = true;
+  services.displayManager.noctalia-greeter = {
     enable = true;
-    configHome = "${config.users.users.diffumist.home}";
-    compositor.name = "niri";
+    settings.keyboard = {
+      layout = "us";
+      numlock = true;
+    };
   };
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.config.umbriel."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+  services.gnome.gnome-keyring.enable = true;
   services.envfs.enable = true;
   environment.systemPackages = with pkgs; [
     # CLI
     duf
     xsz
     dua
-    lstr
+    # lstr
     tokei
     rclone
     binutils
@@ -186,11 +203,9 @@ in
     papirus-icon-theme
     gnome-text-editor
     gpu-screen-recorder
-    xwayland-satellite
   ];
 
   programs = {
-    dux-shell.enable = true;
     nix-ld.enable = true;
     nexttrace.enable = true;
     direnv.enable = true;
@@ -238,8 +253,6 @@ in
     configFile = "/var/lib/mihomo.yaml";
   };
   security.pam.services.login.enableGnomeKeyring = true;
-  systemd.user.services.niri-flake-polkit.serviceConfig.ExecStart =
-    lib.mkForce "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
   services.angrr = {
     enable = true;
     settings = {
@@ -316,6 +329,8 @@ in
     sharedModules = [
       inputs.nix-index-database.homeModules.default
       inputs.sops-nix.homeManagerModules.sops
+      inputs.umbriel.homeModules.default
+      inputs.noctalia.homeModules.default
     ];
   };
 
