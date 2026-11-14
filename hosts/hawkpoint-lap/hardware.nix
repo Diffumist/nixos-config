@@ -1,5 +1,13 @@
-{ pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}:
+{
+  boot.extraModulePackages = [ config.boot.kernelPackages.acpi_call ];
+  boot.kernelModules = [ "acpi_call" ];
+  environment.systemPackages = [ pkgs.wujie14x-cc ];
+
   hardware = {
     bluetooth.enable = true;
     amdgpu.initrd.enable = true;

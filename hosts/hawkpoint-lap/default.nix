@@ -84,6 +84,7 @@ in
     defaultLocale = "zh_CN.UTF-8";
     supportedLocales = [
       "zh_CN.UTF-8/UTF-8"
+      "en_US.UTF-8/UTF-8"
     ];
   };
 
@@ -162,6 +163,8 @@ in
       target = "umbriel-session.target";
     };
   };
+  # Umbriel waits for graphical-session.target, so ordering Noctalia before it creates a cycle.
+  systemd.user.services.noctalia.before = lib.mkForce [ ];
   security.polkit.enable = true;
   services.displayManager.noctalia-greeter = {
     enable = true;

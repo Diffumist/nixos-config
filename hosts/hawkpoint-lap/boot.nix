@@ -7,7 +7,9 @@
 {
   hardware.enableRedistributableFirmware = lib.mkDefault true;
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  services.bootvine.enable = true;
   boot = {
+    consoleLogLevel = 3;
     initrd = {
       availableKernelModules = [
         "nvme"
@@ -95,6 +97,7 @@
     preserveAt."/persist" = {
       directories = [
         "/var/log"
+        "/var/cache"
         {
           directory = "/var/lib";
           inInitrd = true;

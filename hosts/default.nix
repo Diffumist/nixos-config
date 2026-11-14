@@ -147,6 +147,7 @@ let
       modules = [
         inputs.home-manager.nixosModules.home-manager
         inputs.gaze.nixosModules.default
+        inputs.bootvine.nixosModules.default
         inputs.umbriel.nixosModules.default
         inputs.noctalia.nixosModules.default
       ];

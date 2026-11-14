@@ -108,6 +108,12 @@
       settings = {
         container_manager = "podman";
         container_image_default = "archlinux:latest";
+        container_manager_additional_flags = ''
+          --env=TZ=America/Los_Angeles
+          --env=LANG=en_US.UTF-8
+          --env=LC_ALL=en_US.UTF-8
+          --env=LANGUAGE=en_US:en
+        '';
       };
     };
   };

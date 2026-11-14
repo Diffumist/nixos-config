@@ -41,6 +41,10 @@
       url = "github:nix-community/colmena";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    bootvine = {
+      url = "git+https://codeberg.org/wvhulle/bootvine";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     umbriel.url = "github:noctalia-dev/umbriel";
     noctalia.url = "github:noctalia-dev/noctalia";
     llm-agents.url = "github:numtide/llm-agents.nix";

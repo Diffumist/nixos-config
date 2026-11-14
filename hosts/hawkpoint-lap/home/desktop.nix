@@ -61,6 +61,10 @@
       };
       keybinds = {
         "Mod+Return" = "spawn ghostty";
+        "Mod+Print" = {
+          action = "spawn noctalia msg screenshot-region --copy-to-clipboard";
+          repeat = false;
+        };
         "Mod+Tab" = {
           action = "overview-toggle";
           repeat = false;
