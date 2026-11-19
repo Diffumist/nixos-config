@@ -6,6 +6,10 @@
   ...
 }:
 {
+  imports = [
+    ./services/notifications.nix
+  ];
+
   my.hardware.ephemeralBtrfs = {
     device = "/dev/vda";
   };

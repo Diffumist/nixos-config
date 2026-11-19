@@ -92,6 +92,14 @@
         ];
       };
     };
+
+  services.btrfs.autoScrub = {
+    enable = true;
+    interval = "*-01,07-01 00:00:00";
+    # All Btrfs subvolumes share one filesystem, so scrub it only once.
+    fileSystems = [ "/home" ];
+  };
+
   preservation = {
     enable = true;
     preserveAt."/persist" = {

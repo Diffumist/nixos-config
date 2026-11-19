@@ -41,16 +41,13 @@
       url = "github:nix-community/colmena";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    bootvine = {
-      url = "git+https://codeberg.org/wvhulle/bootvine";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     umbriel.url = "github:noctalia-dev/umbriel";
     noctalia.url = "github:noctalia-dev/noctalia";
     llm-agents.url = "github:numtide/llm-agents.nix";
     nur-xddxdd.url = "github:xddxdd/nur-packages";
     nix-alien.url = "github:thiagokokada/nix-alien";
     rimsort.url = "github:RimSort/RimSort";
+    bootvine.url = "git+https://codeberg.org/wvhulle/bootvine";
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";

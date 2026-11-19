@@ -17,6 +17,8 @@ let
     "cybergroupmate"
     "flyline"
     "komari-monitor"
+    "magpie"
+    "ranet"
     "tel42verifier"
     "wu"
     "xsz"

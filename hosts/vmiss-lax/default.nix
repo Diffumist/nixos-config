@@ -6,6 +6,8 @@
   ...
 }:
 {
+  imports = [ ./services/cli-proxy-api.nix ];
+
   my.hardware.ephemeralBtrfs = {
     device = "/dev/vda";
   };

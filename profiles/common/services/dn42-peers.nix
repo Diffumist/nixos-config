@@ -98,7 +98,27 @@ let
         endpoint = "ams-dn42.akae.re";
         peerPort = 50642;
         publicKey = "noJ/5iddGjySp3hNI6yR+7QESJsUEzn6uspfk8Gs0io=";
-        peerLinkLocal = "fe80::616b:6979";
+        peerLinkLocal = "fe80::616b:7979";
+      };
+
+      # AS4242423088 (sunnet.dn42) ams
+      sunnet-ams = {
+        asn = 4242423088;
+        listenPort = 23088;
+        endpoint = "sjc1-us.dn42.6700.cc";
+        peerPort = 20642;
+        publicKey = "G/ggwlVSy5jKWFlJM01hxcWnL8VDXsD5EXZ/S47SmhM=";
+        peerLinkLocal = "fe80::3088:191";
+      };
+
+      # AS4242421810 ams
+      sabri-hkg = {
+        asn = 4242421810;
+        listenPort = 21810;
+        endpoint = "nl42.sabrinaishere.party";
+        peerPort = 20642;
+        publicKey = "bEyqKaQQz9Zg+CCQ36I8SXScFcGopycRm9MaxOpF/gw=";
+        peerLinkLocal = "fe80::1810";
       };
     };
 
@@ -151,6 +171,16 @@ let
         peerPort = 59878;
         publicKey = "Sz0UhewjDk2yRKI0QL9rB+5daWpXFVlbbz9cLfVVLn4=";
         peerLinkLocal = "fe80::2189:e8";
+      };
+
+      # AS4242423088 (sunnet.dn42) sjc
+      sunnet-sjc = {
+        asn = 4242423088;
+        listenPort = 23088;
+        endpoint = "sjc1-us.dn42.6700.cc";
+        peerPort = 20642;
+        publicKey = "G/ggwlVSy5jKWFlJM01hxcWnL8VDXsD5EXZ/S47SmhM=";
+        peerLinkLocal = "fe80::3088:191";
       };
     };
 
@@ -235,6 +265,26 @@ let
         publicKey = "DIw4TKAQelurK10Sh1qE6IiDKTqL1yciI5ItwBgcHFA=";
         peerLinkLocal = "fe80::2189:ef";
       };
+
+      # AS4242423088 (sunnet.dn42) lax
+      sunnet-lax = {
+        asn = 4242423088;
+        listenPort = 23088;
+        endpoint = "lax1-us.dn42.6700.cc";
+        peerPort = 20642;
+        publicKey = "QSAeFPotqFpF6fFe3CMrMjrpS5AL54AxWY2w1+Ot2Bo=";
+        peerLinkLocal = "fe80::3088:193";
+      };
+
+      # AS4242422966 lax
+      ling-lax = {
+        asn = 4242422966;
+        listenPort = 22966;
+        endpoint = "74.2.4.66";
+        peerPort = 20642;
+        publicKey = "ATDVFDOVWWZigD0KJvhaPFaR78twkb8a+tc1+j30cCI=";
+        peerLinkLocal = "fe80::2966";
+      };
     };
 
     noboard-tyo = {
@@ -318,6 +368,36 @@ let
         publicKey = "XjKsLfOYJ8y/U9saLpfM/MjXErlQ7gkw3+OgQTdVZ0U=";
         peerLinkLocal = "fe80::2189:115";
       };
+
+      # AS4242423088 (sunnet.dn42) tyo
+      sunnet-tyo = {
+        asn = 4242423088;
+        listenPort = 23088;
+        endpoint = "tyo1-jp.dn42.6700.cc";
+        peerPort = 20642;
+        publicKey = "b3gUz8an2+wSCvXAwuxGR7AnxKDUqqQMd1+LASo93R0=";
+        peerLinkLocal = "fe80::3088:190";
+      };
+
+      # AS4242421810 tyo
+      sabri-tyo = {
+        asn = 4242421810;
+        listenPort = 21810;
+        endpoint = "jp42.sabrinaishere.party";
+        peerPort = 20642;
+        publicKey = "JHMaawRETQJlhfv0UX8h+uafeOSNYmF3nUaYxEn7jBs=";
+        peerLinkLocal = "fe80::1810";
+      };
+
+      # AS4242422966 tyo
+      ling-tyo = {
+        asn = 4242422966;
+        listenPort = 22966;
+        endpoint = "103.76.86.19";
+        peerPort = 20642;
+        publicKey = "9TWfgCggTKaAKsWjmHodktu9uWu4lJiCMucKibR+SjM=";
+        peerLinkLocal = "fe80::2966";
+      };
     };
 
     wawo-hkg = {
@@ -354,11 +434,21 @@ let
       # AS4242423088 (sunnet.dn42) hkg
       sunnet-hkg = {
         asn = 4242423088;
-        listenPort = 20;
-        endpoint = "hk1.g-load.eu";
-        peerPort = 20057;
+        listenPort = 23088;
+        endpoint = "hk1-hk.dn42.6700.cc";
+        peerPort = 20642;
         publicKey = "rBTH+JyZB0X/DkwHByrCjCojxBKr/kEOm1dTAFGHR1w=";
-        peerLinkLocal = "fe80::ade0";
+        peerLinkLocal = "fe80::3088:192";
+      };
+
+      # AS4242421810 hkg
+      sabri-hkg = {
+        asn = 4242421810;
+        listenPort = 21810;
+        endpoint = "hk42.sabrinaishere.party";
+        peerPort = 20642;
+        publicKey = "Q09qYo+am/qkseqy/Q5nrb+jtMAeTgHsVZ+er/cypXw=";
+        peerLinkLocal = "fe80::1810";
       };
     };
   };

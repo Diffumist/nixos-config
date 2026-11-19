@@ -174,10 +174,6 @@ let
         "web"
       ];
     };
-    lycheen-slc = {
-      roles = [ "server" ];
-      tags = [ "us" ];
-    };
     moecloud-sjc = {
       roles = [ "server" ];
       tags = [ "us" ];
@@ -213,10 +209,6 @@ let
         "dn42"
       ];
       tags = [ "asia" ];
-    };
-    nosla-sjc = {
-      roles = [ "server" ];
-      tags = [ "us" ];
     };
     rabisu-tur = {
       roles = [ "server" ];

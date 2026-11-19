@@ -1,5 +1,14 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
+  home.pointerCursor = {
+    enable = true;
+    package = pkgs.capitaine-cursors;
+    name = "capitaine-cursors";
+    size = 24;
+    gtk.enable = true;
+    x11.enable = true;
+  };
+
   programs.umbriel = {
     enable = true;
     settings = {
@@ -47,11 +56,15 @@
         };
       };
       input = {
+        cursor = {
+          theme = config.home.pointerCursor.name;
+          size = config.home.pointerCursor.size;
+        };
         keyboard = {
           layout = "us";
           numlock_toggle = true;
         };
-        focus.follows_mouse = false;
+        focus.follows_mouse = "off";
         touchpad = {
           tap = true;
           natural_scroll = true;

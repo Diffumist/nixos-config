@@ -8,9 +8,7 @@ keys:
   - &vpstown-hkg age17us2ztp4qm899t5y2tsvtux57605cykl4amenhrqwtxer3s54daqsg4lty
   - &dedirock-lax age1kyfqu2ccdj68lspn85735ph76chsnlaff2pdmfmx3ru5dx8dfanqm8pjxe
   - &hostdzire-sfo age1rkshe6y7r5gz2tpsxtrvnc7a8j5v3puvak04maat7xkssqmggs5qfwkvv5
-  - &nosla-sjc age1vaal4d53wt0he0u0ppsr654cmgmap9vfxwk8plvvd25z5r26y4es5584pl
   - &moecloud-sjc age1qesk00eh6er5tekhptgyf0736ehgk95ezx6mu5sgvc5aq4tkwcfsudym2l
-  - &lycheen-slc age105cf3zd0g6x5jeut8wd2gpz0lse0tneqqg5edc278l4z9c0qu5csqe5cdc
   - &cloudnium-lax age10fntfvvy8m8yg4wmpdg4y7d8gx3k5l8awuymltsxa830la5eaf8q20mg93
   - &vmrack-lax age1pawz4g2qw2awk5mpdgwzzc95p23x0wm04awufrsfy2pvy4zv0g5sc2f3n4
   - &vmiss-lax age13hs5vs8385krruhtgtr44txqpkhxgc3j7ecd37x07t68r40vgyxqzv9vc0
@@ -43,9 +41,7 @@ creation_rules:
           - *vpstown-hkg
           - *dedirock-lax
           - *hostdzire-sfo
-          - *nosla-sjc
           - *moecloud-sjc
-          - *lycheen-slc
           - *cloudnium-lax
           - *vmiss-lax
           - *vmrack-lax
@@ -98,16 +94,6 @@ creation_rules:
     key_groups:
       - age:
           - *cloudnium-lax
-          - *diffumist
-  - path_regex: ^hosts/lycheen-slc/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *lycheen-slc
-          - *diffumist
-  - path_regex: ^hosts/nosla-sjc/.*\.(json|ya?ml|keytab)$
-    key_groups:
-      - age:
-          - *nosla-sjc
           - *diffumist
   - path_regex: ^hosts/moecloud-sjc/.*\.(json|ya?ml|keytab)$
     key_groups:

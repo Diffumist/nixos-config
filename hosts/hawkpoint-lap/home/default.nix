@@ -90,6 +90,7 @@
         "--enable-gpu-rasterization"
         "--enable-wayland-ime"
         "--wayland-text-input-version=3"
+        "--webrtc-ip-handling-policy=disable_non_proxied_udp"
       ];
     };
   };
@@ -99,7 +100,7 @@
     [
       # CLI
       fff
-      # mosh
+      mosh
       sing-box
       # nix-alien
       microfetch
@@ -169,7 +170,6 @@
       llm-agents.crush
       llm-agents.opencode2
       llm-agents.codex-auth
-      llm-agents.claude-code
       llm-agents.antigravity-cli
       # GUI
       qq
@@ -178,6 +178,7 @@
       tuba
       papers
       gitte
+      magpie
       wemeet
       azahar
       vesktop

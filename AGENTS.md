@@ -104,7 +104,7 @@ Common commands:
 colmena apply --on liteserver-ams -p 8
 
 # deploy selected hosts in parallel
-colmena apply --on nosla-sjc,vmiss-lax -p 8
+colmena apply --on vmrack-lax,vmiss-lax -p 8
 
 # build locally only
 colmena build --on liteserver-ams

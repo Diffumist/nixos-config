@@ -66,12 +66,6 @@ let
       ipv6 = "fd42:203::31";
       publicKey = "6x/Qcn7yghNo7AD6ckKFvTpqW9EhuzzhC0qVXpup3HI=";
     };
-    nosla-sjc = {
-      endpoint = "sjc-1.${baseurl}";
-      ipv4 = "10.203.0.32";
-      ipv6 = "fd42:203::32";
-      publicKey = "CsizRoeV1LdnEl8hGg8Dp/1GD1WRuY/8uFz76H/+3TQ=";
-    };
     google-east = {
       endpoint = "chs-0.${baseurl}";
       ipv4 = "10.203.0.42";
@@ -108,10 +102,7 @@ let
   ];
 
   regionalLinks = {
-    hostdzire-sfo = [
-      "nosla-sjc"
-      "google-west"
-    ];
+    hostdzire-sfo = [ "google-west" ];
     dedirock-lax = [
       "vmiss-lax"
       "vmrack-lax"

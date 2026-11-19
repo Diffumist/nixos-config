@@ -6,6 +6,17 @@ let
 in
 importedPkgs
 // {
+  nix-update = prev.nix-update.overrideAttrs (oldAttrs: {
+    patches =
+      (oldAttrs.patches or [ ])
+      ++ lib.optional (oldAttrs.version == "1.16.0") (
+        prev.fetchpatch {
+          name = "nix-update-prefetch-lazy-flake-sources.patch";
+          url = "https://github.com/Mic92/nix-update/commit/d545c1fad667e573128cad0db55fdc77134a4d3c.patch";
+          hash = "sha256-CVSihQevWIwKSnjKo9ilw1hdi4a1t0xr6DunAUKSBFA=";
+        }
+      );
+  });
   pythonPackagesExtensions = (prev.pythonPackagesExtensions or [ ]) ++ [
     (_: pythonPrev: {
       anyio = pythonPrev.anyio.overridePythonAttrs (oldAttrs: {

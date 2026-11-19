@@ -61,11 +61,6 @@ in
     };
   };
 
-  systemd.tmpfiles.rules = [
-    "d /var/lib/ntfy-sh 0750 ${config.services.ntfy-sh.user} ${config.services.ntfy-sh.group} -"
-    "d /var/lib/ntfy-sh/attachments 0750 ${config.services.ntfy-sh.user} ${config.services.ntfy-sh.group} -"
-  ];
-
   services.caddy.virtualHosts = {
     ${barkDomain} = {
       useACMEHost = barkDomain;
