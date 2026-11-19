@@ -8,6 +8,7 @@
 {
   imports = [
     ./services/attic.nix
+    ./services/matrix.nix
     ./services/forgejo.nix
     ./services/garage-ui.nix
   ];

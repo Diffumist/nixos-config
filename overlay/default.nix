@@ -6,6 +6,21 @@ let
 in
 importedPkgs
 // {
+  devin-cli = prev.devin-cli.overrideAttrs (
+    finalAttrs: oldAttrs: {
+      version = "3000.14.30821";
+      src = final.fetchurl {
+        url = lib.replaceStrings [ oldAttrs.version ] [ finalAttrs.version ] oldAttrs.src.url;
+        hash =
+          {
+            x86_64-linux = "sha256-TcQ+PkOIus5g/iqoAQy7OZQC5ySJLXF1hFsc3vAOfds=";
+            aarch64-linux = "sha256-PeuK9rAmBg6XXtNxk24TmBgCDl3Fq7y6B83gOfRzpaU=";
+            aarch64-darwin = "sha256-Ru8addi9hRZlF54Ta345rVl9PXkTuV1n/SuI6civAGE=";
+          }
+          .${final.stdenv.hostPlatform.system};
+      };
+    }
+  );
   nix-update = prev.nix-update.overrideAttrs (oldAttrs: {
     patches =
       (oldAttrs.patches or [ ])
@@ -17,18 +32,6 @@ importedPkgs
         }
       );
   });
-  pythonPackagesExtensions = (prev.pythonPackagesExtensions or [ ]) ++ [
-    (_: pythonPrev: {
-      anyio = pythonPrev.anyio.overridePythonAttrs (oldAttrs: {
-        # Python 3.12.15 rejects client-only TLS arguments in server-side tests.
-        patches =
-          (oldAttrs.patches or [ ])
-          ++ lib.optionals (pythonPrev.python.pythonVersion == "3.12" && oldAttrs.version == "4.14.2") [
-            ./anyio/server-hostname.patch
-          ];
-      });
-    })
-  ];
   microfetch = prev.microfetch.overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or [ ]) ++ [ ./microfetch/storage.patch ];
   });
@@ -46,20 +49,4 @@ importedPkgs
   });
   rimsort = inputs.rimsort.packages.${prev.stdenv.hostPlatform.system}.rimsort;
   # stable-package = inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}.some-package;
-}
-// lib.optionalAttrs (prev ? cachyosKernels) {
-  cachyosKernels = prev.cachyosKernels // {
-    linuxPackages-cachyos-latest-lto-zen4 =
-      prev.cachyosKernels.linuxPackages-cachyos-latest-lto-zen4.extend
-        (
-          _: kernelPrev: {
-            yt6801 = kernelPrev.yt6801.overrideAttrs (oldAttrs: {
-              makeFlags = (oldAttrs.makeFlags or [ ]) ++ [
-                "CC=cc"
-                "LLVM=1"
-              ];
-            });
-          }
-        );
-  };
 }

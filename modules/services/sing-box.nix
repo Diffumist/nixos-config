@@ -130,7 +130,6 @@ in
         ];
 
         route = {
-          auto_detect_interface = true;
           default_domain_resolver = {
             server = "cloudflare-dns";
             strategy = "prefer_ipv4";

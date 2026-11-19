@@ -139,8 +139,15 @@ Current important options:
 - `my.services.dn42.peers`
 - `my.services.postgresql`
 - `my.services.prometheus-node`
+- `my.services.ranet`
 - `my.services.sema`
 - `my.services.sing-box`
+
+`my.services.ranet` is the management mesh (strongSwan driven by ranet), defined
+in `profiles/common/services/ranet.nix`. A host joins when its entry in `nodes`
+has a `publicKey` and its secrets hold `ranet_private_key`; every enrolled host
+must be redeployed after the table changes. Run `nix-build tests/ranet.nix`
+after touching it.
 
 Prefer adding a small reusable module under `modules/services` or
 `modules/hardware` when at least two hosts need the same behavior. For one host,
@@ -157,7 +164,8 @@ peer data lives in `profiles/common/services/dn42-peers.nix`.
 - Bird config is assembled by the DN42 modules; parse-check bird config after changes.
 - WireGuard keys come from SOPS secrets; never commit plaintext keys.
 
-Adding an external peer should usually only touch the target host's `default.nix`.
+Adding an external peer should usually only touch the target host's entry in
+`profiles/common/services/dn42-peers.nix`.
 
 ## 8. Local packages
 

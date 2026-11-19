@@ -14,16 +14,6 @@
     "spec_store_bypass_disable=on"
     "page_alloc.shuffle=1"
   ];
-  boot.extraModprobeConfig = ''
-    install esp4 ${pkgs.coreutils}/bin/false
-    install esp6 ${pkgs.coreutils}/bin/false
-    install rxrpc ${pkgs.coreutils}/bin/false
-  '';
-  boot.blacklistedKernelModules = [
-    "esp4"
-    "esp6"
-    "rxrpc"
-  ];
   # Ref: https://github.com/k4yt3x/sysctl/blob/master/sysctl.conf
   boot.kernel.sysctl = {
     # --- Network Optimization ---

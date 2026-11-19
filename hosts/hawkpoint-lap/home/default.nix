@@ -102,7 +102,7 @@
       fff
       mosh
       sing-box
-      # nix-alien
+      nix-alien
       microfetch
       bubblewrap
       steam-run
@@ -163,6 +163,7 @@
       github-mcp-server
       llm-agents.agent-browser
       # TUI
+      devin-cli
       llm-agents.rtk
       llm-agents.codex
       llm-agents.pi
