@@ -53,7 +53,15 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts.${domain}.useCloudflareACME = true;
+    virtualHosts.${domain} = {
+      useCloudflareACME = true;
+      fail2ban = {
+        enable = true;
+        name = "dufs-caddy";
+        statuses = [ 401 ];
+        maxretry = 6;
+      };
+    };
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
     reverse_proxy 127.0.0.1:${toString port}

@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   my.hardware.ephemeralBtrfs = {
     device = "/dev/sda";
   };
@@ -20,7 +13,6 @@
     ];
   };
 
-  virtualisation.podman.enable = false;
   services.fail2ban.enable = false;
   my.services.sing-box = {
     enable = true;

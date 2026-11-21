@@ -1,22 +1,25 @@
-{ config, ... }:
+{ config, lib, ... }:
 let
   domain = "lg-dn42.diffumist.me";
   frontendPort = 5000;
-  proxyPort = 8000;
+  mesh = config.my.services.dn42.mesh;
+  nodes = map (
+    node:
+    let
+      shortName = builtins.head (lib.splitString "." node.endpoint);
+    in
+    {
+      inherit shortName;
+      inherit (node) ipv4;
+    }
+  ) (lib.sort (a: b: a.ipv4 < b.ipv4) (builtins.attrValues mesh.nodes));
 in
 {
   services.bird-lg.frontend = {
     enable = true;
     listenAddresses = "127.0.0.1:${toString frontendPort}";
-    inherit proxyPort;
-    servers = [
-      "AMS-0<ams-0.lg>"
-      "SJC-0<sjc-0.lg>"
-      "LAX-0<lax-0.lg>"
-      "TYO-0<tyo-0.lg>"
-      "HKG-0<hkg-0.lg>"
-      "NUE-0<nue-0.lg>"
-    ];
+    proxyPort = mesh.lookingGlassProxyPort;
+    servers = map (node: "${lib.toUpper node.shortName}<${node.shortName}.lg>") nodes;
     domain = "";
     netSpecificMode = "dn42";
     protocolFilter = [ "BGP" ];
@@ -24,14 +27,9 @@ in
     navbar.brand = "Diffumist's DN42 LG";
   };
 
-  networking.hosts = {
-    "172.22.64.65" = [ "ams-0.lg" ];
-    "172.22.64.66" = [ "sjc-0.lg" ];
-    "172.22.64.67" = [ "lax-0.lg" ];
-    "172.22.64.68" = [ "tyo-0.lg" ];
-    "172.22.64.69" = [ "hkg-0.lg" ];
-    "172.22.64.70" = [ "nue-0.lg" ];
-  };
+  networking.hosts = lib.listToAttrs (
+    map (node: lib.nameValuePair node.ipv4 [ "${node.shortName}.lg" ]) nodes
+  );
 
   my.services.caddy = {
     enable = true;

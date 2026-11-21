@@ -105,86 +105,69 @@ in
           content = {
             type = "gpt";
             partitions =
-              if isUefi then
-                {
-                  esp = {
-                    size = "512M";
-                    type = "EF00";
-                    priority = 1;
-                    content = {
-                      type = "filesystem";
-                      format = "vfat";
-                      mountpoint = "/boot";
-                      mountOptions = [
-                        "fmask=0077"
-                        "dmask=0077"
-                      ];
-                    };
-                  };
-                  nixos = {
-                    size = "100%";
-                    priority = 2;
-                    content = {
-                      type = "btrfs";
-                      extraArgs = [ "-f" ];
-                      subvolumes = {
-                        "@nix" = {
-                          mountpoint = "/nix";
-                          inherit (cfg) mountOptions;
-                        };
-                        "@persist" = {
-                          mountpoint = "/persist";
-                          inherit (cfg) mountOptions;
-                        };
-                        "@swap" = {
-                          mountpoint = "/.swap";
-                          swap = {
-                            swapfile.size = cfg.swapSize;
-                            swapfile.path = "real-path";
-                          };
-                        };
+              (
+                if isUefi then
+                  {
+                    esp = {
+                      size = "512M";
+                      type = "EF00";
+                      priority = 1;
+                      content = {
+                        type = "filesystem";
+                        format = "vfat";
+                        mountpoint = "/boot";
+                        mountOptions = [
+                          "fmask=0077"
+                          "dmask=0077"
+                        ];
                       };
                     };
-                  };
-                }
-              else
-                {
-                  boot = {
-                    size = "1M";
-                    type = "EF02";
-                    priority = 1;
-                  };
-                  nixos = {
-                    size = "100%";
-                    priority = 2;
-                    content = {
-                      type = "btrfs";
-                      extraArgs = [ "-f" ];
-                      subvolumes = {
-                        "@boot" = {
-                          mountpoint = "/boot";
-                          inherit (cfg) mountOptions;
-                        };
-                        "@nix" = {
-                          mountpoint = "/nix";
-                          inherit (cfg) mountOptions;
-                        };
-                        "@swap" = {
-                          mountpoint = "/.swap";
-                          swap = {
-                            swapfile.size = cfg.swapSize;
-                            swapfile.path = "real-path";
-                          };
-                        };
-                        "@persist" = {
-                          mountpoint = "/persist";
-                          inherit (cfg) mountOptions;
+                  }
+                else
+                  {
+                    boot = {
+                      size = "1M";
+                      type = "EF02";
+                      priority = 1;
+                    };
+                  }
+              )
+              // {
+                nixos = {
+                  size = "100%";
+                  priority = 2;
+                  content = {
+                    type = "btrfs";
+                    extraArgs = [ "-f" ];
+                    subvolumes = {
+                      "@nix" = {
+                        mountpoint = "/nix";
+                        inherit (cfg) mountOptions;
+                      };
+                      "@persist" = {
+                        mountpoint = "/persist";
+                        inherit (cfg) mountOptions;
+                      };
+                      "@swap" = {
+                        mountpoint = "/.swap";
+                        swap = {
+                          swapfile.size = cfg.swapSize;
+                          swapfile.path = "real-path";
                         };
                       };
-                      mountpoint = "/.subvols";
+                    }
+                    // lib.optionalAttrs (!isUefi) {
+                      "@boot" = {
+                        mountpoint = "/boot";
+                        inherit (cfg) mountOptions;
+                      };
                     };
+                  }
+                  // lib.optionalAttrs (!isUefi) {
+                    mountpoint = "/.subvols";
                   };
                 };
+              };
           };
         };
 

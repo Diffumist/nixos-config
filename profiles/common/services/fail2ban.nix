@@ -1,13 +1,12 @@
-{ lib, config, ... }:
+{ lib, ... }:
 {
   services.fail2ban = {
     enable = lib.mkDefault true;
     ignoreIP = [
-      "127.0.0.0/8"
       "10.0.0.0/8"
       "172.16.0.0/12"
       "192.168.0.0/16"
-      "::1/128"
+      "fc00::/7"
     ];
     bantime-increment = {
       enable = true;
@@ -15,66 +14,6 @@
       factor = "4";
       overalljails = true;
     };
-    jails = {
-      sshd.settings = {
-        enabled = false;
-        backend = "systemd";
-        journalmatch = "_SYSTEMD_UNIT=sshd.service";
-        mode = "normal";
-        maxretry = 3;
-        bantime = "24h";
-      };
-
-      vaultwarden.settings = {
-        enabled = true;
-        filter = "vaultwarden";
-        backend = "systemd";
-        journalmatch = "_SYSTEMD_UNIT=vaultwarden.service";
-        maxretry = 3;
-        bantime = "24h";
-      };
-
-      forgejo.settings = {
-        enabled = true;
-        filter = "forgejo";
-        backend = "systemd";
-        journalmatch = "_SYSTEMD_UNIT=forgejo.service";
-        maxretry = 5;
-        bantime = "24h";
-      };
-
-      immich-caddy.settings = {
-        enabled = true;
-        filter = "immich-caddy";
-        backend = "systemd";
-        journalmatch = "_SYSTEMD_UNIT=caddy.service";
-        maxretry = 5;
-        bantime = "24h";
-      };
-    };
-  };
-
-  environment.systemPackages = lib.optionals config.services.fail2ban.enable [
-    config.services.fail2ban.package
-  ];
-
-  environment.etc = {
-    "fail2ban/filter.d/vaultwarden.local".text = ''
-      [Definition]
-      failregex = ^.*\[WARN\] Invalid password for '.*' from <HOST>\.$
-                  ^.*\[WARN\] Two-factor authentication failed .* from <HOST>\.$
-    '';
-
-    "fail2ban/filter.d/forgejo.local".text = ''
-      [Definition]
-      failregex = ^.*Failed authentication attempt for .* from <HOST>.*$
-                  ^.*invalid credentials from <HOST>.*$
-    '';
-
-    "fail2ban/filter.d/immich-caddy.local".text = ''
-      [Definition]
-      failregex = ^.*"client_ip":"<HOST>".*"method":"POST".*"uri":"/api/auth/login".*"status":(401|403).*$
-      ignoreregex =
-    '';
+    jails.sshd.settings.enabled = false;
   };
 }

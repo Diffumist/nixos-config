@@ -169,8 +169,6 @@ func Recommend(inputs Inputs, measurements Measurements) (Recommendation, error)
 	tcpSendMaximum := max(tcpDerived, inputs.Current.TCPSendMaximum)
 	tcpReceiveDefault := max(min(131_072, tcpReceiveMaximum), inputs.Current.TCPReceiveDefault)
 	tcpSendDefault := max(min(16_384, tcpSendMaximum), inputs.Current.TCPSendDefault)
-	tcpReceiveMaximum = max(tcpReceiveMaximum, tcpReceiveDefault)
-	tcpSendMaximum = max(tcpSendMaximum, tcpSendDefault)
 	tcpReceiveMinimum := max(uint64(4_096), inputs.Current.TCPReceiveMinimum)
 	tcpSendMinimum := max(uint64(4_096), inputs.Current.TCPSendMinimum)
 	tcpReceiveDefault = max(tcpReceiveDefault, tcpReceiveMinimum)
@@ -367,20 +365,6 @@ func pageAlignedClamp(value, minimum, maximum, pageSize uint64) uint64 {
 		return value
 	}
 	return maximum - maximum%pageSize
-}
-
-func max(a, b uint64) uint64 {
-	if a > b {
-		return a
-	}
-	return b
-}
-
-func min(a, b uint64) uint64 {
-	if a < b {
-		return a
-	}
-	return b
 }
 
 const (

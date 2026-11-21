@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   imports = [
     ./boot.nix
   ];

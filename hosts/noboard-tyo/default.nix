@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   imports = [
     ./boot.nix
     ./services/dufs.nix
@@ -27,8 +20,4 @@
     domain = "overload-reshoot-aids-silencer.503418.xyz";
     port = 8443;
   };
-
-  environment.etc."vnstat.conf".text = ''
-    MonthRotate 5
-  '';
 }

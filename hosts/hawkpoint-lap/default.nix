@@ -173,8 +173,10 @@ in
       numlock = true;
     };
   };
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  xdg.portal.config.umbriel."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+  xdg.portal = {
+    xdgOpenUsePortal = true;
+    config.umbriel."org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+  };
   services.gnome.gnome-keyring.enable = true;
   services.envfs.enable = true;
   environment.systemPackages = with pkgs; [
@@ -211,7 +213,6 @@ in
   programs = {
     nix-ld.enable = true;
     nexttrace.enable = true;
-    direnv.enable = true;
     fish = {
       enable = true;
       useBabelfish = true;
@@ -328,10 +329,8 @@ in
     useGlobalPkgs = true;
     useUserPackages = true;
     users.diffumist = import ./home;
-    extraSpecialArgs = { inherit inputs; };
     sharedModules = [
       inputs.nix-index-database.homeModules.default
-      inputs.sops-nix.homeManagerModules.sops
       inputs.umbriel.homeModules.default
       inputs.noctalia.homeModules.default
     ];

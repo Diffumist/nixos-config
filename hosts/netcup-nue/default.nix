@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   imports = [
     ./services/notifications.nix
   ];
@@ -24,5 +17,4 @@
       gatewayOnLink = true;
     };
   };
-  my.services.postgresql.totalRamMB = 1 * 1024;
 }

@@ -7,7 +7,7 @@
   ...
 }:
 let
-  inherit (helpers.lists) allUnique;
+  inherit (lib) allUnique;
   inherit (helpers.network) formatHostPort;
   cfg = config.my.services.dn42.mesh;
   nodes = cfg.nodes;

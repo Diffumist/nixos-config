@@ -59,7 +59,6 @@ in
         "-19"
         "-T0"
       ];
-      systemd.enable = true;
       availableKernelModules = [
         "virtio_net"
         "virtio_pci"
@@ -70,7 +69,6 @@ in
         "sd_mod"
         "ahci"
         "ata_piix"
-        "virtio_pci"
         "xen_blkfront"
         "vmw_pvscsi"
       ];

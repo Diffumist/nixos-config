@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 let
   authoritativeDns = config.my.services.dn42.authoritativeDns;
   ipv4 = "172.22.64.68";

@@ -301,17 +301,15 @@ let
     host
     // {
       inherit
+        buildOnTarget
         ciBuild
         deploy
+        externalModules
+        modules
         path
         roles
         system
         tags
-        ;
-      inherit
-        buildOnTarget
-        externalModules
-        modules
         targetHost
         targetUser
         ;
@@ -346,9 +344,6 @@ let
     inherit helpers inputs self;
     hostName = name;
     hostPath = host.path;
-    hostRoles = host.roles;
-    hostTags = tagsOf host;
-    overlays = overlaysFor host;
   };
 
   mkHost =

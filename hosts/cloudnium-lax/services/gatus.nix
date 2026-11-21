@@ -91,11 +91,6 @@ in
           url = "https://vault.diffumist.me/alive";
         }
         {
-          name = "Misskey";
-          group = "Applications";
-          url = "https://mux.im";
-        }
-        {
           name = "Matrix";
           group = "Applications";
           url = "https://mux.im/_matrix/client/versions";
@@ -193,16 +188,7 @@ in
     };
   };
 
-  my.services.postgresql.enable = true;
-  services.postgresql = {
-    ensureDatabases = [ "gatus" ];
-    ensureUsers = [
-      {
-        name = "gatus";
-        ensureDBOwnership = true;
-      }
-    ];
-  };
+  my.services.postgresql.ensureLocalDatabases = [ "gatus" ];
 
   systemd.services.gatus = helpers.systemd.mkService {
     after = [

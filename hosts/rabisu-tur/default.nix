@@ -1,4 +1,3 @@
-{ lib, ... }:
 {
   my.hardware.ephemeralBtrfs.device = "/dev/vda";
 
@@ -13,7 +12,6 @@
   };
 
   my.services.komari-agent.enable = false;
-  virtualisation.podman.enable = false;
   services.fail2ban.enable = false;
   my.services.sing-box = {
     enable = true;

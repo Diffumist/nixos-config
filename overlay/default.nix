@@ -2,7 +2,7 @@ inputs: final: prev:
 let
   inherit (prev) lib;
   localPackages = import ../pkgs { inherit lib; };
-  importedPkgs = localPackages.fromPkgs final inputs;
+  importedPkgs = localPackages.fromPkgs final;
 in
 importedPkgs
 // {
@@ -14,8 +14,6 @@ importedPkgs
         hash =
           {
             x86_64-linux = "sha256-TcQ+PkOIus5g/iqoAQy7OZQC5ySJLXF1hFsc3vAOfds=";
-            aarch64-linux = "sha256-PeuK9rAmBg6XXtNxk24TmBgCDl3Fq7y6B83gOfRzpaU=";
-            aarch64-darwin = "sha256-Ru8addi9hRZlF54Ta345rVl9PXkTuV1n/SuI6civAGE=";
           }
           .${final.stdenv.hostPlatform.system};
       };
@@ -38,15 +36,14 @@ importedPkgs
   wemeet = prev.wemeet.overrideAttrs (oldAttrs: {
     postInstall = (oldAttrs.postInstall or "") + ''
       substituteInPlace $out/share/applications/wemeetapp.desktop \
-        --replace "Exec=wemeet" "Exec=wemeet-xwayland"
+        --replace-fail "Exec=wemeet" "Exec=wemeet-xwayland"
     '';
   });
   code-nautilus = prev.code-nautilus.overrideAttrs (oldAttrs: {
     postInstall = (oldAttrs.postInstall or "") + ''
       substituteInPlace $out/share/nautilus-python/extensions/code-nautilus.py \
-        --replace "VSCODE = 'code'" "VSCODE = 'codium'"
+        --replace-fail "VSCODE = 'code'" "VSCODE = 'codium'"
     '';
   });
   rimsort = inputs.rimsort.packages.${prev.stdenv.hostPlatform.system}.rimsort;
-  # stable-package = inputs.nixpkgs-stable.legacyPackages.${prev.stdenv.hostPlatform.system}.some-package;
 }

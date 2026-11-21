@@ -27,7 +27,18 @@ in
     };
   };
 
-  my.services.caddy.enable = true;
+  my.services.caddy = {
+    enable = true;
+    virtualHosts."attic.diffumist.me".fail2ban = {
+      enable = true;
+      name = "attic-caddy";
+      statuses = [
+        401
+        403
+      ];
+      maxretry = 6;
+    };
+  };
   services.caddy.virtualHosts."attic.diffumist.me" = {
     useACMEHost = "attic.diffumist.me";
     extraConfig = ''

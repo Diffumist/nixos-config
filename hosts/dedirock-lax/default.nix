@@ -1,12 +1,4 @@
 {
-  pkgs,
-  config,
-  lib,
-  inputs,
-  self,
-  ...
-}:
-{
   imports = [
     ./services/sillytavern.nix
     ./services/rustypaste.nix
@@ -31,6 +23,4 @@
     domain = "pastel-riot-defense-stinking-saga.503418.xyz";
     port = 8443;
   };
-  my.services.postgresql.totalRamMB = 2 * 1024;
-
 }

@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   my.hardware.ephemeralBtrfs = {
     device = "/dev/sda";
   };
@@ -19,12 +12,10 @@
       "8.8.4.4"
     ];
   };
-  virtualisation.podman.enable = false;
   services.fail2ban.enable = false;
   my.services.sing-box = {
     enable = true;
     domain = "freehand-dubbed-ellipse-mulled.503418.xyz";
     port = 8443;
   };
-  my.services.postgresql.totalRamMB = 1 * 1024;
 }

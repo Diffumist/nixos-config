@@ -19,7 +19,20 @@ in
 {
   options = {
     my.services.postgresql = {
-      enable = lib.mkEnableOption "The PostgreSQL Service";
+      enable = lib.mkEnableOption "The PostgreSQL Service" // {
+        default = cfg.ensureLocalDatabases != [ ];
+        defaultText = lib.literalExpression "config.my.services.postgresql.ensureLocalDatabases != [ ]";
+      };
+      ensureLocalDatabases = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "grafana" ];
+        description = ''
+          Local PostgreSQL databases to create alongside a matching role with
+          ensureDBOwnership = true. Setting this to a non-empty list enables
+          my.services.postgresql by default.
+        '';
+      };
       totalRamMB = lib.mkOption {
         type = lib.types.int;
       };
@@ -35,13 +48,13 @@ in
 
         accountId = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
+          default = "1ddb57c7f8266ea8489206984571fb77";
           description = "Cloudflare account ID used to build the R2 S3 endpoint.";
         };
 
         bucket = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
+          default = "pgbackrest";
           description = "Cloudflare R2 bucket containing this host's pgBackRest repository.";
         };
 
@@ -112,6 +125,11 @@ in
         services.postgresql = {
           enable = true;
           package = pkgs.postgresql_18;
+          ensureDatabases = lib.unique cfg.ensureLocalDatabases;
+          ensureUsers = map (name: {
+            inherit name;
+            ensureDBOwnership = true;
+          }) (lib.unique cfg.ensureLocalDatabases);
           settings = helpers.postgresql.mkTuningSettings {
             inherit (cfg) totalRamMB storageClass;
           };

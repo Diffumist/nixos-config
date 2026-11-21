@@ -57,26 +57,19 @@ let
   };
 in
 {
-  sops.secrets = {
-    "garage-ui/admin_token" = {
-      owner = user;
-      group = user;
-      mode = "0400";
-      restartUnits = [ "garage-ui.service" ];
-    };
-    "garage-ui/oidc_client_secret" = {
-      owner = user;
-      group = user;
-      mode = "0400";
-      restartUnits = [ "garage-ui.service" ];
-    };
-    "garage-ui/jwt_private_key" = {
-      owner = user;
-      group = user;
-      mode = "0400";
-      restartUnits = [ "garage-ui.service" ];
-    };
-  };
+  sops.secrets =
+    lib.genAttrs
+      [
+        "garage-ui/admin_token"
+        "garage-ui/oidc_client_secret"
+        "garage-ui/jwt_private_key"
+      ]
+      (_: {
+        owner = user;
+        group = user;
+        mode = "0400";
+        restartUnits = [ "garage-ui.service" ];
+      });
 
   users = {
     groups.${user} = { };

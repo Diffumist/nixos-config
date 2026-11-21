@@ -18,20 +18,11 @@ in
     };
   };
 
-  my.services.postgresql.enable = true;
-  services.postgresql = {
-    authentication = ''
-      host komari komari 127.0.0.1/32 trust
-      host komari komari ::1/128 trust
-    '';
-    ensureDatabases = [ "komari" ];
-    ensureUsers = [
-      {
-        name = "komari";
-        ensureDBOwnership = true;
-      }
-    ];
-  };
+  my.services.postgresql.ensureLocalDatabases = [ "komari" ];
+  services.postgresql.authentication = ''
+    host komari komari 127.0.0.1/32 trust
+    host komari komari ::1/128 trust
+  '';
 
   systemd.services.komari-monitor = helpers.systemd.mkService {
     description = "Komari monitoring server";
@@ -69,8 +60,20 @@ in
     };
   };
 
-  my.services.caddy.enable = true;
-  my.services.caddy.virtualHosts."sla.qzz.io" = { };
+  my.services.caddy = {
+    enable = true;
+    virtualHosts."sla.qzz.io".fail2ban = {
+      enable = true;
+      name = "komari-caddy";
+      methods = [ "POST" ];
+      uriRegex = "/api/login";
+      statuses = [
+        401
+        403
+      ];
+      maxretry = 5;
+    };
+  };
   services.caddy.virtualHosts."sla.qzz.io" = {
     useACMEHost = "sla.qzz.io";
     extraConfig = ''

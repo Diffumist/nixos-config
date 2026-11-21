@@ -6,7 +6,7 @@
   ...
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "netfit";
   version = "0.4.1";
 
@@ -38,7 +38,7 @@ buildGoModule {
     runHook preInstallCheck
 
     $out/bin/netfit --help >/dev/null
-    $out/bin/netfit version | grep -q '^netfit 0.4.1$'
+    $out/bin/netfit version | grep -q "^netfit ${finalAttrs.version}$"
 
     runHook postInstallCheck
   '';
@@ -49,4 +49,4 @@ buildGoModule {
     mainProgram = "netfit";
     platforms = lib.platforms.linux;
   };
-}
+})

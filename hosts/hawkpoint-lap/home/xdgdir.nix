@@ -15,12 +15,6 @@
       templates = "$HOME";
     };
     mimeApps.enable = true;
-    portal = {
-      enable = true;
-      extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-      xdgOpenUsePortal = true;
-      config.common.default = "*";
-    };
     autostart.readOnly = true;
     configFile = {
       "npm/npmrc".text = ''
@@ -92,11 +86,6 @@
   };
   home.sessionVariables = {
     DO_NOT_TRACK = 1;
-    # xdg dir base
-    XDG_CONFIG_HOME = "${config.xdg.configHome}";
-    XDG_CACHE_HOME = "${config.xdg.cacheHome}";
-    XDG_DATA_HOME = "${config.xdg.dataHome}";
-    XDG_STATE_HOME = "${config.xdg.stateHome}";
     # binary
     PATH = "${config.home.homeDirectory}/.local/bin\${PATH:+:}$PATH";
     # cache

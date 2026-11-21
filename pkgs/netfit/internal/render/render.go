@@ -34,9 +34,7 @@ func Recommendation(writer io.Writer, recommendation model.Recommendation, forma
 	case FormatText:
 		return writeText(writer, recommendation)
 	case FormatJSON:
-		encoder := json.NewEncoder(writer)
-		encoder.SetIndent("", "  ")
-		return encoder.Encode(recommendation)
+		return JSON(writer, recommendation)
 	case FormatNix:
 		return writeNix(writer, recommendation)
 	case FormatTC:

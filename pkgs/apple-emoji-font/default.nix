@@ -26,8 +26,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postUnpack
   '';
 
-  sourceRoot = ".";
-
   installPhase = ''
     runHook preInstall
 

@@ -38,16 +38,7 @@ in
     };
   };
 
-  my.services.postgresql.enable = true;
-  services.postgresql = {
-    ensureDatabases = [ database ];
-    ensureUsers = [
-      {
-        name = database;
-        ensureDBOwnership = true;
-      }
-    ];
-  };
+  my.services.postgresql.ensureLocalDatabases = [ database ];
 
   systemd.services.pocket-id = {
     requires = [ "postgresql.service" ];
@@ -56,7 +47,23 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts.${domain}.useCloudflareACME = true;
+    virtualHosts.${domain} = {
+      useCloudflareACME = true;
+      fail2ban = {
+        enable = true;
+        name = "pocketid-caddy";
+        methods = [ "POST" ];
+        uriRegex = "/api/(?:webauthn/login/finish|one-time-access-token/[^\"?]+|one-time-access-email)";
+        statuses = [
+          400
+          401
+          403
+          404
+          429
+        ];
+        maxretry = 5;
+      };
+    };
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
     reverse_proxy 127.0.0.1:${toString port}

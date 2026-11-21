@@ -1,5 +1,6 @@
 {
   config,
+  helpers,
   lib,
   pkgs,
   ...
@@ -18,9 +19,40 @@ let
   };
 in
 {
-  my.services.caddy.enable = true;
+  my.services.caddy = {
+    enable = true;
+    virtualHosts.${ntfyDomain}.fail2ban = {
+      enable = true;
+      name = "ntfy-caddy";
+      statuses = [
+        401
+        403
+      ];
+      maxretry = 6;
+    };
+  };
+  services.caddy.virtualHosts = {
+    ${barkDomain} = {
+      useACMEHost = barkDomain;
+      extraConfig = ''
+        encode zstd gzip
+        reverse_proxy 127.0.0.1:${toString barkPort}
+      '';
+    };
+    ${ntfyDomain} = {
+      useACMEHost = ntfyDomain;
+      extraConfig = ''
+        reverse_proxy 127.0.0.1:${toString ntfyPort}
+      '';
+    };
+  };
 
-  systemd.services.bark-server = {
+  security.acme.certs = {
+    ${barkDomain} = acmeCert;
+    ${ntfyDomain} = acmeCert;
+  };
+
+  systemd.services.bark-server = helpers.systemd.mkService {
     description = "Bark push notification server";
     wantedBy = [ "multi-user.target" ];
     after = [ "network-online.target" ];
@@ -32,11 +64,6 @@ in
       ExecStart = "${lib.getExe pkgs.bark-server} --addr 127.0.0.1:${toString barkPort} --data /var/lib/bark-server";
       Restart = "on-failure";
       RestartSec = "5s";
-      NoNewPrivileges = true;
-      PrivateTmp = true;
-      ProtectHome = true;
-      ProtectSystem = "strict";
-      ReadWritePaths = [ "/var/lib/bark-server" ];
     };
   };
 
@@ -61,25 +88,8 @@ in
     };
   };
 
-  services.caddy.virtualHosts = {
-    ${barkDomain} = {
-      useACMEHost = barkDomain;
-      extraConfig = ''
-        encode zstd gzip
-        reverse_proxy 127.0.0.1:${toString barkPort}
-      '';
-    };
-    ${ntfyDomain} = {
-      useACMEHost = ntfyDomain;
-      extraConfig = ''
-        encode zstd gzip
-        reverse_proxy 127.0.0.1:${toString ntfyPort}
-      '';
-    };
-  };
-
-  security.acme.certs = {
-    ${barkDomain} = acmeCert;
-    ${ntfyDomain} = acmeCert;
+  my.networking.usedTCPPorts = {
+    bark = barkPort;
+    ntfy = ntfyPort;
   };
 }

@@ -77,12 +77,9 @@ Per-host fields:
 
 - `inputs`
 - `helpers`
-- `overlays`
 - `self`
 - `hostName`
 - `hostPath`
-- `hostRoles`
-- `hostTags`
 
 `modules/system/hostname.nix` sets `networking.hostName` from `hostName` with
 `mkDefault`; keep explicit per-host `networking.hostName` only for deliberate
@@ -185,8 +182,7 @@ attributes; packages without a normal upstream version can stay out.
 
 Notable packages:
 
-- `caddy-cloudflare`: custom Caddy build with Cloudflare DNS plugin.
-- `caddy-dns-cloudflare`: source-only plugin package.
+- `caddy-cloudflare`: Caddy built via `caddy.withPlugins` with the Cloudflare DNS plugin.
 - `cybergroupmate`: pnpm-based upstream package.
 - `sema`: Rust dead man's switch webhook server.
 - `xsz`: Rust package with checked-in `Cargo.lock`.

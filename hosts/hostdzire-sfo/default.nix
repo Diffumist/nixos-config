@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   imports = [
     ./services/asterisk.nix
     ./services/grafana.nix
@@ -29,10 +22,6 @@
 
   my.services.postgresql = {
     totalRamMB = 6 * 1024;
-    backup = {
-      enable = true;
-      accountId = "1ddb57c7f8266ea8489206984571fb77";
-      bucket = "pgbackrest";
-    };
+    backup.enable = true;
   };
 }

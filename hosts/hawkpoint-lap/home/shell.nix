@@ -156,7 +156,6 @@
           trim-final-newlines = true;
         };
       };
-      themes = { };
     };
   };
 }

@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   imports = [
     ./services/gonic.nix
     ./services/http418-cat.nix
@@ -34,11 +27,7 @@
 
   my.services.postgresql = {
     totalRamMB = 2 * 1024;
-    backup = {
-      enable = true;
-      accountId = "1ddb57c7f8266ea8489206984571fb77";
-      bucket = "pgbackrest";
-    };
+    backup.enable = true;
   };
 
   my.services.garage = {

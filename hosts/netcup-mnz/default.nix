@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   imports = [
     ./services/attic.nix
     ./services/matrix.nix
@@ -31,16 +24,11 @@
 
   my.services.postgresql = {
     totalRamMB = 8 * 1024;
-    backup = {
-      enable = true;
-      accountId = "1ddb57c7f8266ea8489206984571fb77";
-      bucket = "pgbackrest";
-    };
+    backup.enable = true;
   };
 
   my.services.garage = {
     enable = true;
-    domain = "s3.418.cat";
     exposeS3 = true;
     bootstrapPeers = [
       "8e6345e4659cb1d16d804100cfb67cdfb4fefc318117d594cf4161718b0e2faf@ams-0.diffumist.me:3901"

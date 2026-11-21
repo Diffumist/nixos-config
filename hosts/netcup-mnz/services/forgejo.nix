@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }:
@@ -103,6 +104,27 @@ in
   services.caddy.virtualHosts.${domain}.extraConfig = ''
     reverse_proxy 127.0.0.1:${toString port}
   '';
+
+  services.fail2ban.jails.forgejo = lib.mkIf config.services.fail2ban.enable {
+    settings = {
+      enabled = true;
+      filter = "forgejo";
+      backend = "systemd";
+      journalmatch = "_SYSTEMD_UNIT=forgejo.service";
+      port = "80,443";
+      protocol = "tcp,udp";
+      maxretry = 5;
+      bantime = "24h";
+    };
+  };
+
+  environment.etc."fail2ban/filter.d/forgejo.local" = lib.mkIf config.services.fail2ban.enable {
+    text = ''
+      [Definition]
+      failregex = ^.*Failed authentication attempt for .* from <HOST>.*$
+                  ^.*invalid credentials from <HOST>.*$
+    '';
+  };
 
   my.networking.usedTCPPorts.forgejo-http = port;
 }

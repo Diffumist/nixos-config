@@ -82,8 +82,6 @@
 
       systems = [
         "x86_64-linux"
-        "aarch64-linux"
-        "aarch64-darwin"
       ];
 
       perSystem =
@@ -95,7 +93,7 @@
             overlays = [ self.overlays.default ];
           };
           localPackages = import ./pkgs { lib = nixpkgs.lib; };
-          localPackageSet = localPackages.fromPkgs pkgs inputs;
+          localPackageSet = nixpkgs.lib.genAttrs localPackages.packageNames (name: pkgs.${name});
           availableLocalPackages = nixpkgs.lib.filterAttrs (
             _: package: nixpkgs.lib.meta.availableOn pkgs.stdenv.hostPlatform package
           ) localPackageSet;

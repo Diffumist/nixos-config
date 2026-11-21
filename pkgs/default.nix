@@ -4,15 +4,10 @@
 }:
 
 let
-  packageDirs = lib.filterAttrs (name: ty: ty == "directory" && name != "_sources") (
-    builtins.readDir pkgsDir
-  );
+  packageDirs = lib.filterAttrs (_: ty: ty == "directory") (builtins.readDir pkgsDir);
   packageNames = lib.attrNames packageDirs;
   updateablePackageNames = [
     "apple-emoji-font"
-    "bub"
-    "caddy-cloudflare"
-    "caddy-dns-cloudflare"
     "cloudflare-ip-ranges"
     "cybergroupmate"
     "flyline"
@@ -27,7 +22,5 @@ in
 {
   inherit packageNames updateablePackageNames;
 
-  fromPkgs =
-    pkgs: inputs:
-    lib.genAttrs packageNames (name: pkgs.callPackage (pkgsDir + "/${name}") { inherit inputs; });
+  fromPkgs = pkgs: lib.genAttrs packageNames (name: pkgs.callPackage (pkgsDir + "/${name}") { });
 }

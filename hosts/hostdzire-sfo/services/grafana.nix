@@ -99,16 +99,7 @@ in
     };
   };
 
-  my.services.postgresql.enable = true;
-  services.postgresql = {
-    ensureDatabases = [ "grafana" ];
-    ensureUsers = [
-      {
-        name = "grafana";
-        ensureDBOwnership = true;
-      }
-    ];
-  };
+  my.services.postgresql.ensureLocalDatabases = [ "grafana" ];
 
   systemd.services.grafana = {
     requires = [
@@ -128,36 +119,42 @@ in
         useCloudflareACME = true;
         oauth2ForwardAuth = "oauth.diffumist.dev";
       };
-      ${metricsDomain}.useCloudflareACME = true;
+      ${metricsDomain} = {
+        useCloudflareACME = true;
+        fail2ban = {
+          enable = true;
+          name = "metrics-caddy";
+          methods = [ "POST" ];
+          uriRegex = "/api/v1/write";
+          statuses = [ 401 ];
+          maxretry = 5;
+        };
+      };
     };
   };
   services.caddy = {
     environmentFile = config.sops.templates."caddy-victoriametrics.env".path;
     virtualHosts = {
-      ${grafanaDomain} = {
-        extraConfig = ''
-          reverse_proxy 127.0.0.1:${toString grafanaPort}
-        '';
-      };
-      ${metricsDomain} = {
-        extraConfig = ''
-          route {
-            @remoteWrite {
-              method POST
-              path /api/v1/write
-            }
-
-            handle @remoteWrite {
-              basic_auth {
-                vmagent {$VICTORIAMETRICS_write_passwd_hash}
-              }
-              reverse_proxy 127.0.0.1:${toString victoriametricsPort}
-            }
-
-            respond 404
+      ${grafanaDomain}.extraConfig = ''
+        reverse_proxy 127.0.0.1:${toString grafanaPort}
+      '';
+      ${metricsDomain}.extraConfig = ''
+        route {
+          @remoteWrite {
+            method POST
+            path /api/v1/write
           }
-        '';
-      };
+
+          handle @remoteWrite {
+            basic_auth {
+              vmagent {$VICTORIAMETRICS_write_passwd_hash}
+            }
+            reverse_proxy 127.0.0.1:${toString victoriametricsPort}
+          }
+
+          respond 404
+        }
+      '';
     };
   };
 

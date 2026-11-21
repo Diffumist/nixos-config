@@ -47,6 +47,12 @@ in
     enable = true;
     virtualHosts.${domain} = {
       useCloudflareACME = true;
+      fail2ban = {
+        enable = true;
+        name = "transmission-caddy";
+        statuses = [ 401 ];
+        maxretry = 5;
+      };
     };
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''

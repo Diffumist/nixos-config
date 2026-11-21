@@ -144,16 +144,7 @@ in
     mode = "0440";
   };
 
-  my.services.postgresql.enable = true;
-  services.postgresql = {
-    ensureDatabases = [ "pdns" ];
-    ensureUsers = [
-      {
-        name = "pdns";
-        ensureDBOwnership = true;
-      }
-    ];
-  };
+  my.services.postgresql.ensureLocalDatabases = [ dbName ];
 
   systemd.services.pdns-init-db = {
     description = "Bootstrap PowerDNS PostgreSQL schema and initial zones";
@@ -212,7 +203,16 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts."zones.diffumist.me".useCloudflareACME = true;
+    virtualHosts."zones.diffumist.me" = {
+      useCloudflareACME = true;
+      fail2ban = {
+        enable = true;
+        name = "powerdns-api-caddy";
+        uriRegex = "/api/v1/[^\"?]*";
+        statuses = [ 401 ];
+        maxretry = 5;
+      };
+    };
   };
   services.caddy.virtualHosts."zones.diffumist.me" = {
     extraConfig = ''

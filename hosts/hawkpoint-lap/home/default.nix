@@ -1,7 +1,6 @@
 {
   pkgs,
   config,
-  inputs,
   ...
 }:
 {
@@ -11,36 +10,8 @@
     ./xdgdir.nix
     ./desktop.nix
   ];
-  sops.age.sshKeyPaths = [ "/persist/etc/ssh/ssh_host_ed25519_key" ];
   # services
-  # systemd.user.services.cli-proxy-api = {
-  #   Unit = {
-  #     Description = "CLIProxyAPI Service";
-  #     After = [ "network-online.target" ];
-  #     Wants = [ "network-online.target" ];
-  #   };
-  #   Service = {
-  #     Type = "simple";
-  #     ExecStart = "${pkgs.llm-agents.cli-proxy-api}/bin/cli-proxy-api --config %h/.local/share/cli-proxy-api/config.yaml";
-  #     Restart = "on-failure";
-  #     RestartSec = 5;
-  #   };
-  #   Install = {
-  #     WantedBy = [ "default.target" ];
-  #   };
-  # };
-  systemd.user.services.bluetooth-mpris-proxy = {
-    Unit = {
-      Description = "MPRIS controlling proxy for bluetooth connections";
-      After = [ "sound.target" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.bluez}/bin/mpris-proxy";
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
-  };
+  services.mpris-proxy.enable = true;
   systemd.user.services.aria2 = {
     Unit = {
       Description = "Aria2 daemon";
@@ -94,110 +65,108 @@
       ];
     };
   };
-  home.packages =
-    with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
-    with pkgs;
-    [
-      # CLI
-      fff
-      mosh
-      sing-box
-      nix-alien
-      microfetch
-      bubblewrap
-      steam-run
-      android-tools
-      (pkgs.writeShellApplication {
-        name = "umbriel-single-monitor";
-        runtimeInputs = [ config.programs.umbriel.package ];
-        text = ''
-          output="eDP-1"
-          # shellcheck disable=SC2329
-          restore_output() {
-            env -u LD_LIBRARY_PATH -u LD_PRELOAD umbriel msg output-enable "$output" >/dev/null 2>&1 || true
-          }
-          trap restore_output EXIT HUP INT TERM
-          env -u LD_LIBRARY_PATH -u LD_PRELOAD umbriel msg output-disable "$output"
-          if "$@"; then
-            status=0
-          else
-            status=$?
-          fi
-          exit "$status"
-        '';
-      })
-      (pkgs.writeShellApplication {
-        name = "game-force-1440p";
-        runtimeInputs = [
-          pkgs.coreutils
-          pkgs.wlr-randr
-        ];
-        text = ''
-          output="HDMI-A-1"
+  home.packages = with pkgs; [
+    # CLI
+    fff
+    mosh
+    sing-box
+    nix-alien
+    steam-run
+    mitmproxy
+    microfetch
+    bubblewrap
+    android-tools
+    (pkgs.writeShellApplication {
+      name = "umbriel-single-monitor";
+      runtimeInputs = [ config.programs.umbriel.package ];
+      text = ''
+        output="eDP-1"
+        # shellcheck disable=SC2329
+        restore_output() {
+          env -u LD_LIBRARY_PATH -u LD_PRELOAD umbriel msg output-enable "$output" >/dev/null 2>&1 || true
+        }
+        trap restore_output EXIT HUP INT TERM
+        env -u LD_LIBRARY_PATH -u LD_PRELOAD umbriel msg output-disable "$output"
+        if "$@"; then
+          status=0
+        else
+          status=$?
+        fi
+        exit "$status"
+      '';
+    })
+    (pkgs.writeShellApplication {
+      name = "game-force-1440p";
+      runtimeInputs = [
+        pkgs.coreutils
+        pkgs.wlr-randr
+      ];
+      text = ''
+        output="HDMI-A-1"
 
-          set_output() {
-            env -u LD_LIBRARY_PATH -u LD_PRELOAD wlr-randr --output "$output" "$@"
-          }
+        set_output() {
+          env -u LD_LIBRARY_PATH -u LD_PRELOAD wlr-randr --output "$output" "$@"
+        }
 
-          # shellcheck disable=SC2329
-          restore_output() {
-            set_output --mode "3840x2160@59.997Hz" --scale 1.5 >/dev/null 2>&1 || true
-          }
+        # shellcheck disable=SC2329
+        restore_output() {
+          set_output --mode "3840x2160@59.997Hz" --scale 1.5 >/dev/null 2>&1 || true
+        }
 
-          trap restore_output EXIT HUP INT TERM
-          set_output --mode "2560x1440@59.951Hz" --scale 1
+        trap restore_output EXIT HUP INT TERM
+        set_output --mode "2560x1440@59.951Hz" --scale 1
 
-          if "$@"; then
-            status=0
-          else
-            status=$?
-          fi
-          exit "$status"
-        '';
-      })
-      # mcp
-      # mcp-nixos
-      playwright
-      context7-mcp
-      playwright-mcp
-      github-mcp-server
-      llm-agents.agent-browser
-      # TUI
-      devin-cli
-      llm-agents.rtk
-      llm-agents.codex
-      llm-agents.pi
-      llm-agents.herdr
-      llm-agents.crush
-      llm-agents.opencode2
-      llm-agents.codex-auth
-      llm-agents.antigravity-cli
-      # GUI
-      qq
-      wu
-      pods
-      tuba
-      papers
-      gitte
-      magpie
-      wemeet
-      azahar
-      vesktop
-      gapless
-      clapper
-      fractal
-      rimsort
-      ryubing
-      localsend
-      fragments
-      apostrophe
-      typesetter
-      distroshelf
-      thunderbird
-      field-monitor
-      ayugram-desktop
-      netease-cloud-music-gtk
-    ];
+        if "$@"; then
+          status=0
+        else
+          status=$?
+        fi
+        exit "$status"
+      '';
+    })
+    # mcp
+    mcp-nixos
+    playwright
+    context7-mcp
+    playwright-mcp
+    github-mcp-server
+    llm-agents.agent-browser
+    # TUI
+    devin-cli
+    agy-acp-server
+    llm-agents.pi
+    llm-agents.rtk
+    llm-agents.codex
+    llm-agents.herdr
+    llm-agents.crush
+    llm-agents.opencode2
+    llm-agents.codex-auth
+    llm-agents.t3code-desktop
+    llm-agents.antigravity-cli
+    # GUI
+    qq
+    wu
+    pods
+    tuba
+    gitte
+    papers
+    magpie
+    wemeet
+    azahar
+    vesktop
+    gapless
+    clapper
+    fractal
+    rimsort
+    localsend
+    fragments
+    apostrophe
+    typesetter
+    thunderbird
+    field-monitor
+    ayugram-desktop
+    netease-cloud-music-gtk
+  ];
   home.shell.enableFishIntegration = true;
   home.shell.enableBashIntegration = true;
   home.preferXdgDirectories = true;

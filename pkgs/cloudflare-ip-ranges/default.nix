@@ -13,6 +13,16 @@
 
 let
   metadata = builtins.fromJSON (builtins.readFile ./ips.json);
+  validateIpsJq = ''
+    .success == true
+    and (.result.ipv4_cidrs | length) > 0
+    and (.result.ipv6_cidrs | length) > 0
+    and (.result.etag | type == "string" and length > 0)
+    and all(
+      (.result.ipv4_cidrs + .result.ipv6_cidrs)[];
+      type == "string" and length > 0
+    )
+  '';
   updateScript = writeShellApplication {
     name = "update-cloudflare-ip-ranges";
     runtimeInputs = [
@@ -35,16 +45,7 @@ let
         https://api.cloudflare.com/client/v4/ips \
         --output "$raw"
 
-      jq -e '
-        .success == true
-        and (.result.ipv4_cidrs | length) > 0
-        and (.result.ipv6_cidrs | length) > 0
-        and (.result.etag | type == "string" and length > 0)
-        and all(
-          (.result.ipv4_cidrs + .result.ipv6_cidrs)[];
-          type == "string" and length > 0
-        )
-      ' "$raw" >/dev/null
+      jq -e ${lib.escapeShellArg validateIpsJq} "$raw" >/dev/null
       jq . "$raw" > "$candidate"
 
       if cmp --silent "$candidate" "$target"; then
@@ -58,7 +59,7 @@ let
     '';
   };
 in
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "cloudflare-ip-ranges";
   version = "etag-${builtins.substring 0 12 metadata.result.etag}";
 
@@ -73,15 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    jq -e '
-      .success == true
-      and (.result.ipv4_cidrs | length) > 0
-      and (.result.ipv6_cidrs | length) > 0
-      and all(
-        (.result.ipv4_cidrs + .result.ipv6_cidrs)[];
-        type == "string" and length > 0
-      )
-    ' "$src" >/dev/null
+    jq -e ${lib.escapeShellArg validateIpsJq} "$src" >/dev/null
 
     install -Dm644 "$src" "$out/share/cloudflare-ip-ranges/ips.json"
     jq -r '.result.ipv4_cidrs[]' "$src" \
@@ -141,4 +134,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.cloudflare.com/ips/";
     platforms = lib.platforms.all;
   };
-})
+}

@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   my.hardware.ephemeralBtrfs = {
     device = "/dev/vda";
     swapSize = "512M";
@@ -20,7 +13,6 @@
     };
   };
 
-  virtualisation.podman.enable = false;
   services.fail2ban.enable = false;
 
   my.services.mihomo-server = {

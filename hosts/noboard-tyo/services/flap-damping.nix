@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ config, ... }:
 let
   domain = "flap-dn42.diffumist.me";
   flapalertedAddress = config.my.services.dn42.flapDamping.serverAddress;

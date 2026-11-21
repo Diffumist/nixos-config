@@ -1,11 +1,4 @@
 {
-  pkgs,
-  config,
-  inputs,
-  self,
-  ...
-}:
-{
   my.hardware.ephemeralBtrfs = {
     device = "/dev/sda";
     firmware = "uefi";
