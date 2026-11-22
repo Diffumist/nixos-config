@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795345314,
-        "narHash": "sha256-KX+cxd59X5GDgOpiSsonY81tfnIO5xl+iDsrjFvUULg=",
+        "lastModified": 1795355930,
+        "narHash": "sha256-zbNhe6iqoIzwFgtHGjDOXCcWlhd+YDnougjbev5HqzU=",
         "ref": "refs/heads/main",
-        "rev": "36784f60e089d3077fed5dcd34c70fa6bdb9fb03",
-        "revCount": 1,
+        "rev": "11619da49093e477c27753e787afc32101c17da7",
+        "revCount": 5,
         "type": "git",
         "url": "https://git.418.cat/DiftLab/autopeer.git"
       },
@@ -409,11 +409,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1795273404,
-        "narHash": "sha256-mO7g3jcvhwAq9aUsSf4FUq+tHkoWO0pga93HsyZYQjs=",
+        "lastModified": 1795352235,
+        "narHash": "sha256-eVCJhEmNpIeDMMd8pqwwg0KPMEwyTJ6K1y6oxTNGrZI=",
         "owner": "GunduLabs",
         "repo": "gaze",
-        "rev": "d0e4622ce9b4ff6967a9a69bc50ed3601fc6976f",
+        "rev": "7201ab4a18f32ecf9dfa17537b11194ab6da5a79",
         "type": "github"
       },
       "original": {
@@ -512,11 +512,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1795341226,
-        "narHash": "sha256-5KruClwP+Sseafmf4xFksKJA1eYajegMkAbTHIcv2CY=",
+        "lastModified": 1795355689,
+        "narHash": "sha256-RPjEcxvqjtbqVbyIHviPV8IDiMnMitu0VlowFnd8pXw=",
         "owner": "numtide",
         "repo": "llm-agents.nix",
-        "rev": "3ba11af458c6b66a83447bc6bf6fe180b237d0da",
+        "rev": "63d305102e15a499ae19e54cbbff715382590a1c",
         "type": "github"
       },
       "original": {
@@ -1292,11 +1292,11 @@
         "xdg-desktop-portal-umbriel": "xdg-desktop-portal-umbriel"
       },
       "locked": {
-        "lastModified": 1795331569,
-        "narHash": "sha256-FeMGxm+UQeP1mP3ACrVgfeniwe3Sr+le3C2/3ay/8+g=",
+        "lastModified": 1795354583,
+        "narHash": "sha256-MHZD1a1+JmIH8tD6Rb6Ok5nkbAoq9jYmPb0CBprJEAM=",
         "owner": "noctalia-dev",
         "repo": "umbriel",
-        "rev": "1b2f89fa3791cef47a7266087e5ae144171ae2c8",
+        "rev": "b8f1828e0860aa2625aa748b3aff89f7be3f3cd9",
         "type": "github"
       },
       "original": {

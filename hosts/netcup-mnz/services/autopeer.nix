@@ -18,6 +18,7 @@ in
   sops.secrets = {
     autopeer_cookie_secret = { };
     autopeer_forgejo_token = { };
+    autopeer_hook_token = { };
     autopeer_agent_token.sopsFile = ../../../profiles/common/secrets/server.yaml;
   };
 
@@ -48,6 +49,7 @@ in
     secretFile = config.sops.secrets.autopeer_cookie_secret.path;
     agentTokenFile = config.sops.secrets.autopeer_agent_token.path;
     forgejoTokenFile = config.sops.secrets.autopeer_forgejo_token.path;
+    hookTokenFile = config.sops.secrets.autopeer_hook_token.path;
   };
 
   my.systemd.harden = [ "autopeer-web" ];
