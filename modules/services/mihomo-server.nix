@@ -101,6 +101,8 @@ in
       processesInfo = false;
     };
 
+    my.systemd.harden = [ "mihomo" ];
+
     systemd.services.mihomo = {
       wants = [ acmeService ];
       after = [ acmeService ];

@@ -146,6 +146,7 @@
     # GUI
     qq
     wu
+    winc
     pods
     tuba
     gitte

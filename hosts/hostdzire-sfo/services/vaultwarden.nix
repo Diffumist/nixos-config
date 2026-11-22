@@ -21,7 +21,14 @@
 
   my.services.postgresql.ensureLocalDatabases = [ "vaultwarden" ];
 
+  my.systemd.harden = [ "vaultwarden" ];
   systemd.services.vaultwarden = {
+    confinement = {
+      enable = true;
+      # EnvironmentFile references the webVault package in the Nix store.
+      fullUnit = true;
+    };
+    serviceConfig.BindPaths = [ "/run/postgresql" ];
     requires = [ "postgresql.service" ];
     after = [ "postgresql.service" ];
   };

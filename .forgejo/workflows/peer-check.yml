@@ -1,0 +1,92 @@
+name: Check a DN42 peer request
+
+# Autopeer opens a pull request for every peer it brings up, changes or
+# removes. This evaluates the node the peer is on with the request applied
+# and tells Bark the outcome: something to merge, or a request whose check
+# failed and needs a look.
+on:
+  pull_request:
+    types: [opened, reopened]
+
+env:
+  BARK_URL: https://bark.diffumist.me
+  NIX_CONFIG: |
+    experimental-features = nix-command flakes
+    accept-flake-config = true
+
+jobs:
+  check:
+    # Autopeer's requests are branches of this repo named autopeer/<node>/<peer>/<time>.
+    if: startsWith(forge.head_ref, 'autopeer/') && forge.event.pull_request.head.repo.full_name == forge.repository
+    runs-on: nix
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Install action runtime and clients
+        run: |
+          set -euo pipefail
+          nix profile add nixpkgs#nodejs_24 nixpkgs#curl nixpkgs#jq
+          # Why: JavaScript actions need the profile's Node runtime in later steps.
+          echo "$HOME/.nix-profile/bin" >> "$FORGEJO_PATH"
+
+      - name: Checkout the request
+        uses: https://data.forgejo.org/actions/checkout@v6.0.2
+        with:
+          ref: ${{ forge.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      # No secret is in reach of this step: it evaluates what the request brings.
+      - name: Evaluate the node
+        run: |
+          set -euo pipefail
+          # Left by an earlier run if the runner keeps its temp directory.
+          rm -f "$RUNNER_TEMP/peer-host"
+          # The node's directory, which is the first label of its endpoint.
+          label="$(cut -d/ -f2 <<<"$FORGEJO_HEAD_REF")"
+          host="$(
+            nix eval --json --file profiles/common/services/dn42-nodes.nix \
+              | jq -r --arg label "$label" '.[] | select(.endpoint | startswith($label + ".")) | .hostName'
+          )"
+          if [[ -z "$host" ]]; then
+            echo "::error::No DN42 node has the directory $label."
+            exit 1
+          fi
+          echo "Evaluate $host"
+          nix eval --raw ".#nixosConfigurations.$host.config.system.build.toplevel.drvPath"
+          echo "$host" > "$RUNNER_TEMP/peer-host"
+
+      - name: Tell Bark
+        # Also when a step above failed: a request nobody hears of is worse than a failed one.
+        if: always()
+        env:
+          BARK_DEVICE_KEY: ${{ secrets.BARK_DEVICE_KEY }}
+          TITLE: ${{ forge.event.pull_request.title }}
+          URL: ${{ forge.event.pull_request.html_url }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$BARK_DEVICE_KEY" ]]; then
+            echo "BARK_DEVICE_KEY must be configured as a Forgejo Actions secret." >&2
+            exit 1
+          fi
+
+          # The evaluation leaves the host's name behind only when it went through.
+          title="DN42 peer request failed its check: ${TITLE#autopeer: }"
+          body="See the check on the pull request."
+          if [[ -f "$RUNNER_TEMP/peer-host" ]]; then
+            title="DN42 peer request: ${TITLE#autopeer: }"
+            body="$(cat "$RUNNER_TEMP/peer-host") evaluates with it. Merge and deploy."
+          fi
+
+          jq -n \
+            --arg key "$BARK_DEVICE_KEY" \
+            --arg title "$title" \
+            --arg body "$body" \
+            --arg url "$URL" \
+            '{device_key: $key, title: $title, body: $body, url: $url, group: "dn42"}' \
+            | curl --fail --silent --show-error \
+              -H "Content-Type: application/json" \
+              --data @- \
+              "$BARK_URL/push" > /dev/null
+          echo "Told Bark."

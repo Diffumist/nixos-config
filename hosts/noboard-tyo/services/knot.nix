@@ -89,6 +89,8 @@ in
     };
   };
 
+  my.systemd.harden = [ "knot" ];
+
   networking.firewall.allowedTCPPorts = [ dnsPort ];
   networking.firewall.allowedUDPPorts = [ dnsPort ];
 

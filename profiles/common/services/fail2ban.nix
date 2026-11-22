@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ config, lib, ... }:
 {
   services.fail2ban = {
     enable = lib.mkDefault true;
@@ -15,5 +15,21 @@
       overalljails = true;
     };
     jails.sshd.settings.enabled = false;
+  };
+
+  my.systemd.harden = lib.mkIf config.services.fail2ban.enable [ "fail2ban" ];
+  systemd.services = lib.mkIf config.services.fail2ban.enable {
+    fail2ban.serviceConfig = {
+      RestrictAddressFamilies = [
+        "AF_UNIX"
+        "AF_INET"
+        "AF_INET6"
+        "AF_NETLINK"
+      ];
+      SystemCallFilter = [
+        "@system-service"
+        "~@clock @cpu-emulation @debug @module @mount @obsolete @raw-io @reboot @swap"
+      ];
+    };
   };
 }

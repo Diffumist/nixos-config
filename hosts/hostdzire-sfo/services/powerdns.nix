@@ -190,9 +190,21 @@ in
     '';
   };
 
+  my.systemd.harden = [ "pdns" ];
+
   systemd.services.pdns = {
     requires = postgresqlUnits ++ [ "pdns-init-db.service" ];
     after = postgresqlUnits ++ [ "pdns-init-db.service" ];
+    serviceConfig = {
+      AmbientCapabilities = [
+        ""
+        "CAP_NET_BIND_SERVICE"
+      ];
+      CapabilityBoundingSet = [
+        ""
+        "CAP_NET_BIND_SERVICE"
+      ];
+    };
   };
 
   services.powerdns = {

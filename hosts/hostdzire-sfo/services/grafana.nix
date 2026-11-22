@@ -101,6 +101,13 @@ in
 
   my.services.postgresql.ensureLocalDatabases = [ "grafana" ];
 
+  my.systemd.harden = [
+    "grafana"
+    "victoriametrics"
+  ];
+  # VictoriaMetrics reads /proc/meminfo to compute memory.allowedPercent.
+  systemd.services.victoriametrics.serviceConfig.ProcSubset = "all";
+
   systemd.services.grafana = {
     requires = [
       "postgresql.service"

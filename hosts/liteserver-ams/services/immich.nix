@@ -11,6 +11,17 @@
 
   my.services.postgresql.ensureLocalDatabases = [ "immich" ];
 
+  my.systemd.harden = [
+    "immich-server"
+    "redis-immich"
+  ];
+  systemd.services.immich-server.serviceConfig = {
+    # Immich runs on Node.js (V8 JIT requires W+X mappings) and reads /proc for CPU topology.
+    MemoryDenyWriteExecute = false;
+    ProcSubset = "all";
+    ReadWritePaths = [ config.services.immich.mediaLocation ];
+  };
+
   systemd.tmpfiles.rules = [
     "d /persist/var/storage/immich 0700 immich immich -"
   ];

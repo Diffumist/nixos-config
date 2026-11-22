@@ -68,6 +68,10 @@
       url = "git+https://git.418.cat/DiftFork/registry.git";
       flake = false;
     };
+    autopeer = {
+      url = "git+https://git.418.cat/DiftLab/autopeer.git";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

@@ -18,11 +18,7 @@ let
       }
     )
     ++ lib.optionals (hasRole "desktop" host) [
-      (
-        final: prev:
-        # Keep nixpkgs QQ: the NUR override uses an obsolete download URL.
-        builtins.removeAttrs (inputs.nur-xddxdd.overlays.default final prev) [ "qq" ]
-      )
+      inputs.nur-xddxdd.overlays.default
       inputs.nix-alien.overlays.default
       inputs.nix-cachyos-kernel.overlays.pinned
       inputs.nix-vscode-extensions.overlays.default
@@ -50,6 +46,8 @@ let
     inputs.disko.nixosModules.disko
     inputs.sops-nix.nixosModules.sops
     inputs.preservation.nixosModules.preservation
+    inputs.autopeer.nixosModules.default
+    inputs.nix-dn42.nixosModules.default
   ];
 
   allowedHostFields = [

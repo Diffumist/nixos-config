@@ -159,9 +159,39 @@ in
       };
     };
 
-    systemd.services.sing-box.serviceConfig.ExecStartPre = lib.mkAfter [
-      "${lib.getExe config.services.sing-box.package} -D \${STATE_DIRECTORY} -c \${RUNTIME_DIRECTORY}/config.json check"
-    ];
+    my.systemd.harden = [ "sing-box" ];
+    systemd.services.sing-box.confinement = {
+      enable = true;
+      # Upstream ExecStartPre script runs jq and chown from unit PATH inside the chroot.
+      fullUnit = true;
+    };
+
+    systemd.services.sing-box.serviceConfig = {
+      # Keep host user namespace so CAP_NET_BIND_SERVICE works on port 443.
+      PrivateUsers = false;
+      BindReadOnlyPaths = [
+        config.sops.secrets.cloudflare_api_token.path
+        config.sops.secrets.singbox_passwd.path
+      ];
+      # Reset upstream unit capabilities (which include CAP_SYS_PTRACE and CAP_DAC_READ_SEARCH)
+      # and keep only CAP_NET_BIND_SERVICE for binding port 443.
+      AmbientCapabilities = [
+        ""
+        "CAP_NET_BIND_SERVICE"
+      ];
+      CapabilityBoundingSet = [
+        ""
+        "CAP_NET_BIND_SERVICE"
+      ];
+      # Confinement adds RuntimeDirectory=confinement/%n, turning $RUNTIME_DIRECTORY into a colon-separated list.
+      ExecStart = lib.mkForce [
+        ""
+        "${lib.getExe config.services.sing-box.package} -D /var/lib/sing-box -C /run/sing-box run"
+      ];
+      ExecStartPre = lib.mkAfter [
+        "${lib.getExe config.services.sing-box.package} -D /var/lib/sing-box -c /run/sing-box/config.json check"
+      ];
+    };
 
     networking.firewall = {
       allowedTCPPorts = [ cfg.port ];

@@ -145,6 +145,8 @@ in
     };
   };
 
+  my.systemd.harden = [ "asterisk" ];
+
   systemd.services.asterisk = {
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
@@ -152,6 +154,24 @@ in
       install -d -m755 /var/lib/asterisk/agi-bin
       ln -sfn ${pkgs.tel42verifier}/bin/tel42verifier /var/lib/asterisk/agi-bin/tel42verifier
     '';
+    serviceConfig = {
+      # Upstream Asterisk preStart initializes /var/{lib,spool,log}/asterisk as root
+      # and drops privileges via `-U asterisk`.
+      ProtectSystem = "full";
+      CapabilityBoundingSet = [
+        "CAP_CHOWN"
+        "CAP_DAC_OVERRIDE"
+        "CAP_FOWNER"
+        "CAP_SETGID"
+        "CAP_SETUID"
+      ];
+      SystemCallFilter = [
+        "@system-service"
+        "@setuid"
+        "@chown"
+        "~@clock @cpu-emulation @debug @module @mount @obsolete @raw-io @reboot @swap"
+      ];
+    };
   };
 
   my.networking.usedUDPPorts = {

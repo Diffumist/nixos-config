@@ -72,6 +72,7 @@ in
   };
 
   systemd.services.oauth2-proxy = helpers.systemd.mkService {
+    confinement.enable = true;
     requires = [ "pocket-id.service" ];
     after = [ "pocket-id.service" ];
   };

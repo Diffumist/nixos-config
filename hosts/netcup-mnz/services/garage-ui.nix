@@ -80,6 +80,7 @@ in
   };
 
   systemd.services.garage-ui = helpers.systemd.mkService {
+    confinement.enable = true;
     description = "Garage web administration interface";
     wantedBy = [ "multi-user.target" ];
     wants = [ "network-online.target" ];
@@ -94,6 +95,11 @@ in
       GARAGE_UI_AUTH_JWT_PRIVATE_KEY_FILE = config.sops.secrets."garage-ui/jwt_private_key".path;
     };
     serviceConfig = {
+      BindReadOnlyPaths = [
+        config.sops.secrets."garage-ui/admin_token".path
+        config.sops.secrets."garage-ui/oidc_client_secret".path
+        config.sops.secrets."garage-ui/jwt_private_key".path
+      ];
       ExecStart = "${lib.getExe pkgs.garage-ui} -config ${settings}";
       Restart = "on-failure";
       RestartSec = "5s";

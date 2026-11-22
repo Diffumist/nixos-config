@@ -15,6 +15,7 @@
     ../common/services/sshd.nix
     (modulesPath + "/profiles/qemu-guest.nix")
     "${self}/modules/system/nixos-init.nix"
+    "${self}/modules/system/service-harden.nix"
     "${self}/modules/system/sops.nix"
   ];
 

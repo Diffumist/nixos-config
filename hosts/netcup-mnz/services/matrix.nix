@@ -29,6 +29,19 @@ in
     };
   };
 
+  my.systemd.harden = [ "tuwunel" ];
+  systemd.services.tuwunel = {
+    confinement = {
+      enable = true;
+      # TUWUNEL_CONFIG is passed via Environment rather than ExecStart.
+      fullUnit = true;
+    };
+    serviceConfig.BindReadOnlyPaths = [
+      config.sops.secrets.tuwunel_registration_token.path
+      config.sops.secrets.tuwunel_oidc_secret.path
+    ];
+  };
+
   my.services.caddy = {
     enable = true;
     virtualHosts.${domain} = {

@@ -9,6 +9,8 @@ in
 {
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB5+ekQWrbKupUzdeLcawo2BxqmW8MDLpocNpUBVItle noname"
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIBSwGHK8dmP7yEwMXii9Vt3PZB9QPGbjLlz1uZHN+li7AAAACHNzaDptYWlu yubikey-sk"
+    "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIFnfaOqfH26Xn1Cx8rMCgJDAP279r5NKtiGHFp7v3ylQAAAACHNzaDptYWlu canokey-sk"
   ];
   networking = {
     firewall = {

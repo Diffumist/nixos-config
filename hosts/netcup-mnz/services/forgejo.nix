@@ -8,7 +8,9 @@ let
   domain = "git.418.cat";
   port = 3000;
   runnerService = "forgejo-runner.service";
-  runnerStateDirectory = "/var/lib/forgejo-runner";
+  runnerUid = 950;
+  runnerHome = "/var/lib/forgejo-runner-rootless";
+  runnerPodmanSocket = "/run/user/${toString runnerUid}/podman/podman.sock";
   runnerConfig = (pkgs.formats.yaml { }).generate "forgejo-runner.yaml" {
     log.level = "info";
     runner = {
@@ -46,6 +48,18 @@ in
   users.users.forgejo.uid = 998;
   users.groups.forgejo.gid = 997;
 
+  # Dedicated unprivileged user for rootless Podman so forgejo-runner never touches host rootful podman.sock.
+  users.groups.forgejo-runner.gid = runnerUid;
+  users.users.forgejo-runner = {
+    uid = runnerUid;
+    isSystemUser = true;
+    group = "forgejo-runner";
+    home = runnerHome;
+    createHome = true;
+    linger = true;
+    autoSubUidGidRange = true;
+  };
+
   services.forgejo = {
     enable = true;
     database = {
@@ -70,27 +84,42 @@ in
 
   environment.systemPackages = [ config.services.forgejo.package ];
 
+  my.systemd.harden = [
+    "forgejo"
+    "forgejo-runner"
+  ];
+
   systemd.services.forgejo-runner = {
     description = "Forgejo Actions runner";
     wantedBy = [ "multi-user.target" ];
-    wants = [ "network-online.target" ];
+    wants = [
+      "network-online.target"
+      "linger-users.service"
+      "user@${toString runnerUid}.service"
+    ];
     after = [
       "network-online.target"
-      "podman.service"
+      "linger-users.service"
+      "user@${toString runnerUid}.service"
     ];
     environment = {
-      DOCKER_HOST = "unix:///run/podman/podman.sock";
-      HOME = runnerStateDirectory;
+      DOCKER_HOST = "unix://${runnerPodmanSocket}";
+      HOME = runnerHome;
     };
     path = [ pkgs.coreutils ];
     serviceConfig = {
-      DynamicUser = true;
       User = "forgejo-runner";
-      StateDirectory = "forgejo-runner";
-      WorkingDirectory = runnerStateDirectory;
+      Group = "forgejo-runner";
+      WorkingDirectory = runnerHome;
+      ReadWritePaths = [ runnerHome ];
+      # ProtectHome=true hides /run/user, which blocks access to the rootless Podman user socket.
+      ProtectHome = false;
+      InaccessiblePaths = [
+        "/home"
+        "/root"
+      ];
       ExecStart = "${pkgs.forgejo-runner}/bin/forgejo-runner daemon --config ${runnerConfig}";
       LoadCredential = [ "forgejo-token:${config.sops.secrets.forgejo_runner_token.path}" ];
-      SupplementaryGroups = [ "podman" ];
       Restart = "on-failure";
       RestartSec = "2s";
       UMask = "0077";

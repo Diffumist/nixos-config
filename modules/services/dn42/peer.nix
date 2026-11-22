@@ -146,6 +146,19 @@ let
 in
 {
   options = {
+    # What the Bird side of a peer is made of, for whatever else brings up
+    # peers (the autopeer agent's runtime ones), so they cannot drift from
+    # the declared ones.
+    my.services.dn42.peerBird = lib.mkOption {
+      internal = true;
+      readOnly = true;
+      type = lib.types.raw;
+      default = {
+        filters = birdFilters;
+        protocol = mkBird;
+      };
+    };
+
     my.services.dn42.peers = lib.mkOption {
       default = { };
       description = ''

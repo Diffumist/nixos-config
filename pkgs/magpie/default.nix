@@ -34,7 +34,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "magpie";
-  version = "0.1.4592";
+  version = "0.1.4667";
 
   src = fetchurl {
     url = "https://github.com/yetone/magpie-releases/releases/download/v${finalAttrs.version}/magpie-linux-${
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }";
     hash =
       {
-        x86_64-linux = "sha256-YEW/1LPbx+ryQy1xXO82mtUX9prBfzeEJ7bcSs+MJ8U=";
+        x86_64-linux = "sha256-LYGv9uDdpxmN3kF5asSxWnABWi7YovSnBZIL/jxJ/B4=";
         aarch64-linux = "sha256-F0RYbDk4hsZ8JhW1uvXNukZj6F1YP9F1nZY0XEpTZPk=";
       }
       .${stdenvNoCC.hostPlatform.system};

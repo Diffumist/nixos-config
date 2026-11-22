@@ -368,6 +368,17 @@ in
         ];
       };
 
+      my.systemd.harden = [
+        "bird"
+        "bird-lg-proxy"
+      ];
+      systemd.services.bird.serviceConfig.RestrictAddressFamilies = [
+        "AF_UNIX"
+        "AF_INET"
+        "AF_INET6"
+        "AF_NETLINK"
+      ];
+
       systemd.services.frr.enable = lib.mkForce false;
 
       security.pki.certificateFiles = [

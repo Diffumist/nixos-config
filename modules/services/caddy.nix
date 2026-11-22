@@ -183,8 +183,29 @@ in
       };
     }) cloudflareACMEHosts;
 
-    systemd.services.caddy.serviceConfig.EnvironmentFile =
-      config.sops.templates."caddy-cloudflare.env".path;
+    my.systemd.harden = [ "caddy" ];
+    systemd.services.caddy.confinement.enable = true;
+
+    systemd.services.caddy.serviceConfig = {
+      # Keep host user namespace so CAP_NET_BIND_SERVICE works on ports 80/443.
+      PrivateUsers = false;
+      # The whole store, not the config's closure: a closure would change the
+      # unit on every Caddyfile edit and turn each reload into a restart.
+      BindReadOnlyPaths = [
+        "/nix/store"
+        "/etc/caddy/caddy_config"
+        "-/var/lib/acme"
+      ];
+      EnvironmentFile = config.sops.templates."caddy-cloudflare.env".path;
+      AmbientCapabilities = [
+        ""
+        "CAP_NET_BIND_SERVICE"
+      ];
+      CapabilityBoundingSet = [
+        ""
+        "CAP_NET_BIND_SERVICE"
+      ];
+    };
     sops.secrets.cloudflare_api_token = {
       sopsFile = ../../profiles/common/secrets/server.yaml;
     };

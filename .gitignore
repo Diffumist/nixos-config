@@ -2,5 +2,6 @@ result*
 result-*
 .direnv/
 .deploy-gc
+.claude/
 .pre-commit-config.yaml
 pkgs/_sources/generated.json

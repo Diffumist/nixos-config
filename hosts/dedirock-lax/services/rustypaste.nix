@@ -131,6 +131,11 @@ in
   ];
 
   systemd.services.rustypaste = helpers.systemd.mkService {
+    confinement = {
+      enable = true;
+      # CONFIG points to the generated TOML file via Environment.
+      fullUnit = true;
+    };
     description = "rustypaste file upload service";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
@@ -139,6 +144,7 @@ in
       RUST_LOG = "info";
     };
     serviceConfig = {
+      BindPaths = [ uploadPath ];
       ExecStart = "${pkgs.rustypaste}/bin/rustypaste";
       User = "rustypaste";
       Group = "rustypaste";

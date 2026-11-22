@@ -68,6 +68,12 @@ in
       };
     };
 
+    my.systemd.harden = [ "garage" ];
+    systemd.services.garage = {
+      confinement.enable = true;
+      serviceConfig.BindReadOnlyPaths = [ "/etc/garage.toml" ];
+    };
+
     environment.systemPackages = [ config.services.garage.package ];
 
     my.services.caddy = lib.mkIf cfg.exposeS3 {

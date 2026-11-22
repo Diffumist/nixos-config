@@ -30,6 +30,8 @@ in
       };
     };
 
+    my.systemd.harden = [ "komari-agent" ];
+
     systemd.services.komari-agent = {
       environment = {
         AGENT_ENDPOINT = "https://sla.qzz.io";
@@ -47,6 +49,15 @@ in
         # ICMPing
         AmbientCapabilities = [ "CAP_NET_RAW" ];
         CapabilityBoundingSet = [ "CAP_NET_RAW" ];
+        # System telemetry reads /proc metrics, process counts, and netlink interface stats.
+        ProcSubset = "all";
+        ProtectProc = "default";
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
         # Net static
         StateDirectory = "komari-agent";
         WorkingDirectory = "/var/lib/komari-agent";

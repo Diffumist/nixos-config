@@ -27,6 +27,9 @@ in
     navbar.brand = "Diffumist's DN42 LG";
   };
 
+  my.systemd.harden = [ "bird-lg-frontend" ];
+  systemd.services.bird-lg-frontend.confinement.enable = true;
+
   networking.hosts = lib.listToAttrs (
     map (node: lib.nameValuePair node.ipv4 [ "${node.shortName}.lg" ]) nodes
   );

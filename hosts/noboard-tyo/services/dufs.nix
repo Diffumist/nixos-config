@@ -20,6 +20,7 @@ in
   };
 
   systemd.services.dufs = helpers.systemd.mkService {
+    confinement.enable = true;
     description = "Dufs file server";
     wantedBy = [ "multi-user.target" ];
     after = [ "network.target" ];

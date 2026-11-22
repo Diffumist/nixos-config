@@ -81,12 +81,14 @@ in
     };
 
     systemd.services.sema = helpers.systemd.mkService {
+      confinement.enable = true;
       description = "sema dead man's switch webhook server";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       unitConfig.AssertPathExists = configFile;
       serviceConfig = {
+        BindReadOnlyPaths = lib.optional (cfg.configFile != null) (toString cfg.configFile);
         User = "sema";
         Group = "sema";
         StateDirectory = "sema";

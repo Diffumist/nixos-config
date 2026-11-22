@@ -6,11 +6,11 @@
 }:
 
 let
-  version = "Snapshot-2611192227";
+  version = "Snapshot-2611211259";
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/komari-monitor/komari/releases/download/${version}/komari-linux-amd64";
-      hash = "sha256-iuokiHUu3cw9DDTTGk76CqQYju2Vy6F6z0tWhBuYKEw=";
+      hash = "sha256-wGYPGAan5uJ/IpSS7zvexs/cKneNMytSwXFrKiMjrJw=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/komari-monitor/komari/releases/download/${version}/komari-linux-arm64";

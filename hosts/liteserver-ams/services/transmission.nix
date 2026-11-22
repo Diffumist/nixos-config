@@ -43,6 +43,8 @@ in
     };
   };
 
+  my.systemd.harden = [ "transmission" ];
+
   my.services.caddy = {
     enable = true;
     virtualHosts.${domain} = {

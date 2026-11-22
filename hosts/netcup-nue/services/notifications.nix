@@ -53,6 +53,7 @@ in
   };
 
   systemd.services.bark-server = helpers.systemd.mkService {
+    confinement.enable = true;
     description = "Bark push notification server";
     wantedBy = [ "multi-user.target" ];
     after = [ "network-online.target" ];
@@ -87,6 +88,9 @@ in
       proxy-trusted-hosts = "127.0.0.1/8,::1";
     };
   };
+
+  my.systemd.harden = [ "ntfy-sh" ];
+  systemd.services.ntfy-sh.confinement.enable = true;
 
   my.networking.usedTCPPorts = {
     bark = barkPort;

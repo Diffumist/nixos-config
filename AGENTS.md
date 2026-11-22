@@ -153,16 +153,19 @@ keep it in that host.
 ## 7. DN42
 
 DN42 is provided by `nix-dn42` plus repo modules under `modules/services/dn42`.
-The repo mesh topology lives in `profiles/common/services/dn42.nix`; external
-peer data lives in `profiles/common/services/dn42-peers.nix`.
+The repo mesh topology lives in `profiles/common/services/dn42.nix`, its nodes
+in `dn42-nodes.nix` next to it; external peers live in
+`profiles/common/services/peers/<node>/<peer>.nix`, one file each, read by
+`peers/default.nix`. `<node>` is the first label of the node's endpoint
+(`sjc-0`).
 
 - Internal mesh: `my.services.dn42` + `networking.dn42`.
 - External peers: `my.services.dn42.peers.<name>`.
 - Bird config is assembled by the DN42 modules; parse-check bird config after changes.
 - WireGuard keys come from SOPS secrets; never commit plaintext keys.
 
-Adding an external peer should usually only touch the target host's entry in
-`profiles/common/services/dn42-peers.nix`.
+Adding an external peer should usually only add one file under
+`profiles/common/services/peers/<node>/`.
 
 ## 8. Local packages
 

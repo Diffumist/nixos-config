@@ -192,6 +192,7 @@ let
           ProtectHome = true;
           ProtectSystem = "strict";
           ReadWritePaths = [ stateDir ];
+          MemoryDenyWriteExecute = false;
         };
       };
     in
@@ -428,6 +429,10 @@ in
     sops.secrets = lib.mergeAttrsList (map (instance: instance.sopsSecrets) instances);
     networking.firewall.allowedUDPPorts = lib.concatMap (instance: instance.publicPorts) instances;
     my.networking.usedUDPPorts = lib.mergeAttrsList (map (instance: instance.usedUDPPorts) instances);
+    my.systemd.harden = lib.concatMap (name: [
+      "dst-server-${name}-master"
+      "dst-server-${name}-caves"
+    ]) (builtins.attrNames cfg.instances);
     systemd.targets = lib.mergeAttrsList (map (instance: instance.targets) instances);
     systemd.services = lib.mergeAttrsList (map (instance: instance.services) instances);
   };

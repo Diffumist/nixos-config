@@ -17,9 +17,14 @@ in
     };
   };
 
+  my.systemd.harden = [ "gonic" ];
+
   systemd.services.gonic.serviceConfig = {
     CPUQuota = "100%";
     MemoryMax = "512M";
+    # Upstream gonic already runs inside RootDirectory=/run/gonic; strict ProtectSystem
+    # would make the chroot parent of db-path (/persist/var/lib/gonic) read-only.
+    ProtectSystem = false;
   };
 
   systemd.tmpfiles.rules = [

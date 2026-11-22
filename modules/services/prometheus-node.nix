@@ -56,6 +56,10 @@ in
       ];
     };
 
+    my.systemd.harden = [ "prometheus-node-exporter" ];
+    # Node exporter reads system-wide /proc files (stat, meminfo, net, diskstats, pressure).
+    systemd.services.prometheus-node-exporter.serviceConfig.ProcSubset = "all";
+
     my.networking.usedTCPPorts.prometheus-node-exporter = cfg.port;
   };
 }

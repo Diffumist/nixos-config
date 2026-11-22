@@ -135,6 +135,8 @@ in
           };
         };
 
+        my.systemd.harden = [ "postgresql" ];
+
         services.postgresqlBackup = {
           enable = lib.mkDefault (!backupCfg.enable);
           backupAll = true;

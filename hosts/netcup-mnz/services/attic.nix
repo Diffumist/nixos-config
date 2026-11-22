@@ -27,6 +27,9 @@ in
     };
   };
 
+  my.systemd.harden = [ "atticd" ];
+  systemd.services.atticd.confinement.enable = true;
+
   my.services.caddy = {
     enable = true;
     virtualHosts."attic.diffumist.me".fail2ban = {

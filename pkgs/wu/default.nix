@@ -18,13 +18,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wu";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://github.com/dstrml/wu/releases/download/v${finalAttrs.version}/wu-linux-${stdenv.hostPlatform.parsed.cpu.name}.tar.gz";
     hash =
       {
-        x86_64-linux = "sha256-bPWQ8yNOQIh9oQh9Sv6xCwTPLCqfCTyOnGiZomSjWtw=";
+        x86_64-linux = "sha256-JCb2FnJHLKOtobKgxP7boUw87cthmVQRyLISEEAgjRc=";
         aarch64-linux = "sha256-Rf7zLB0tDswKTT4DvUHR7ONwgIGcJZaqp5Ss9WjQvG8=";
       }
       .${stdenv.hostPlatform.system};

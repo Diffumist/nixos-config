@@ -55,11 +55,13 @@ in
   ];
 
   systemd.services.cli-proxy-api = helpers.systemd.mkService {
+    confinement.enable = true;
     description = "CLIProxyAPI service";
     after = [ "network-online.target" ];
     wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
+      BindReadOnlyPaths = [ config.sops.secrets."cliproxyapi/config".path ];
       Type = "simple";
       User = "cli-proxy-api";
       Group = "cli-proxy-api";

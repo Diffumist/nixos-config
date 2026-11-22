@@ -40,7 +40,13 @@ in
 
   my.services.postgresql.ensureLocalDatabases = [ database ];
 
+  my.systemd.harden = [ "pocket-id" ];
   systemd.services.pocket-id = {
+    confinement.enable = true;
+    serviceConfig.BindPaths = [
+      "/var/lib/pocket-id"
+      "/run/postgresql"
+    ];
     requires = [ "postgresql.service" ];
     after = [ "postgresql.service" ];
   };

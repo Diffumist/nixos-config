@@ -15,6 +15,7 @@ let
     "magpie"
     "ranet"
     "tel42verifier"
+    "winc"
     "wu"
     "xsz"
   ];
