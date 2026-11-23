@@ -1,6 +1,7 @@
 {
   config,
   helpers,
+  hostName,
   lib,
   ...
 }:
@@ -9,7 +10,61 @@ let
   cfg = config.my.services.dn42;
   dn42 = config.networking.dn42;
   peers = lib.attrValues cfg.peers;
+  localNode = lib.findFirst (node: node.hostName == hostName) null (lib.attrValues cfg.mesh.nodes);
   lines = lib.concatStringsSep "\n";
+
+  # Well-known, DN42 standard (64511:*), and AS4242420642 large community helpers.
+  communityDefinitions = [
+    "define OWN_ASN = ${toString dn42.asn};"
+    "define COMM_GRACEFUL_SHUTDOWN = (65535, 0);"
+    "define DN42_NODE_ID = ${toString localNode.id};"
+    "define DN42_NODE_REGION = ${toString localNode.region};"
+    "define DN42_NODE_COUNTRY = ${toString localNode.country};"
+  ]
+  ++ lib.optional cfg.flapDamping.enable "define COMM_FLAPPING = (64511, 65282);"
+  ++ [
+    ""
+    ''
+      function dn42_update_crypto(int link_crypto) {
+        bgp_community.add((64511, link_crypto));
+        if (64511, 31) ~ bgp_community then bgp_community.delete([(64511, 32..36)]);
+        else if (64511, 32) ~ bgp_community then bgp_community.delete([(64511, 33..36)]);
+        else if (64511, 33) ~ bgp_community then bgp_community.delete([(64511, 34..36)]);
+        else if (64511, 34) ~ bgp_community then bgp_community.delete([(64511, 35..36)]);
+        else if (64511, 35) ~ bgp_community then bgp_community.delete((64511, 36));
+      }
+
+      function dn42_update_topology(int link_topology) {
+        bgp_community.add((64511, link_topology));
+        if (64511, 89) ~ bgp_community then bgp_community.delete([(64511, 81..88)]);
+        else if (64511, 85) ~ bgp_community then bgp_community.delete([(64511, 81..84)]);
+        else if (64511, 84) ~ bgp_community then bgp_community.delete([(64511, 81..83)]);
+        else if (64511, 83) ~ bgp_community then bgp_community.delete([(64511, 81..82)]);
+        else if (64511, 82) ~ bgp_community then bgp_community.delete((64511, 81));
+      }
+    ''
+  ];
+
+  importCommon = lines (
+    [
+      "function dn42_ebgp_import_common() {"
+    ]
+    ++ lib.optional cfg.flapDamping.enable "  bgp_community.delete(COMM_FLAPPING);"
+    ++ [
+      "  bgp_large_community.delete([(OWN_ASN, 10..12, *)]);"
+      "  dn42_update_crypto(34);"
+      "  dn42_update_topology(83);"
+      "  bgp_large_community.add((OWN_ASN, 10, DN42_NODE_ID));"
+      "  bgp_large_community.add((OWN_ASN, 11, DN42_NODE_REGION));"
+      "  bgp_large_community.add((OWN_ASN, 12, DN42_NODE_COUNTRY));"
+      "  if (OWN_ASN, 200, 50) ~ bgp_large_community then bgp_local_pref = 50;"
+      "  else if (OWN_ASN, 200, 80) ~ bgp_large_community then bgp_local_pref = 80;"
+      "  else if (OWN_ASN, 200, 90) ~ bgp_large_community then bgp_local_pref = 90;"
+      "  if COMM_GRACEFUL_SHUTDOWN ~ bgp_community then bgp_local_pref = 0;"
+      "}"
+    ]
+  );
+
   mkImportFilter =
     {
       name,
@@ -22,6 +77,7 @@ let
         "filter ${name} {"
         "  if net ~ [ ${pool}+ ] then reject;"
         "  if roa_check(${roaTable}) != ROA_VALID then reject;"
+        "  dn42_ebgp_import_common();"
       ]
       ++ lib.optionals cfg.flapDamping.enable [
         "  if roa_check(${flapRoaTable}, net, bgp_path.last) = ROA_INVALID then {"
@@ -34,28 +90,77 @@ let
         "}"
       ]
     );
-  mkExportFilter =
-    name:
-    lines (
-      [
-        "filter ${name} {"
-        "  if source = RTS_STATIC then accept;"
-        "  if source = RTS_BGP then {"
-      ]
-      ++ lib.optional cfg.flapDamping.enable "    if COMM_FLAPPING ~ bgp_community then reject;"
-      ++ [
-        "    accept;"
-        "  }"
-        ""
-        "  reject;"
-        "}"
-      ]
-    );
-  flapDefinitions = lib.optionals cfg.flapDamping.enable [
-    "define COMM_FLAPPING = (64511, 65282);"
-    ""
-  ];
+
+  exportFunction = lines (
+    [
+      "function dn42_ebgp_export(int peer_asn) -> bool"
+      "int prepend_count;"
+      "{"
+      "  if source = RTS_STATIC then {"
+      "    bgp_community.add((64511, DN42_NODE_REGION));"
+      "    bgp_community.add((64511, DN42_NODE_COUNTRY));"
+      "    bgp_large_community.add((OWN_ASN, 10, DN42_NODE_ID));"
+      "    bgp_large_community.add((OWN_ASN, 11, DN42_NODE_REGION));"
+      "    bgp_large_community.add((OWN_ASN, 12, DN42_NODE_COUNTRY));"
+      "    dn42_update_crypto(34);"
+      "    dn42_update_topology(83);"
+      "    return true;"
+      "  }"
+      "  if source = RTS_BGP then {"
+    ]
+    ++ lib.optional cfg.flapDamping.enable "    if COMM_FLAPPING ~ bgp_community then return false;"
+    ++ [
+      "    if (OWN_ASN, 0, 0) ~ bgp_large_community then return false;"
+      "    if peer_asn > 0 && (OWN_ASN, 0, peer_asn) ~ bgp_large_community then return false;"
+      "    if (OWN_ASN, 1000, DN42_NODE_REGION) ~ bgp_large_community then return false;"
+      "    if (OWN_ASN, 1001, DN42_NODE_ID) ~ bgp_large_community then return false;"
+      "    prepend_count = 0;"
+      "    if peer_asn > 0 && (OWN_ASN, 103, peer_asn) ~ bgp_large_community then prepend_count = 3;"
+      "    else if peer_asn > 0 && (OWN_ASN, 102, peer_asn) ~ bgp_large_community then prepend_count = 2;"
+      "    else if peer_asn > 0 && (OWN_ASN, 101, peer_asn) ~ bgp_large_community then prepend_count = 1;"
+      "    else if (OWN_ASN, 1103, DN42_NODE_REGION) ~ bgp_large_community then prepend_count = 3;"
+      "    else if (OWN_ASN, 1102, DN42_NODE_REGION) ~ bgp_large_community then prepend_count = 2;"
+      "    else if (OWN_ASN, 1101, DN42_NODE_REGION) ~ bgp_large_community then prepend_count = 1;"
+      "    else if (OWN_ASN, 103, 0) ~ bgp_large_community then prepend_count = 3;"
+      "    else if (OWN_ASN, 102, 0) ~ bgp_large_community then prepend_count = 2;"
+      "    else if (OWN_ASN, 101, 0) ~ bgp_large_community then prepend_count = 1;"
+      "    if prepend_count >= 1 then bgp_path.prepend(OWN_ASN);"
+      "    if prepend_count >= 2 then bgp_path.prepend(OWN_ASN);"
+      "    if prepend_count >= 3 then bgp_path.prepend(OWN_ASN);"
+      "    bgp_large_community.delete(["
+      "      (OWN_ASN, 0, *),"
+      "      (OWN_ASN, 101..103, *),"
+      "      (OWN_ASN, 200, *),"
+      "      (OWN_ASN, 1000..1001, *),"
+      "      (OWN_ASN, 1101..1103, *)"
+      "    ]);"
+      "    dn42_update_crypto(34);"
+      "    dn42_update_topology(83);"
+      "    return true;"
+      "  }"
+      ""
+      "  return false;"
+      "}"
+    ]
+  );
+
+  # Compatibility wrappers for any runtime /run/autopeer/bird/*.conf written
+  # before the template switched to `export where dn42_ebgp_export(<asn>)`.
+  legacyExportWrappers = ''
+    filter dn42_ebgp4_export {
+      if dn42_ebgp_export(0) then accept;
+      reject;
+    }
+
+    filter dn42_ebgp6_export {
+      if dn42_ebgp_export(0) then accept;
+      reject;
+    }
+  '';
+
   filterBlocks = [
+    importCommon
+    ""
     (mkImportFilter {
       name = "dn42_ebgp4_import";
       pool = dn42.ipv4.pool;
@@ -70,11 +175,11 @@ let
       flapRoaTable = "roa_flap_v6";
     })
     ""
-    (mkExportFilter "dn42_ebgp4_export")
+    exportFunction
     ""
-    (mkExportFilter "dn42_ebgp6_export")
+    legacyExportWrappers
   ];
-  birdFilters = lines (flapDefinitions ++ filterBlocks);
+  birdFilters = lines (communityDefinitions ++ filterBlocks);
 
   # eBGP peers run over WireGuard, with the BGP session on IPv6 link-local
   # (multiprotocol / extended-next-hop). Relies on dn42.nix for the dn42_peer
@@ -130,14 +235,14 @@ let
         next hop self ebgp;
         extended next hop on;
         import filter dn42_ebgp4_import;
-        export filter dn42_ebgp4_export;
+        export where dn42_ebgp_export(${toString peer.asn});
         export table on;
       };
       ipv6 {
         preference 200;
         next hop self ebgp;
         import filter dn42_ebgp6_import;
-        export filter dn42_ebgp6_export;
+        export where dn42_ebgp_export(${toString peer.asn});
         export table on;
       };
       neighbor ${peer.peerLinkLocal}%'${peer.interface}' as ${toString peer.asn};

@@ -58,6 +58,9 @@ let
   assertions =
     let
       nodeList = builtins.attrValues nodes;
+      nodeIds = map (node: node.id) nodeList;
+      nodeRegions = map (node: node.region) nodeList;
+      nodeCountries = map (node: node.country) nodeList;
       nodeHostNames = map (node: node.hostName) nodeList;
       nodeIPv4s = map (node: node.ipv4) nodeList;
       nodeIPv6s = map (node: node.ipv6) nodeList;
@@ -78,6 +81,18 @@ let
       ]) links;
     in
     [
+      {
+        assertion = allUnique nodeIds && lib.all (id: id > 0) nodeIds;
+        message = "dn42 mesh node ids must be unique positive integers.";
+      }
+      {
+        assertion = lib.all (region: region >= 41 && region <= 70) nodeRegions;
+        message = "dn42 mesh node regions must be in the DN42 region community range 41..70.";
+      }
+      {
+        assertion = lib.all (country: country >= 1000 && country <= 1999) nodeCountries;
+        message = "dn42 mesh node countries must be in the DN42 country community range 1000..1999.";
+      }
       {
         assertion = allUnique nodeHostNames;
         message = "dn42 mesh node host names must be unique.";
