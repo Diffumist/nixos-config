@@ -174,12 +174,6 @@ in
           ignoreRedirect = true;
         }
         {
-          name = "Looking Glass";
-          group = "DN42";
-          url = "https://lg-dn42.diffumist.me";
-          responseTimeLimit = 10000;
-        }
-        {
           name = "Flap Damping";
           group = "DN42";
           url = "https://flap-dn42.diffumist.me";

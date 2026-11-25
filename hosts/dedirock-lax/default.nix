@@ -2,7 +2,6 @@
   imports = [
     ./services/sillytavern.nix
     ./services/rustypaste.nix
-    ./services/looking-glass.nix
   ];
 
   my.hardware.ephemeralBtrfs = {

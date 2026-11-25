@@ -345,10 +345,6 @@ in
         ms-ceintl.vscode-language-pack-zh-hans
       ];
     };
-    zed-editor = {
-      enable = true;
-      extensions = [ "nix" ];
-    };
     distrobox = {
       enable = true;
       settings = {

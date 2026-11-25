@@ -1,5 +1,6 @@
 {
   imports = [
+    ./services/autopeer.nix
     ./services/notifications.nix
   ];
 

@@ -69,7 +69,7 @@
       flake = false;
     };
     autopeer = {
-      url = "git+https://git.418.cat/DiftLab/autopeer.git";
+      url = "git+https://git.418.cat/DiftLab/e-peering.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

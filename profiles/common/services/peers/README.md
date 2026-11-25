@@ -8,7 +8,7 @@
 | IPv6 | `fd22:1056:95a4::/48` |
 | Domain | `diffumist.dn42` |
 | Contact | dn42@diffumist.me |
-| Looking Glass | https://lg-dn42.diffumist.me |
+| Looking Glass | https://peering.diffumist.me (on each node's page) |
 | Route Flaps | https://flap-dn42.diffumist.me |
 | AutoPeer(experimental) | https://autopeer.diffumist.me |
 
@@ -46,7 +46,9 @@ WireGuard public key, your endpoint and port, and your link-local address.
 What a session gets:
 
 - Import: routes are checked against ROA and dropped unless valid; our own
-  prefixes are not accepted back.
+  prefixes are not accepted back. The AS path must start with your ASN, and
+  past 10000 routes per address family further routes are ignored while the
+  session stays up.
 - Flapping prefixes (FlapAlerted) are kept with local preference 0, tagged
   `(64511, 65282)` and not passed on.
 - Export: our prefixes and every other DN42 route we hold, so we give transit.
@@ -68,7 +70,9 @@ What a session gets:
 
 ### Informational Large Communities
 
-Attached to routes entering or originating from `AS4242420642` (scrubbed on import):
+Set by us on routes entering or originating from `AS4242420642`. Anything a
+neighbour sends under `(4242420642, *, *)` other than the action
+communities below is removed on import.
 
 | Large Community | Meaning |
 |---|---|
@@ -76,18 +80,12 @@ Attached to routes entering or originating from `AS4242420642` (scrubbed on impo
 | `(4242420642, 11, <region>)` | Ingress/origin DN42 region (`41`, `44`, `52`) |
 | `(4242420642, 12, <country>)` | Ingress/origin DN42 country (`1276`, `1344`, `1392`, `1528`, `1840`) |
 
-### Action Large Communities (Traffic Engineering)
+### Action Large Communities
 
-Peers may attach these Large Communities to control export and routing policy inside `AS4242420642` (stripped on eBGP export):
+Attach these to routes you send us; every node acts on them, and they are
+removed before the route leaves `AS4242420642`.
 
 | Large Community | Action |
 |---|---|
-| `(4242420642, 0, 0)` | Do not export to any eBGP peer |
-| `(4242420642, 0, <peer_asn>)` | Do not export to `<peer_asn>` |
-| `(4242420642, 1000, <region>)` | Do not export from nodes in DN42 region `<region>` |
-| `(4242420642, 1001, <node_id>)` | Do not export from node `<node_id>` |
-| `(4242420642, 101..103, <peer_asn>)` | Prepend `AS4242420642` 1x / 2x / 3x to `<peer_asn>` (`0` = all eBGP peers) |
-| `(4242420642, 1101..1103, <region>)` | Prepend `AS4242420642` 1x / 2x / 3x when exporting from region `<region>` |
-| `(4242420642, 200, 50\|80\|90)` | Set `local_pref` to `50` / `80` / `90` (default `100`) |
-
-Prepend precedence: peer-specific `(101..103, <peer_asn>)` > region-specific `(1101..1103, <region>)` > global `(101..103, 0)` (capped at 3x).
+| `(4242420642, 0, <asn>)` | Do not export to AS `<asn>` |
+| `(4242420642, 101..103, <asn>)` | Prepend `AS4242420642` 1x / 2x / 3x when exporting to AS `<asn>` (highest wins) |

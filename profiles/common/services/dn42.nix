@@ -2,7 +2,7 @@
 {
   my.services.dn42.autopeer = {
     enable = true;
-    frontend = "netcup-mnz";
+    frontend = "netcup-nue";
   };
 
   my.services.dn42.mesh = {
@@ -11,7 +11,6 @@
     ipv4Pool = "172.22.64.64/27";
     ipv6Pool = "fd22:1056:95a4::/48";
     roaRegistry = inputs.dn42-registry;
-    lookingGlassAllowedNode = "lax0";
 
     flapDamping.serverAddress = "fd22:1056:95a4:4::1179";
 

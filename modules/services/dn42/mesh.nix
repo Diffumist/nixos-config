@@ -18,7 +18,6 @@ let
   enabled = cfg.enable && localNodeName != null;
   localLinks = lib.filter (link: builtins.elem localNodeName (linkNodes link)) links;
   ibgpPeers = lib.filterAttrs (name: _: name != localNodeName) nodes;
-  lookingGlassProxyPort = cfg.lookingGlassProxyPort;
   dn42KernelRoutingTable = 642;
   mainRoutingTable = 254;
   dn42RoutingPolicyRules = [
@@ -52,6 +51,33 @@ let
       Priority = 10003;
       To = "fd00::/8";
       Table = dn42KernelRoutingTable;
+    }
+    # An address in DN42 that DN42 has no route to is unreachable. Without
+    # these the lookup goes on to main and takes its default route: packets
+    # for DN42, forwarded ones and the looking glass's probes alike, would
+    # leave through the provider. Main is still asked, without its default
+    # route, for what is connected there, like a mesh link.
+    {
+      Priority = 10010;
+      To = "172.20.0.0/14";
+      Table = mainRoutingTable;
+      SuppressPrefixLength = 0;
+    }
+    {
+      Priority = 10011;
+      To = "fd00::/8";
+      Table = mainRoutingTable;
+      SuppressPrefixLength = 0;
+    }
+    {
+      Priority = 10020;
+      To = "172.20.0.0/14";
+      Type = "unreachable";
+    }
+    {
+      Priority = 10021;
+      To = "fd00::/8";
+      Type = "unreachable";
     }
   ];
 
@@ -128,11 +154,6 @@ let
       {
         assertion = allUnique lls;
         message = "dn42 mesh link-local addresses must be unique.";
-      }
-      {
-        assertion =
-          cfg.lookingGlassAllowedNode == null || builtins.hasAttr cfg.lookingGlassAllowedNode nodes;
-        message = "dn42 mesh lookingGlassAllowedNode must reference an existing node.";
       }
     ];
 
@@ -259,18 +280,6 @@ in
       type = lib.types.str;
       description = "Central FlapAlerted address.";
     };
-
-    lookingGlassProxyPort = lib.mkOption {
-      type = lib.types.port;
-      default = 8000;
-      description = "bird-lg proxy port exposed on DN42 mesh links.";
-    };
-
-    lookingGlassAllowedNode = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Extra mesh node allowed to query this bird-lg proxy.";
-    };
   };
 
   config = lib.mkIf enabled (
@@ -306,10 +315,7 @@ in
           map (
             link:
             lib.nameValuePair link.name {
-              allowedTCPPorts = [
-                179
-                lookingGlassProxyPort
-              ];
+              allowedTCPPorts = [ 179 ];
             }
           ) localLinks
         );
@@ -318,7 +324,6 @@ in
       my.networking = {
         usedTCPPorts = {
           bird-bgp = 179;
-          bird-lg-proxy = lookingGlassProxyPort;
         };
         usedUDPPorts = lib.listToAttrs (
           map (link: lib.nameValuePair "dn42-mesh/${link.name}" link.port) localLinks
@@ -371,22 +376,7 @@ in
         '';
       };
 
-      services.bird-lg.proxy = {
-        enable = true;
-        allowedIPs = [
-          "127.0.0.1"
-        ]
-        ++ lib.optional (cfg.lookingGlassAllowedNode != null) nodes.${cfg.lookingGlassAllowedNode}.ipv4;
-        listenAddresses = [
-          "127.0.0.1:${toString lookingGlassProxyPort}"
-          "${node.ipv4}:${toString lookingGlassProxyPort}"
-        ];
-      };
-
-      my.systemd.harden = [
-        "bird"
-        "bird-lg-proxy"
-      ];
+      my.systemd.harden = [ "bird" ];
       systemd.services.bird.serviceConfig.RestrictAddressFamilies = [
         "AF_UNIX"
         "AF_INET"

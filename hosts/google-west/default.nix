@@ -1,4 +1,6 @@
 {
+  boot.kernelParams = [ "console=ttyS0,115200n8" ];
+
   my.hardware.ephemeralBtrfs = {
     device = "/dev/sda";
     firmware = "uefi";

@@ -4,6 +4,7 @@
   ...
 }:
 {
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.acpi_call ];
   boot.kernelModules = [ "acpi_call" ];
   environment.systemPackages = [ pkgs.wujie14x-cc ];

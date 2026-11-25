@@ -1,6 +1,5 @@
 {
   imports = [
-    ./services/autopeer.nix
     ./services/attic.nix
     ./services/matrix.nix
     ./services/forgejo.nix

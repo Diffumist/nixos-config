@@ -12,6 +12,17 @@ let
     ipv6 = true;
     "log-level" = "info";
     mode = "direct";
+    # Clients send .dn42 names, not addresses, and the system resolver does
+    # not serve that zone.
+    dns = {
+      enable = true;
+      ipv6 = true;
+      nameserver = [ "system" ];
+      "nameserver-policy"."+.dn42" = [
+        "172.20.0.53"
+        "172.23.0.53"
+      ];
+    };
     listeners = [
       {
         name = "anytls-tcp-in";
@@ -76,6 +87,7 @@ in
     sops.templates."mihomo-server.yaml" = {
       mode = "0400";
       content = builtins.toJSON serverConfig;
+      restartUnits = [ "mihomo.service" ];
     };
 
     security.acme = {
@@ -109,6 +121,9 @@ in
       environment.SAFE_PATHS = certificateDirectory;
       serviceConfig = {
         SupplementaryGroups = [ certificateGroup ];
+        # Relaying UDP makes mihomo list interfaces over netlink; the nixpkgs unit
+        # only allows that family in TUN mode.
+        RestrictAddressFamilies = lib.mkForce "AF_INET AF_INET6 AF_NETLINK";
         ExecStartPre = [
           "${lib.getExe config.services.mihomo.package} -t -d \${STATE_DIRECTORY} -f \${CREDENTIALS_DIRECTORY}/config.yaml"
         ];

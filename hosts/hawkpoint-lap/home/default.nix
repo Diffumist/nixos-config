@@ -141,7 +141,8 @@
     llm-agents.crush
     llm-agents.opencode2
     llm-agents.codex-auth
-    llm-agents.t3code-desktop
+    llm-agents.claude-code
+    llm-agents.paseo-desktop
     llm-agents.antigravity-cli
     # GUI
     qq

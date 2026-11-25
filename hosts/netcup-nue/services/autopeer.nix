@@ -8,11 +8,11 @@
   ...
 }:
 let
-  domain = "autopeer.diffumist.me";
+  clearnetDomain = "peering.diffumist.me";
+  dn42Domain = "peering.diffumist.dn42";
   port = 4800;
   registry = inputs.dn42-registry;
   ranet = config.my.services.ranet.nodes;
-  forgejo = config.services.forgejo.settings.server;
 in
 {
   sops.secrets = {
@@ -29,19 +29,24 @@ in
       asn = 4242420642;
       link_local = "fe80::642";
       # Kioubit login signs its answer for this name.
-      inherit domain;
+      domain = clearnetDomain;
       registry = "${registry}";
       registry_rev = registry.rev;
       registry_time = registry.lastModified;
       flapalerted = "https://flap-dn42.diffumist.me";
       forgejo = {
-        url = "http://${forgejo.HTTP_ADDR}:${toString forgejo.HTTP_PORT}";
+        url = "https://git.418.cat";
         repo = "DiftLab/nixos-config";
         dir = "profiles/common/services/peers";
       };
       nodes = lib.mapAttrsToList (name: node: {
         inherit name;
-        inherit (node) location endpoint capacity;
+        inherit (node)
+          location
+          provider
+          endpoint
+          capacity
+          ;
         public_key = node.publicKey;
         agent = "http://[${ranet.${node.hostName}.ipv6}]:4801";
       }) (import ../../../profiles/common/services/dn42-nodes.nix);
@@ -54,13 +59,43 @@ in
 
   my.systemd.harden = [ "autopeer-web" ];
 
+  # Route .dn42 queries through DN42 anycast DNS so Caddy can reach acme.burble.dn42.
+  services.resolved.enable = true;
+  systemd.network.networks."10-dn42-dummy" = {
+    dns = [
+      "172.20.0.53"
+      "fd42:d42:d42:54::1"
+      "172.23.0.53"
+      "fd42:d42:d42:53::1"
+    ];
+    domains = [ "~dn42" ];
+    networkConfig = {
+      DNSDefaultRoute = false;
+      DNSSEC = false;
+    };
+  };
+
   my.services.caddy = {
     enable = true;
-    virtualHosts.${domain}.useCloudflareACME = true;
+    virtualHosts = {
+      ${clearnetDomain}.useCloudflareACME = true;
+      ${dn42Domain} = { };
+    };
   };
-  services.caddy.virtualHosts.${domain}.extraConfig = ''
-    reverse_proxy 127.0.0.1:${toString port}
-  '';
+  services.caddy.virtualHosts = {
+    ${clearnetDomain}.extraConfig = ''
+      reverse_proxy 127.0.0.1:${toString port}
+    '';
+    ${dn42Domain}.extraConfig = ''
+      tls {
+        issuer acme {
+          dir https://acme.burble.dn42/v1/dn42/acme/directory
+          email services@diffumist.me
+        }
+      }
+      reverse_proxy 127.0.0.1:${toString port}
+    '';
+  };
 
   my.networking.usedTCPPorts.autopeer = port;
 }
