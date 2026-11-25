@@ -128,13 +128,13 @@ in
       };
       ${metricsDomain} = {
         useCloudflareACME = true;
-        fail2ban = {
+        reaction = {
           enable = true;
           name = "metrics-caddy";
           methods = [ "POST" ];
           uriRegex = "/api/v1/write";
           statuses = [ 401 ];
-          maxretry = 5;
+          retry = 5;
         };
       };
     };

@@ -217,12 +217,12 @@ in
     enable = true;
     virtualHosts."zones.diffumist.me" = {
       useCloudflareACME = true;
-      fail2ban = {
+      reaction = {
         enable = true;
         name = "powerdns-api-caddy";
         uriRegex = "/api/v1/[^\"?]*";
         statuses = [ 401 ];
-        maxretry = 5;
+        retry = 5;
       };
     };
   };

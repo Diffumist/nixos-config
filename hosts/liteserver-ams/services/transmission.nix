@@ -49,11 +49,11 @@ in
     enable = true;
     virtualHosts.${domain} = {
       useCloudflareACME = true;
-      fail2ban = {
+      reaction = {
         enable = true;
         name = "transmission-caddy";
         statuses = [ 401 ];
-        maxretry = 5;
+        retry = 5;
       };
     };
   };

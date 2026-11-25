@@ -10,14 +10,8 @@ let
   cloudflareAccessFile = "${pkgs.cloudflare-ip-ranges}/share/caddy/cloudflare-only.caddy";
   cloudflareTrustedProxiesFile = "${pkgs.cloudflare-ip-ranges}/share/caddy/cloudflare-trusted-proxies.caddy";
   cloudflareACMEHosts = lib.filterAttrs (_: host: host.useCloudflareACME) cfg.virtualHosts;
-  fail2banHosts = lib.filterAttrs (_: host: host.fail2ban.enable) cfg.virtualHosts;
-  caddyPorts = lib.concatMapStringsSep "," toString (
-    lib.filter (port: port != null) [
-      caddyCfg.httpPort
-      caddyCfg.httpsPort
-    ]
-  );
-  fail2banActive = config.services.fail2ban.enable && fail2banHosts != { };
+  reactionHosts = lib.filterAttrs (_: host: host.reaction.enable) cfg.virtualHosts;
+  reactionActive = config.services.reaction.enable && reactionHosts != { };
 in
 {
   options = {
@@ -54,13 +48,13 @@ in
                   example = "oauth.example.com";
                   description = "OAuth2 Proxy host used to protect the entire virtual host.";
                 };
-                fail2ban = {
-                  enable = lib.mkEnableOption "Fail2ban jail for this virtual host's Caddy JSON access log";
+                reaction = {
+                  enable = lib.mkEnableOption "Reaction ban rule for this virtual host's Caddy JSON access log";
                   name = lib.mkOption {
                     type = lib.types.str;
                     default = "caddy-${lib.replaceStrings [ "." ":" ] [ "-" "-" ] name}";
                     defaultText = lib.literalExpression ''"caddy-<sanitized-domain>"'';
-                    description = "Name of the generated Fail2ban jail and filter.";
+                    description = "Name of the generated Reaction stream.";
                   };
                   methods = lib.mkOption {
                     type = lib.types.listOf lib.types.str;
@@ -86,15 +80,15 @@ in
                     example = [ 401 ];
                     description = "HTTP response status codes that count as a failure.";
                   };
-                  maxretry = lib.mkOption {
+                  retry = lib.mkOption {
                     type = lib.types.ints.positive;
                     default = 5;
-                    description = "Maximum matching failures within findtime before banning.";
+                    description = "Maximum matching failures within retryperiod before banning.";
                   };
-                  findtime = lib.mkOption {
+                  retryperiod = lib.mkOption {
                     type = lib.types.str;
                     default = "10m";
-                    description = "Time window in which maxretry failures trigger a ban.";
+                    description = "Time window in which retry failures trigger a ban.";
                   };
                   bantime = lib.mkOption {
                     type = lib.types.str;
@@ -114,13 +108,13 @@ in
   config = lib.mkIf cfg.enable {
     assertions =
       lib.mapAttrsToList (domain: host: {
-        assertion = host.fail2ban.statuses != [ ];
-        message = ''my.services.caddy.virtualHosts."${domain}".fail2ban.statuses must not be empty.'';
-      }) fail2banHosts
+        assertion = host.reaction.statuses != [ ];
+        message = ''my.services.caddy.virtualHosts."${domain}".reaction.statuses must not be empty.'';
+      }) reactionHosts
       ++ [
         {
-          assertion = lib.allUnique (lib.mapAttrsToList (_: host: host.fail2ban.name) fail2banHosts);
-          message = "my.services.caddy.virtualHosts.*.fail2ban.name values must be unique.";
+          assertion = lib.allUnique (lib.mapAttrsToList (_: host: host.reaction.name) reactionHosts);
+          message = "my.services.caddy.virtualHosts.*.reaction.name values must be unique.";
         }
       ];
 
@@ -160,6 +154,14 @@ in
           domain: host:
           lib.optionalAttrs host.useCloudflareACME {
             useACMEHost = domain;
+          }
+          // lib.optionalAttrs (config.services.reaction.enable && host.reaction.enable) {
+            # Keep rotated access logs group-readable for the non-root reaction user.
+            logFormat = lib.mkDefault ''
+              output file ${caddyCfg.logDir}/access-${domain}.log {
+                mode 640
+              }
+            '';
           }
           // lib.optionalAttrs (host.enableCompression || host.oauth2ForwardAuth != null) {
             extraConfig = lib.mkBefore (
@@ -220,62 +222,41 @@ in
 
     users.users.caddy.extraGroups = [ "acme" ];
 
-    environment.etc = lib.mkIf fail2banActive (
-      lib.mapAttrs' (
-        _: host:
-        let
-          f2b = host.fail2ban;
-          methodPart = lib.optionalString (
-            f2b.methods != [ ]
-          ) ''[^{}]*"method":"(?:${lib.concatStringsSep "|" f2b.methods})"'';
-          uriPart = lib.optionalString (f2b.uriRegex != null) ''[^{}]*"uri":"${f2b.uriRegex}(?:\?[^"]*)?"'';
-          statusPart = lib.concatMapStringsSep "|" toString f2b.statuses;
-        in
-        lib.nameValuePair "fail2ban/filter.d/${f2b.name}.local" {
-          text = ''
-            [Definition]
-            datepattern = "ts":{EPOCH}
-            failregex = ^.*"request":\{[^{}]*"client_ip":"<HOST>"${methodPart}${uriPart}.*"status":(?:${statusPart}),"resp_headers":.*$
-            ignoreregex =
-          '';
-        }
-      ) fail2banHosts
-    );
-
-    services.fail2ban.jails = lib.mkIf fail2banActive (
+    my.services.reaction.webRules = lib.mkIf reactionActive (
       lib.mapAttrs' (
         domain: host:
         let
-          f2b = host.fail2ban;
+          rule = host.reaction;
+          methodPart = lib.optionalString (
+            rule.methods != [ ]
+          ) ''[^{}]*"method":"(?:${lib.concatStringsSep "|" rule.methods})"'';
+          uriPart = lib.optionalString (rule.uriRegex != null) ''[^{}]*"uri":"${rule.uriRegex}(?:\?[^"]*)?"'';
+          statusPart = lib.concatMapStringsSep "|" toString rule.statuses;
         in
-        lib.nameValuePair f2b.name {
-          settings = {
-            enabled = true;
-            filter = f2b.name;
-            backend = "auto";
-            logpath = "${caddyCfg.logDir}/access-${domain}.log";
-            maxretry = f2b.maxretry;
-            findtime = f2b.findtime;
-            bantime = f2b.bantime;
-          }
-          // lib.optionalAttrs (caddyPorts != "") {
-            port = caddyPorts;
-            protocol = "tcp,udp";
-          };
+        lib.nameValuePair rule.name {
+          logFile = "${caddyCfg.logDir}/access-${domain}.log";
+          regex = [
+            ''"request":\{[^{}]*"client_ip":"<ip>"${methodPart}${uriPart}.*"status":(?:${statusPart}),"resp_headers":''
+          ];
+          inherit (rule) retry retryperiod bantime;
         }
-      ) fail2banHosts
+      ) reactionHosts
     );
 
-    systemd.tmpfiles.rules = lib.mkIf fail2banActive (
+    systemd.tmpfiles.rules = lib.mkIf reactionActive (
       [
         "d ${caddyCfg.logDir} 0755 ${caddyCfg.user} ${caddyCfg.group} -"
       ]
       ++ lib.mapAttrsToList (
         domain: _: "f ${caddyCfg.logDir}/access-${domain}.log 0640 ${caddyCfg.user} ${caddyCfg.group} -"
-      ) fail2banHosts
+      ) reactionHosts
     );
 
-    systemd.services.fail2ban = lib.mkIf fail2banActive {
+    users.users.reaction = lib.mkIf (reactionActive && !config.services.reaction.runAsRoot) {
+      extraGroups = [ caddyCfg.group ];
+    };
+
+    systemd.services.reaction = lib.mkIf reactionActive {
       after = [ "caddy.service" ];
     };
 

@@ -62,7 +62,7 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts."sla.qzz.io".fail2ban = {
+    virtualHosts."sla.qzz.io".reaction = {
       enable = true;
       name = "komari-caddy";
       methods = [ "POST" ];
@@ -71,7 +71,7 @@ in
         401
         403
       ];
-      maxretry = 5;
+      retry = 5;
     };
   };
   services.caddy.virtualHosts."sla.qzz.io" = {

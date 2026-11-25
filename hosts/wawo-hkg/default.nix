@@ -13,8 +13,6 @@
     };
   };
 
-  services.fail2ban.enable = false;
-
   my.services.mihomo-server = {
     enable = true;
     domain = "earache-pretty-anyway-squealing.503418.xyz";

@@ -56,7 +56,7 @@ Per-host fields:
 
 - `roles`: explicit host capabilities; `server`, `container`, and `dn42`
   compose server behavior, while `desktop` selects desktop overlays. The server
-  baseline enables fail2ban, the QEMU guest profile, and ephemeral Btrfs policy
+  baseline enables reaction, the QEMU guest profile, and ephemeral Btrfs policy
   by default; a host may explicitly override these defaults.
 - `tags`: Colmena selectors assigned directly to the host.
 - `system`: optional target system; defaults to `x86_64-linux`.

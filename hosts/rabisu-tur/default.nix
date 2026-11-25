@@ -12,7 +12,6 @@
   };
 
   my.services.komari-agent.enable = false;
-  services.fail2ban.enable = false;
   my.services.sing-box = {
     enable = true;
     domain = "watch-revoke-undermine-caravan.503418.xyz";

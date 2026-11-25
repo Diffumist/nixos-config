@@ -12,7 +12,7 @@
       "8.8.4.4"
     ];
   };
-  services.fail2ban.enable = false;
+
   my.services.sing-box = {
     enable = true;
     domain = "freehand-dubbed-ellipse-mulled.503418.xyz";

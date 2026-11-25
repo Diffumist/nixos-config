@@ -13,7 +13,6 @@
     ];
   };
 
-  services.fail2ban.enable = false;
   my.services.sing-box = {
     enable = true;
     domain = "overfed-thyself-colonize-distress.503418.xyz";

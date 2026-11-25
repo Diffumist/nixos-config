@@ -46,7 +46,7 @@ in
     enable = true;
     virtualHosts.${domain} = {
       useCloudflareACME = true;
-      fail2ban = {
+      reaction = {
         enable = true;
         name = "matrix-caddy";
         methods = [ "POST" ];
@@ -55,7 +55,7 @@ in
           401
           403
         ];
-        maxretry = 5;
+        retry = 5;
       };
     };
   };

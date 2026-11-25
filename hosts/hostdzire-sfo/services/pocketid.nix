@@ -55,7 +55,7 @@ in
     enable = true;
     virtualHosts.${domain} = {
       useCloudflareACME = true;
-      fail2ban = {
+      reaction = {
         enable = true;
         name = "pocketid-caddy";
         methods = [ "POST" ];
@@ -67,7 +67,7 @@ in
           404
           429
         ];
-        maxretry = 5;
+        retry = 5;
       };
     };
   };

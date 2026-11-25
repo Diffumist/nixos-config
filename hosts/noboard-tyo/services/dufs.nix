@@ -56,11 +56,11 @@ in
     enable = true;
     virtualHosts.${domain} = {
       useCloudflareACME = true;
-      fail2ban = {
+      reaction = {
         enable = true;
         name = "dufs-caddy";
         statuses = [ 401 ];
-        maxretry = 6;
+        retry = 6;
       };
     };
   };

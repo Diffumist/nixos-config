@@ -30,7 +30,7 @@
     enable = true;
     virtualHosts."immich.diffumist.me" = {
       useCloudflareACME = true;
-      fail2ban = {
+      reaction = {
         enable = true;
         name = "immich-caddy";
         methods = [ "POST" ];
@@ -39,7 +39,7 @@
           401
           403
         ];
-        maxretry = 5;
+        retry = 5;
       };
     };
   };

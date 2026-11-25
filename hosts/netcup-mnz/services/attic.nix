@@ -32,14 +32,14 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts."attic.diffumist.me".fail2ban = {
+    virtualHosts."attic.diffumist.me".reaction = {
       enable = true;
       name = "attic-caddy";
       statuses = [
         401
         403
       ];
-      maxretry = 6;
+      retry = 6;
     };
   };
   services.caddy.virtualHosts."attic.diffumist.me" = {

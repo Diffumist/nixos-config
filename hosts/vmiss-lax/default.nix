@@ -17,7 +17,7 @@
       ];
     };
   };
-  services.fail2ban.enable = false;
+
   my.services.sing-box = {
     enable = true;
     domain = "shun-pranker-pasture-molecular.503418.xyz";

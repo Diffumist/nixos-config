@@ -21,14 +21,14 @@ in
 {
   my.services.caddy = {
     enable = true;
-    virtualHosts.${ntfyDomain}.fail2ban = {
+    virtualHosts.${ntfyDomain}.reaction = {
       enable = true;
       name = "ntfy-caddy";
       statuses = [
         401
         403
       ];
-      maxretry = 6;
+      retry = 6;
     };
   };
   services.caddy.virtualHosts = {

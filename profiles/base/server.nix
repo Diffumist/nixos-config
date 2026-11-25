@@ -10,8 +10,8 @@
   imports = [
     ../common/kernel.nix
     ../common/nixconfig.nix
-    ../common/services/fail2ban.nix
     ../common/services/ranet.nix
+    ../common/services/reaction.nix
     ../common/services/sshd.nix
     (modulesPath + "/profiles/qemu-guest.nix")
     "${self}/modules/system/nixos-init.nix"
