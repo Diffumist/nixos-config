@@ -26,6 +26,8 @@ let
 
     networking.nftables.enable = true;
     networking.useNetworkd = true;
+    # Match profiles/base/server.nix so ranet-ready.service is actually exercised.
+    systemd.network.wait-online.enable = false;
 
     my.services.ranet = {
       privateKeyFile = "${keys}/${name}.key";
@@ -72,6 +74,15 @@ pkgs.testers.runNixOSTest {
     a.fail("swanctl --stats | grep -wE 'farp|dhcp|forecast|stroke'")
     a.succeed("nft list table inet ranet | grep 'ranet-\\*'")
     a.fail("ip route get 10.203.0.3 | grep ranet-")
+
+    # Restarting networkd must not bounce strongSwan or tear down live tunnels.
+    a.succeed("systemctl is-active ranet-ready.service")
+    inv_before = a.succeed("systemctl show -p InvocationID --value strongswan-swanctl.service").strip()
+    a.systemctl("restart systemd-networkd.service")
+    inv_after = a.succeed("systemctl show -p InvocationID --value strongswan-swanctl.service").strip()
+    assert inv_before == inv_after, f"strongswan-swanctl restarted: {inv_before} != {inv_after}"
+    a.succeed("ping -c1 -W1 10.203.0.2")
+    b.succeed("ping -c1 -W1 fd42:203::1")
 
     # A daemon restart replaces the SA; the kept link must carry the new one.
     b.systemctl("restart strongswan-swanctl.service")

@@ -4,6 +4,7 @@
     ./services/dufs.nix
     ./services/knot.nix
     ./services/flap-damping.nix
+    ./services/phantun.nix
   ];
   my.networking.static = {
     enable = true;

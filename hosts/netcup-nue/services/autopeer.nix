@@ -39,17 +39,24 @@ in
         repo = "DiftLab/nixos-config";
         dir = "profiles/common/services/peers";
       };
-      nodes = lib.mapAttrsToList (name: node: {
-        inherit name;
-        inherit (node)
-          location
-          provider
-          endpoint
-          capacity
-          ;
-        public_key = node.publicKey;
-        agent = "http://[${ranet.${node.hostName}.ipv6}]:4801";
-      }) (import ../../../profiles/common/services/dn42-nodes.nix);
+      nodes =
+        lib.mapAttrsToList
+          (name: node: {
+            inherit name;
+            inherit (node)
+              location
+              provider
+              endpoint
+              capacity
+              ;
+            public_key = node.publicKey;
+            agent = "http://[${ranet.${node.hostName}.ipv6}]:4801";
+          })
+          (
+            lib.filterAttrs (_: node: node.autopeer or true) (
+              import ../../../profiles/common/services/dn42-nodes.nix
+            )
+          );
     };
     secretFile = config.sops.secrets.autopeer_cookie_secret.path;
     agentTokenFile = config.sops.secrets.autopeer_agent_token.path;

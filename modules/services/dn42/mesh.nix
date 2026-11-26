@@ -195,15 +195,19 @@ let
         PrivateKeyFile = config.sops.secrets.dn42_wg_private_key.path;
       };
       wireguardPeers = [
-        {
-          PublicKey = side.peer.publicKey;
-          Endpoint = formatHostPort side.peer.endpoint link.port;
-          AllowedIPs = [
-            "0.0.0.0/0"
-            "::/0"
-          ];
-          PersistentKeepalive = 25;
-        }
+        (
+          {
+            PublicKey = side.peer.publicKey;
+            AllowedIPs = [
+              "0.0.0.0/0"
+              "::/0"
+            ];
+          }
+          // lib.optionalAttrs (!(side.peer.passive or false)) {
+            Endpoint = formatHostPort side.peer.endpoint link.port;
+            PersistentKeepalive = 25;
+          }
+        )
       ];
     };
 
@@ -221,6 +225,7 @@ let
       ];
       linkConfig.RequiredForOnline = "no";
       networkConfig = {
+        IPv4ReversePathFilter = "no";
         IPv6AcceptRA = false;
         LinkLocalAddressing = "no";
       };
@@ -294,7 +299,17 @@ in
         "net.ipv6.conf.all.forwarding" = 1;
         "net.ipv4.conf.all.rp_filter" = lib.mkForce 0;
         "net.ipv4.conf.default.rp_filter" = lib.mkForce 0;
-        "net.ipv4.conf.*.rp_filter" = lib.mkForce 0;
+      };
+
+      networking.nftables.tables.dn42-forward = {
+        family = "inet";
+        content = ''
+          chain forward {
+            type filter hook forward priority filter; policy accept;
+            iifname "wg-*" oifname != "wg-*" drop
+            iifname != "wg-*" oifname "wg-*" drop
+          }
+        '';
       };
 
       sops.secrets.dn42_wg_private_key = {

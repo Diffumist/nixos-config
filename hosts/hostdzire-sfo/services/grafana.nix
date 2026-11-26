@@ -44,6 +44,11 @@ in
     retentionPeriod = "90d";
   };
 
+  networking.hosts = {
+    ${config.my.services.ranet.nodes.cloudnium-lax.ipv4} = [ "logs.diffumist.dev" ];
+    ${config.my.services.ranet.nodes.cloudnium-lax.ipv6} = [ "logs.diffumist.dev" ];
+  };
+
   services.grafana = {
     enable = true;
     settings = {
@@ -82,6 +87,14 @@ in
     provision.datasources.settings = {
       apiVersion = 1;
       datasources = [
+        {
+          name = "Fleet logs";
+          uid = "fleet-loki";
+          type = "loki";
+          access = "proxy";
+          url = "https://logs.diffumist.dev";
+          editable = false;
+        }
         {
           name = "VictoriaMetrics";
           uid = "victoriametrics";

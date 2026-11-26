@@ -89,6 +89,13 @@ in
     "forgejo-runner"
   ];
 
+  # Work around crun 1.31 failing rootless exec when lowering oom_score_adj
+  # from user@.service's default 100 to 0 (containers/crun#2467).
+  systemd.services."user@${toString runnerUid}" = {
+    overrideStrategy = "asDropin";
+    serviceConfig.OOMScoreAdjust = 0;
+  };
+
   systemd.services.forgejo-runner = {
     description = "Forgejo Actions runner";
     wantedBy = [ "multi-user.target" ];

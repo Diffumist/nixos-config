@@ -8,9 +8,8 @@
 | IPv6 | `fd22:1056:95a4::/48` |
 | Domain | `diffumist.dn42` |
 | Contact | dn42@diffumist.me |
-| Looking Glass | https://peering.diffumist.me (on each node's page) |
 | Route Flaps | https://flap-dn42.diffumist.me |
-| AutoPeer(experimental) | https://autopeer.diffumist.me |
+| AutoPeer(experimental) | https://peering.diffumist.me |
 
 ## Node
 

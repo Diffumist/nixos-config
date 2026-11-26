@@ -5,19 +5,6 @@
 }:
 let
   cfg = config.my.services.sing-box;
-  acme = {
-    data_directory = "acme";
-    default_server_name = cfg.domain;
-    disable_http_challenge = true;
-    disable_tls_alpn_challenge = true;
-    dns01_challenge = {
-      provider = "cloudflare";
-      api_token._secret = config.sops.secrets.cloudflare_api_token.path;
-    };
-    domain = [ cfg.domain ];
-    email = "services@diffumist.me";
-    provider = "letsencrypt";
-  };
   users = [
     {
       name = "default";
@@ -60,6 +47,24 @@ in
     services.sing-box = {
       enable = true;
       settings = {
+        certificate_providers = [
+          {
+            type = "acme";
+            tag = "acme";
+            data_directory = "acme";
+            default_server_name = cfg.domain;
+            disable_http_challenge = true;
+            disable_tls_alpn_challenge = true;
+            dns01_challenge = {
+              provider = "cloudflare";
+              api_token._secret = config.sops.secrets.cloudflare_api_token.path;
+            };
+            domain = [ cfg.domain ];
+            email = "services@diffumist.me";
+            provider = "letsencrypt";
+          }
+        ];
+
         experimental.cache_file = {
           enabled = true;
           path = "cache.db";
@@ -88,11 +93,11 @@ in
             listen_port = cfg.port;
             tag = "anytls-tcp-in";
             tls = {
-              inherit acme;
               alpn = [
                 "h2"
                 "http/1.1"
               ];
+              certificate_provider = "acme";
               enabled = true;
             };
             type = "anytls";
@@ -108,8 +113,8 @@ in
             };
             tag = "hysteria-udp-in";
             tls = {
-              inherit acme;
               alpn = [ "h3" ];
+              certificate_provider = "acme";
               enabled = true;
             };
             type = "hysteria2";
@@ -182,6 +187,13 @@ in
       CapabilityBoundingSet = [
         ""
         "CAP_NET_BIND_SERVICE"
+      ];
+      # sing-box 1.14+ initializes a netlink socket on startup.
+      RestrictAddressFamilies = [
+        "AF_UNIX"
+        "AF_INET"
+        "AF_INET6"
+        "AF_NETLINK"
       ];
       # Confinement adds RuntimeDirectory=confinement/%n, turning $RUNTIME_DIRECTORY into a colon-separated list.
       ExecStart = lib.mkForce [

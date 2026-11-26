@@ -82,4 +82,19 @@ in
     country = 1276;
     capacity = 30;
   };
+  chn0 = {
+    id = 8;
+    hostName = "immortalwrt-chn";
+    endpoint = "chn-0.${baseurl}";
+    ipv4 = "172.22.64.72";
+    ipv6 = "fd22:1056:95a4:8::1";
+    publicKey = "2CqV2l4cHhM9tk4g9Yoomdy9AghyYIvhYYMDHIpSQVI=";
+    location = "China, CN";
+    provider = "China Telecom";
+    region = 52;
+    country = 1156;
+    capacity = 10;
+    autopeer = false;
+    passive = true;
+  };
 }

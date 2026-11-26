@@ -39,7 +39,7 @@ in
         401
         403
       ];
-      retry = 6;
+      retry = 20;
     };
   };
   services.caddy.virtualHosts."attic.diffumist.me" = {

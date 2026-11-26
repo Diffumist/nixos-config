@@ -63,11 +63,15 @@ in
     # The looking glass runs ping, which drops its privileges with capset and
     # setuid before it sends and gives up when it may not. Both are in
     # @privileged, which the hardening profile denies.
-    systemd.services.autopeer-agent.serviceConfig.SystemCallFilter = [
-      "@system-service"
-      "~@clock @cpu-emulation @debug @module @mount @obsolete @privileged @raw-io @reboot @swap"
-      "capset setuid"
-    ];
+    systemd.services.autopeer-agent = {
+      after = [ "ranet-ready.service" ];
+      wants = [ "ranet-ready.service" ];
+      serviceConfig.SystemCallFilter = [
+        "@system-service"
+        "~@clock @cpu-emulation @debug @module @mount @obsolete @privileged @raw-io @reboot @swap"
+        "capset setuid"
+      ];
+    };
 
     networking.firewall.extraInputRules = ''
       ip6 saddr ${frontend} tcp dport ${toString port} accept

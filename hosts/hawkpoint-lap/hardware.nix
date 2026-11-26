@@ -77,7 +77,7 @@
     };
     services = {
       login.u2f.enable = true;
-      sudo.u2f.enable = true;
+      polkit-1.u2f.enable = true;
       login.gaze = {
         enable = true;
         simultaneous = false;

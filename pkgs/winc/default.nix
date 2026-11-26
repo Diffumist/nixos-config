@@ -21,11 +21,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "winc";
-  version = "0.1.857";
+  version = "0.1.970";
 
   src = fetchurl {
     url = "https://github.com/DEEIX-AI/Winc/releases/download/v${finalAttrs.version}/winc-${finalAttrs.version}-1-x86_64.pkg.tar.zst";
-    hash = "sha256-mqzlmGLWXGumdak2sJhOf2iXiZ5OcyZPUFcABg9fB7k=";
+    hash = "sha256-TIl7VsWXK/zvGWSeF/eX5H/K5Q7cJPxeVvy3dKbTCWo=";
   };
 
   sourceRoot = ".";

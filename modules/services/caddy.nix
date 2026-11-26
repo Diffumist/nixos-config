@@ -92,7 +92,7 @@ in
                   };
                   bantime = lib.mkOption {
                     type = lib.types.str;
-                    default = "24h";
+                    default = "1h";
                     description = "Initial ban duration.";
                   };
                 };

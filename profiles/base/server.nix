@@ -56,6 +56,8 @@
 
   users.users.root.hashedPasswordFile = config.sops.secrets.user_passwd_hash.path;
 
+  security.sudo.enable = lib.mkDefault false;
+
   programs = {
     nexttrace.enable = true;
     command-not-found.enable = false;

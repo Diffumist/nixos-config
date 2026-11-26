@@ -53,7 +53,7 @@ in
         enable = true;
         name = "transmission-caddy";
         statuses = [ 401 ];
-        retry = 5;
+        retry = 15;
       };
     };
   };

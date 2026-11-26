@@ -8,6 +8,7 @@ let
   domain = "status.diffumist.dev";
   port = 8080;
   certificateWarningThreshold = "336h";
+  ranetNodes = config.my.services.ranet.nodes;
   mkHttpsEndpoint =
     {
       name,
@@ -70,6 +71,11 @@ in
           ignoreRedirect = true;
         }
         {
+          name = "Loki";
+          group = "Monitoring";
+          url = "https://logs.diffumist.dev/ready";
+        }
+        {
           name = "Pocket ID";
           group = "Identity";
           url = "https://id.418.cat/healthz";
@@ -79,11 +85,6 @@ in
           name = "OAuth";
           group = "Identity";
           url = "https://oauth.diffumist.me/ready";
-        }
-        {
-          name = "TGTLDR";
-          group = "Applications";
-          url = "https://tg.503418.xyz";
         }
         {
           name = "Vaultwarden";
@@ -180,6 +181,22 @@ in
         }
       ];
     };
+  };
+
+  # Probe endpoints with broad 401/403 reaction rules over ranet, and local Loki over loopback.
+  networking.hosts = {
+    "127.0.0.1" = [ "logs.diffumist.dev" ];
+    "::1" = [ "logs.diffumist.dev" ];
+    ${ranetNodes.liteserver-ams.ipv4} = [ "bt.503418.xyz" ];
+    ${ranetNodes.liteserver-ams.ipv6} = [ "bt.503418.xyz" ];
+    ${ranetNodes.hostdzire-sfo.ipv4} = [ "zones.diffumist.me" ];
+    ${ranetNodes.hostdzire-sfo.ipv6} = [ "zones.diffumist.me" ];
+    ${ranetNodes.netcup-mnz.ipv4} = [ "attic.diffumist.me" ];
+    ${ranetNodes.netcup-mnz.ipv6} = [ "attic.diffumist.me" ];
+    ${ranetNodes.netcup-nue.ipv4} = [ "ntfy.diffumist.me" ];
+    ${ranetNodes.netcup-nue.ipv6} = [ "ntfy.diffumist.me" ];
+    ${ranetNodes.noboard-tyo.ipv4} = [ "file.diffumist.io" ];
+    ${ranetNodes.noboard-tyo.ipv6} = [ "file.diffumist.io" ];
   };
 
   my.services.postgresql.ensureLocalDatabases = [ "gatus" ];

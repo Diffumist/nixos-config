@@ -1,5 +1,6 @@
 {
   imports = [
+    ./services/loki.nix
     ./services/gatus.nix
     ./services/komari-monitor.nix
   ];

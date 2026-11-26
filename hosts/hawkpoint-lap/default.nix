@@ -165,7 +165,15 @@ in
   };
   # Umbriel waits for graphical-session.target, so ordering Noctalia before it creates a cycle.
   systemd.user.services.noctalia.before = lib.mkForce [ ];
-  security.polkit.enable = true;
+  security = {
+    polkit.enable = true;
+    sudo.enable = false;
+    run0 = {
+      enable = true;
+      sudo-shim.enable = true;
+      persistentAuth.enable = true;
+    };
+  };
   services.displayManager.noctalia-greeter = {
     enable = true;
     settings.keyboard = {

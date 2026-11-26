@@ -12,7 +12,7 @@
       ROCKET_PORT = 3011;
       LOG_LEVEL = "warn";
       IP_HEADER = "X-Real-IP";
-      DATABASE_URL = "postgresql:///vaultwarden?host=/run/postgresql";
+      DATABASE_URL = "postgresql:///vaultwarden?host=/run/postgresql&user=vaultwarden";
       ENABLE_DB_WAL = false;
       ENABLE_WEBSOCKET = false;
       SHOW_PASSWORD_HINT = false;

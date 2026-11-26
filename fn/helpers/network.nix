@@ -41,6 +41,7 @@ let
         "MACAddress=${settings.macAddress}"
         ""
         "[Network]"
+        "IPv4ReversePathFilter=strict"
       ]
       ++ addressLines
       ++

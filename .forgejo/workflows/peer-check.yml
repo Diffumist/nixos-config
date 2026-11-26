@@ -27,7 +27,8 @@ jobs:
       - name: Install action runtime and clients
         run: |
           set -euo pipefail
-          nix profile add nixpkgs#nodejs_24 nixpkgs#curl nixpkgs#jq
+          # Why: the nixos/nix runner image already provides curl in its default profile.
+          nix profile add nixpkgs#nodejs_24 nixpkgs#jq
           # Why: JavaScript actions need the profile's Node runtime in later steps.
           echo "$HOME/.nix-profile/bin" >> "$FORGEJO_PATH"
 

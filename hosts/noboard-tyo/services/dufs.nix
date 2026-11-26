@@ -60,7 +60,7 @@ in
         enable = true;
         name = "dufs-caddy";
         statuses = [ 401 ];
-        retry = 6;
+        retry = 15;
       };
     };
   };

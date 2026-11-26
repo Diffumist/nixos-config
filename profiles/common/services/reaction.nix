@@ -81,6 +81,7 @@ let
         type filter hook input priority filter - 10; policy accept;
     ''
     + lib.optionalString hasSsh ''
+      tcp dport ${fmtPortSet sshPorts} ct state established,related accept
       tcp dport ${fmtPortSet sshPorts} ip saddr @ssh_v4 drop
       tcp dport ${fmtPortSet sshPorts} ip6 saddr @ssh_v6 drop
       tcp dport ${fmtPortSet sshPorts} ip saddr @ssh_recidive_v4 drop
@@ -204,7 +205,7 @@ let
     lib.optionalAttrs hasSsh {
       ssh = {
         regex = [ "^ssh <ip>(?:/64)?$" ];
-        retry = 2;
+        retry = 3;
         retryperiod = "7d";
         actions = mkNftBanActions {
           setPrefix = "ssh_recidive";
@@ -215,7 +216,7 @@ let
     // lib.optionalAttrs hasWeb {
       web = {
         regex = [ "^web <ip>(?:/64)?$" ];
-        retry = 2;
+        retry = 3;
         retryperiod = "7d";
         actions = mkNftBanActions {
           setPrefix = "web_recidive";
@@ -256,7 +257,7 @@ in
             };
             bantime = lib.mkOption {
               type = lib.types.str;
-              default = "24h";
+              default = "1h";
               description = "Initial ban duration before recidive escalation.";
             };
           };
@@ -338,17 +339,14 @@ in
                   "Failed (?:password|publickey) for .* from <ip> port"
                   "authentication failure;.*rhost=<ip>(?: |$)"
                   "Maximum authentication attempts exceeded for .* from <ip> port"
-                  "Connection (?:reset|closed) by (?:authenticating|invalid) user .* <ip> port"
-                  "Disconnected from (?:authenticating|invalid) user .* <ip> port"
                   "banner exchange: Connection from <ip> port [0-9]+: invalid format"
                   "Did not receive identification string from <ip> port"
-                  "Timeout before authentication for connection from <ip> to"
                 ];
-                retry = 5;
+                retry = 20;
                 retryperiod = "10m";
                 actions = mkNftBanActions {
                   setPrefix = "ssh";
-                  bantime = "24h";
+                  bantime = "1h";
                   recidiveTag = "ssh";
                 };
               };
@@ -376,6 +374,8 @@ in
       serviceConfig = {
         AmbientCapabilities = [ "CAP_NET_ADMIN" ];
         CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
+        # journalctl -f reads /proc/sys/kernel/random/boot_id.
+        ProcSubset = "all";
         RestrictAddressFamilies = [
           "AF_UNIX"
           "AF_INET"

@@ -185,6 +185,7 @@ let
       address = [ "${peer.localLinkLocal}/64" ];
       linkConfig.RequiredForOnline = "no";
       networkConfig = {
+        IPv4ReversePathFilter = "no";
         IPv6AcceptRA = false;
         LinkLocalAddressing = "no";
       };

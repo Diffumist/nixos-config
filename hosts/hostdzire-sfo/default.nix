@@ -1,5 +1,6 @@
 {
   imports = [
+    ./services/cpu-alerts.nix
     ./services/asterisk.nix
     ./services/grafana.nix
     ./services/pocketid.nix

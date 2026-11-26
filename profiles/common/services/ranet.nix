@@ -287,6 +287,26 @@ in
         linkConfig.RequiredForOnline = "no";
       };
 
+      # Global networkd wait-online is disabled on servers and ranet has
+      # RequiredForOnline=no, so wait specifically for the dummy interface to
+      # finish configuring both management addresses before strongSwan or
+      # services binding the management IP start.
+      systemd.services.ranet-ready = {
+        description = "Wait for ranet management addresses";
+        after = [ "systemd-networkd.service" ];
+        wants = [ "systemd-networkd.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --interface=${dummy}:routable --ipv4 --ipv6 --timeout=30";
+        };
+      };
+
+      systemd.services.strongswan-swanctl = {
+        after = [ "ranet-ready.service" ];
+        wants = [ "ranet-ready.service" ];
+      };
+
       services.strongswan-swanctl = {
         enable = true;
         # ranet runs IKE and ESP on the NAT-T port alone; 0 keeps charon off

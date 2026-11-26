@@ -16,8 +16,8 @@ in
     firewall = {
       enable = true;
       extraInputRules = ''
-        tcp dport ${toString sshPort} ct state new meter ssh_meter { ip saddr limit rate 5/minute burst 8 packets } accept
-        tcp dport ${toString sshPort} ct state new meter ssh_v6_meter { ip6 saddr limit rate 5/minute burst 8 packets } counter accept
+        tcp dport ${toString sshPort} ct state new meter ssh_meter { ip saddr limit rate 15/minute burst 20 packets } accept
+        tcp dport ${toString sshPort} ct state new meter ssh_v6_meter { ip6 saddr limit rate 15/minute burst 20 packets } counter accept
         tcp dport ${toString sshPort} ct state new drop
       '';
     };

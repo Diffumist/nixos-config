@@ -61,10 +61,8 @@ in
         methods = [ "POST" ];
         uriRegex = "/api/(?:webauthn/login/finish|one-time-access-token/[^\"?]+|one-time-access-email)";
         statuses = [
-          400
           401
           403
-          404
           429
         ];
         retry = 5;
