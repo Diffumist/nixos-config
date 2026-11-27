@@ -1,5 +1,4 @@
 {
-  config,
   helpers,
   lib,
   pkgs,
@@ -10,46 +9,37 @@ let
   barkPort = 8090;
   ntfyDomain = "ntfy.diffumist.me";
   ntfyPort = 2586;
-  acmeCert = {
-    dnsProvider = "cloudflare";
-    credentialFiles = {
-      CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-      CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-    };
-  };
 in
 {
   my.services.caddy = {
     enable = true;
-    virtualHosts.${ntfyDomain}.reaction = {
-      enable = true;
-      name = "ntfy-caddy";
-      statuses = [
-        401
-        403
-      ];
-      retry = 20;
+    virtualHosts = {
+      ${barkDomain} = {
+        useCloudflareOriginCert = true;
+        cloudflareOnly = true;
+      };
+      ${ntfyDomain} = {
+        useCloudflareOriginCert = true;
+        cloudflareOnly = true;
+        reaction = {
+          enable = true;
+          name = "ntfy-caddy";
+          statuses = [
+            401
+            403
+          ];
+          retry = 20;
+        };
+      };
     };
   };
   services.caddy.virtualHosts = {
-    ${barkDomain} = {
-      useACMEHost = barkDomain;
-      extraConfig = ''
-        encode zstd gzip
-        reverse_proxy 127.0.0.1:${toString barkPort}
-      '';
-    };
-    ${ntfyDomain} = {
-      useACMEHost = ntfyDomain;
-      extraConfig = ''
-        reverse_proxy 127.0.0.1:${toString ntfyPort}
-      '';
-    };
-  };
-
-  security.acme.certs = {
-    ${barkDomain} = acmeCert;
-    ${ntfyDomain} = acmeCert;
+    ${barkDomain}.extraConfig = ''
+      reverse_proxy 127.0.0.1:${toString barkPort}
+    '';
+    ${ntfyDomain}.extraConfig = ''
+      reverse_proxy 127.0.0.1:${toString ntfyPort}
+    '';
   };
 
   systemd.services.bark-server = helpers.systemd.mkService {

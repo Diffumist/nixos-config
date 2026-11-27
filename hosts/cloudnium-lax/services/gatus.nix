@@ -2,6 +2,7 @@
   config,
   helpers,
   lib,
+  pkgs,
   ...
 }:
 let
@@ -212,9 +213,20 @@ in
     ];
   };
 
+  # Trust Cloudflare Origin CA ECC root so ranet-direct probes of proxied hosts verify TLS.
+  security.pki.certificateFiles = [
+    (pkgs.fetchurl {
+      url = "https://developers.cloudflare.com/ssl/static/origin_ca_ecc_root.pem";
+      hash = "sha256-ylbFspkY+veQRrHBcmw113FZUaNURbLmP1bqWnC3r5w=";
+    })
+  ];
+
   my.services.caddy = {
     enable = true;
-    virtualHosts.${domain}.useCloudflareACME = true;
+    virtualHosts.${domain} = {
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
+    };
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
     reverse_proxy 127.0.0.1:${toString port}

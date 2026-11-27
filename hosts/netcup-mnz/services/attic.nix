@@ -32,30 +32,22 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts."attic.diffumist.me".reaction = {
-      enable = true;
-      name = "attic-caddy";
-      statuses = [
-        401
-        403
-      ];
-      retry = 20;
+    virtualHosts."attic.diffumist.me" = {
+      acmeWildcardZone = "diffumist.me";
+      reaction = {
+        enable = true;
+        name = "attic-caddy";
+        statuses = [
+          401
+          403
+        ];
+        retry = 20;
+      };
     };
   };
-  services.caddy.virtualHosts."attic.diffumist.me" = {
-    useACMEHost = "attic.diffumist.me";
-    extraConfig = ''
-      reverse_proxy 127.0.0.1:${toString port}
-    '';
-  };
-
-  security.acme.certs."attic.diffumist.me" = {
-    dnsProvider = "cloudflare";
-    credentialFiles = {
-      CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-      CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-    };
-  };
+  services.caddy.virtualHosts."attic.diffumist.me".extraConfig = ''
+    reverse_proxy 127.0.0.1:${toString port}
+  '';
 
   my.networking.usedTCPPorts.atticd = port;
 }

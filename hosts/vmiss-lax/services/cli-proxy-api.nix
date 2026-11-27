@@ -83,8 +83,10 @@ in
 
   my.services.caddy = {
     enable = true;
-    cloudflareOnlyHosts = [ domain ];
-    virtualHosts.${domain}.useCloudflareACME = true;
+    virtualHosts.${domain} = {
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
+    };
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
     @legacyManagement path /management.html

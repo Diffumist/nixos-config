@@ -336,6 +336,9 @@ in
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    extraSpecialArgs = {
+      inherit inputs;
+    };
     users.diffumist = import ./home;
     sharedModules = [
       inputs.nix-index-database.homeModules.default

@@ -1,5 +1,4 @@
 {
-  config,
   helpers,
   pkgs,
   ...
@@ -157,31 +156,23 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts.${domain} = { };
-  };
-  services.caddy.virtualHosts.${domain} = {
-    useACMEHost = domain;
-    extraConfig = ''
-      @badExpire {
-        header expire *
-        not header_regexp expire ^\s*(?:(?:0|[1-9]|[1-9][0-9]{1,5}|1[0-9]{6}|2[0-4][0-9]{5}|25[0-8][0-9]{4}|259[01][0-9]{3}|2592000)\s*(?:seconds?|secs?|s)|(?:0|[1-9]|[1-9][0-9]{1,3}|[1-3][0-9]{4}|4[0-2][0-9]{3}|43[01][0-9]{2}|43200)\s*(?:minutes?|mins?|m)|(?:0|[1-9]|[1-9][0-9]|[1-6][0-9]{2}|7[01][0-9]|720)\s*(?:hours?|hrs?|h)|(?:0|[1-9]|[12][0-9]|30)\s*(?:days?|d)|(?:0|[1-4])\s*(?:weeks?|w))\s*$
-      }
-      respond @badExpire "expire must be 30 days or less. Allowed units: s, min, h, d, w.\n" 400
-
-      request_body {
-        max_size 128MB
-      }
-      reverse_proxy 127.0.0.1:${toString port}
-    '';
-  };
-
-  security.acme.certs.${domain} = {
-    dnsProvider = "cloudflare";
-    credentialFiles = {
-      CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-      CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
+    virtualHosts.${domain} = {
+      useCloudflareACME = true;
+      cloudflareOnly = true;
     };
   };
+  services.caddy.virtualHosts.${domain}.extraConfig = ''
+    @badExpire {
+      header expire *
+      not header_regexp expire ^\s*(?:(?:0|[1-9]|[1-9][0-9]{1,5}|1[0-9]{6}|2[0-4][0-9]{5}|25[0-8][0-9]{4}|259[01][0-9]{3}|2592000)\s*(?:seconds?|secs?|s)|(?:0|[1-9]|[1-9][0-9]{1,3}|[1-3][0-9]{4}|4[0-2][0-9]{3}|43[01][0-9]{2}|43200)\s*(?:minutes?|mins?|m)|(?:0|[1-9]|[1-9][0-9]|[1-6][0-9]{2}|7[01][0-9]|720)\s*(?:hours?|hrs?|h)|(?:0|[1-9]|[12][0-9]|30)\s*(?:days?|d)|(?:0|[1-4])\s*(?:weeks?|w))\s*$
+    }
+    respond @badExpire "expire must be 30 days or less. Allowed units: s, min, h, d, w.\n" 400
+
+    request_body {
+      max_size 128MB
+    }
+    reverse_proxy 127.0.0.1:${toString port}
+  '';
 
   my.networking.usedTCPPorts.rustypaste = port;
 }

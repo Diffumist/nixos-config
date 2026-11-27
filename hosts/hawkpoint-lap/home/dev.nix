@@ -1,6 +1,7 @@
 {
   pkgs,
   config,
+  inputs,
   osConfig,
   ...
 }:
@@ -55,6 +56,7 @@ let
         gnused
         jq
         less
+        llm-agents.claude-code
         llm-agents.rtk
         nix
         ripgrep
@@ -65,193 +67,194 @@ let
       ++ sharedDevPackages;
   };
 
-  ccbox = pkgs.writeShellApplication {
-    name = "ccbox";
-    runtimeInputs = with pkgs; [
-      coreutils
-      jq
-      podman
-    ];
+  jail = inputs.jail-nix.lib.extend {
+    inherit pkgs;
+    basePermissions =
+      combinators: with combinators; [
+        base
+        fake-passwd
+      ];
+  };
+
+  ccboxEntry = pkgs.writeShellApplication {
+    name = "ccbox-entry";
     text = ''
-      # ponytail: rootless podman wrapper for CLI isolation; move to microvm only if GUI/Electron isolation is needed
-      image="''${CCBOX_IMAGE:-docker.io/library/archlinux:latest}"
-      proxy_port="''${CCBOX_PROXY_PORT:-7890}"
-      box_home="''${CCBOX_HOME:-''${XDG_DATA_HOME:-$HOME/.local/share}/ccbox/home}"
-      projects_dir="$HOME/Projects"
-
-      shell_mode=0
       if [ "''${1:-}" = "--shell" ]; then
-        shell_mode=1
         shift
-      fi
-
-      # Pre-create mountpoint parents as the host user so podman never creates root-mapped subdirs in box_home.
-      mkdir -p \
-        "$box_home/.claude/hooks" \
-        "$box_home/.claude/plugins" \
-        "$box_home/.claude/skills" \
-        "$box_home/.local/bin" \
-        "$box_home/.local/share/claude" \
-        "$box_home/Projects"
-      touch \
-        "$box_home/.local/bin/claude" \
-        "$box_home/.claude/CLAUDE.md" \
-        "$box_home/.claude/RTK.md"
-
-      # Sync shared hooks/plugins/UI prefs while keeping container auth, model, and env isolated from host magpie config.
-      host_settings="$HOME/.claude/settings.json"
-      box_settings="$box_home/.claude/settings.json"
-      if [ -f "$host_settings" ]; then
-        [ -f "$box_settings" ] || printf '{}\n' > "$box_settings"
-        tmp_settings="$(mktemp "$box_home/.claude/settings.json.XXXXXX")"
-        jq -s '
-          .[0] as $box | .[1] as $host |
-          $box + ($host | {
-            hooks,
-            enabledPlugins,
-            extraKnownMarketplaces,
-            statusLine,
-            effortLevel,
-            theme,
-            skipDangerousModePermissionPrompt
-          } | with_entries(select(.value != null)))
-        ' "$box_settings" "$host_settings" > "$tmp_settings"
-        mv "$tmp_settings" "$box_settings"
-      fi
-
-      # Loopback-only forwarding to host mihomo; no tap/default route acts as a hard kill switch.
-      args=(
-        --rm
-        --userns=keep-id
-        --passwd-entry="''${USER}:*:\$UID:\$GID::''${HOME}:/bin/bash"
-        --network="pasta:--splice-only,-T,''${proxy_port},-t,none,-u,none,-U,none"
-        --hostname=workstation
-        --mount "type=bind,src=/nix/store,dst=/nix/store,ro"
-        --mount "type=bind,src=${pkgs.tzdata}/share/zoneinfo/America/Los_Angeles,dst=/etc/localtime,ro"
-        --mount "type=bind,src=${pkgs.glibcLocalesUtf8}/lib/locale/locale-archive,dst=/usr/lib/locale/locale-archive,ro"
-        --mount "type=bind,src=$box_home,dst=$HOME"
-      )
-
-      if [ -t 0 ] && [ -t 1 ]; then
-        args+=(-it)
-      else
-        args+=(-i)
-      fi
-
-      # Mount host projects at the same path so Claude project memory and AGENTS.md resolve identically.
-      if [ -d "$projects_dir" ]; then
-        args+=(--mount "type=bind,src=$projects_dir,dst=$projects_dir")
-      fi
-
-      workdir="$PWD"
-      case "$PWD" in
-        "$projects_dir" | "$projects_dir"/*)
-          ;;
-        "$HOME" | "/")
-          if [ -d "$projects_dir" ]; then
-            workdir="$projects_dir"
-          else
-            workdir="$HOME"
-          fi
-          ;;
-        *)
-          args+=(--mount "type=bind,src=$PWD,dst=$PWD")
-          ;;
-      esac
-      args+=(--workdir "$workdir")
-
-      # Share Claude Code binary and selected config subtrees at identical host paths.
-      for ro_path in \
-        "$HOME/.local/share/claude" \
-        "$HOME/.local/bin/claude" \
-        "$HOME/.claude/CLAUDE.md" \
-        "$HOME/.claude/RTK.md" \
-        "$HOME/.claude/skills" \
-        "$HOME/.claude/hooks"; do
-        if [ -e "$ro_path" ]; then
-          args+=(--mount "type=bind,src=$ro_path,dst=$ro_path,ro")
-        fi
-      done
-
-      # Plugins write sweep/catalog caches inside ~/.claude/plugins, so mount rw.
-      if [ -d "$HOME/.claude/plugins" ]; then
-        args+=(--mount "type=bind,src=$HOME/.claude/plugins,dst=$HOME/.claude/plugins")
-      fi
-
-      # Forward herdr hook socket only when launched inside a herdr pane.
-      if [ "''${HERDR_ENV:-}" = "1" ] && [ -S "''${HERDR_SOCKET_PATH:-}" ] && [ -n "''${HERDR_PANE_ID:-}" ]; then
-        args+=(
-          -e "HERDR_ENV=1"
-          -e "HERDR_PANE_ID=$HERDR_PANE_ID"
-          -e "HERDR_SOCKET_PATH=$HERDR_SOCKET_PATH"
-          --mount "type=bind,src=$HERDR_SOCKET_PATH,dst=$HERDR_SOCKET_PATH"
-        )
-      fi
-
-      # Allow nix eval/build via host nix-daemon without mounting host /etc/nix (avoids CN mirrors & tokens).
-      if [ -d /nix/var/nix/daemon-socket ]; then
-        args+=(
-          --mount "type=bind,src=/nix/var/nix/daemon-socket,dst=/nix/var/nix/daemon-socket"
-          -e "NIX_REMOTE=daemon"
-          -e $'NIX_CONFIG=experimental-features = nix-command flakes\nwarn-dirty = false\nuse-xdg-base-directories = true'
-        )
-      fi
-
-      # Inherit /nix/store toolchain entries when launched from a direnv/nix develop shell.
-      devshell_path=""
-      if [ -n "''${IN_NIX_SHELL:-}" ]; then
-        IFS=':' read -r -a host_path_parts <<< "''${PATH:-}"
-        for p in "''${host_path_parts[@]}"; do
-          case "$p" in
-            /nix/store/*)
-              if [ -d "$p" ]; then
-                devshell_path="''${devshell_path:+$devshell_path:}$p"
-              fi
-              ;;
-          esac
-        done
-        for var in PKG_CONFIG_PATH NIX_CFLAGS_COMPILE NIX_LDFLAGS CMAKE_PREFIX_PATH; do
-          if [ -n "''${!var:-}" ]; then
-            args+=(-e "$var=''${!var}")
-          fi
-        done
-      fi
-
-      proxy_url="http://127.0.0.1:''${proxy_port}"
-      box_path="$HOME/.local/bin''${devshell_path:+:$devshell_path}:${ccboxEnv}/bin:/usr/local/bin:/usr/bin:/bin"
-      args+=(
-        -e "HOME=$HOME"
-        -e "USER=$USER"
-        -e "TERM=''${TERM:-xterm-256color}"
-        -e "COLORTERM=truecolor"
-        -e "TZ=America/Los_Angeles"
-        -e "LANG=en_US.UTF-8"
-        -e "LC_ALL=en_US.UTF-8"
-        -e "LANGUAGE=en_US:en"
-        -e "SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
-        -e "HTTP_PROXY=$proxy_url"
-        -e "HTTPS_PROXY=$proxy_url"
-        -e "ALL_PROXY=$proxy_url"
-        -e "http_proxy=$proxy_url"
-        -e "https_proxy=$proxy_url"
-        -e "all_proxy=$proxy_url"
-        -e "NO_PROXY=127.0.0.1,localhost"
-        -e "no_proxy=127.0.0.1,localhost"
-        -e "DISABLE_AUTOUPDATER=1"
-        -e "DISABLE_TELEMETRY=1"
-        -e "DISABLE_ERROR_REPORTING=1"
-        -e "PATH=$box_path"
-      )
-
-      if [ "$shell_mode" -eq 1 ]; then
         if [ "$#" -eq 0 ]; then
-          exec podman run "''${args[@]}" "$image" bash -i
+          exec bash -i
         fi
-        exec podman run "''${args[@]}" "$image" bash "$@"
+        exec bash "$@"
       fi
-      exec podman run "''${args[@]}" "$image" claude "$@"
+      exec claude "$@"
     '';
   };
+
+  ccbox = jail "ccbox" ccboxEntry (
+    combinators: with combinators; [
+      # Share host network namespace (egress handled by host mihomo tun) without exposing /etc/nix or host timezone.
+      (share-ns "net")
+      (set-hostname "workstation")
+      (write-text "/etc/hostname" "workstation\n")
+      (unsafe-add-raw-args "--hostname workstation")
+      (try-readonly "/etc/hosts")
+      (try-readonly "/etc/nsswitch.conf")
+      (try-readonly "/etc/resolv.conf")
+      (try-readonly "/etc/ssl")
+      (try-readonly "/run/systemd/resolve")
+
+      # Expose /nix/store, /usr/bin/env, timezone data, and host nix-ld for native claude / prebuilt binaries.
+      (ro-bind "/nix/store" "/nix/store")
+      (ro-bind "${pkgs.coreutils}/bin/env" "/usr/bin/env")
+      (ro-bind "${pkgs.tzdata}/share/zoneinfo" "/usr/share/zoneinfo")
+      (ro-bind "${pkgs.tzdata}/share/zoneinfo/America/Los_Angeles" "/etc/localtime")
+      (try-ro-bind "/lib64/ld-linux-x86-64.so.2" "/lib64/ld-linux-x86-64.so.2")
+      (try-readonly "/run/current-system/sw/share/nix-ld")
+      (try-fwd-env "NIX_LD")
+      (try-fwd-env "NIX_LD_LIBRARY_PATH")
+
+      # Clean environment with US locale/timezone and disabled Claude telemetry.
+      (fwd-env "USER")
+      (set-env "SHELL" "${pkgs.bashInteractive}/bin/bash")
+      (set-env "TERM" (noescape ''"''${TERM:-xterm-256color}"''))
+      (set-env "COLORTERM" "truecolor")
+      (set-env "TZ" "America/Los_Angeles")
+      (set-env "TZDIR" "${pkgs.tzdata}/share/zoneinfo")
+      (set-env "LANG" "en_US.UTF-8")
+      (set-env "LC_ALL" "en_US.UTF-8")
+      (set-env "LANGUAGE" "en_US:en")
+      (set-env "LOCALE_ARCHIVE" "${pkgs.glibcLocalesUtf8}/lib/locale/locale-archive")
+      (set-env "SSL_CERT_FILE" "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt")
+      (set-env "DISABLE_AUTOUPDATER" "1")
+      (set-env "DISABLE_TELEMETRY" "1")
+      (set-env "DISABLE_ERROR_REPORTING" "1")
+
+      (add-runtime ''
+        box_home="''${CCBOX_HOME:-''${XDG_DATA_HOME:-$HOME/.local/share}/ccbox/home}"
+        projects_dir="$HOME/Projects"
+
+        mkdir -p \
+          "$box_home/.agents/skills" \
+          "$box_home/.claude/hooks" \
+          "$box_home/.claude/plugins" \
+          "$box_home/.claude/skills" \
+          "$box_home/.local/bin" \
+          "$box_home/.local/share/claude" \
+          "$box_home/Projects"
+        touch \
+          "$box_home/.local/bin/claude" \
+          "$box_home/.claude/CLAUDE.md" \
+          "$box_home/.claude/RTK.md"
+
+        # Sync shared hooks/plugins/UI prefs while keeping sandbox auth, model, and env isolated from host magpie config.
+        host_settings="$HOME/.claude/settings.json"
+        box_settings="$box_home/.claude/settings.json"
+        if [ -f "$host_settings" ]; then
+          [ -f "$box_settings" ] || printf '{}\n' > "$box_settings"
+          tmp_settings="$(mktemp "$box_home/.claude/settings.json.XXXXXX")"
+          ${pkgs.jq}/bin/jq -s '
+            .[0] as $box | .[1] as $host |
+            $box + ($host | {
+              hooks,
+              enabledPlugins,
+              extraKnownMarketplaces,
+              statusLine,
+              effortLevel,
+              theme,
+              skipDangerousModePermissionPrompt
+            } | with_entries(select(.value != null)))
+          ' "$box_settings" "$host_settings" > "$tmp_settings"
+          mv "$tmp_settings" "$box_settings"
+        fi
+
+        # Bind persistent sandbox home first so subsequent subpath binds layer on top of it.
+        RUNTIME_ARGS+=(--bind "$box_home" "$HOME")
+
+        # Mount host projects at the same path so Claude project memory and AGENTS.md resolve identically.
+        if [ -d "$projects_dir" ]; then
+          RUNTIME_ARGS+=(--bind "$projects_dir" "$projects_dir")
+        fi
+
+        workdir="$PWD"
+        case "$PWD" in
+          "$projects_dir" | "$projects_dir"/*)
+            ;;
+          "$HOME" | "/")
+            if [ -d "$projects_dir" ]; then
+              workdir="$projects_dir"
+            else
+              workdir="$HOME"
+            fi
+            ;;
+          *)
+            RUNTIME_ARGS+=(--bind "$PWD" "$PWD")
+            ;;
+        esac
+        RUNTIME_ARGS+=(--chdir "$workdir")
+
+        # Share Claude Code binary and selected config/skill subtrees at identical host paths.
+        for ro_path in \
+          "$HOME/.agents/skills" \
+          "$HOME/.local/share/claude" \
+          "$HOME/.local/bin/claude" \
+          "$HOME/.claude/CLAUDE.md" \
+          "$HOME/.claude/RTK.md" \
+          "$HOME/.claude/skills" \
+          "$HOME/.claude/hooks"; do
+          if [ -e "$ro_path" ]; then
+            RUNTIME_ARGS+=(--ro-bind "$ro_path" "$ro_path")
+          fi
+        done
+
+        # Plugins write sweep/catalog caches inside ~/.claude/plugins, so mount rw.
+        if [ -d "$HOME/.claude/plugins" ]; then
+          RUNTIME_ARGS+=(--bind "$HOME/.claude/plugins" "$HOME/.claude/plugins")
+        fi
+
+        # Forward herdr hook socket only when launched inside a herdr pane.
+        if [ "''${HERDR_ENV:-}" = "1" ] && [ -S "''${HERDR_SOCKET_PATH:-}" ] && [ -n "''${HERDR_PANE_ID:-}" ]; then
+          RUNTIME_ARGS+=(
+            --setenv HERDR_ENV 1
+            --setenv HERDR_PANE_ID "$HERDR_PANE_ID"
+            --setenv HERDR_SOCKET_PATH "$HERDR_SOCKET_PATH"
+            --bind "$HERDR_SOCKET_PATH" "$HERDR_SOCKET_PATH"
+          )
+        fi
+
+        # Allow nix eval/build via host nix-daemon without mounting host /etc/nix (avoids CN mirrors & tokens).
+        if [ -d /nix/var/nix/daemon-socket ]; then
+          RUNTIME_ARGS+=(
+            --bind /nix/var/nix/daemon-socket /nix/var/nix/daemon-socket
+            --setenv NIX_REMOTE daemon
+            --setenv NIX_CONFIG $'experimental-features = nix-command flakes\nwarn-dirty = false\nuse-xdg-base-directories = true'
+          )
+        fi
+
+        # Inherit /nix/store toolchain entries when launched from a direnv/nix develop shell.
+        devshell_path=""
+        if [ -n "''${IN_NIX_SHELL:-}" ]; then
+          IFS=':' read -r -a host_path_parts <<< "''${PATH:-}"
+          for p in "''${host_path_parts[@]}"; do
+            case "$p" in
+              /nix/store/*)
+                if [ -d "$p" ]; then
+                  devshell_path="''${devshell_path:+$devshell_path:}$p"
+                fi
+                ;;
+            esac
+          done
+          for var in PKG_CONFIG_PATH NIX_CFLAGS_COMPILE NIX_LDFLAGS CMAKE_PREFIX_PATH; do
+            if [ -n "''${!var:-}" ]; then
+              RUNTIME_ARGS+=(--setenv "$var" "''${!var}")
+            fi
+          done
+        fi
+
+        box_path="$HOME/.local/bin''${devshell_path:+:$devshell_path}:${ccboxEnv}/bin:/bin"
+        RUNTIME_ARGS+=(--setenv PATH "$box_path")
+      '')
+    ]
+  );
 in
 {
   services.gpg-agent = {

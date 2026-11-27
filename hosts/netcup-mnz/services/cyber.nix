@@ -102,7 +102,8 @@ in
   my.services.caddy = {
     enable = true;
     virtualHosts."cyber.503418.xyz" = {
-      useCloudflareACME = true;
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
       oauth2ForwardAuth = "oauth.503418.xyz";
     };
   };

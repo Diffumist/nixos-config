@@ -114,6 +114,7 @@
     };
     starship = {
       enable = true;
+      presets = [ "bracketed-segments" ];
       settings = {
         battery.disabled = true;
         gcloud.disabled = true;
@@ -122,6 +123,10 @@
           truncation_length = 3;
           truncation_symbol = "…/";
         };
+        vcs.order = [
+          "jj"
+          "git"
+        ];
       };
     };
     ghostty = {

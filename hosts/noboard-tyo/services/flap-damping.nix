@@ -22,20 +22,12 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts.${domain} = { };
-  };
-  services.caddy.virtualHosts.${domain} = {
-    useACMEHost = domain;
-    extraConfig = ''
-      reverse_proxy [${flapalertedAddress}]:${toString frontendPort}
-    '';
-  };
-
-  security.acme.certs.${domain} = {
-    dnsProvider = "cloudflare";
-    credentialFiles = {
-      CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-      CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
+    virtualHosts.${domain} = {
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
     };
   };
+  services.caddy.virtualHosts.${domain}.extraConfig = ''
+    reverse_proxy [${flapalertedAddress}]:${toString frontendPort}
+  '';
 }

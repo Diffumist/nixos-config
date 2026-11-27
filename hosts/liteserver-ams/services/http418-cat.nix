@@ -5,7 +5,10 @@ in
 {
   my.services.caddy = {
     enable = true;
-    virtualHosts.${domain}.useCloudflareACME = true;
+    virtualHosts.${domain} = {
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
+    };
   };
 
   services.caddy.virtualHosts.${domain}.extraConfig = ''

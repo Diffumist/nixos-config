@@ -1,4 +1,8 @@
-{ config, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 let
   grafanaDomain = "grafana.diffumist.dev";
   metricsDomain = "metrics.diffumist.dev";
@@ -48,6 +52,14 @@ in
     ${config.my.services.ranet.nodes.cloudnium-lax.ipv4} = [ "logs.diffumist.dev" ];
     ${config.my.services.ranet.nodes.cloudnium-lax.ipv6} = [ "logs.diffumist.dev" ];
   };
+
+  # Trust Cloudflare Origin CA ECC root so Grafana's ranet-direct queries to logs.diffumist.dev verify TLS.
+  security.pki.certificateFiles = [
+    (pkgs.fetchurl {
+      url = "https://developers.cloudflare.com/ssl/static/origin_ca_ecc_root.pem";
+      hash = "sha256-ylbFspkY+veQRrHBcmw113FZUaNURbLmP1bqWnC3r5w=";
+    })
+  ];
 
   services.grafana = {
     enable = true;
@@ -136,11 +148,13 @@ in
     enable = true;
     virtualHosts = {
       ${grafanaDomain} = {
-        useCloudflareACME = true;
+        useCloudflareOriginCert = true;
+        cloudflareOnly = true;
         oauth2ForwardAuth = "oauth.diffumist.dev";
       };
       ${metricsDomain} = {
-        useCloudflareACME = true;
+        useCloudflareOriginCert = true;
+        cloudflareOnly = true;
         reaction = {
           enable = true;
           name = "metrics-caddy";

@@ -55,7 +55,7 @@ in
   my.services.caddy = {
     enable = true;
     virtualHosts.${domain} = {
-      useCloudflareACME = true;
+      acmeWildcardZone = "diffumist.io";
       reaction = {
         enable = true;
         name = "dufs-caddy";

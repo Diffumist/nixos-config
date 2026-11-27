@@ -89,8 +89,8 @@ in
     ipv4 = "172.22.64.72";
     ipv6 = "fd22:1056:95a4:8::1";
     publicKey = "2CqV2l4cHhM9tk4g9Yoomdy9AghyYIvhYYMDHIpSQVI=";
-    location = "China, CN";
-    provider = "China Telecom";
+    location = "North China, CN";
+    provider = "Selfhost";
     region = 52;
     country = 1156;
     capacity = 10;

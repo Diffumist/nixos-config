@@ -216,7 +216,8 @@ in
   my.services.caddy = {
     enable = true;
     virtualHosts."zones.diffumist.me" = {
-      useCloudflareACME = true;
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
       reaction = {
         enable = true;
         name = "powerdns-api-caddy";

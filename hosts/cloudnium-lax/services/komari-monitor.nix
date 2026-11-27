@@ -1,5 +1,4 @@
 {
-  config,
   helpers,
   lib,
   pkgs,
@@ -62,35 +61,28 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts."sla.qzz.io".reaction = {
-      enable = true;
-      name = "komari-caddy";
-      methods = [ "POST" ];
-      uriRegex = "/api/login";
-      statuses = [
-        401
-        403
-      ];
-      retry = 5;
+    virtualHosts."sla.qzz.io" = {
+      useCloudflareACME = true;
+      cloudflareOnly = true;
+      reaction = {
+        enable = true;
+        name = "komari-caddy";
+        methods = [ "POST" ];
+        uriRegex = "/api/login";
+        statuses = [
+          401
+          403
+        ];
+        retry = 5;
+      };
     };
   };
-  services.caddy.virtualHosts."sla.qzz.io" = {
-    useACMEHost = "sla.qzz.io";
-    extraConfig = ''
-      request_body {
-        max_size 128MB
-      }
-      reverse_proxy 127.0.0.1:${toString port}
-    '';
-  };
-
-  security.acme.certs."sla.qzz.io" = {
-    dnsProvider = "cloudflare";
-    credentialFiles = {
-      CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-      CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-    };
-  };
+  services.caddy.virtualHosts."sla.qzz.io".extraConfig = ''
+    request_body {
+      max_size 128MB
+    }
+    reverse_proxy 127.0.0.1:${toString port}
+  '';
 
   my.networking.usedTCPPorts.komari-monitor = port;
 }

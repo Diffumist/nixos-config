@@ -20,7 +20,8 @@
   my.services.caddy = {
     enable = true;
     virtualHosts."tavern.diffumist.me" = {
-      useCloudflareACME = true;
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
       oauth2ForwardAuth = "oauth.diffumist.me";
     };
   };

@@ -48,7 +48,8 @@ in
   my.services.caddy = {
     enable = true;
     virtualHosts.${domain} = {
-      useCloudflareACME = true;
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
       reaction = {
         enable = true;
         name = "transmission-caddy";

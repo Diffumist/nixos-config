@@ -125,6 +125,12 @@ in
         services.postgresql = {
           enable = true;
           package = pkgs.postgresql_18;
+          initdbArgs = [
+            "--encoding=UTF8"
+            "--locale-provider=builtin"
+            "--locale=C.UTF-8"
+            "--builtin-locale=PG_UNICODE_FAST"
+          ];
           ensureDatabases = lib.unique cfg.ensureLocalDatabases;
           ensureUsers = map (name: {
             inherit name;

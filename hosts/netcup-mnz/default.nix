@@ -30,6 +30,7 @@
   my.services.garage = {
     enable = true;
     exposeS3 = true;
+    acmeWildcardZone = "418.cat";
     bootstrapPeers = [
       "8e6345e4659cb1d16d804100cfb67cdfb4fefc318117d594cf4161718b0e2faf@ams-0.diffumist.me:3901"
     ];

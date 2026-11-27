@@ -44,6 +44,7 @@
     umbriel.url = "github:noctalia-dev/umbriel";
     noctalia.url = "github:noctalia-dev/noctalia";
     llm-agents.url = "github:numtide/llm-agents.nix";
+    jail-nix.url = "sourcehut:~alexdavid/jail.nix";
     nur-xddxdd.url = "github:xddxdd/nur-packages";
     nix-alien.url = "github:thiagokokada/nix-alien";
     rimsort.url = "github:RimSort/RimSort";

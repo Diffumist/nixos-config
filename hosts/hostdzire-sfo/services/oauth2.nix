@@ -77,23 +77,20 @@ in
     after = [ "pocket-id.service" ];
   };
 
-  my.services.caddy.enable = true;
-  services.caddy.virtualHosts = lib.genAttrs authDomains (domain: {
-    useACMEHost = domain;
+  my.services.caddy = {
+    enable = true;
+    virtualHosts = lib.genAttrs authDomains (_: {
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
+    });
+  };
+  services.caddy.virtualHosts = lib.genAttrs authDomains (_: {
     extraConfig = ''
       reverse_proxy 127.0.0.1:${toString port} {
         header_up X-Real-IP {remote_host}
         header_up X-Forwarded-Uri {uri}
       }
     '';
-  });
-
-  security.acme.certs = lib.genAttrs authDomains (_: {
-    dnsProvider = "cloudflare";
-    credentialFiles = {
-      CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-      CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-    };
   });
 
   my.networking.usedTCPPorts.oauth2-proxy = port;

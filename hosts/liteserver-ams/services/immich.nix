@@ -6,7 +6,10 @@
     mediaLocation = "/persist/var/storage/immich";
     database.createDB = false;
     machine-learning.enable = false;
-    settings.server.externalDomain = "https://immich.diffumist.me";
+    settings = {
+      machineLearning.enabled = false;
+      server.externalDomain = "https://immich.diffumist.me";
+    };
   };
 
   my.services.postgresql.ensureLocalDatabases = [ "immich" ];
@@ -29,7 +32,8 @@
   my.services.caddy = {
     enable = true;
     virtualHosts."immich.diffumist.me" = {
-      useCloudflareACME = true;
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
       reaction = {
         enable = true;
         name = "immich-caddy";

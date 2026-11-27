@@ -22,6 +22,12 @@ in
 
     exposeS3 = lib.mkEnableOption "the public S3 API through Caddy";
 
+    acmeWildcardZone = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Optional wildcard zone for Cloudflare DNS-01 ACME instead of a single-host certificate.";
+    };
+
     bootstrapPeers = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];
@@ -78,7 +84,11 @@ in
 
     my.services.caddy = lib.mkIf cfg.exposeS3 {
       enable = true;
-      virtualHosts.${cfg.domain}.useCloudflareACME = true;
+      virtualHosts.${cfg.domain} =
+        if cfg.acmeWildcardZone != null then
+          { acmeWildcardZone = cfg.acmeWildcardZone; }
+        else
+          { useCloudflareACME = true; };
     };
     services.caddy.virtualHosts = lib.mkIf cfg.exposeS3 {
       ${cfg.domain}.extraConfig = ''

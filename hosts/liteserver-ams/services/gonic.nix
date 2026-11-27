@@ -38,7 +38,10 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts."music.diffumist.me".useCloudflareACME = true;
+    virtualHosts."music.diffumist.me" = {
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
+    };
   };
   services.caddy.virtualHosts."music.diffumist.me" = {
     extraConfig = ''

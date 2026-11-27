@@ -35,7 +35,10 @@
 
   my.services.caddy = {
     enable = true;
-    virtualHosts."vault.diffumist.me".useCloudflareACME = true;
+    virtualHosts."vault.diffumist.me" = {
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
+    };
   };
   services.caddy.virtualHosts."vault.diffumist.me".extraConfig = ''
     reverse_proxy 127.0.0.1:${toString config.services.vaultwarden.config.ROCKET_PORT} {

@@ -111,7 +111,10 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts.${domain}.useCloudflareACME = true;
+    virtualHosts.${domain} = {
+      useCloudflareOriginCert = true;
+      cloudflareOnly = true;
+    };
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
     reverse_proxy 127.0.0.1:${toString port}

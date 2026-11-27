@@ -135,7 +135,7 @@ in
 
   my.services.caddy = {
     enable = true;
-    virtualHosts.${domain}.useCloudflareACME = true;
+    virtualHosts.${domain}.acmeWildcardZone = "418.cat";
   };
   services.caddy.virtualHosts.${domain}.extraConfig = ''
     reverse_proxy 127.0.0.1:${toString port}

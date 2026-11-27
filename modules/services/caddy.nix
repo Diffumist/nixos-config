@@ -7,11 +7,42 @@
 let
   cfg = config.my.services.caddy;
   caddyCfg = config.services.caddy;
-  cloudflareAccessFile = "${pkgs.cloudflare-ip-ranges}/share/caddy/cloudflare-only.caddy";
+  cloudflareIpsData = builtins.fromJSON (builtins.readFile ../../pkgs/cloudflare-ip-ranges/ips.json);
+  cloudflareRanges = cloudflareIpsData.result.ipv4_cidrs ++ cloudflareIpsData.result.ipv6_cidrs;
+  ranetRanges = lib.concatMap (node: [
+    node.ipv4
+    node.ipv6
+  ]) (lib.attrValues (config.my.services.ranet.nodes or { }));
+  cloudflareAccessFile = pkgs.writeText "cloudflare-only.caddy" ''
+    @not_cloudflare_proxy not remote_ip ${
+      lib.concatStringsSep " " (
+        cloudflareRanges
+        ++ ranetRanges
+        ++ [
+          "127.0.0.1"
+          "::1"
+        ]
+      )
+    }
+    abort @not_cloudflare_proxy
+  '';
   cloudflareTrustedProxiesFile = "${pkgs.cloudflare-ip-ranges}/share/caddy/cloudflare-trusted-proxies.caddy";
   cloudflareACMEHosts = lib.filterAttrs (_: host: host.useCloudflareACME) cfg.virtualHosts;
+  wildcardACMEZones = lib.unique (
+    lib.filter (zone: zone != null) (
+      lib.mapAttrsToList (_: host: host.acmeWildcardZone) cfg.virtualHosts
+    )
+  );
+  originCertHosts = lib.filterAttrs (_: host: host.useCloudflareOriginCert) cfg.virtualHosts;
+  hasOriginCertHosts = originCertHosts != { };
+  cloudflareOnlyHosts = lib.unique (
+    cfg.cloudflareOnlyHosts
+    ++ lib.attrNames (lib.filterAttrs (_: host: host.cloudflareOnly) cfg.virtualHosts)
+  );
   reactionHosts = lib.filterAttrs (_: host: host.reaction.enable) cfg.virtualHosts;
   reactionActive = config.services.reaction.enable && reactionHosts != { };
+  originCertPath = config.sops.secrets.cloudflare_origin_cert.path;
+  originKeyPath = config.sops.secrets.cloudflare_origin_key.path;
 in
 {
   options = {
@@ -41,6 +72,22 @@ in
                   type = lib.types.bool;
                   default = false;
                   description = "Provision and use a Cloudflare DNS-01 certificate for this host.";
+                };
+                useCloudflareOriginCert = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Use the shared Cloudflare Origin CA certificate from SOPS for this proxied host.";
+                };
+                acmeWildcardZone = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  example = "example.com";
+                  description = "Provision and use a shared Cloudflare DNS-01 wildcard certificate (*.<zone>) for this host.";
+                };
+                cloudflareOnly = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "Restrict HTTP access to Cloudflare's published IP ranges (plus ranet management peers).";
                 };
                 oauth2ForwardAuth = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
@@ -111,6 +158,31 @@ in
         assertion = host.reaction.statuses != [ ];
         message = ''my.services.caddy.virtualHosts."${domain}".reaction.statuses must not be empty.'';
       }) reactionHosts
+      ++ lib.mapAttrsToList (
+        domain: host:
+        let
+          tlsModes = lib.count lib.id [
+            host.useCloudflareACME
+            host.useCloudflareOriginCert
+            (host.acmeWildcardZone != null)
+          ];
+        in
+        {
+          assertion = tlsModes <= 1;
+          message = ''my.services.caddy.virtualHosts."${domain}" may set at most one of useCloudflareACME, useCloudflareOriginCert, or acmeWildcardZone.'';
+        }
+      ) cfg.virtualHosts
+      ++ lib.mapAttrsToList (
+        domain: host:
+        let
+          suffix = ".${host.acmeWildcardZone}";
+          prefix = lib.removeSuffix suffix domain;
+        in
+        {
+          assertion = lib.hasSuffix suffix domain && prefix != "" && !(lib.hasInfix "." prefix);
+          message = ''my.services.caddy.virtualHosts."${domain}".acmeWildcardZone ("${host.acmeWildcardZone}") only covers single-label subdomains of ${host.acmeWildcardZone}.'';
+        }
+      ) (lib.filterAttrs (_: host: host.acmeWildcardZone != null) cfg.virtualHosts)
       ++ [
         {
           assertion = lib.allUnique (lib.mapAttrsToList (_: host: host.reaction.name) reactionHosts);
@@ -139,13 +211,14 @@ in
         }
       '';
       globalConfig = ''
+        order abort first
         acme_dns cloudflare {env.CF_API_TOKEN}
         servers {
           import ${cloudflareTrustedProxiesFile}
         }
       '';
       virtualHosts = lib.mkMerge [
-        (lib.genAttrs cfg.cloudflareOnlyHosts (_: {
+        (lib.genAttrs cloudflareOnlyHosts (_: {
           extraConfig = lib.mkBefore ''
             import ${cloudflareAccessFile}
           '';
@@ -155,6 +228,9 @@ in
           lib.optionalAttrs host.useCloudflareACME {
             useACMEHost = domain;
           }
+          // lib.optionalAttrs (host.acmeWildcardZone != null) {
+            useACMEHost = "wildcard.${host.acmeWildcardZone}";
+          }
           // lib.optionalAttrs (config.services.reaction.enable && host.reaction.enable) {
             # Keep rotated access logs group-readable for the non-root reaction user.
             logFormat = lib.mkDefault ''
@@ -163,27 +239,46 @@ in
               }
             '';
           }
-          // lib.optionalAttrs (host.enableCompression || host.oauth2ForwardAuth != null) {
-            extraConfig = lib.mkBefore (
-              lib.concatStrings [
-                (lib.optionalString host.enableCompression "encode\n")
-                (lib.optionalString (
-                  host.oauth2ForwardAuth != null
-                ) "import oauth2_forward_auth ${host.oauth2ForwardAuth}\n")
-              ]
-            );
-          }
+          //
+            lib.optionalAttrs
+              (host.useCloudflareOriginCert || host.enableCompression || host.oauth2ForwardAuth != null)
+              {
+                extraConfig = lib.mkBefore (
+                  lib.concatStrings [
+                    (lib.optionalString host.useCloudflareOriginCert "tls ${originCertPath} ${originKeyPath}\n")
+                    (lib.optionalString host.enableCompression "encode\n")
+                    (lib.optionalString (
+                      host.oauth2ForwardAuth != null
+                    ) "import oauth2_forward_auth ${host.oauth2ForwardAuth}\n")
+                  ]
+                );
+              }
         ) cfg.virtualHosts)
       ];
     };
 
-    security.acme.certs = lib.mapAttrs (_: _: {
-      dnsProvider = "cloudflare";
-      credentialFiles = {
-        CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-        CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
-      };
-    }) cloudflareACMEHosts;
+    security.acme.certs = lib.mkMerge [
+      (lib.mapAttrs (_: _: {
+        dnsProvider = "cloudflare";
+        credentialFiles = {
+          CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
+          CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
+        };
+      }) cloudflareACMEHosts)
+      (lib.listToAttrs (
+        map (zone: {
+          name = "wildcard.${zone}";
+          value = {
+            domain = "*.${zone}";
+            dnsProvider = "cloudflare";
+            credentialFiles = {
+              CF_DNS_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
+              CF_ZONE_API_TOKEN_FILE = config.sops.secrets.cloudflare_api_token.path;
+            };
+          };
+        }) wildcardACMEZones
+      ))
+    ];
 
     my.systemd.harden = [ "caddy" ];
     systemd.services.caddy.confinement.enable = true;
@@ -197,6 +292,10 @@ in
         "/nix/store"
         "/etc/caddy/caddy_config"
         "-/var/lib/acme"
+      ]
+      ++ lib.optionals hasOriginCertHosts [
+        originCertPath
+        originKeyPath
       ];
       EnvironmentFile = config.sops.templates."caddy-cloudflare.env".path;
       AmbientCapabilities = [
@@ -208,8 +307,26 @@ in
         "CAP_NET_BIND_SERVICE"
       ];
     };
-    sops.secrets.cloudflare_api_token = {
-      sopsFile = ../../profiles/common/secrets/server.yaml;
+    sops.secrets = {
+      cloudflare_api_token = {
+        sopsFile = ../../profiles/common/secrets/server.yaml;
+      };
+    }
+    // lib.optionalAttrs hasOriginCertHosts {
+      cloudflare_origin_cert = {
+        sopsFile = ../../profiles/common/secrets/server.yaml;
+        owner = caddyCfg.user;
+        group = caddyCfg.group;
+        mode = "0400";
+        restartUnits = [ "caddy.service" ];
+      };
+      cloudflare_origin_key = {
+        sopsFile = ../../profiles/common/secrets/server.yaml;
+        owner = caddyCfg.user;
+        group = caddyCfg.group;
+        mode = "0400";
+        restartUnits = [ "caddy.service" ];
+      };
     };
     sops.templates."caddy-cloudflare.env" = {
       owner = "caddy";
