@@ -5,6 +5,8 @@
     frontend = "netcup-nue";
   };
 
+  my.services.dn42.metrics.enable = true;
+
   my.services.dn42.mesh = {
     enable = true;
     asn = 4242420642;

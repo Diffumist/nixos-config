@@ -5,6 +5,7 @@
     ./services/knot.nix
     ./services/flap-damping.nix
     ./services/phantun.nix
+    ./services/ranet-n1.nix
   ];
   my.networking.static = {
     enable = true;

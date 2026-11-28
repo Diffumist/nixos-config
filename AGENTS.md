@@ -137,7 +137,6 @@ Current important options:
 - `my.services.postgresql`
 - `my.services.prometheus-node`
 - `my.services.ranet`
-- `my.services.sema`
 - `my.services.sing-box`
 
 `my.services.ranet` is the management mesh (strongSwan driven by ranet), defined
@@ -187,7 +186,6 @@ Notable packages:
 
 - `caddy-cloudflare`: Caddy built via `caddy.withPlugins` with the Cloudflare DNS plugin.
 - `cybergroupmate`: pnpm-based upstream package.
-- `sema`: Rust dead man's switch webhook server.
 - `xsz`: Rust package with checked-in `Cargo.lock`.
 
 ## 9. Secrets

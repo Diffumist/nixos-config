@@ -127,6 +127,7 @@
               pre-commit-hook-ensure-sops = {
                 enable = true;
                 files = "^(hosts/[^/]+/.*|profiles/common/secrets/.*)\.(json|ya?ml|keytab)$";
+                excludes = [ "^hosts/hostdzire-sfo/services/dashboards/[^/]+\\.json$" ];
               };
             };
           };

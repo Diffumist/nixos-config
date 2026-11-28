@@ -31,6 +31,12 @@ in
       };
       description = "Additional labels attached to every metric from this host.";
     };
+
+    extraScrapeConfigs = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      default = [ ];
+      description = "Additional Prometheus scrape_configs appended to vmagent.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -122,7 +128,8 @@ in
               }
             ];
           }
-        ];
+        ]
+        ++ cfg.extraScrapeConfigs;
       };
     };
 

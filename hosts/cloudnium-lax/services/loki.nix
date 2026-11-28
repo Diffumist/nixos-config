@@ -65,7 +65,10 @@ in
         dir = "${data}/wal";
         replay_memory_ceiling = "256MB";
       };
-      limits_config.retention_period = "168h";
+      limits_config = {
+        max_query_lookback = "720h";
+        retention_period = "1440h";
+      };
       compactor = {
         working_directory = "${data}/compactor";
         retention_enabled = true;

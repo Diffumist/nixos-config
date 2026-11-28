@@ -27,6 +27,12 @@ in
       default = false;
       description = "Open the node exporter port on the host firewall.";
     };
+
+    textfiles = lib.mkOption {
+      type = lib.types.attrsOf lib.types.lines;
+      default = { };
+      description = "Static Prometheus textfile collector files (keyed by filename without .prom suffix).";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -53,12 +59,33 @@ in
         "--collector.pressure"
         "--collector.filesystem.mount-points-exclude=^/(dev|proc|sys|run|var/lib/docker/.+|var/lib/kubelet/.+)($|/)"
         "--collector.diskstats.device-exclude=^(loop|ram|fd|sr|dm-).*"
+      ]
+      ++ lib.optionals (cfg.textfiles != { }) [
+        "--collector.textfile"
+        "--collector.textfile.directory=/etc/prometheus-node-exporter/textfile"
       ];
     };
 
+    environment.etc = lib.mapAttrs' (
+      name: text:
+      lib.nameValuePair "prometheus-node-exporter/textfile/${name}.prom" {
+        inherit text;
+      }
+    ) cfg.textfiles;
+
     my.systemd.harden = [ "prometheus-node-exporter" ];
     # Node exporter reads system-wide /proc files (stat, meminfo, net, diskstats, pressure).
-    systemd.services.prometheus-node-exporter.serviceConfig.ProcSubset = "all";
+    systemd.services.prometheus-node-exporter.serviceConfig = {
+      ProcSubset = "all";
+    }
+    // lib.optionalAttrs (cfg.listenAddress == "127.0.0.1") {
+      IPAddressDeny = "any";
+      IPAddressAllow = "localhost";
+      RestrictAddressFamilies = lib.mkForce [
+        "AF_NETLINK"
+        "AF_INET"
+      ];
+    };
 
     my.networking.usedTCPPorts.prometheus-node-exporter = cfg.port;
   };

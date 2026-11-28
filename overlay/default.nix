@@ -33,6 +33,19 @@ importedPkgs
   microfetch = prev.microfetch.overrideAttrs (oldAttrs: {
     patches = (oldAttrs.patches or [ ]) ++ [ ./microfetch/storage.patch ];
   });
+  # Work around czerwonk/bird_exporter#169: BIRD2 socket prefixes the first
+  # OSPF detail line with `1006-  Channel ipv4`, which 1.7.1's `^\s+Channel`
+  # regex drops, making OSPF export fail with HTTP 500.
+  prometheus-bird-exporter = prev.prometheus-bird-exporter.overrideAttrs (oldAttrs: {
+    postPatch =
+      (oldAttrs.postPatch or "")
+      + lib.optionalString (oldAttrs.version == "1.7.1") ''
+        substituteInPlace parser/parser.go \
+          --replace-fail \
+            'channelRegex = regexp.MustCompile(`^\s+Channel (?:ipv|roa)(4|6)(?:\s|$)`)' \
+            'channelRegex = regexp.MustCompile(`^(?:\d{4}-)?\s+Channel (?:ipv|roa)(4|6)(?:\s|$)`)'
+      '';
+  });
   wemeet = prev.wemeet.overrideAttrs (oldAttrs: {
     postInstall = (oldAttrs.postInstall or "") + ''
       substituteInPlace $out/share/applications/wemeetapp.desktop \

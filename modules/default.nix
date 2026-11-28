@@ -10,7 +10,6 @@
     ./services/monitoring-agent.nix
     ./services/postgresql.nix
     ./services/prometheus-node.nix
-    ./services/sema.nix
     ./services/sing-box.nix
   ];
 }

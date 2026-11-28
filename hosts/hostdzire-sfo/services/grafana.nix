@@ -96,31 +96,45 @@ in
         feedback_links_enabled = false;
       };
     };
-    provision.datasources.settings = {
-      apiVersion = 1;
-      datasources = [
-        {
-          name = "Fleet logs";
-          uid = "fleet-loki";
-          type = "loki";
-          access = "proxy";
-          url = "https://logs.diffumist.dev";
-          editable = false;
-        }
-        {
-          name = "VictoriaMetrics";
-          uid = "victoriametrics";
-          type = "prometheus";
-          access = "proxy";
-          url = "http://127.0.0.1:${toString victoriametricsPort}";
-          isDefault = true;
-          editable = false;
-          jsonData = {
-            httpMethod = "POST";
-            timeInterval = "30s";
-          };
-        }
-      ];
+    provision = {
+      datasources.settings = {
+        apiVersion = 1;
+        datasources = [
+          {
+            name = "Fleet logs";
+            uid = "fleet-loki";
+            type = "loki";
+            access = "proxy";
+            url = "https://logs.diffumist.dev";
+            editable = false;
+          }
+          {
+            name = "VictoriaMetrics";
+            uid = "victoriametrics";
+            type = "prometheus";
+            access = "proxy";
+            url = "http://127.0.0.1:${toString victoriametricsPort}";
+            isDefault = true;
+            editable = false;
+            jsonData = {
+              httpMethod = "POST";
+              timeInterval = "30s";
+            };
+          }
+        ];
+      };
+      dashboards.settings = {
+        apiVersion = 1;
+        providers = [
+          {
+            name = "DN42";
+            folder = "DN42";
+            type = "file";
+            disableDeletion = true;
+            options.path = ./dashboards;
+          }
+        ];
+      };
     };
   };
 
